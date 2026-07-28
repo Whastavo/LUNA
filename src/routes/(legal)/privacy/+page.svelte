@@ -130,7 +130,7 @@
 
 	<h2 id="children">Age</h2>
 	<p>
-		Utsuwa is intended for adults aged 18 and over. It is not designed for or directed at anyone
+		Luna is intended for adults aged 18 and over. It is not designed for or directed at anyone
 		under 18, and we do not knowingly collect personal information from anyone, minors included,
 		since we don't collect personal information at all.
 	</p>
@@ -145,7 +145,7 @@
 	<h2 id="contact">Contact</h2>
 	<p>
 		The fastest way to reach us is on
-		<a href={`${GITHUB_REPO}/issues`} target="_blank" rel="noopener noreferrer">GitHub</a>. Utsuwa
+		<a href={`${GITHUB_REPO}/issues`} target="_blank" rel="noopener noreferrer">GitHub</a>. Luna
 		is maintained by Ordinary Company Group LLC, a limited liability company formed in Ohio, USA.
 	</p>
 </article>

@@ -10,13 +10,13 @@
 </script>
 
 <svelte:head>
-	<title>Documentation - Utsuwa</title>
+	<title>Documentation - Luna</title>
 	<meta
 		name="description"
-		content="Guides, setup, and architecture docs for Utsuwa — the open-source AI companion with 3D VRM avatars, voice, and semantic memory."
+		content="Guides, setup, and architecture docs for Luna — the open-source AI companion with 3D VRM avatars, voice, and semantic memory."
 	/>
 	<link rel="canonical" href={DOCS_URL} />
-	<meta property="og:title" content="Utsuwa Documentation" />
+	<meta property="og:title" content="Luna Documentation" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content={DOCS_URL} />
 </svelte:head>

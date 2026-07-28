@@ -165,7 +165,7 @@ export function createDefaultCharacterState(): Omit<CharacterState, 'id'> {
 	const now = new Date();
 	return {
 		// Persona fields
-		name: 'Utsuwa',
+		name: 'Luna',
 		systemPrompt: DEFAULT_SYSTEM_PROMPT,
 		extensions: {},
 

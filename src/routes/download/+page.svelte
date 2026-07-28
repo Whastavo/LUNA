@@ -38,27 +38,27 @@
 </script>
 
 <svelte:head>
-	<title>Download Utsuwa - Free Open-Source AI Companion for Mac, Windows, Linux</title>
+	<title>Download Luna - Free Open-Source AI Companion for Mac, Windows, Linux</title>
 	<meta
 		name="description"
-		content="Download Utsuwa, the free and open-source AI companion with 3D VRM avatars, for macOS, Windows, and Linux, or run it in your browser. Self-hosted and privacy-first."
+		content="Download Luna, the free and open-source AI companion with 3D VRM avatars, for macOS, Windows, and Linux, or run it in your browser. Self-hosted and privacy-first."
 	/>
 	<link rel="canonical" href={`${SITE_URL}/download`} />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content="Download Utsuwa" />
+	<meta property="og:title" content="Download Luna" />
 	<meta
 		property="og:description"
 		content="Free and open source, for macOS, Windows, and Linux, or run it in your browser."
 	/>
 	<meta property="og:url" content={`${SITE_URL}/download`} />
-	<meta property="og:site_name" content="Utsuwa" />
+	<meta property="og:site_name" content="Luna" />
 	<meta property="og:image" content={`${SITE_URL}/brand-assets/og-image.png`} />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:image" content={`${SITE_URL}/brand-assets/og-image.png`} />
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'SoftwareApplication',
-		name: 'Utsuwa',
+		name: 'Luna',
 		applicationCategory: 'MultimediaApplication',
 		operatingSystem: 'macOS, Windows, Linux, Web',
 		offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
@@ -73,7 +73,7 @@
 	<section class="hero">
 		<div class="hero-copy">
 			<p class="eyebrow hero-kicker">Download</p>
-			<h1 class="hero-h1 text-balance">Get Utsuwa on your desktop.</h1>
+			<h1 class="hero-h1 text-balance">Get Luna on your desktop.</h1>
 			<p class="hero-lead text-pretty">
 				The desktop app adds a transparent overlay you can pin over anything and a global hotkey to
 				summon your companion. Free and open source on every platform.
@@ -93,7 +93,7 @@
 			<img
 				class="shot"
 				src="/marketing/desktop-app.webp"
-				alt="The Utsuwa desktop overlay: a VRM companion floating on a macOS desktop"
+				alt="The Luna desktop overlay: a VRM companion floating on a macOS desktop"
 				loading="eager"
 			/>
 		</div>
@@ -137,7 +137,7 @@
 		<div use:reveal class="reveal build-inner">
 			<h2 class="section-title">Rather build it yourself?</h2>
 			<p class="build-body text-pretty">
-				Utsuwa is AGPL-3.0 licensed and built on SvelteKit, Three.js, and Tauri. Clone the repo, install
+				Luna is AGPL-3.0 licensed and built on SvelteKit, Three.js, and Tauri. Clone the repo, install
 				dependencies, and run it locally, or fork it and make it your own.
 			</p>
 			<a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">

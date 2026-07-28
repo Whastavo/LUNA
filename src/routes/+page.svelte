@@ -117,7 +117,7 @@
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
 	<meta property="og:url" content={SITE_URL} />
-	<meta property="og:site_name" content="Utsuwa" />
+	<meta property="og:site_name" content="Luna" />
 
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary_large_image" />
@@ -129,7 +129,7 @@
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'SoftwareApplication',
-		name: 'Utsuwa',
+		name: 'Luna',
 		description: 'Open-source AI companion with 3D VRM avatars, voice chat, semantic memory, and multi-provider LLM support.',
 		url: SITE_URL,
 		applicationCategory: 'DesktopApplication',
@@ -157,7 +157,7 @@
 			<!-- Fade lives on the wrapper: the animation's fill would otherwise
 			     override the logo's own theme filter -->
 			<span class="hero-fade hero-logo-wrap" style="--wd: 0ms">
-				<img src="/brand-assets/logo.svg" alt="Utsuwa" class="hero-logo" />
+				<img src="/brand-assets/logo.svg" alt="Luna" class="hero-logo" />
 			</span>
 
 			<h1 class="hero-title text-balance">

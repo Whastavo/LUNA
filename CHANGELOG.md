@@ -104,7 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Every change now runs the full test suite (197 tests) and type checks in CI before it can merge.
 
 ### Note for existing users
-On your first launch after this update, Utsuwa downloads the new multilingual memory model (about 100 MB, one time, cached after that) and re-indexes your saved memories in the background. Everything keeps working during the re-index; memory recall briefly leans on keyword matching until it finishes.
+On your first launch after this update, Luna downloads the new multilingual memory model (about 100 MB, one time, cached after that) and re-indexes your saved memories in the background. Everything keeps working during the re-index; memory recall briefly leans on keyword matching until it finishes.
 
 ## [0.8.0] - 2026-07-04
 
@@ -147,7 +147,7 @@ On your first launch after this update, Utsuwa downloads the new multilingual me
 ## [0.7.0] - 2026-07-03
 
 ### Added
-- **Custom OpenAI-compatible LLM endpoint**: point Utsuwa at any OpenAI-compatible API (OpenRouter, Together, Mistral, Perplexity, a local vLLM, LiteLLM, and more) with a base URL, an optional API key, and a model of your choice.
+- **Custom OpenAI-compatible LLM endpoint**: point Luna at any OpenAI-compatible API (OpenRouter, Together, Mistral, Perplexity, a local vLLM, LiteLLM, and more) with a base URL, an optional API key, and a model of your choice.
 - **Local speech-to-text**: run voice input entirely on your machine with any OpenAI-compatible Whisper server (Speaches, faster-whisper-server, whisper.cpp). Audio never leaves your device, and there's no API key or per-minute cost. Includes a new Local STT Setup guide.
 - **OpenAI (Whisper) speech-to-text**: OpenAI's cloud Whisper is now a voice-input option alongside Groq, a local server, and the browser's Web Speech API.
 - **Developer animation preview**: the animation dropdown in the developer panel now lists the bundled emote clips so you can trigger them directly.

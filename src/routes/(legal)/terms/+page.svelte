@@ -30,7 +30,7 @@
 		luna.ai (including app.luna.ai and docs.luna.ai) and the Luna desktop app, operated by
 		Ordinary Company Group LLC ("we", "us"), a limited liability company formed in Ohio, USA.
 		Luna's source code is open source and separately licensed under the
-		<a href={`${GITHUB_REPO}/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer">GNU AGPL-3.0-or-later</a>; nothing in these terms limits the rights that license gives you. By using Utsuwa,
+		<a href={`${GITHUB_REPO}/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer">GNU AGPL-3.0-or-later</a>; nothing in these terms limits the rights that license gives you. By using Luna,
 		you agree to these terms.
 	</p>
 

@@ -123,7 +123,7 @@ The desktop app uses the same codebase as the web version, and your save files a
 
 ### LLM Providers (8)
 
-Utsuwa supports popular cloud and local LLMs. For endpoints that speak the OpenAI API (OpenRouter, Together, vLLM, LiteLLM, etc.), use the **OpenAI-Compatible** provider:
+Luna supports popular cloud and local LLMs. For endpoints that speak the OpenAI API (OpenRouter, Together, vLLM, LiteLLM, etc.), use the **OpenAI-Compatible** provider:
 - Set the **Base URL** to the endpoint root (e.g. `https://api.openai.com/v1/`).
 - **API Key** is optional; leave it empty for keyless local servers.
 - Enter a model manually or fetch available models after providing a base URL.
@@ -137,13 +137,13 @@ Utsuwa supports popular cloud and local LLMs. For endpoints that speak the OpenA
 
 #### Context Window and Memory Budget
 
-The **Context Window** setting is available for every LLM provider. When enabled, it tells Utsuwa how many tokens the selected model can process. The app then:
+The **Context Window** setting is available for every LLM provider. When enabled, it tells Luna how many tokens the selected model can process. The app then:
 
 - Retrieves the matching number of recent conversation turns from working memory.
 - Scales the amount of injected memory (recent conversation turns and relevant facts) to match the window size.
 - Truncates older chat history before sending, always keeping the system prompt and the user's newest message.
 
-If the setting is left off, Utsuwa keeps the historical defaults (10 retrieved turns, 6 injected turns, 5 facts) and does not truncate history. This is useful when you want the provider to handle its own context management.
+If the setting is left off, Luna keeps the historical defaults (10 retrieved turns, 6 injected turns, 5 facts) and does not truncate history. This is useful when you want the provider to handle its own context management.
 
 ### TTS Providers (3)
 
@@ -165,7 +165,7 @@ Voice input is accessed via the microphone button in the chat bar. Selection is 
 ## Getting Started
 
 > [!NOTE]
-> Utsuwa is in its very early development stages. If you're using the app, **save your data often**. Early versions may not have backwards-compatible save states and could require manual reformatting.
+> Luna is in its very early development stages. If you're using the app, **save your data often**. Early versions may not have backwards-compatible save states and could require manual reformatting.
 
 ### Try it Online
 
@@ -234,7 +234,7 @@ Your companion data is stored locally on your device. To back up or transfer you
 ## Project Structure
 
 ```
-utsuwa/
+luna/
 ├── src/
 │   ├── lib/
 │   │   ├── ai/             # LLM response parsing and prompt building
@@ -329,7 +329,7 @@ For information about security considerations and how to report vulnerabilities,
 
 ## Acknowledgments
 
-Utsuwa is built on the shoulders of these excellent projects:
+Luna is built on the shoulders of these excellent projects:
 
 ### Inspiration
 
@@ -357,16 +357,16 @@ Utsuwa is built on the shoulders of these excellent projects:
 
 ## License
 
-Utsuwa is licensed under the [GNU AGPL-3.0-or-later](LICENSE). In plain terms: you can use, modify, self-host, and redistribute it freely, and if you offer a modified version to others, including over a network, you share your changes under the same license.
+Luna is licensed under the [GNU AGPL-3.0-or-later](LICENSE). In plain terms: you can use, modify, self-host, and redistribute it freely, and if you offer a modified version to others, including over a network, you share your changes under the same license.
 
 Releases up to and including 0.12.0 were published under the MIT License and remain so. Code contributed under MIT is carried forward with its attribution intact.
 
 ## Star History
 
-<a href="https://www.star-history.com/?repos=The-Lab-by-Ordinary-Company%2Futsuwa&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=The-Lab-by-Ordinary-Company%2Fluna&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=The-Lab-by-Ordinary-Company/utsuwa&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=The-Lab-by-Ordinary-Company/utsuwa&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=The-Lab-by-Ordinary-Company/utsuwa&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=The-Lab-by-Ordinary-Company/luna&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=The-Lab-by-Ordinary-Company/luna&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=The-Lab-by-Ordinary-Company/luna&type=date&legend=top-left" />
  </picture>
 </a>
