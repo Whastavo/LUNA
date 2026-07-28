@@ -45,13 +45,13 @@
 
 <nav class="site-nav" class:scrolled={scrolled || menuOpen}>
 	<div class="site-nav-inner">
-		<a href="/" class="site-nav-brand" aria-label="Luna home">
+		<a href="/" class="site-nav-brand" aria-label="Inicio de Luna">
 			<img src="/brand-assets/logo.svg" alt="Luna" class="site-nav-logo" />
 		</a>
 
 		<div class="site-nav-links">
-			<a href="/#features" class="site-nav-link" class:active={onHome}>Features</a>
-			<a href={sectionUrl('docs')} class="site-nav-link" class:active={isSection('docs')}>Docs</a>
+			<a href="/#features" class="site-nav-link" class:active={onHome}>Características</a>
+			<a href={sectionUrl('docs')} class="site-nav-link" class:active={isSection('docs')}>Documentación</a>
 
 			<!-- Blog + recent-posts dropdown. Reveal is pure hover/focus-within, no
 			     click state; the Blog link itself still navigates to /blog. -->
@@ -79,31 +79,30 @@
 		</div>
 
 		<div class="site-nav-right">
-			<a href="/download" class="btn btn-secondary btn-sm site-nav-cta">Download</a>
+			<a href="/download" class="btn btn-secondary btn-sm site-nav-cta">Descargar</a>
 			<a href={sectionUrl('app')} class="btn btn-primary btn-sm site-nav-cta">
 				<span class="live-dot" aria-hidden="true"></span>
-				Try Live
+				Probar en línea
 			</a>
 			<button
 				type="button"
 				class="site-nav-burger"
-				onclick={() => (menuOpen = !menuOpen)}
-				aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-				aria-expanded={menuOpen}
-				aria-controls="site-nav-mobile"
-			>
-				<Icon name={menuOpen ? 'xmark' : 'bars'} size={18} />
-			</button>
-		</div>
+			onclick={() => (menuOpen = !menuOpen)}
+			aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+			aria-expanded={menuOpen}
+			aria-controls="site-nav-mobile"
+		>
+			<Icon name={menuOpen ? 'xmark' : 'bars'} size={18} />
+		</button>
 	</div>
 
 	{#if menuOpen}
 		<!-- Blurs the page behind the open menu; tapping it closes -->
-		<button class="site-nav-backdrop" aria-label="Close menu" onclick={() => (menuOpen = false)}
+		<button class="site-nav-backdrop" aria-label="Cerrar menú" onclick={() => (menuOpen = false)}
 		></button>
 		<div id="site-nav-mobile" class="site-nav-mobile">
-			<a href="/#features" class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>Features</a>
-			<a href={sectionUrl('docs')} class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>Docs</a>
+			<a href="/#features" class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>Características</a>
+			<a href={sectionUrl('docs')} class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>Documentación</a>
 			<a href="/blog" class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>Blog</a>
 			<a
 				href={GITHUB_REPO}

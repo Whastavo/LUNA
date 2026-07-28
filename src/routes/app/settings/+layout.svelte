@@ -6,13 +6,13 @@
 	let { children } = $props();
 
 	const navItems = $derived([
-		{ href: localPath('app', '/settings/persona'), label: 'Character', icon: 'persona' },
-		{ href: localPath('app', '/settings/display'), label: 'Display', icon: 'monitor' },
+		{ href: localPath('app', '/settings/persona'), label: 'Personaje', icon: 'persona' },
+		{ href: localPath('app', '/settings/display'), label: 'Pantalla', icon: 'monitor' },
 		{ href: localPath('app', '/settings/llm'), label: 'LLM Model', icon: 'brain' },
 		{ href: localPath('app', '/settings/tts'), label: 'TTS', icon: 'volume' },
 		{ href: localPath('app', '/settings/stt'), label: 'STT', icon: 'mic' },
-		{ href: localPath('app', '/settings/data'), label: 'Data', icon: 'database' },
-		{ href: localPath('app', '/settings/developer'), label: 'Developer', icon: 'code' }
+		{ href: localPath('app', '/settings/data'), label: 'Datos', icon: 'database' },
+		{ href: localPath('app', '/settings/developer'), label: 'Desarrollador', icon: 'code' }
 	]);
 
 	const currentIcon = $derived(

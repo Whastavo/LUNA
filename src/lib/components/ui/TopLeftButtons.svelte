@@ -15,7 +15,7 @@
 		<Icon name="camera" size={20} />
 	</button>
 	{#if onOpenMemoryGraph}
-		<button class="icon-btn" onclick={onOpenMemoryGraph} aria-label="Open memory graph">
+		<button class="icon-btn" onclick={onOpenMemoryGraph} aria-label="Abrir gráfico de memoria">
 			<Icon name="brain" size={20} />
 		</button>
 	{/if}

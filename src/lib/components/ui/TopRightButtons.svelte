@@ -216,8 +216,8 @@
 				class="icon-btn cluster-item"
 				style="--i: 0"
 				onclick={() => goto(localPath('app', '/settings'))}
-				aria-label="Settings"
-				title="Settings"
+				aria-label="Configuración"
+				title="Configuración"
 			>
 				<Icon name="settings" size={20} />
 			</button>

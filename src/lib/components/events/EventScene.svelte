@@ -87,12 +87,12 @@
 					<Icon name={eventIcon} size={18} />
 					<span>{eventName}</span>
 				</div>
-				<button class="close-btn" onclick={onClose} aria-label="Close">
+				<button class="close-btn" onclick={onClose} aria-label="Cerrar">
 					<Icon name="x" size={16} />
 				</button>
 			</div>
 		{:else}
-			<button class="close-btn floating" onclick={onClose} aria-label="Close">
+			<button class="close-btn floating" onclick={onClose} aria-label="Cerrar">
 				<Icon name="x" size={16} />
 			</button>
 		{/if}

@@ -147,7 +147,7 @@
 			<h2>
 				Things you've shown her{#if items.length}<span class="count">{items.length}</span>{/if}
 			</h2>
-			<button class="close-btn" onclick={onClose} aria-label="Close">
+			<button class="close-btn" onclick={onClose} aria-label="Cerrar">
 				<Icon name="x" size={16} />
 			</button>
 		</div>
@@ -167,11 +167,11 @@
 					<div class="section-photos">
 						{#each section.items as item, i (item.id)}
 							<div class="photo-card" style="--rot: {ROTATIONS[i % ROTATIONS.length]}deg">
-								<button class="photo-btn" onclick={() => openLightbox(item)} aria-label="View photo">
+								<button class="photo-btn" onclick={() => openLightbox(item)} aria-label="Ver foto">
 									<img src={item.url} alt="" loading="lazy" />
 								</button>
 								<div class="caption">{shortDate(item.createdAt)}</div>
-								<button class="forget-btn" aria-label="Forget this" onclick={() => forget(item.id)}>
+								<button class="forget-btn" aria-label="Olvidar esto" onclick={() => forget(item.id)}>
 									<Icon name="x" size={12} />
 								</button>
 							</div>
@@ -199,10 +199,10 @@
 		aria-label="Photo"
 		tabindex="-1"
 	>
-		<button class="lb-close" onclick={closeLightbox} aria-label="Close">
+		<button class="lb-close" onclick={closeLightbox} aria-label="Cerrar">
 			<Icon name="x" size={18} />
 		</button>
-		<button class="flip-card" class:flipped onclick={() => (flipped = !flipped)} aria-label="Flip photo">
+		<button class="flip-card" class:flipped onclick={() => (flipped = !flipped)} aria-label="Voltear foto">
 			<div class="flip-inner">
 				<div class="flip-front">
 					{#if selectedFullUrl}<img src={selectedFullUrl} alt="" />{/if}

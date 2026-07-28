@@ -9,28 +9,28 @@
 
 	// Stored values keep their original names; only the labels changed
 	const modes: { value: ChatDisplayMode; label: string }[] = [
-		{ value: 'bubble', label: 'Immersive' },
+		{ value: 'bubble', label: 'Inmersivo' },
 		{ value: 'sidebar', label: 'Chat window' },
-		{ value: 'both', label: 'Both' },
-		{ value: 'off', label: 'Off' }
+		{ value: 'both', label: 'Ambos' },
+		{ value: 'off', label: 'Apagado' }
 	];
 
 	const positions: { value: SidebarPosition; label: string }[] = [
-		{ value: 'left', label: 'Left' },
-		{ value: 'right', label: 'Right' }
+		{ value: 'left', label: 'Izquierda' },
+		{ value: 'right', label: 'Derecha' }
 	];
 
 	const alignments: { value: ChatBarAlignment; label: string }[] = [
-		{ value: 'left', label: 'Left' },
-		{ value: 'center', label: 'Center' },
-		{ value: 'right', label: 'Right' }
+		{ value: 'left', label: 'Izquierda' },
+		{ value: 'center', label: 'Centro' },
+		{ value: 'right', label: 'Derecha' }
 	];
 
 	const revealSpeeds: { value: TextRevealSpeed; label: string }[] = [
-		{ value: 'off', label: 'Off' },
-		{ value: 'slow', label: 'Slow' },
+		{ value: 'off', label: 'Apagado' },
+		{ value: 'slow', label: 'Lento' },
 		{ value: 'normal', label: 'Normal' },
-		{ value: 'fast', label: 'Fast' }
+		{ value: 'fast', label: 'Rápido' }
 	];
 
 	const sidebarActive = $derived(

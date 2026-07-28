@@ -29,7 +29,7 @@
 			class="ob-input"
 			value={name}
 			oninput={(e) => onNameChange(e.currentTarget.value)}
-			placeholder="Enter a name..."
+			placeholder="Ingresa un nombre..."
 		/>
 	</div>
 
@@ -40,7 +40,7 @@
 			class="ob-textarea"
 			value={systemPrompt}
 			oninput={(e) => onSystemPromptChange(e.currentTarget.value)}
-			placeholder="Describe their personality, speaking style, background..."
+			placeholder="Describe su personalidad, estilo de habla, trasfondo..."
 			rows="5"
 		></textarea>
 		<span class="ob-hint">This shapes how your companion talks and behaves.</span>

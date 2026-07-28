@@ -30,7 +30,7 @@
 <header class="docs-header">
 	<div class="header-left">
 		{#if onToggleSidebar}
-			<button type="button" class="hamburger" onclick={onToggleSidebar} aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}>
+			<button type="button" class="hamburger" onclick={onToggleSidebar} aria-label={sidebarOpen ? 'Cerrar menú' : 'Abrir menú'}>
 				<Icon name={sidebarOpen ? 'xmark' : 'bars'} size={18} />
 			</button>
 		{/if}

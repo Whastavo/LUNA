@@ -258,7 +258,7 @@
 
 	function handleClearHistory() {
 		if (!browser) return;
-		if (confirm('Delete all messages in this chat?')) {
+		if (confirm('¿Eliminar todos los mensajes de este chat?')) {
 			chatStore.clearMessages();
 		}
 	}
@@ -294,10 +294,10 @@
 			<Icon name={moodInfo.icon} size={16} />
 		</span>
 		<span class="window-title">Chat</span>
-		<button class="dock-btn" onclick={() => snapTo('left')} aria-label="Snap to left edge" title="Snap left">
+		<button class="dock-btn" onclick={() => snapTo('left')} aria-label="Ajustar al borde izquierdo" title="Ajustar izquierda">
 			<Icon name="chevron-left" size={16} />
 		</button>
-		<button class="dock-btn" onclick={() => snapTo('right')} aria-label="Snap to right edge" title="Snap right">
+		<button class="dock-btn" onclick={() => snapTo('right')} aria-label="Ajustar al borde derecho" title="Ajustar derecha">
 			<Icon name="chevron-right" size={16} />
 		</button>
 		<button
@@ -309,7 +309,7 @@
 		>
 			<Icon name="trash" size={14} />
 		</button>
-		<button class="close-btn" onclick={onClose} aria-label="Close chat" title="Close chat">
+		<button class="close-btn" onclick={onClose} aria-label="Cerrar chat" title="Cerrar chat">
 			<Icon name="x" size={16} />
 		</button>
 	</div>

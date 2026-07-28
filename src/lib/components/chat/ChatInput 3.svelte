@@ -126,7 +126,7 @@
 		>
 			{#if isTranscribing}
 				<div class="transcribing-label">Transcribing...</div>
-				<button type="button" class="mic-btn recording" disabled aria-label="Transcribing">
+				<button type="button" class="mic-btn recording" disabled aria-label="Transcribiendo">
 					<Icon name="loader" size={20} />
 				</button>
 			{:else if isListening}
@@ -160,7 +160,7 @@
 					bind:this={textareaRef}
 					bind:value={chatDraftStore.draft}
 					onkeydown={handleKeydown}
-					placeholder="Type a message..."
+					placeholder="Escribe un mensaje..."
 					rows="1"
 					wrap="off"
 					{disabled}

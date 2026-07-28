@@ -98,7 +98,7 @@
 					<button
 						type="button"
 						class="remove-chip"
-						aria-label="Remove image"
+						aria-label="Eliminar imagen"
 						onclick={() => chatDraftStore.removePending(p.image.id)}
 					>
 						<Icon name="x" size={12} />
@@ -126,7 +126,7 @@
 		>
 			{#if isTranscribing}
 				<div class="transcribing-label">Transcribing...</div>
-				<button type="button" class="mic-btn recording" disabled aria-label="Transcribing">
+				<button type="button" class="mic-btn recording" disabled aria-label="Transcribiendo">
 					<Icon name="loader" size={20} />
 				</button>
 			{:else if isListening}
@@ -147,7 +147,7 @@
 						class="mic-btn"
 						class:vision-off={!visionCapable}
 						onclick={openPicker}
-						aria-label="Attach an image"
+						aria-label="Adjuntar una imagen"
 						title={visionCapable ? 'Attach an image' : 'This model cannot see images'}
 					>
 						<Icon name="paperclip" size={20} />
@@ -160,7 +160,7 @@
 					bind:this={textareaRef}
 					bind:value={chatDraftStore.draft}
 					onkeydown={handleKeydown}
-					placeholder="Type a message..."
+					placeholder="Escribe un mensaje..."
 					rows="1"
 					wrap="off"
 					{disabled}
@@ -169,8 +169,8 @@
 					type="button"
 					class="mic-btn"
 					onclick={handleMicClick}
-					aria-label="Voice input"
-					title="Voice input"
+				aria-label="Entrada de voz"
+				title="Entrada de voz"
 				>
 					<Icon name="mic" size={20} />
 				</button>

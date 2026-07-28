@@ -18,14 +18,14 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="modal-overlay" out:fadeFast={{ duration: 160 }} role="dialog" aria-modal="true" aria-label="Memory Graph">
+<div class="modal-overlay" out:fadeFast={{ duration: 160 }} role="dialog" aria-modal="true" aria-label="Gráfico de Memoria">
 	<div class="modal-container">
 		<header class="modal-header">
 			<div class="header-info">
 				<Icon name="brain" size={20} />
 				<h2>Memory Graph</h2>
 			</div>
-			<button class="close-btn" onclick={onClose} aria-label="Close">
+			<button class="close-btn" onclick={onClose} aria-label="Cerrar">
 				<Icon name="x" size={20} />
 			</button>
 		</header>

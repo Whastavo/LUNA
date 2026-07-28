@@ -168,7 +168,7 @@
 			const facts = await getFactsWithEmbeddings();
 
 			if (facts.length === 0) {
-				error = 'No memories with embeddings found. Chat more to build memories!';
+				error = 'No se encontraron recuerdos con incrustaciones. ¡Chatea más para crear recuerdos!';
 				loading = false;
 				return;
 			}
@@ -221,7 +221,7 @@
 			loading = false;
 		} catch (e) {
 			console.error('Failed to initialize memory graph:', e);
-			error = 'Failed to load memory graph';
+			error = 'Error al cargar el gráfico de memoria';
 			loading = false;
 		}
 	}

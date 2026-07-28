@@ -145,7 +145,7 @@
 			bind:this={inputEl}
 			{id}
 			type="text"
-			placeholder="Search docs..."
+			placeholder="Buscar en documentación..."
 			value={query}
 			oninput={handleInput}
 			onfocus={handleFocus}

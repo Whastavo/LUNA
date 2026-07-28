@@ -50,7 +50,7 @@
 						<span class="banner-title">Update available</span>
 						<span class="banner-sub">Luna {updaterStore.availableVersion} is ready to install</span>
 					{:else if status === 'downloading'}
-						<span class="banner-title">Downloading update…</span>
+						<span class="banner-title">Descargando actualización…</span>
 						<div class="progress-track">
 							<div class="progress-fill" style="width: {updaterStore.progress}%"></div>
 						</div>
@@ -59,7 +59,7 @@
 						<span class="banner-sub">Restarting…</span>
 					{:else if status === 'error'}
 						<span class="banner-title">Update failed</span>
-						<span class="banner-sub">{updaterStore.errorMessage ?? 'Please try again later.'}</span>
+						<span class="banner-sub">{updaterStore.errorMessage ?? '''Por favor, inténtalo de nuevo más tarde.'''}</span>
 					{/if}
 				</div>
 			{/key}

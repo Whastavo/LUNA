@@ -332,7 +332,7 @@
 					onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); vrmStore.setError(null); } }}
 				>
 					<span>{vrmStore.error}</span>
-					<button type="button" class="toast-dismiss" aria-label="Dismiss">✕</button>
+					<button type="button" class="toast-dismiss" aria-label="Descartar">✕</button>
 				</div>
 			{/if}
 
@@ -428,7 +428,7 @@
 				onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chatStore.setError(null); } }}
 			>
 				<span>{chatStore.error}</span>
-				<button type="button" class="toast-dismiss" aria-label="Dismiss">✕</button>
+				<button type="button" class="toast-dismiss" aria-label="Descartar">✕</button>
 			</div>
 		{/if}
 

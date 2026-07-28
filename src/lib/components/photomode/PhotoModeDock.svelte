@@ -17,7 +17,7 @@
 	type Tab = 'pose' | 'face' | 'scene' | 'camera' | 'sticker';
 	const TABS: Array<{ id: Tab; label: string }> = [
 		{ id: 'camera', label: 'Cámara' },
-		{ id: 'pose', label: 'Pose' },
+		{ id: 'pose', label: 'Postura' },
 		{ id: 'face', label: 'Cara' },
 		{ id: 'scene', label: 'Escena' },
 		{ id: 'sticker', label: 'Pegatina' }
@@ -52,7 +52,7 @@
 	}));
 
 	const FRAMES: Array<{ id: PhotoFrameId; label: string }> = [
-		{ id: 'none', label: 'None' },
+		{ id: 'none', label: 'Ninguno' },
 		{ id: 'polaroid', label: 'Polaroid' },
 		{ id: 'film', label: 'Film' }
 	];
@@ -330,7 +330,7 @@
 							<span class="sticker-name">Sticker {i + 1}</span>
 							<button
 								class="header-btn"
-								aria-label="Remove sticker"
+								aria-label="Eliminar pegatina"
 								onclick={() => photomodeStore.removeSticker(active.id)}
 							>
 								<Icon name="x" size={13} />

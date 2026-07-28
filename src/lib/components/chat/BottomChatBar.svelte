@@ -44,15 +44,15 @@
 	let showStats = $state(false);
 
 	const datingStats = $derived([
-		{ key: 'affection', label: 'Love', icon: 'heart', value: affectionPercent, color: 'var(--stat-affection)' },
-		{ key: 'trust', label: 'Trust', icon: 'shield', value: charState.trust, color: 'var(--stat-trust)' },
-		{ key: 'intimacy', label: 'Intimacy', icon: 'sparkles', value: charState.intimacy, color: 'var(--stat-intimacy)' },
-		{ key: 'comfort', label: 'Comfort', icon: 'home', value: charState.comfort, color: 'var(--stat-comfort)' },
-		{ key: 'energy', label: 'Energy', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
-		{ key: 'respect', label: 'Respect', icon: 'award', value: charState.respect, color: 'var(--stat-respect)' }
+		{ key: 'affection', label: 'Amor', icon: 'heart', value: affectionPercent, color: 'var(--stat-affection)' },
+		{ key: 'trust', label: 'Confianza', icon: 'shield', value: charState.trust, color: 'var(--stat-trust)' },
+		{ key: 'intimacy', label: 'Intimidad', icon: 'sparkles', value: charState.intimacy, color: 'var(--stat-intimacy)' },
+		{ key: 'comfort', label: 'Comodidad', icon: 'home', value: charState.comfort, color: 'var(--stat-comfort)' },
+		{ key: 'energy', label: 'Energía', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
+		{ key: 'respect', label: 'Respeto', icon: 'award', value: charState.respect, color: 'var(--stat-respect)' }
 	]);
 	const companionStats = $derived([
-		{ key: 'energy', label: 'Energy', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
+		{ key: 'energy', label: 'Energía', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
 		{ key: 'chats', label: 'Chats', icon: 'message-circle', value: Math.min(charState.totalInteractions, 100), color: 'var(--stat-trust)' }
 	]);
 	const stats = $derived(isCompanionMode ? companionStats : datingStats);
@@ -162,7 +162,7 @@
 	>
 		<Icon name="alert" size={16} />
 		<span>{sttStore.error}</span>
-		<button type="button" class="dismiss-btn" aria-label="Dismiss">
+		<button type="button" class="dismiss-btn" aria-label="Descartar">
 			<Icon name="x" size={14} />
 		</button>
 	</div>
@@ -242,7 +242,7 @@
 					{#if charState.currentStreak > 1}
 						<span class="foot-stat streak"><Icon name="flame" size={12} />{charState.currentStreak}</span>
 					{/if}
-					<a href={localPath('app', '/settings/persona')} class="foot-link">Profile <Icon name="arrow-right" size={12} /></a>
+					<a href={localPath('app', '/settings/persona')} class="foot-link">Perfil <Icon name="arrow-right" size={12} /></a>
 				</div>
 			</div>
 		{/if}

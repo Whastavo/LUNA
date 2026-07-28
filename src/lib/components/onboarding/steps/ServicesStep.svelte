@@ -130,7 +130,7 @@
 			},
 			onError: (error) => {
 				llmIsLoading = false;
-				llmFetchError = error ?? 'Could not fetch installed models';
+				llmFetchError = error ?? 'No se pudieron obtener los modelos instalados';
 				llmDynamicModels = llmProvider?.isLocal ? [] : null;
 			},
 			onEmpty: () => {
@@ -362,7 +362,7 @@
 			type="llm"
 			value={llmSettings.activeProvider as string}
 			onSelect={handleLLMProviderChange}
-			placeholder="Select LLM provider..."
+			placeholder="Selecciona proveedor de LLM..."
 		/>
 
 		{#if llmProvider?.requiresApiKey || llmProvider?.custom}
@@ -415,7 +415,7 @@
 			<input
 				type="text"
 				class="api-key-input"
-				placeholder="Model (e.g. gpt-4o-mini, meta-llama/llama-3-70b)"
+				placeholder="Modelo (por ejemplo, gpt-4o-mini, meta-llama/llama-3-70b)"
 				value={(llmSettings.activeModel as string) ?? ''}
 				oninput={(e) => handleLLMModelChange(e.currentTarget.value.trim())}
 			/>
@@ -424,7 +424,7 @@
 					models={llmModels}
 					value={llmSettings.activeModel as string}
 					onSelect={handleLLMModelChange}
-					placeholder="Pick a fetched model..."
+					placeholder="Selecciona un modelo obtenido..."
 					isLoading={llmIsLoading}
 					onRefresh={fetchLLMModels}
 					disabled={false}
@@ -459,7 +459,7 @@
 			<Icon name="mic" size={16} />
 			<span class="service-title">Speech (TTS)</span>
 			<span class="optional-badge">Optional</span>
-			<button class="toggle-btn" class:enabled={ttsEnabled} onclick={() => ttsEnabled = !ttsEnabled} aria-label="Toggle TTS">
+			<button class="toggle-btn" class:enabled={ttsEnabled} onclick={() => ttsEnabled = !ttsEnabled} aria-label="Activar/desactivar TTS">
 				<span class="toggle-track">
 					<span class="toggle-thumb"></span>
 				</span>
@@ -503,7 +503,7 @@
 				<input
 					type="text"
 					class="api-key-input"
-					placeholder="Custom Voice ID (optional)"
+					placeholder="ID de voz personalizada (opcional)"
 					value={settingsStore.elevenLabsVoiceId}
 					oninput={(e) => settingsStore.setElevenLabsVoiceId(e.currentTarget.value)}
 				/>
@@ -543,7 +543,7 @@
 			<Icon name="mic" size={16} />
 			<span class="service-title">Voice Input (STT)</span>
 			<span class="optional-badge">Optional</span>
-			<button class="toggle-btn" class:enabled={sttEnabled} onclick={() => sttEnabled = !sttEnabled} aria-label="Toggle voice input (STT)">
+			<button class="toggle-btn" class:enabled={sttEnabled} onclick={() => sttEnabled = !sttEnabled} aria-label="Activar/desactivar entrada de voz (STT)">
 				<span class="toggle-track">
 					<span class="toggle-thumb"></span>
 				</span>
