@@ -19,11 +19,11 @@ export const docsNav: DocsNavSection[] = [
 		title: 'Guides',
 		icon: 'compass',
 		items: [
-			{ title: 'Web Guide', slug: 'guides/web-guide' },
-			{ title: 'Desktop Guide', slug: 'guides/desktop-guide' },
-			{ title: 'Local LLM Setup', slug: 'guides/local-llm-setup' },
-			{ title: 'Local TTS Setup', slug: 'guides/local-tts-setup' },
-			{ title: 'Local STT Setup', slug: 'guides/local-stt-setup' },
+			{ title: 'Guía Web', slug: 'guides/web-guide' },
+			{ title: 'Guía de Escritorio', slug: 'guides/desktop-guide' },
+			{ title: 'Configuración de LLM Local', slug: 'guides/local-llm-setup' },
+			{ title: 'Configuración de TTS Local', slug: 'guides/local-tts-setup' },
+			{ title: 'Configuración de STT Local', slug: 'guides/local-stt-setup' },
 			{ title: 'Troubleshooting', slug: 'guides/troubleshooting' }
 		]
 	},
@@ -31,9 +31,9 @@ export const docsNav: DocsNavSection[] = [
 		title: 'Technology',
 		icon: 'code',
 		items: [
-			{ title: 'Architecture Overview', slug: 'technology/architecture' },
-			{ title: 'Companion System', slug: 'technology/companion-system' },
-			{ title: 'Memory Graph', slug: 'technology/memory-graph' }
+			{ title: 'Descripción general de arquitectura', slug: 'technology/architecture' },
+			{ title: 'Sistema de Compañera', slug: 'technology/companion-system' },
+			{ title: 'Gráfico de Memoria', slug: 'technology/memory-graph' }
 		]
 	},
 	{

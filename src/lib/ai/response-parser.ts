@@ -194,8 +194,8 @@ export function parseResponse(rawResponse: string, companionName?: string): Pars
 		if (parsed) {
 			stateUpdates = convertLLMOutput(parsed);
 		} else {
-			parseError = 'Failed to parse JSON state block';
-			console.debug('Failed to parse LLM state updates:', fenced[1]);
+			parseError = 'Error al analizar el bloque de estado JSON';
+			console.debug("'Error al analizar las actualizaciones de estado de LLM:'", fenced[1]);
 		}
 		dialogue = raw.replace(fenced[0], '').trim();
 	} else {

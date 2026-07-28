@@ -37,26 +37,26 @@ export const consciousnessModule: ModuleDefinition = {
 			{
 				key: 'topP',
 				type: 'number',
-				label: 'Top P',
+				label: 'Precisión del Top P',
 				description: 'Nucleus sampling threshold (0.0-1.0)',
 				defaultValue: 1.0
 			},
 			{
 				key: 'maxTokens',
 				type: 'number',
-				label: 'Max Tokens',
+				label: 'Tokens Máximos',
 				description: 'Maximum tokens in response. Leave empty to use the provider default.'
 			},
 			{
 				key: 'contextSize',
 				type: 'number',
-				label: 'Context Window',
+				label: 'Ventana de Contexto',
 				description: 'Maximum context size of the selected model in tokens. Used to scale memory injection and truncate history. Leave empty to keep the default behavior.'
 			},
 			{
 				key: 'presencePenalty',
 				type: 'number',
-				label: 'Presence Penalty',
+				label: 'Penalización de Presencia',
 				description: 'Penalizes tokens that have already appeared (-2.0 to 2.0)',
 				defaultValue: 0
 			},

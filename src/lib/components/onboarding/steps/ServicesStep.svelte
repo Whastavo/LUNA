@@ -173,7 +173,7 @@
 			},
 			onError: () => {
 				ttsIsLoading = false;
-				ttsFetchError = 'Using default list';
+				ttsFetchError = 'Usando lista predeterminada';
 				ttsDynamicModels = null;
 			},
 			onEmpty: () => {
@@ -471,7 +471,7 @@
 				type="tts"
 				value={ttsSettings.activeProvider as string}
 				onSelect={handleTTSProviderChange}
-				placeholder="Select TTS provider..."
+				placeholder="Selecciona proveedor de TTS..."
 			/>
 
 			{#if ttsProvider?.requiresApiKey}
@@ -479,7 +479,7 @@
 					type="password"
 					class="api-key-input"
 					class:error={ttsFetchError}
-					placeholder="Enter API Key..."
+					placeholder="Ingresa la clave de API..."
 					value={settingsStore.getProviderConfig(ttsProvider.id).apiKey ?? ''}
 					oninput={(e) => handleTTSApiKeyChange(e.currentTarget.value)}
 					onblur={handleTTSApiKeyBlur}
@@ -577,7 +577,7 @@
 			<input
 				type="password"
 				class="api-key-input"
-				placeholder="Groq API Key (optional)"
+				placeholder="Clave de API de Groq (opcional)"
 				value={settingsStore.getProviderConfig('groq-stt').apiKey ?? ''}
 				oninput={(e) => {
 					settingsStore.setProviderConfig('groq-stt', { apiKey: e.currentTarget.value });

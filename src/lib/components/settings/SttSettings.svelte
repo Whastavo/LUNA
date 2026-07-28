@@ -16,7 +16,7 @@
 		<input
 			type="password"
 			class="api-key-input"
-			placeholder="Groq API Key"
+			placeholder="Clave de API de Groq"
 			value={settingsStore.getProviderConfig('groq-stt').apiKey ?? ''}
 			oninput={(e) => {
 				const v = e.currentTarget.value;

@@ -26,8 +26,8 @@
 
 	// Group providers by category for LLM
 	const llmCategories = [
-		{ id: 'cloud-commercial', label: 'Cloud Commercial', providers: ['openai', 'anthropic', 'google', 'deepseek', 'mistral', 'xai', 'groq', 'perplexity', 'moonshot', 'together'] },
-		{ id: 'cloud-additional', label: 'Cloud Additional', providers: ['cerebras', 'fireworks', 'novita', '302ai', 'comet'] },
+		{ id: 'cloud-commercial', label: 'Comerciales en la Nube', providers: ['openai', 'anthropic', 'google', 'deepseek', 'mistral', 'xai', 'groq', 'perplexity', 'moonshot', 'together'] },
+		{ id: 'cloud-additional', label: 'Adicionales en la Nube', providers: ['cerebras', 'fireworks', 'novita', '302ai', 'comet'] },
 		{ id: 'aggregators', label: 'Aggregators', providers: ['openrouter', 'openai-compatible'] },
 		{ id: 'local', label: 'Local', providers: ['ollama', 'lmstudio', 'vllm', 'player2'] },
 		{ id: 'enterprise', label: 'Enterprise', providers: ['azure', 'cloudflare'] }
@@ -35,7 +35,7 @@
 
 	// Group providers by category for TTS
 	const ttsCategories = [
-		{ id: 'cloud', label: 'Cloud TTS', providers: ['elevenlabs', 'openai-tts', 'azure-speech', 'deepgram', 'alibaba-cosyvoice', 'volcengine', 'comet-tts'] },
+		{ id: 'cloud', label: 'TTS en la Nube', providers: ['elevenlabs', 'openai-tts', 'azure-speech', 'deepgram', 'alibaba-cosyvoice', 'volcengine', 'comet-tts'] },
 		{ id: 'local', label: 'Local / Free', providers: ['local-tts', 'web-speech', 'index-tts', 'browser-local', 'app-local'] },
 		{ id: 'generic', label: 'Generic', providers: ['openai-compatible-tts', 'player2-tts'] }
 	];

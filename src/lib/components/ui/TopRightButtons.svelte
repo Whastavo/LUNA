@@ -191,7 +191,7 @@
 			</button>
 		{/if}
 		{#if showOverlayBtn}
-			<button class="icon-btn overlay-btn" onclick={launchOverlay} aria-label="Launch overlay" title="Launch Overlay Mode">
+			<button class="icon-btn overlay-btn" onclick={launchOverlay} aria-label="Iniciar modo superpuesto" title="Iniciar modo superpuesto">
 				<Icon name="monitor" size={20} />
 			</button>
 		{/if}
@@ -245,7 +245,7 @@
 				class:active={arStore.active}
 				style="--i: 3"
 				onclick={handleArClick}
-				aria-label={arStore.active ? 'Exit AR' : 'Enter AR'}
+				aria-label={arStore.active ? 'Salir de RA' : 'Entrar en RA'}
 				title={arStore.active ? 'Exit AR' : 'View in AR'}
 			>
 				<Icon name="cube" size={20} />

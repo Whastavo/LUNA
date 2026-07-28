@@ -57,14 +57,14 @@
 				const validated = validateSaveFile(json);
 
 				if (!validated) {
-					importError = 'Invalid save file format';
+					importError = 'Formato de archivo de guardado inválido';
 					importFile = null;
 					return;
 				}
 
 				importPreview = getSaveFilePreview(validated);
 			} catch {
-				importError = 'Failed to parse JSON file';
+				importError = 'Error al analizar el archivo JSON';
 				importFile = null;
 			}
 		};
@@ -84,13 +84,13 @@
 					try {
 						const json = JSON.parse(e.target?.result as string);
 						const validated = validateSaveFile(json);
-						if (!validated) reject(new Error('Invalid save file'));
+						if (!validated) reject(new Error('Archivo de guardado inválido'));
 						else resolve(validated);
 					} catch {
-						reject(new Error('Failed to parse file'));
+						reject(new Error('Error al analizar el archivo'));
 					}
 				};
-				reader.onerror = () => reject(new Error('Failed to read file'));
+				reader.onerror = () => reject(new Error('Error al leer el archivo'));
 				reader.readAsText(importFile!);
 			});
 
@@ -104,7 +104,7 @@
 				window.location.reload();
 			}, 1500);
 		} catch (e) {
-			importError = e instanceof Error ? e.message : 'Import failed';
+			importError = e instanceof Error ? e.message : 'La importación falló';
 		} finally {
 			isImporting = false;
 		}

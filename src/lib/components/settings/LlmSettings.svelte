@@ -55,7 +55,7 @@
 			type="llm"
 			value={state.consciousnessSettings.activeProvider as string}
 			onSelect={state.handleLLMProviderChange}
-			placeholder="Select LLM provider..."
+			placeholder="Selecciona proveedor de LLM..."
 		/>
 
 		{#if state.consciousnessSettings.activeProvider}

@@ -29,7 +29,7 @@
 			type="tts"
 			value={state.speechSettings.activeProvider as string}
 			onSelect={state.handleTTSProviderChange}
-			placeholder="Select TTS provider..."
+			placeholder="Selecciona proveedor de TTS..."
 		/>
 
 		{#if state.speechSettings.activeProvider}
@@ -67,7 +67,7 @@
 					<input
 						type="text"
 						class="api-key-input"
-						placeholder="Custom Voice ID (optional)"
+						placeholder="ID de voz personalizada (opcional)"
 						value={settingsStore.elevenLabsVoiceId}
 						onchange={(e) => settingsStore.setElevenLabsVoiceId(e.currentTarget.value)}
 					/>
