@@ -255,7 +255,7 @@
 		clearingStorage = true;
 		try {
 			const vrmStorage = localforage.createInstance({
-				name: 'utsuwa-vrm',
+				name: 'luna-vrm',
 				storeName: 'models'
 			});
 			await vrmStorage.clear();
@@ -278,7 +278,7 @@
 	// Clear all character data
 	async function clearCharacterData() {
 		try {
-			indexedDB.deleteDatabase('utsuwa-db');
+			indexedDB.deleteDatabase('luna-db');
 			// console.log('Character database cleared');
 			window.location.reload();
 		} catch (e) {

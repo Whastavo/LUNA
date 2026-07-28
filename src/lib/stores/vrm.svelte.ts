@@ -47,11 +47,11 @@ const DEFAULT_MODELS: VrmModel[] = [
 const PREVIEW_KEY_PREFIX = 'model-preview-v2-';
 
 // Configure localforage for VRM storage
-const vrmStorage = browser
-	? localforage.createInstance({
-			name: 'utsuwa-vrm',
-			storeName: 'models'
-		})
+	const vrmStorage = browser
+		? localforage.createInstance({
+				name: 'luna-vrm',
+				storeName: 'models'
+			})
 	: null;
 
 function createVrmStore() {

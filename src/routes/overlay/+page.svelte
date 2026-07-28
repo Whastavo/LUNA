@@ -49,8 +49,8 @@
 	const chatExpanded = $derived(overlayStore.chatExpanded);
 
 	// --- Overlay window sizing & lock ---
-	const SIZE_KEY = 'utsuwa-overlay-size';
-	const LOCK_KEY = 'utsuwa-overlay-locked';
+	const SIZE_KEY = 'luna-overlay-size';
+	const LOCK_KEY = 'luna-overlay-locked';
 
 	// Restore lock preference and last window size
 	$effect(() => {

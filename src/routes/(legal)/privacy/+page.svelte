@@ -3,20 +3,20 @@
 </script>
 
 <svelte:head>
-	<title>Privacy Policy — Utsuwa</title>
+	<title>Privacy Policy — Luna</title>
 	<meta
 		name="description"
-		content="How Utsuwa handles your data: no accounts, no analytics, no tracking. Your conversations, memories, and settings live on your device."
+		content="How Luna handles your data: no accounts, no analytics, no tracking. Your conversations, memories, and settings live on your device."
 	/>
 	<link rel="canonical" href={`${SITE_URL}/privacy`} />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content="Privacy Policy — Utsuwa" />
+	<meta property="og:title" content="Privacy Policy — Luna" />
 	<meta
 		property="og:description"
-		content="How Utsuwa handles your data: no accounts, no analytics, no tracking."
+		content="How Luna handles your data: no accounts, no analytics, no tracking."
 	/>
 	<meta property="og:url" content={`${SITE_URL}/privacy`} />
-	<meta property="og:site_name" content="Utsuwa" />
+	<meta property="og:site_name" content="Luna" />
 </svelte:head>
 
 <header class="legal-header">
@@ -36,15 +36,15 @@
 
 <article class="prose legal-prose">
 	<p>
-		Utsuwa is an open-source AI companion built to be local-first. This policy explains what
-		happens to your data when you use the Utsuwa website and hosted web app (utsuwa.ai and its
-		subdomains) and the Utsuwa desktop app, operated by Ordinary Company Group LLC. The short
+		Luna is an open-source AI companion built to be local-first. This policy explains what
+		happens to your data when you use the Luna website and hosted web app (luna.ai and its
+		subdomains) and the Luna desktop app, operated by Ordinary Company Group LLC. The short
 		version: your companion lives on your device, and we like it that way.
 	</p>
 
 	<h2 id="what-we-dont-collect">What we don't collect</h2>
 	<p>
-		Utsuwa has no account system, so we never ask for your name, email address, or a password. We
+		Luna has no account system, so we never ask for your name, email address, or a password. We
 		run no analytics or tracking scripts on the website or in the app, we set no advertising or
 		tracking cookies, and we show no ads. There is no database of users on our side, and we can't
 		see your conversations. We couldn't sell your personal information if we wanted to, because we
@@ -66,7 +66,7 @@
 
 	<h2 id="how-messages-reach-your-provider">How your messages reach your AI provider</h2>
 	<p>
-		Utsuwa is bring-your-own-AI: you connect it to a provider you choose (for example OpenAI,
+		Luna is bring-your-own-AI: you connect it to a provider you choose (for example OpenAI,
 		Anthropic, or a local model through Ollama or LM Studio) using your own API key. How your
 		messages travel depends on where you run Utsuwa:
 	</p>

@@ -70,9 +70,9 @@ test('provides local provider troubleshooting hints', () => {
 		getLocalProviderConnectionHint(
 			'ollama',
 			'http://localhost:11434',
-			'https://utsuwa-git-fix-ollama-local-provider.vercel.app'
+			'https://luna-git-fix-ollama-local-provider.vercel.app'
 		),
-		/OLLAMA_ORIGINS="https:\/\/utsuwa-git-fix-ollama-local-provider\.vercel\.app"/
+		/OLLAMA_ORIGINS="https:\/\/luna-git-fix-ollama-local-provider\.vercel\.app"/
 	);
 	assert.match(getLocalProviderConnectionHint('lmstudio', 'http://localhost:1234/v1'), /Start Server/);
 });
@@ -97,8 +97,8 @@ test('provides local TTS troubleshooting hint with CORS guidance', () => {
 	assert.match(hint, /audio\/speech/);
 	assert.match(hint, /CORS/);
 	assert.match(
-		getLocalTTSConnectionHint('http://localhost:8880', 'https://utsuwa.app'),
-		/https:\/\/utsuwa\.app/
+		getLocalTTSConnectionHint('http://localhost:8880', 'https://luna.app'),
+		/https:\/\/luna\.app/
 	);
 });
 

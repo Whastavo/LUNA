@@ -60,7 +60,7 @@
 	const FILTER_IDS = Object.keys(PHOTO_FILTERS) as PhotoFilterId[];
 
 	const STICKERS: Array<{ id: string; label: string; src: string }> = [
-		{ id: 'utsuwa-logo', label: 'Utsuwa logo', src: '/brand-assets/logo.svg' }
+		{ id: 'luna-logo', label: 'Logo de Luna', src: '/brand-assets/logo.svg' }
 	];
 
 	const activeBackgroundId = $derived(
@@ -119,7 +119,7 @@
 			// Both platforms put the file where users expect downloads to land:
 			// the browser via a download, the desktop app by writing directly to
 			// the Downloads folder. The keepsake-store copy is kept either way.
-			const filename = `utsuwa-photo-${Date.now()}.png`;
+			const filename = `luna-photo-${Date.now()}.png`;
 			if (isTauri()) {
 				try {
 					const { writeFile, BaseDirectory } = await import('@tauri-apps/plugin-fs');

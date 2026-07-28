@@ -45,7 +45,7 @@ function createOverlayStore() {
 	function setPosition(newPosition: OverlayPosition) {
 		position = newPosition;
 		if (browser) {
-			localStorage.setItem('utsuwa-overlay-position', JSON.stringify(position));
+			localStorage.setItem('luna-overlay-position', JSON.stringify(position));
 		}
 	}
 

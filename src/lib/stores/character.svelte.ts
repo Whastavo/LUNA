@@ -395,7 +395,7 @@ function createCharacterStore() {
 		// Listen before the initial load so a boot-time patch save in another
 		// window is never missed.
 		if (typeof BroadcastChannel !== 'undefined') {
-			syncChannel = new BroadcastChannel('utsuwa-character-state');
+			syncChannel = new BroadcastChannel('luna-character-state');
 			syncChannel.onmessage = async () => {
 				// Still booting: loadState is about to read fresh data anyway
 				if (isLoading) return;
