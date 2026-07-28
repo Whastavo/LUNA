@@ -1,0 +1,45 @@
+{
+	"rewrites": [
+		{
+			"source": "/",
+			"has": [{ "type": "host", "value": "docs.utsuwa.ai" }],
+			"destination": "/docs"
+		},
+		{
+			"source": "/:path+",
+			"has": [{ "type": "host", "value": "docs.utsuwa.ai" }],
+			"destination": "/docs/:path+"
+		},
+		{
+			"source": "/",
+			"has": [{ "type": "host", "value": "app.utsuwa.ai" }],
+			"destination": "/app"
+		}
+	],
+	"redirects": [
+		{
+			"source": "/docs",
+			"has": [{ "type": "host", "value": "utsuwa.ai" }],
+			"destination": "https://docs.utsuwa.ai",
+			"permanent": true
+		},
+		{
+			"source": "/docs/:path*",
+			"has": [{ "type": "host", "value": "utsuwa.ai" }],
+			"destination": "https://docs.utsuwa.ai/:path*",
+			"permanent": true
+		},
+		{
+			"source": "/app",
+			"has": [{ "type": "host", "value": "utsuwa.ai" }],
+			"destination": "https://app.utsuwa.ai",
+			"permanent": true
+		},
+		{
+			"source": "/app/:path*",
+			"has": [{ "type": "host", "value": "utsuwa.ai" }],
+			"destination": "https://app.utsuwa.ai/:path*",
+			"permanent": true
+		}
+	]
+}
