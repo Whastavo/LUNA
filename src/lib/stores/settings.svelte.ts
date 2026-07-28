@@ -16,9 +16,9 @@ function createSettingsStore() {
 	// Desktop hotkey configuration
 	let hotkeys = $state<HotkeyConfig>({ ...DEFAULT_HOTKEYS });
 
-	// Load from localStorage on init
+	// Cargar desde localStorage en la inicialización
 	if (browser) {
-		const saved = localStorage.getItem('utsuwa-settings');
+		const saved = localStorage.getItem('luna-settings');
 		if (saved) {
 			try {
 				const parsed = JSON.parse(saved);
@@ -59,7 +59,7 @@ function createSettingsStore() {
 	function save() {
 		if (browser) {
 			localStorage.setItem(
-				'utsuwa-settings',
+				'luna-settings',
 				JSON.stringify({
 					providerConfigs,
 					addedProviders,
@@ -69,10 +69,10 @@ function createSettingsStore() {
 		}
 	}
 
-	// Sync settings across windows (main ↔ overlay)
+	// Sincronizar configuración en ventanas (main ↔ overlay)
 	if (browser) {
 		window.addEventListener('storage', (e) => {
-			if (e.key === 'utsuwa-settings' && e.newValue) {
+			if (e.key === 'luna-settings' && e.newValue) {
 				try {
 					const parsed = JSON.parse(e.newValue);
 					providerConfigs = parsed.providerConfigs ?? {};

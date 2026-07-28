@@ -1,10 +1,10 @@
 import type { Reroute } from '@sveltejs/kit';
 
-// Subdomain → internal route prefix. On docs.utsuwa.ai a request for
-// `/overview/introduction` is routed to `/docs/overview/introduction`, and
-// app.utsuwa.ai/settings → /app/settings. This runs on both the server and
-// during client-side navigation, so clean subdomain URLs resolve everywhere.
-// "Prepend only if missing" keeps already-prefixed paths working as a safety net.
+// Subdominio → prefijo de ruta interna. En docs.luna.ai una solicitud para
+// `/overview/introduction` se enruta a `/docs/overview/introduction`, y
+// app.luna.ai/settings → /app/settings. Esto se ejecuta tanto en el servidor como
+// durante la navegación del lado del cliente, por lo que las URL de subdominio limpias se resuelven en todas partes.
+// "Prepend only if missing" mantiene las rutas ya prefijadas funcionando como red de seguridad.
 export const reroute: Reroute = ({ url }) => {
 	const host = url.hostname;
 
@@ -18,5 +18,5 @@ export const reroute: Reroute = ({ url }) => {
 		}
 	}
 
-	// Main domain / localhost: leave the path untouched.
+	// Dominio principal / localhost: dejar la ruta sin tocar.
 };

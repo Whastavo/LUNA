@@ -11,9 +11,9 @@ function createOverlayStore() {
 	let chatExpanded = $state(false);
 	let position = $state<OverlayPosition>({ x: 100, y: 100 });
 
-	// Load persisted position on init
+	// Cargar posición persistida al inicializar
 	if (browser) {
-		const saved = localStorage.getItem('utsuwa-overlay-position');
+		const saved = localStorage.getItem('luna-overlay-position');
 		if (saved) {
 			try {
 				position = JSON.parse(saved);

@@ -17,17 +17,17 @@
 	const updateStatusText = $derived.by(() => {
 		switch (updaterStore.status) {
 			case 'checking':
-				return 'Checking for updates…';
+				return 'Buscando actualizaciones…';
 			case 'uptodate':
-				return "You're on the latest version";
+				return 'Estás en la última versión';
 			case 'available':
-				return `Update available: Utsuwa ${updaterStore.availableVersion}`;
+				return `Actualización disponible: Luna ${updaterStore.availableVersion}`;
 			case 'downloading':
-				return `Downloading… ${updaterStore.progress}%`;
+				return `Descargando… ${updaterStore.progress}%`;
 			case 'ready':
-				return 'Update installed — restarting…';
+				return 'Actualización instalada — reiniciando…';
 			case 'error':
-				return updaterStore.errorMessage ?? 'Update check failed';
+				return updaterStore.errorMessage ?? 'La verificación de actualización falló';
 			default:
 				return '';
 		}

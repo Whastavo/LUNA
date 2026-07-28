@@ -16,11 +16,11 @@
 
 	type Tab = 'pose' | 'face' | 'scene' | 'camera' | 'sticker';
 	const TABS: Array<{ id: Tab; label: string }> = [
-		{ id: 'camera', label: 'Camera' },
+		{ id: 'camera', label: 'Cámara' },
 		{ id: 'pose', label: 'Pose' },
-		{ id: 'face', label: 'Face' },
-		{ id: 'scene', label: 'Scene' },
-		{ id: 'sticker', label: 'Sticker' }
+		{ id: 'face', label: 'Cara' },
+		{ id: 'scene', label: 'Escena' },
+		{ id: 'sticker', label: 'Pegatina' }
 	];
 
 	let tab = $state<Tab>('camera');

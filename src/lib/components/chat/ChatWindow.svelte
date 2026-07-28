@@ -37,11 +37,11 @@
 	let messagesEl: HTMLDivElement | null = $state(null);
 	let scrollRaf: number | null = null;
 
-	// --- Floating geometry -----------------------------------------------------
-	// The panel floats: drag it by the header, resize it from any edge. Its
-	// rect persists so it comes back where you left it. Until the user drags,
-	// it anchors to the docked side from settings.
-	const GEOMETRY_KEY = 'utsuwa-chat-panel';
+	// --- Geometría flotante --------------------------------------------------
+	// El panel flota: arrástralo por el encabezado, cambia su tamaño desde cualquier borde. Su
+	// rect persiste para que regrese a donde lo dejaste. Hasta que el usuario lo arrastra,
+	// se ancla al lado acoplado desde la configuración.
+	const GEOMETRY_KEY = 'luna-chat-panel';
 	const DEFAULT_WIDTH = 460;
 	const DEFAULT_HEIGHT_VH = 0.72;
 	const MIN_WIDTH = 260;

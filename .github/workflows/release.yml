@@ -75,20 +75,20 @@ jobs:
         with:
           # Only publish a release on a tag push. Manual runs just verify the build.
           tagName: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
-          releaseName: ${{ github.ref_type == 'tag' && 'Utsuwa __VERSION__' || '' }}
+          releaseName: ${{ github.ref_type == 'tag' && 'Luna __VERSION__' || '' }}
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
           releaseBody: |
-            Desktop builds for macOS, Windows, and Linux.
+            Compilaciones de escritorio para macOS, Windows y Linux.
 
-            **Downloads**
+            **Descargas**
             - macOS: `.dmg` (universal — Apple Silicon + Intel)
-            - Windows: `.exe` installer
-            - Linux: `.AppImage`, `.deb`, or `.rpm`
+            - Windows: instalador `.exe`
+            - Linux: `.AppImage`, `.deb` o `.rpm`
 
-            > These builds are **unsigned** while the desktop app is in beta, so your OS will warn you the first time you open it.
-            > - **macOS:** right-click the app → **Open** → **Open** (or run `xattr -dr com.apple.quarantine /Applications/Utsuwa.app`).
-            > - **Windows:** on the SmartScreen prompt, click **More info** → **Run anyway**.
+            > Estas compilaciones están **sin firmar** mientras la aplicación de escritorio está en beta, por lo que el sistema operativo te advertirá la primera vez que la abras.
+            > - **macOS:** haz clic derecho en la aplicación → **Abrir** → **Abrir** (o ejecuta `xattr -dr com.apple.quarantine /Applications/Luna.app`).
+            > - **Windows:** en la solicitud de SmartScreen, haz clic en **Más información** → **Ejecutar de todas formas**.
             >
-            > See the [Desktop Guide](https://docs.utsuwa.ai/docs/guides/desktop-guide) for details.
+            > Ver la [Guía de Escritorio](https://docs.luna.ai/docs/guides/desktop-guide) para más detalles.

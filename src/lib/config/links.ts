@@ -1,27 +1,27 @@
 import { page } from '$app/state';
 
 /**
- * Host-aware link builder for the subdomain split (docs.utsuwa.ai, app.utsuwa.ai).
+ * Constructor de enlace consciente del host para la división de subdominio (docs.luna.ai, app.luna.ai).
  *
- * - On the real utsuwa.ai (apex or any subdomain): links resolve to the right
- *   subdomain via absolute URLs. Same-origin links stay client-side (SPA) nav,
- *   cross-subdomain links do a normal full navigation.
- * - In local dev (localhost) and on *.vercel.app preview deploys: everything
- *   stays path-based (/docs, /app), so there's nothing to set up to test.
+ * - En el verdadero luna.ai (ápice o cualquier subdominio): los enlaces se resuelven al derecho
+ *   subdominio mediante URL absolutas. Los enlaces del mismo origen permanecen en el lado del cliente (SPA) nav,
+ *   los enlaces entre subdominios hacen una navegación completa normal.
+ * - En desarrollo local (localhost) y en despliegues de vista previa *.vercel.app: todo
+ *   permanece basado en rutas (/docs, /app), por lo que no hay nada que configurar para probar.
  *
- * The reroute hook (src/hooks.ts) maps the clean subdomain paths back to the
- * real /docs and /app routes.
+ * El gancho reroute (src/hooks.ts) asigna las rutas de subdominio limpias a
+ * las rutas reales /docs y /app.
  */
 
 type Section = 'docs' | 'app';
-const APEX = 'utsuwa.ai';
+const APEX = 'luna.ai';
 
 function hostname(): string {
 	return page.url?.hostname ?? '';
 }
 
-// Only the real production domain uses the subdomain split. localhost and
-// preview deploys (e.g. *.vercel.app) fall back to path-based routing.
+// Solo el dominio de producción real usa la división de subdominio. localhost y
+// los despliegues de vista previa (por ejemplo, *.vercel.app) recurren al enrutamiento basado en rutas.
 function usesSubdomains(): boolean {
 	return hostname().endsWith(APEX);
 }
@@ -44,10 +44,10 @@ export function mainUrl(path = ''): string {
 }
 
 /**
- * The *relative* browser path for a section page on the current host — clean
- * ("/overview") when already on that section's subdomain, prefixed
- * ("/docs/overview") otherwise. Use for within-section links and for comparing
- * against `page.url.pathname` (active states), since those must match.
+ * La ruta *relativa* del navegador para una página de sección en el host actual — limpia
+ * ("/overview") cuando ya está en el subdominio de esa sección, con prefijo
+ * ("/docs/overview") de lo contrario. Utiliza para enlaces dentro de la sección y para comparar
+ * contra `page.url.pathname` (estados activos), ya que deben coincidir.
  */
 export function localPath(section: Section, path = ''): string {
 	const clean = norm(path);
@@ -55,7 +55,7 @@ export function localPath(section: Section, path = ''): string {
 	return onThisSubdomain ? clean || '/' : `/${section}${clean}`;
 }
 
-/** Whether the current page belongs to a section (subdomain or path-prefixed). */
+/** Si la página actual pertenece a una sección (subdominio o prefijo de ruta). */
 export function isSection(section: Section): boolean {
 	return hostname().startsWith(`${section}.`) || (page.url?.pathname ?? '').startsWith(`/${section}`);
 }

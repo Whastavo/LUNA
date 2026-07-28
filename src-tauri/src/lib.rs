@@ -33,7 +33,7 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init());
 
-    // Updates ship as signed installers, so the updater is desktop-only.
+    // Las actualizaciones se envían como instaladores firmados, por lo que el actualizador es solo de escritorio.
     #[cfg(desktop)]
     let builder = builder
         .plugin(tauri_plugin_updater::Builder::new().build())
@@ -45,5 +45,5 @@ pub fn run() {
             toggle_overlay
         ])
         .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .expect("error mientras se ejecutaba la aplicación tauri");
 }

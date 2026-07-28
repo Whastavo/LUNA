@@ -2,11 +2,11 @@ import { browser } from '$app/environment';
 import localforage from 'localforage';
 import { computeScaledDimensions } from '$lib/services/chat/image-scaling';
 
-// "Traces of life": the images you've shown her. Stored locally only. The blob
-// never leaves the device; only the single vision inference does. Mirrors the
-// VRM blob store in stores/vrm.svelte.ts.
+// "Huellas de vida": las imágenes que le has mostrado. Almacenado localmente solo. El blob
+// nunca sale del dispositivo; solo lo hace la única inferencia de visión. Refleja el
+// almacén de blobs VRM en stores/vrm.svelte.ts.
 const keepsakeStorage = browser
-	? localforage.createInstance({ name: 'utsuwa-keepsakes', storeName: 'images' })
+	? localforage.createInstance({ name: 'luna-keepsakes', storeName: 'images' })
 	: null;
 
 export interface PreparedImage {

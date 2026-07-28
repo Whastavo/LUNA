@@ -9,7 +9,7 @@
 
 	let { state }: { state: LlmSettingsState } = $props();
 
-	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-utsuwa-to-reach-ollama`;
+	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-luna-to-reach-ollama`;
 
 	function openLocalLlmDocs(e: MouseEvent) {
 		if (isTauri()) {
@@ -25,11 +25,11 @@
 
 {#snippet troubleHelp()}
 	<p class="provider-help">
-		Having trouble? Click <a
+		¿Problemas? Haz clic <a
 			href={LOCAL_LLM_DOCS_URL}
 			target="_blank"
 			rel="noopener"
-			onclick={openLocalLlmDocs}>here</a
+			onclick={openLocalLlmDocs}>aquí</a
 		>
 	</p>
 {/snippet}

@@ -9,13 +9,13 @@ import {
 } from '$lib/utils/reminders';
 
 const POLL_INTERVAL_MS = 10000;
-// Grace must cover a full poll gap so a reminder never classifies as missed
-// just because the timer fell on the far side of an interval.
+// El período de gracia debe cubrir un intervalo de sondeo completo para que un recordatorio nunca se clasifique como perdido
+// solo porque el temporizador cayó al otro lado de un intervalo.
 const GRACE_MS = 15000;
-const CLEANUP_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
-// Largest safe date for compound-index range queries.
+const CLEANUP_INTERVAL_MS = 60 * 60 * 1000; // 1 hora
+// Fecha más segura para consultas de rango de índice compuesto.
 const MAX_DATE = new Date(8640000000000000);
-const BROADCAST_CHANNEL_NAME = 'utsuwa-reminders';
+const BROADCAST_CHANNEL_NAME = 'luna-reminders';
 
 let upcoming = $state<Reminder[]>([]);
 let recentFired = $state<Reminder[]>([]);
@@ -33,9 +33,9 @@ const windowId = generateWindowId();
 
 async function loadUpcoming() {
 	const now = new Date();
-	// sessionId is kept only as metadata; pending reminders from any session are
-	// visible and fireable so timers survive a browser restart even when the
-	// current in-memory session id changes.
+	// sessionId se mantiene solo como metadatos; los recordatorios pendientes de cualquier sesión son
+	// visibles y pueden dispararse, por lo que los temporizadores sobreviven a un reinicio del navegador incluso cuando el
+	// identificador de sesión actual en memoria cambia.
 	const items = await db.reminders
 		.where('[executed+triggerAt]')
 		.between([0, now], [0, MAX_DATE], false, false)

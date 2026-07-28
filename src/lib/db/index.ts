@@ -28,11 +28,11 @@ export interface DBReminder extends Omit<Reminder, 'id'> {
 	id?: number;
 }
 
-// Legacy persona storage keys (for migration)
-const LEGACY_PERSONA_CARDS_KEY = 'utsuwa-persona-cards';
-const LEGACY_PERSONA_ACTIVE_KEY = 'utsuwa-persona-active-id';
+// Claves de almacenamiento heredadas de personas (para migración)
+const LEGACY_PERSONA_CARDS_KEY = 'luna-persona-cards';
+const LEGACY_PERSONA_ACTIVE_KEY = 'luna-persona-active-id';
 
-class UtsuwaDatabase extends Dexie {
+class LunaDatabase extends Dexie {
 	characterStates!: EntityTable<DBCharacterState, 'id'>;
 	facts!: EntityTable<DBFact, 'id'>;
 	sessions!: EntityTable<DBSessionSummary, 'id'>;
@@ -41,7 +41,7 @@ class UtsuwaDatabase extends Dexie {
 	reminders!: EntityTable<DBReminder, 'id'>;
 
 	constructor() {
-		super('utsuwa-db');
+		super('luna-db');
 
 		// Version 1: Original multi-persona schema (legacy)
 		this.version(1).stores({

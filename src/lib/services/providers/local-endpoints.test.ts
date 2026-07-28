@@ -36,9 +36,9 @@ test('cloud STT base URL is only trimmed, not path-normalized', () => {
 });
 
 test('local STT connection hint names the endpoint and origin', () => {
-	const hint = getLocalSTTConnectionHint('http://localhost:8000/v1', 'https://utsuwa.ai');
+	const hint = getLocalSTTConnectionHint('http://localhost:8000/v1', 'https://luna.ai');
 	assert.match(hint, /audio\/transcriptions/);
-	assert.match(hint, /utsuwa\.ai/);
+	assert.match(hint, /luna\.ai/);
 });
 
 test('identifies local LLM providers', () => {

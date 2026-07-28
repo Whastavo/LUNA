@@ -1,6 +1,6 @@
-// Prevents additional console window on Windows in release
+// Evita una ventana de consola adicional en Windows en lanzamiento
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    utsuwa_lib::run();
+    luna_lib::run();
 }

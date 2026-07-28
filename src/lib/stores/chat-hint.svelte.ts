@@ -1,11 +1,11 @@
 import { browser } from '$app/environment';
 
-const PRIVACY_ACK_KEY = 'utsuwa-image-privacy-ack';
+const PRIVACY_ACK_KEY = 'luna-image-privacy-ack';
 
 /**
- * Transient chat toasts (image hints, TTS errors) plus the one-time photo
- * privacy disclosure. Lives in a store so any input surface can raise them
- * while BottomChatBar, which is always mounted, renders them.
+ * Notificaciones de chat transitorias (sugerencias de imágenes, errores de TTS) más la divulgación
+ * de privacidad de fotos de una sola vez. Vive en una tienda para que cualquier superficie de entrada pueda generarlas
+ * mientras que BottomChatBar, que siempre está montado, las representa.
  */
 function createChatHintStore() {
 	let hint = $state<string | null>(null);
@@ -18,7 +18,7 @@ function createChatHintStore() {
 		hintTimer = setTimeout(() => (hint = null), 6000);
 	}
 
-	/** Shown once, the first time a photo is attached, then remembered. */
+	/** Se muestra una vez, la primera vez que se adjunta una foto, luego se recuerda. */
 	function requestPrivacyNotice() {
 		if (!browser || localStorage.getItem(PRIVACY_ACK_KEY) === '1') return;
 		showPrivacy = true;

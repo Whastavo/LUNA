@@ -13,9 +13,9 @@
 	import { DOCS_URL } from '$lib/config/site';
 	import { isTauri } from '$lib/services/platform';
 
-	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-utsuwa-to-reach-ollama`;
+	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-luna-to-reach-ollama`;
 
-	// Always open the docs subdomain; on desktop route it to the system browser.
+	// Siempre abre el subdominio de docs; en el escritorio, enrútalo al navegador del sistema.
 	function openLocalLlmDocs(e: MouseEvent) {
 		if (isTauri()) {
 			e.preventDefault();

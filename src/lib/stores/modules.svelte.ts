@@ -1,14 +1,14 @@
 import { browser } from '$app/environment';
 import type { ModuleDefinition, ModuleState, ModuleMetadata, ModuleWithState } from '$lib/types/module';
 
-const STORAGE_PREFIX = 'utsuwa-module-';
+const STORAGE_PREFIX = 'luna-module-';
 
 function createModulesStore() {
 	let registry = $state<Map<string, ModuleDefinition>>(new Map());
 
 	let moduleStates = $state<Map<string, ModuleState>>(new Map());
 
-	// Sync module state across windows (main ↔ overlay)
+	// Sincronizar el estado del módulo en ventanas (main ↔ overlay)
 	if (browser) {
 		window.addEventListener('storage', (e) => {
 			if (e.key?.startsWith(STORAGE_PREFIX) && e.newValue) {
