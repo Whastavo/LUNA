@@ -1,11 +1,11 @@
 ---
 title: Desktop Guide
-description: How to install and use the Utsuwa desktop application with overlay mode.
+description: How to install and use the Luna desktop application with overlay mode.
 ---
 
 # Desktop Guide
 
-Utsuwa Desktop is an application that brings your AI companion to your desktop with a transparent overlay mode. Your companion can float over other applications, always visible while you work.
+Luna Desktop is an application that brings your AI companion to your desktop with a transparent overlay mode. Your companion can float over other applications, always visible while you work.
 
 Available for **macOS**, **Windows**, and **Linux**.
 
@@ -13,11 +13,11 @@ Available for **macOS**, **Windows**, and **Linux**.
 
 ### Download
 
-Head to the [GitHub Releases](https://github.com/The-Lab-by-Ordinary-Company/utsuwa/releases) page and grab the build for your platform:
+Head to the [GitHub Releases](https://github.com/The-Lab-by-Ordinary-Company/luna/releases) page and grab the build for your platform:
 
 | Platform | File | Install |
 |----------|------|---------|
-| **macOS** | `.dmg` (universal) | Open the disk image and drag Utsuwa to your Applications folder |
+| **macOS** | `.dmg` (universal) | Open the disk image and drag Luna to your Applications folder |
 | **Windows** | `.exe` | Run the installer |
 | **Linux** | `.AppImage` | `chmod +x` the file and run it |
 | **Linux** | `.deb` / `.rpm` | Install with your package manager |
@@ -26,9 +26,9 @@ Head to the [GitHub Releases](https://github.com/The-Lab-by-Ordinary-Company/uts
 
 The desktop app is in beta and currently **unsigned**, so your OS will warn you the first time you open it. This is expected.
 
-- **macOS:** right-click the app → **Open** → **Open**. Or run `xattr -dr com.apple.quarantine /Applications/Utsuwa.app` once.
+- **macOS:** right-click the app → **Open** → **Open**. Or run `xattr -dr com.apple.quarantine /Applications/Luna.app` once.
 - **Windows:** on the SmartScreen prompt, click **More info** → **Run anyway**.
-- **Linux:** AppImages just need the executable bit (`chmod +x Utsuwa.AppImage`).
+- **Linux:** AppImages just need the executable bit (`chmod +x Luna.AppImage`).
 
 ### Building from Source
 
@@ -42,8 +42,8 @@ If you prefer to build it yourself:
 
 ```bash
 # Clone the repo
-git clone https://github.com/The-Lab-by-Ordinary-Company/utsuwa.git
-cd utsuwa
+git clone https://github.com/The-Lab-by-Ordinary-Company/luna.git
+cd luna
 
 # Install dependencies
 pnpm install
@@ -69,7 +69,7 @@ You can also check manually any time from the **About** dialog (the info button 
 
 ### Main Window
 
-The main window provides the full Utsuwa experience — same as the web version with all features:
+The main window provides the full Luna experience — same as the web version with all features:
 
 - VRM avatar with animations
 - Chat interface
@@ -143,14 +143,14 @@ If not installed, run:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-If you downloaded a release binary and it won't launch, try downloading it again or check the [GitHub Issues](https://github.com/The-Lab-by-Ordinary-Company/utsuwa/issues) page.
+If you downloaded a release binary and it won't launch, try downloading it again or check the [GitHub Issues](https://github.com/The-Lab-by-Ordinary-Company/luna/issues) page.
 
 ### Overlay background not transparent
 
 This can happen if the renderer isn't properly configured. Try:
 
 1. Exit and relaunch the app
-2. Make sure you're on the latest version from [Releases](https://github.com/The-Lab-by-Ordinary-Company/utsuwa/releases)
+2. Make sure you're on the latest version from [Releases](https://github.com/The-Lab-by-Ordinary-Company/luna/releases)
 
 ### Character facing wrong direction
 

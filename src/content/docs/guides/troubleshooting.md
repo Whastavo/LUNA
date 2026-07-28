@@ -1,17 +1,17 @@
 ---
 title: Troubleshooting
-description: Common issues and solutions for Utsuwa.
+description: Common issues and solutions for Luna.
 ---
 
 # Troubleshooting
 
-This guide covers common issues you might encounter when using Utsuwa and how to resolve them.
+This guide covers common issues you might encounter when using Luna and how to resolve them.
 
 ## Node.js Version Issues
 
 ### "Unsupported engine" error
 
-Utsuwa requires Node.js 22 or higher. If you see an error like:
+Luna requires Node.js 22 or higher. If you see an error like:
 
 ```bash
 npm error engine Unsupported engine
@@ -134,9 +134,9 @@ If you selected **Local TTS** but hear nothing:
 
 1. **Server running** - Confirm your TTS server is up, e.g. `curl http://localhost:8880/v1/audio/voices`
 2. **Voice is set** - The voice field must hold a name your server knows (e.g. `af_bella` for Kokoro)
-3. **Base URL** - It should point at the server's `/v1`; Utsuwa normalizes the trailing slash for you
+3. **Base URL** - It should point at the server's `/v1`; Luna normalizes the trailing slash for you
 4. **Desktop app** - Just needs the server running on `localhost`; no origin or CORS setup is required
-5. **Hosted site** (`https://app.utsuwa.ai`) - The server must be on `localhost` (one on another machine is blocked as mixed content), must allow the `app.utsuwa.ai` origin (Kokoro-FastAPI does by default), and your browser may prompt to allow local-network access. Allow it if asked
+5. **Hosted site** (`https://app.luna.ai`) - The server must be on `localhost` (one on another machine is blocked as mixed content), must allow the `app.luna.ai` origin (Kokoro-FastAPI does by default), and your browser may prompt to allow local-network access. Allow it if asked
 
 See [Local TTS Setup](/docs/guides/local-tts-setup#desktop-app-vs-hosted-website) for the hosted vs desktop details.
 
@@ -162,7 +162,7 @@ If the mic button shows an error in the browser:
 Your browser or OS is blocking microphone access:
 
 1. **Browser permissions** - Click the lock icon in the address bar and allow microphone access
-2. **System permissions** - On macOS, go to System Settings > Privacy & Security > Microphone and enable access for your browser or Utsuwa
+2. **System permissions** - On macOS, go to System Settings > Privacy & Security > Microphone and enable access for your browser or Luna
 
 ## Desktop App
 
@@ -170,9 +170,9 @@ Your browser or OS is blocking microphone access:
 
 The desktop app is in beta and currently **unsigned**, so your OS warns you the first time you open it. This is expected, not a broken download.
 
-1. **macOS** - Right-click the app → **Open** → **Open**, or run `xattr -dr com.apple.quarantine /Applications/Utsuwa.app` once
+1. **macOS** - Right-click the app → **Open** → **Open**, or run `xattr -dr com.apple.quarantine /Applications/Luna.app` once
 2. **Windows** - On the SmartScreen prompt, click **More info** → **Run anyway**
-3. **Linux** - Give the AppImage the executable bit: `chmod +x Utsuwa.AppImage`
+3. **Linux** - Give the AppImage the executable bit: `chmod +x Luna.AppImage`
 
 See the [Desktop Guide](/docs/guides/desktop-guide) for the full install walkthrough.
 
@@ -181,14 +181,14 @@ See the [Desktop Guide](/docs/guides/desktop-guide) for the full install walkthr
 On the desktop app, most local providers need only that the server is running. The one exception is **Ollama on Windows and Linux**: the desktop app's origin is `http://tauri.localhost`, which Ollama does not allow by default, so it rejects every request with a `403`. macOS is fine out of the box, and LM Studio and the common local TTS/STT servers (Kokoro-FastAPI, openedai-speech) allow all origins by default.
 
 1. **Ollama (macOS)** - Start it with `ollama serve` and pull a model (`ollama pull <model>`)
-2. **Ollama (Windows/Linux)** - Same, plus allow the app's origin: `setx OLLAMA_ORIGINS "http://tauri.localhost"` on Windows (then restart Ollama from the tray), or `OLLAMA_ORIGINS=http://tauri.localhost ollama serve` on Linux. Full steps: [Local LLM Setup](/docs/guides/local-llm-setup#allowing-utsuwa-to-reach-ollama)
+2. **Ollama (Windows/Linux)** - Same, plus allow the app's origin: `setx OLLAMA_ORIGINS "http://tauri.localhost"` on Windows (then restart Ollama from the tray), or `OLLAMA_ORIGINS=http://tauri.localhost ollama serve` on Linux. Full steps: [Local LLM Setup](/docs/guides/local-llm-setup#allowing-luna-to-reach-ollama)
 3. **LM Studio** - Load a model and click Start Server
 4. **Local TTS** - Start your TTS server (e.g. Kokoro-FastAPI on `http://localhost:8880`)
 5. **Base URL** - Confirm the port in **Settings > Character** matches the port your server is using
 
 ### No sound (desktop)
 
-1. **System audio** - Check your OS volume and that Utsuwa isn't muted in the system mixer
+1. **System audio** - Check your OS volume and that Luna isn't muted in the system mixer
 2. **TTS configured** - Confirm a TTS provider is set up and a voice is selected (see Text-to-Speech Issues above)
 3. **Microphone/voice input** - The desktop webview has no Web Speech API, so the mic needs a Groq or OpenAI key; see [Mic button not responding (desktop)](#mic-button-not-responding-desktop)
 
@@ -247,7 +247,7 @@ For local LLMs, the browser connects directly to your local server:
 1. **Ollama running** - Start it with `ollama serve`
 2. **LM Studio running** - Load a model and click Start Server
 3. **Correct base URL** - Use `http://localhost:11434` for Ollama or `http://localhost:1234/v1` for LM Studio
-4. **Ollama origin (CORS)** - Ollama rejects origins it doesn't allow with a `403` on `/api/tags`. On the **hosted website** (the app runs at `app.utsuwa.ai`) allow that origin: `OLLAMA_ORIGINS=https://app.utsuwa.ai ollama serve` (for a Vercel preview use the exact origin from the address bar). On the **Windows or Linux desktop app** allow `OLLAMA_ORIGINS=http://tauri.localhost`; the macOS desktop app needs nothing. Full per-platform steps: [Local LLM Setup](/docs/guides/local-llm-setup#allowing-utsuwa-to-reach-ollama). Background: Ollama's [additional web origins FAQ](https://docs.ollama.com/faq#how-can-i-allow-additional-web-origins-to-access-ollama).
+4. **Ollama origin (CORS)** - Ollama rejects origins it doesn't allow with a `403` on `/api/tags`. On the **hosted website** (the app runs at `app.luna.ai`) allow that origin: `OLLAMA_ORIGINS=https://app.luna.ai ollama serve` (for a Vercel preview use the exact origin from the address bar). On the **Windows or Linux desktop app** allow `OLLAMA_ORIGINS=http://tauri.localhost`; the macOS desktop app needs nothing. Full per-platform steps: [Local LLM Setup](/docs/guides/local-llm-setup#allowing-luna-to-reach-ollama). Background: Ollama's [additional web origins FAQ](https://docs.ollama.com/faq#how-can-i-allow-additional-web-origins-to-access-ollama).
 5. **Installed model** - If you see `model not found`, run `ollama list`, pull or load a model, refresh the dropdown, and select an installed model
 
 ### "Page not found" after deployment
@@ -270,7 +270,7 @@ This often means something loaded out of order:
 
 If your issue isn't covered here:
 
-1. Check the [GitHub Issues](https://github.com/The-Lab-by-Ordinary-Company/utsuwa/issues) for similar problems
+1. Check the [GitHub Issues](https://github.com/The-Lab-by-Ordinary-Company/luna/issues) for similar problems
 2. Open a new issue with:
    - App version (web or desktop) and browser if web
    - Steps to reproduce

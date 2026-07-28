@@ -35,7 +35,7 @@
 			</button>
 		{/if}
 		<a href={localPath('docs')} class="logo desktop-logo">
-			<img src="/brand-assets/logo.svg" alt="Utsuwa" class="logo-img" />
+			<img src="/brand-assets/logo.svg" alt="Luna" class="logo-img" />
 		</a>
 	</div>
 	{#if !hideSearch}

@@ -12,14 +12,14 @@
 </script>
 
 <svelte:head>
-	<title>Blog — Utsuwa | Development Updates & AI Companion News</title>
+	<title>Blog — Luna | Development Updates & AI Companion News</title>
 	<meta
 		name="description"
 		content="Development updates, release notes, and behind-the-scenes notes from building Utsuwa — the open-source AI companion with 3D VRM avatars."
 	/>
 	<link rel="canonical" href={`${SITE_URL}/blog`} />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content="Blog — Utsuwa" />
+	<meta property="og:title" content="Blog — Luna" />
 	<meta property="og:description" content="Development updates, release notes, and behind-the-scenes notes from building Utsuwa." />
 	<meta property="og:url" content={`${SITE_URL}/blog`} />
 	<meta property="og:site_name" content="Utsuwa" />

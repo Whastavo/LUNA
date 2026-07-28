@@ -1,53 +1,53 @@
 > [!WARNING]
-> Utsuwa and The Lab by Ordinary Company have not minted, launched, endorsed, or authorized any cryptocurrency, token, coin, NFT, or blockchain project. We never will. If you see crypto associated with Utsuwa or The Lab, it is a scam. This repository is the only authentic Utsuwa project repository.
+> Luna and The Lab by Ordinary Company have not minted, launched, endorsed, or authorized any cryptocurrency, token, coin, NFT, or blockchain project. We never will. If you see crypto associated with Luna or The Lab, it is a scam. This repository is the only authentic Luna project repository.
 
 <p align="center">
-  <img alt="Utsuwa, an open-source AI companion you can see and talk to" src="static/brand-assets/banner-light.avif" width="100%">
+  <img alt="Luna, an open-source AI companion you can see and talk to" src="static/brand-assets/banner-light.avif" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://utsuwa.ai">Website</a>
+  <a href="https://luna.ai">Website</a>
   ·
-  <a href="https://app.utsuwa.ai">Try it in your browser</a>
+  <a href="https://app.luna.ai">Try it in your browser</a>
   ·
-  <a href="https://docs.utsuwa.ai">Docs</a>
+  <a href="https://docs.luna.ai">Docs</a>
   ·
-  <a href="https://utsuwa.ai/blog">Blog</a>
+  <a href="https://luna.ai/blog">Blog</a>
   ·
-  <a href="https://github.com/The-Lab-by-Ordinary-Company/utsuwa/releases">Releases</a>
+  <a href="https://github.com/The-Lab-by-Ordinary-Company/luna/releases">Releases</a>
 </p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg" alt="License: AGPL-3.0"></a>
-  <a href="https://github.com/The-Lab-by-Ordinary-Company/utsuwa/releases"><img src="https://img.shields.io/github/v/release/The-Lab-by-Ordinary-Company/utsuwa?label=Release&color=00b2ff" alt="Latest release"></a>
+  <a href="https://github.com/The-Lab-by-Ordinary-Company/luna/releases"><img src="https://img.shields.io/github/v/release/The-Lab-by-Ordinary-Company/luna?label=Release&color=00b2ff" alt="Latest release"></a>
   <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-22+-green.svg" alt="Node.js 22+"></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/The-Lab-by-Ordinary-Company/utsuwa/releases/latest">
+  <a href="https://github.com/The-Lab-by-Ordinary-Company/luna/releases/latest">
     <img alt="Download for macOS" src="static/brand-assets/download-buttons/macos-light.avif" width="31%">
   </a>
-  <a href="https://github.com/The-Lab-by-Ordinary-Company/utsuwa/releases/latest">
+  <a href="https://github.com/The-Lab-by-Ordinary-Company/luna/releases/latest">
     <img alt="Download for Windows" src="static/brand-assets/download-buttons/windows-light.avif" width="31%">
   </a>
-  <a href="https://github.com/The-Lab-by-Ordinary-Company/utsuwa/releases/latest">
+  <a href="https://github.com/The-Lab-by-Ordinary-Company/luna/releases/latest">
     <img alt="Download for Linux" src="static/brand-assets/download-buttons/linux-light.avif" width="31%">
   </a>
 </p>
 
 <p align="center">
-  <sub>Beta builds are unsigned, so your OS will warn on first launch (<a href="#download-the-desktop-app">install notes</a>). Prefer zero install? <a href="https://app.utsuwa.ai">Run it in your browser</a>.</sub>
+  <sub>Beta builds are unsigned, so your OS will warn on first launch (<a href="#download-the-desktop-app">install notes</a>). Prefer zero install? <a href="https://app.luna.ai">Run it in your browser</a>.</sub>
 </p>
 
 ---
 
-**Utsuwa is an open-source AI companion with 3D VRM avatars.** A platform where you can have a virtual companion that learns and grows with you, bundled with optional mechanics inspired by Japanese [dating sim](https://en.wikipedia.org/wiki/Dating_sim) games. Utsuwa is privacy-focused: your data is stored locally and never leaves your device.
+**Luna is an open-source AI companion with 3D VRM avatars.** A platform where you can have a virtual companion that learns and grows with you, bundled with optional mechanics inspired by Japanese [dating sim](https://en.wikipedia.org/wiki/Dating_sim) games. Luna is privacy-focused: your data is stored locally and never leaves your device.
 
-"Utsuwa" means "vessel" in Japanese. A container for AI to inhabit visually.
+"Luna" means "moon" in Spanish. A gentle companion in the digital night.
 
 <p align="center">
-  <img alt="The Utsuwa app: a 3D VRM companion with chat, mood, and voice" src="static/marketing/companion-light.webp" width="100%">
+  <img alt="The Luna app: a 3D VRM companion with chat, mood, and voice" src="static/marketing/companion-light.webp" width="100%">
 </p>
 
 ## Features
@@ -102,7 +102,7 @@ Build a meaningful relationship with your AI companion through a dating sim-insp
 - **Time-Aware**: Your companion notices when you've been away and reacts accordingly
 - **Scheduled Tasks**: The companion can set timers/reminders for itself. Timers that fired while the app was closed are marked as missed and shown in the reminder dropdown for you to review and dismiss. The list survives a browser reload and is kept in sync across the main app and overlay windows
 
-See the [Companion System Architecture](https://docs.utsuwa.ai/technology/companion-system) for full details.
+See the [Companion System Architecture](https://docs.luna.ai/technology/companion-system) for full details.
 
 ### Desktop Application (Beta)
 
@@ -160,7 +160,7 @@ If the setting is left off, Utsuwa keeps the historical defaults (10 retrieved t
 | **Cloud** | Groq (Whisper), OpenAI (Whisper) |
 | **Browser** | Web Speech API (no API key required) |
 
-Voice input is accessed via the microphone button in the chat bar. Selection is automatic by priority: a configured local Whisper server wins, then Groq, then OpenAI, then the browser's Web Speech API. A local server or a cloud key works on any platform including desktop; Web Speech API works without an API key in Chrome, Edge, and Safari. See [Local STT Setup](https://docs.utsuwa.ai/docs/guides/local-stt-setup) to run a local Whisper server.
+Voice input is accessed via the microphone button in the chat bar. Selection is automatic by priority: a configured local Whisper server wins, then Groq, then OpenAI, then the browser's Web Speech API. A local server or a cloud key works on any platform including desktop; Web Speech API works without an API key in Chrome, Edge, and Safari. See [Local STT Setup](https://docs.luna.ai/docs/guides/local-stt-setup) to run a local Whisper server.
 
 ## Getting Started
 
@@ -169,39 +169,15 @@ Voice input is accessed via the microphone button in the chat bar. Selection is 
 
 ### Try it Online
 
-Use Utsuwa directly at **[app.utsuwa.ai](https://app.utsuwa.ai)**. No installation required.
+Use Luna directly at **[app.luna.ai](https://app.luna.ai)**. No installation required.
 
 ### Download the Desktop App
 
-Native desktop builds (with transparent overlay mode) are available for all three platforms on the [GitHub Releases](https://github.com/The-Lab-by-Ordinary-Company/utsuwa/releases) page:
-
-| Platform | Download |
-|----------|----------|
-| **macOS** | `.dmg` (universal: Apple Silicon + Intel) |
-| **Windows** | `.exe` installer |
-| **Linux** | `.AppImage`, `.deb`, or `.rpm` |
-
-> [!NOTE]
-> The desktop app is in beta and currently **unsigned**, so your OS will warn you the first time you open it.
-> - **macOS:** right-click the app → **Open** → **Open** (or run `xattr -dr com.apple.quarantine /Applications/Utsuwa.app`).
-> - **Windows:** on the SmartScreen prompt, click **More info** → **Run anyway**.
-
-### Self-Hosting
-
-If you prefer to run Utsuwa locally or host your own instance:
-
-#### Prerequisites
-
-- Node.js 22+
-- pnpm (recommended) or npm
-- A modern browser (Chrome, Firefox, Safari, Edge) for the web version
-
-#### Installation
+Native desktop builds (with transparent overlay mode) are available for all three platforms on the [GitHub Releases](https://github.com/The-Lab-by-Ordinary-Company/luna/releases) page:
 
 ```bash
-# Clone the repository
-git clone https://github.com/The-Lab-by-Ordinary-Company/utsuwa.git
-cd utsuwa
+git clone https://github.com/The-Lab-by-Ordinary-Company/luna.git
+cd luna
 
 # Install dependencies
 pnpm install
@@ -263,7 +239,7 @@ utsuwa/
 │   ├── lib/
 │   │   ├── ai/             # LLM response parsing and prompt building
 │   │   ├── assets/         # Static assets
-│   │   ├── components/     # Svelte components
+│   │   ��── components/     # Svelte components
 │   │   ├── config/         # App and docs configuration
 │   │   ├── data/           # Event definitions and static data
 │   │   ├── db/             # IndexedDB database (Dexie)

@@ -1,11 +1,11 @@
 ---
 title: Contributing
-description: How to contribute to the Utsuwa project.
+description: How to contribute to the Luna project.
 ---
 
 # Contributing
 
-Contributions to Utsuwa are welcome. This page covers how to get set up and submit changes.
+Contributions to Luna are welcome. This page covers how to get set up and submit changes.
 
 ## Prerequisites
 
@@ -18,8 +18,8 @@ Contributions to Utsuwa are welcome. This page covers how to get set up and subm
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/utsuwa.git
-   cd utsuwa
+   git clone https://github.com/YOUR_USERNAME/luna.git
+   cd luna
    ```
 3. Install dependencies:
    ```bash
@@ -106,4 +106,4 @@ src-tauri/              # Tauri desktop app (Rust)
 
 ## License
 
-By contributing to Utsuwa, you agree that your contributions are licensed under the AGPL-3.0-or-later, and you confirm you have the right to submit the work. You keep the copyright to your contribution.
+By contributing to Luna, you agree that your contributions are licensed under the AGPL-3.0-or-later, and you confirm you have the right to submit the work. You keep the copyright to your contribution.

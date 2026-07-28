@@ -74,9 +74,9 @@ class LunaDatabase extends Dexie {
 					existingStates[0];
 
 				// Read persona from localStorage
-				let personaName = 'Utsuwa';
+				let personaName = 'Luna';
 				let personaPrompt =
-					'You are a friendly AI assistant named Utsuwa. You communicate through a VRM avatar and can express emotions through facial expressions and gestures. Be helpful, conversational, and engaging.';
+					'You are a friendly AI assistant named Luna. You communicate through a VRM avatar and can express emotions through facial expressions and gestures. Be helpful, conversational, and engaging.';
 				let personaExtensions = {};
 
 				if (typeof window !== 'undefined') {
@@ -159,4 +159,4 @@ class LunaDatabase extends Dexie {
 	}
 }
 
-export const db = new UtsuwaDatabase();
+export const db = new LunaDatabase();

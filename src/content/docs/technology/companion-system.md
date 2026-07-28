@@ -1,6 +1,6 @@
 ---
 title: Companion System
-description: Architecture documentation for Utsuwa's companion relationship and character state system.
+description: Architecture documentation for Luna's companion relationship and character state system.
 ---
 
 # Companion System Architecture
@@ -21,7 +21,7 @@ The Companion System is the core engine that manages relationship state, charact
 
 ## App Modes
 
-Utsuwa supports two distinct modes:
+Luna supports two distinct modes:
 
 ### Companion Mode
 
@@ -331,7 +331,7 @@ A fired reminder is delivered as a **system event**: the trigger text enters the
 
 ### Context Window and Memory Budget
 
-The LLM settings expose a **Context Window** slider that tells Utsuwa how many tokens the selected model can process. This value is used in three places:
+The LLM settings expose a **Context Window** slider that tells Luna how many tokens the selected model can process. This value is used in three places:
 
 1. **Memory retrieval** — `retrieveRelevantContext` asks working memory for up to the budgeted number of recent turns. Without a context window configured it falls back to 10 turns; with a large window configured it retrieves up to 20, so the larger budget is actually used.
 
@@ -339,7 +339,7 @@ The LLM settings expose a **Context Window** slider that tells Utsuwa how many t
 
 3. **History truncation** — Before a request is sent, the assembled messages are trimmed so the system prompt plus conversation history plus a small reserve for the model's response fit inside the configured window. Truncation always keeps the system prompt and the user's newest message; older history is dropped first.
 
-The reserve and scaling are intentionally conservative. If the system prompt alone is larger than the window, Utsuwa still keeps the newest user message and lets the provider handle the overflow rather than silently dropping the user's current turn.
+The reserve and scaling are intentionally conservative. If the system prompt alone is larger than the window, Luna still keeps the newest user message and lets the provider handle the overflow rather than silently dropping the user's current turn.
 
 ### LLM Output Format
 
@@ -448,7 +448,7 @@ All data is stored client-side on the user's device using IndexedDB via Dexie.js
 ### Database Schema
 
 ```typescript
-const db = new Dexie('utsuwa-db');
+const db = new Dexie('luna-db');
 
 // v2: Single character model (migrated from v1 multi-persona)
 db.version(2).stores({

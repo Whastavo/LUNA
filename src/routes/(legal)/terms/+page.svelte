@@ -108,7 +108,7 @@
 		contributors will not be liable for any indirect, incidental, special, consequential, or
 		exemplary damages, or for lost profits, data, or goodwill, arising from your use of Luna.
 		Our total liability for any claim relating to Luna will not exceed fifty US dollars (US $50)
-		or the amount you have paid us to use Utsuwa in the past twelve months, whichever is greater.
+		or the amount you have paid us to use Luna in the past twelve months, whichever is greater.
 	</p>
 
 	<h2 id="governing-law">Governing law</h2>

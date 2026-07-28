@@ -1,11 +1,11 @@
 ---
 title: Architecture Overview
-description: High-level architecture of Utsuwa's VRM viewer, chat system, and companion engine.
+description: High-level architecture of Luna's VRM viewer, chat system, and companion engine.
 ---
 
 # Architecture Overview
 
-Utsuwa is a client-side application that combines 3D avatar rendering, LLM chat, text-to-speech, and a relationship simulation engine. Everything runs locally on the user's device — in a browser or the desktop app — with no backend required.
+Luna is a client-side application that combines 3D avatar rendering, LLM chat, text-to-speech, and a relationship simulation engine. Everything runs locally on the user's device — in a browser or the desktop app — with no backend required.
 
 ## System Diagram
 

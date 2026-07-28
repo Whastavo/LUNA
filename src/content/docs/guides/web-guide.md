@@ -1,11 +1,11 @@
 ---
 title: Web Guide
-description: How to set up and use Utsuwa on the web.
+description: How to set up and use Luna on the web.
 ---
 
 # Web Guide
 
-This guide walks you through using Utsuwa, whether on the hosted version at [utsuwa.ai](https://utsuwa.ai) or a self-hosted instance.
+This guide walks you through using Luna, whether on the hosted version at [luna.ai](https://luna.ai) or a self-hosted instance.
 
 ## Self-Hosting Setup
 
@@ -18,8 +18,8 @@ This guide walks you through using Utsuwa, whether on the hosted version at [uts
 ### Installation
 
 ```bash
-git clone https://github.com/The-Lab-by-Ordinary-Company/utsuwa.git
-cd utsuwa
+git clone https://github.com/The-Lab-by-Ordinary-Company/luna.git
+cd luna
 pnpm install
 pnpm dev
 ```
@@ -41,7 +41,7 @@ All API keys are stored locally on your device and never sent anywhere except th
 
 ### 2. Load a VRM Model
 
-Utsuwa comes with a default avatar, but you can load your own:
+Luna comes with a default avatar, but you can load your own:
 
 1. Go to **Settings > Character**
 2. Click **Add Custom** in the Avatar section and select a local `.vrm` file (drag-and-drop works too)
@@ -114,4 +114,4 @@ All data is stored locally on your device.
 
 ## Themes
 
-Utsuwa supports light and dark modes with automatic system preference detection. Open the **Controls** panel (sliders icon, top right) and click the theme button to cycle System, Light, and Dark.
+Luna supports light and dark modes with automatic system preference detection. Open the **Controls** panel (sliders icon, top right) and click the theme button to cycle System, Light, and Dark.

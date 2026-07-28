@@ -45,8 +45,8 @@
 
 <nav class="site-nav" class:scrolled={scrolled || menuOpen}>
 	<div class="site-nav-inner">
-		<a href="/" class="site-nav-brand" aria-label="Utsuwa home">
-			<img src="/brand-assets/logo.svg" alt="Utsuwa" class="site-nav-logo" />
+		<a href="/" class="site-nav-brand" aria-label="Luna home">
+			<img src="/brand-assets/logo.svg" alt="Luna" class="site-nav-logo" />
 		</a>
 
 		<div class="site-nav-links">

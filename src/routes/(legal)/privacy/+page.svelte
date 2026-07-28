@@ -68,7 +68,7 @@
 	<p>
 		Luna is bring-your-own-AI: you connect it to a provider you choose (for example OpenAI,
 		Anthropic, or a local model through Ollama or LM Studio) using your own API key. How your
-		messages travel depends on where you run Utsuwa:
+		messages travel depends on where you run Luna:
 	</p>
 	<ul>
 		<li>

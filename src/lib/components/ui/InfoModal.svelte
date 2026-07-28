@@ -85,7 +85,7 @@
 
 		<!-- Hero -->
 		<div class="hero">
-			<span class="app-logo" role="img" aria-label="Utsuwa"></span>
+			<span class="app-logo" role="img" aria-label="Luna"></span>
 			<p id="modal-title" class="tagline">Open-source AI companion</p>
 			<div class="hero-meta">
 				<span class="version-chip">{version}</span>

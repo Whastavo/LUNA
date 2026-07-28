@@ -48,7 +48,7 @@
 				<div class="banner-body-inner" in:fadeFast={{ duration: 200 }}>
 					{#if status === 'available'}
 						<span class="banner-title">Update available</span>
-						<span class="banner-sub">Utsuwa {updaterStore.availableVersion} is ready to install</span>
+						<span class="banner-sub">Luna {updaterStore.availableVersion} is ready to install</span>
 					{:else if status === 'downloading'}
 						<span class="banner-title">Downloading update…</span>
 						<div class="progress-track">

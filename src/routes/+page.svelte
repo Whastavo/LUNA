@@ -44,7 +44,7 @@
 	// Statement line, same treatment but triggered on scroll. The second
 	// sentence renders muted.
 	const statementWords = [
-		...'Utsuwa means vessel.'.split(' ').map((w) => ({ w, muted: false })),
+		...'Luna means moon.'.split(' ').map((w) => ({ w, muted: false })),
 		...'You decide what fills it.'.split(' ').map((w) => ({ w, muted: true }))
 	];
 
@@ -53,13 +53,13 @@
 			title: 'A real 3D body, not a chat box.',
 			body: "Drop in any VRM model and watch it come to life. Replies appear as 3D speech bubbles that follow your companion's head as it moves, breathes, and looks around.",
 			shot: 'companion',
-			alt: 'Utsuwa desktop app with a 3D VRM avatar companion and chat interface'
+			alt: 'Luna desktop app with a 3D VRM avatar companion and chat interface'
 		},
 		{
 			title: 'She steps into your room.',
 			body: 'Place her on your real floor through the camera and she stands there in your space, holding her ground as you move around her. Drag her anywhere, pinch to resize, and keep the chat open the whole time, in Android Chrome or any WebXR-capable headset browser.',
 			shot: 'ar',
-			alt: 'Utsuwa VRM companion in WebXR AR camera passthrough shown on an Android phone held in a hand'
+			alt: 'Luna VRM companion in WebXR AR camera passthrough shown on an Android phone held in a hand'
 		},
 		{
 			title: 'She actually remembers.',
@@ -99,7 +99,7 @@
 </script>
 
 <svelte:head>
-	<title>Utsuwa — Open-Source AI Companion with 3D VRM Avatars</title>
+	<title>Luna — Open-Source AI Companion with 3D VRM Avatars</title>
 	<meta
 		name="description"
 		content="Open-source AI companion with 3D VRM avatars, voice chat, semantic memory, and support for OpenAI, Anthropic, Google, and local LLMs. Desktop app and web. Self-hosted, privacy-first."
@@ -111,7 +111,7 @@
 
 	<!-- Open Graph -->
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content="Utsuwa — Open-Source AI Companion with 3D VRM Avatars" />
+	<meta property="og:title" content="Luna — Open-Source AI Companion with 3D VRM Avatars" />
 	<meta property="og:description" content="Open-source AI companion with 3D VRM avatars, voice chat, semantic memory, and support for OpenAI, Anthropic, Google, and local LLMs. Desktop app and web. Self-hosted, privacy-first." />
 	<meta property="og:image" content={`${SITE_URL}/brand-assets/og-image.png`} />
 	<meta property="og:image:width" content="1200" />
@@ -121,7 +121,7 @@
 
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Utsuwa — Open-Source AI Companion with 3D VRM Avatars" />
+	<meta name="twitter:title" content="Luna — Open-Source AI Companion with 3D VRM Avatars" />
 	<meta name="twitter:description" content="Open-source AI companion with 3D VRM avatars, voice chat, semantic memory, and support for OpenAI, Anthropic, Google, and local LLMs." />
 	<meta name="twitter:image" content={`${SITE_URL}/brand-assets/og-image.png`} />
 

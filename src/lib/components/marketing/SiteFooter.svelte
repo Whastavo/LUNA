@@ -21,7 +21,7 @@
 	<div class="site-footer-inner">
 		<div class="site-footer-top">
 			<div class="site-footer-brand">
-				<img src="/brand-assets/logo.svg" alt="Utsuwa" class="site-footer-logo" />
+				<img src="/brand-assets/logo.svg" alt="Luna" class="site-footer-logo" />
 				<p class="site-footer-tagline">An open-source AI companion you can see and talk to.</p>
 			</div>
 
