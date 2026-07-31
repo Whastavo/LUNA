@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Icon } from '$lib/components/ui';
 	import { isTauri } from '$lib/services/platform/platform';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		onUpload: (file: File) => void;
@@ -103,8 +104,8 @@
 	<div class="icon">
 		<Icon name="upload" size={32} strokeWidth={1.5} />
 	</div>
-	<span class="label">Upload VRM</span>
-	<span class="hint">Drag & drop or click to browse</span>
+	<span class="label">{$t('vrm.uploadVrm')}</span>
+	<span class="hint">{$t('vrm.dragDropBrowse')}</span>
 </div>
 
 <style>

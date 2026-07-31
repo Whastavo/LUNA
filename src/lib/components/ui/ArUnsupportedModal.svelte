@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Icon } from '$lib/components/ui';
 	import { pop, fadeFast } from '$lib/utils/motion';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		onclose: () => void;
@@ -14,12 +15,12 @@
 	<div
 		class="ar-modal"
 		role="dialog"
-		aria-label="AR mode requirements"
+		aria-label={$t('ui.arUnsupported.requirements')}
 		tabindex="-1"
 		transition:pop={{ duration: 260, y: 14 }}
 		onclick={(e) => e.stopPropagation()}
 	>
-		<button class="ar-close" onclick={onclose} aria-label="Close">
+		<button class="ar-close" onclick={onclose} aria-label={$t('common.close')}>
 			<Icon name="x" size={14} />
 		</button>
 
@@ -30,29 +31,27 @@
 			</div>
 		</div>
 
-		<h2>See her in your space</h2>
+		<h2>{$t('ui.arUnsupported.title')}</h2>
 		<p>
-			AR mode puts your companion right on your floor: walk around her, move her wherever you
-			like, and resize her with a pinch. It just needs a browser that speaks WebXR.
+			El modo RA coloca a tu compañera en tu espacio: camina a su alrededor, muévela donde quieras y cambia su tamaño pellizcando la pantalla. Solo necesita un navegador compatible con WebXR.
 		</p>
 
 		<div class="ar-devices">
 			<div class="ar-device">
-				<span class="ar-device-name">Android phone or tablet</span>
-				<span class="ar-device-via">Chrome</span>
+				<span class="ar-device-name">{$t('ui.arUnsupported.android')}</span>
+				<span class="ar-device-via">{$t('ui.arUnsupported.chrome')}</span>
 			</div>
 			<div class="ar-device">
-				<span class="ar-device-name">Meta Quest</span>
-				<span class="ar-device-via">Headset browser</span>
+				<span class="ar-device-name">{$t('ui.arUnsupported.metaQuest')}</span>
+				<span class="ar-device-via">{$t('ui.arUnsupported.headsetBrowser')}</span>
 			</div>
 		</div>
 
 		<p class="ar-footnote">
-			iPhones don't support WebXR yet: open this page on one of the devices above and the AR
-			button lights up automatically.
+			Los iPhone aún no admiten WebXR: abre esta página en uno de los dispositivos anteriores y el botón de RA se activará automáticamente.
 		</p>
 
-		<button class="ar-cta" onclick={onclose}>Got it</button>
+		<button class="ar-cta" onclick={onclose}>{$t('common.gotIt')}</button>
 	</div>
 </div>
 

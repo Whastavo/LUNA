@@ -1,6 +1,6 @@
-# Contributing to Utsuwa
+# Contributing to Luna
 
-Thank you for your interest in contributing to Utsuwa! Community PRs are welcome and reviewed with care. This document tells you what to expect and what gets a PR merged quickly.
+Thank you for your interest in contributing to Luna! Community PRs are welcome and reviewed with care. This document tells you what to expect and what gets a PR merged quickly.
 
 ## Getting Started
 
@@ -15,8 +15,8 @@ Thank you for your interest in contributing to Utsuwa! Community PRs are welcome
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/utsuwa.git
-   cd utsuwa
+   git clone https://github.com/YOUR_USERNAME/luna.git
+   cd luna
    ```
 3. Install dependencies:
    ```bash
@@ -67,9 +67,9 @@ LLM, TTS, and STT providers follow an established pattern. If you're adding or e
 
 ## Scope and Content Decisions
 
-Some changes are product decisions, not code decisions: anything that changes what Utsuwa ships in its prompts, how the project positions itself, or what the hosted deployment transmits. Open an issue to discuss before writing code, it saves everyone time.
+Some changes are product decisions, not code decisions: anything that changes what Luna ships in its prompts, how the project positions itself, or what the hosted deployment transmits. Open an issue to discuss before writing code, it saves everyone time.
 
-One standing decision, so nobody has to rediscover it: **Utsuwa core does not ship content preambles or filter-override text.** The persona system prompt is fully user-editable, on the user's machine, in the user's words, and that is where tone and content boundaries belong. PRs that bundle preamble text into the app will be asked to convert to documentation instead.
+One standing decision, so nobody has to rediscover it: **Luna core does not ship content preambles or filter-override text.** The persona system prompt is fully user-editable, on the user's machine, in the user's words, and that is where tone and content boundaries belong. PRs that bundle preamble text into the app will be asked to convert to documentation instead.
 
 ## Review Expectations
 
@@ -163,4 +163,4 @@ If you have questions about contributing, feel free to open an issue for discuss
 
 ## License
 
-By contributing to Utsuwa, you agree that your contributions are licensed under the AGPL-3.0-or-later, and you confirm you have the right to submit the work. You keep the copyright to your contribution.
+By contributing to Luna, you agree that your contributions are licensed under the AGPL-3.0-or-later, and you confirm you have the right to submit the work. You keep the copyright to your contribution.

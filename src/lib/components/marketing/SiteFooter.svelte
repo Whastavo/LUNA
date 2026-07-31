@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { cycleTheme, getIconName, getLabel } from '$lib/config/docs-theme-toggle.svelte';
 	import { sectionUrl } from '$lib/config/links';
@@ -21,28 +22,28 @@
 	<div class="site-footer-inner">
 		<div class="site-footer-top">
 			<div class="site-footer-brand">
-				<img src="/brand-assets/logo.svg" alt="Utsuwa" class="site-footer-logo" />
-				<p class="site-footer-tagline">An open-source AI companion you can see and talk to.</p>
+				<img src="/brand-assets/logo.svg" alt="Luna" class="site-footer-logo" />
+				<p class="site-footer-tagline">{$t('landing.heroSubtitle')}</p>
 			</div>
 
 			<div class="site-footer-cols">
 				<div class="site-footer-col">
-					<h3>Product</h3>
-					<a href="/#features">Features</a>
-					<a href="/download">Download</a>
-					<a href={sectionUrl('app')}>Try live</a>
+					<h3>{$t('footer.product')}</h3>
+					<a href="/#features">{$t('footer.features')}</a>
+					<a href="/download">{$t('footer.download')}</a>
+					<a href={sectionUrl('app')}>{$t('footer.tryLive')}</a>
 				</div>
 				<div class="site-footer-col">
-					<h3>Resources</h3>
-					<a href={sectionUrl('docs')}>Docs</a>
-					<a href="/blog">Blog</a>
-					<a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer">GitHub</a>
-					<a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer">Releases</a>
+					<h3>{$t('footer.resources')}</h3>
+					<a href={sectionUrl('docs')}>{$t('footer.docs')}</a>
+					<a href="/blog">{$t('footer.blog')}</a>
+					<a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer">{$t('footer.github')}</a>
+					<a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer">{$t('footer.releases')}</a>
 				</div>
 				<div class="site-footer-col">
-					<h3>Legal</h3>
-					<a href="/privacy">Privacy Policy</a>
-					<a href="/terms">Terms of Use</a>
+					<h3>{$t('footer.legal')}</h3>
+					<a href="/privacy">{$t('footer.privacyPolicy')}</a>
+					<a href="/terms">{$t('footer.termsOfUse')}</a>
 					<a href={`${GITHUB_REPO}/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer">
 						AGPL-3.0 License
 					</a>
@@ -51,7 +52,7 @@
 		</div>
 
 		<div class="site-footer-bottom">
-			<span>&copy; 2026 Ordinary Company Group LLC. Open source under AGPL-3.0.</span>
+			<span>&copy; 2026 Ordinary Company Group LLC. {$t('legal.licenseAgpl')}</span>
 			<div class="site-footer-actions">
 				<button
 					type="button"
@@ -67,7 +68,7 @@
 					target="_blank"
 					rel="noopener noreferrer"
 					class="site-footer-gh"
-					aria-label="GitHub"
+					aria-label={$t('footer.github')}
 				>
 				<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"
 					><path

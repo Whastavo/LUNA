@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import { settingsStore } from '$lib/stores/settings.svelte';
 	import { getTTSProvider } from '$lib/services/providers/registry';
 	import { Icon, ProviderDropdown, ModelDropdown } from '$lib/components/ui';
@@ -11,12 +12,12 @@
 <div class="service-group">
 	<div class="service-header">
 		<Icon name="mic" size={14} />
-		<span>Speech (TTS)</span>
+		<span>{$t('settings.tts.title')}</span>
 		<button
 			class="service-toggle"
 			class:enabled={state.isTTSEnabled}
 			onclick={state.toggleTTS}
-			aria-label="Toggle speech (TTS)"
+			aria-label={$t('settings.tts.title')}
 		>
 			<span class="toggle-track">
 				<span class="toggle-thumb"></span>
@@ -29,7 +30,7 @@
 			type="tts"
 			value={state.speechSettings.activeProvider as string}
 			onSelect={state.handleTTSProviderChange}
-			placeholder="Select TTS provider..."
+			placeholder={$t('settings.tts.selectProvider')}
 		/>
 
 		{#if state.speechSettings.activeProvider}
@@ -41,7 +42,7 @@
 						type="password"
 						class="api-key-input"
 						class:error={state.ttsFetchError}
-						placeholder="API Key"
+						placeholder={$t('settings.apiKey')}
 						value={settingsStore.getProviderConfig(provider.id).apiKey ?? ''}
 						oninput={(e) => state.handleApiKeyChange(provider.id, e.currentTarget.value)}
 						onblur={state.handleTTSApiKeyBlur}
@@ -54,11 +55,11 @@
 					models={state.ttsModels}
 					value={state.speechSettings.activeModel as string}
 					onSelect={state.handleTTSModelChange}
-					placeholder="Select model..."
+					placeholder={$t('settings.tts.selectModel')}
 					isLoading={state.ttsIsLoading}
 					onRefresh={state.ttsHasApiKey ? state.fetchTTSModels : undefined}
 					disabled={!state.ttsHasApiKey}
-					disabledMessage="Enter API key first"
+					disabledMessage={$t('settings.enterApiKeyFirst')}
 				/>
 			{/if}
 
@@ -67,7 +68,7 @@
 					<input
 						type="text"
 						class="api-key-input"
-						placeholder="Custom Voice ID (optional)"
+						placeholder={$t('settings.tts.customVoiceIdOptional')}
 						value={settingsStore.elevenLabsVoiceId}
 						onchange={(e) => settingsStore.setElevenLabsVoiceId(e.currentTarget.value)}
 					/>
@@ -80,7 +81,7 @@
 						type="text"
 						class="api-key-input"
 						list="local-tts-voices"
-						placeholder="Voice (e.g. af_bella)"
+						placeholder={$t('settings.tts.voicePlaceholder')}
 						value={state.speechSettings.activeVoiceId as string ?? ''}
 						onchange={(e) => state.handleTTSVoiceChange(e.currentTarget.value)}
 					/>
@@ -94,7 +95,7 @@
 					<input
 						type="text"
 						class="api-key-input"
-						placeholder="Model (optional, e.g. kokoro)"
+						placeholder={$t('settings.tts.modelOptionalPlaceholder')}
 						value={state.speechSettings.activeModel as string ?? ''}
 						onchange={(e) => state.handleTTSModelChange(e.currentTarget.value)}
 					/>

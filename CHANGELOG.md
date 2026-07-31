@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.12.1] - 2026-07-19
 
 ### License
-- Utsuwa is now licensed under AGPL-3.0-or-later. Everything you could do before you can still do: use it, change it, self-host it, share it. The one new rule is for people who ship a modified Utsuwa to others, including as a hosted service: their changes have to stay open too. Releases up to 0.12.0 remain MIT.
+- Luna is now licensed under AGPL-3.0-or-later. Everything you could do before you can still do: use it, change it, self-host it, share it. The one new rule is for people who ship a modified Luna to others, including as a hosted service: their changes have to stay open too. Releases up to 0.12.0 remain MIT.
 
 ### Added
 - **The chat window grew up**: the old sidebar is now a proper messenger-style window with the input docked inside it. Type where you read. Drag it anywhere by the header, resize it from any edge or corner, snap it to either side, and it remembers exactly where you left it. On phones it opens low on the screen so her face stays in view above the conversation. If it ever ends up somewhere off screen, a Reset position button in Settings > Display brings it home.
@@ -104,7 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Every change now runs the full test suite (197 tests) and type checks in CI before it can merge.
 
 ### Note for existing users
-On your first launch after this update, Utsuwa downloads the new multilingual memory model (about 100 MB, one time, cached after that) and re-indexes your saved memories in the background. Everything keeps working during the re-index; memory recall briefly leans on keyword matching until it finishes.
+On your first launch after this update, Luna downloads the new multilingual memory model (about 100 MB, one time, cached after that) and re-indexes your saved memories in the background. Everything keeps working during the re-index; memory recall briefly leans on keyword matching until it finishes.
 
 ## [0.8.0] - 2026-07-04
 
@@ -147,7 +147,7 @@ On your first launch after this update, Utsuwa downloads the new multilingual me
 ## [0.7.0] - 2026-07-03
 
 ### Added
-- **Custom OpenAI-compatible LLM endpoint**: point Utsuwa at any OpenAI-compatible API (OpenRouter, Together, Mistral, Perplexity, a local vLLM, LiteLLM, and more) with a base URL, an optional API key, and a model of your choice.
+- **Custom OpenAI-compatible LLM endpoint**: point Luna at any OpenAI-compatible API (OpenRouter, Together, Mistral, Perplexity, a local vLLM, LiteLLM, and more) with a base URL, an optional API key, and a model of your choice.
 - **Local speech-to-text**: run voice input entirely on your machine with any OpenAI-compatible Whisper server (Speaches, faster-whisper-server, whisper.cpp). Audio never leaves your device, and there's no API key or per-minute cost. Includes a new Local STT Setup guide.
 - **OpenAI (Whisper) speech-to-text**: OpenAI's cloud Whisper is now a voice-input option alongside Groq, a local server, and the browser's Web Speech API.
 - **Developer animation preview**: the animation dropdown in the developer panel now lists the bundled emote clips so you can trigger them directly.
@@ -178,7 +178,7 @@ On your first launch after this update, Utsuwa downloads the new multilingual me
 
 ### Fixed
 - Desktop app now reliably boots into the app on **macOS** (and all platforms). The previous launch raced on macOS WebKit; the window now opens directly into the app, with routing gated by a build-time flag so the landing page and docs are never reachable inside the desktop window.
-- Info modal "Docs" link now points to the docs subdomain (docs.utsuwa.ai) and opens in the system browser on desktop.
+- Info modal "Docs" link now points to the docs subdomain (docs.luna.ai) and opens in the system browser on desktop.
 - Info modal logo is now a clean mark (blue in light mode, white in dark) without the badge container.
 - Desktop update notification now appears from the top of the window.
 - OpenAI TTS now respects the selected model instead of always using `tts-1`.

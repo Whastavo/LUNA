@@ -2,9 +2,9 @@
 export type ThinkingPhase = 'remembering' | 'seeing' | 'thinking';
 
 const LABELS: Record<ThinkingPhase, string> = {
-	remembering: 'Remembering...',
-	seeing: 'Looking at your photo...',
-	thinking: 'Thinking...'
+	remembering: 'Recordando...',
+	seeing: 'Mirando tu foto...',
+	thinking: 'Pensando...'
 };
 
 export function phaseLabel(phase: ThinkingPhase): string {

@@ -24,7 +24,7 @@ function disposeVrm(vrm: VRM, scene: Scene) {
 		if (obj.material) {
 			const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
 			materials.forEach((mat: any) => {
-				if (mat?.map?.dispose) mat.map.dispose();
+				// Avoid disposing mat.map directly while GLTFLoader texture fetches finish
 				mat?.dispose?.();
 			});
 		}
@@ -123,8 +123,8 @@ export async function generateVrmThumbnail(url: string): Promise<string | null> 
 				scene.add(directionalLight);
 
 				try {
-					VRMUtils.removeUnnecessaryVertices(vrm.scene);
-					VRMUtils.removeUnnecessaryJoints(vrm.scene);
+					try { VRMUtils.removeUnnecessaryVertices(vrm.scene); } catch (e) { console.warn("removeUnnecessaryVertices skipped:", e); }
+					try { VRMUtils.removeUnnecessaryJoints(vrm.scene); } catch (e) { console.warn("removeUnnecessaryJoints skipped:", e); }
 
 					applyRelaxedPose(vrm);
 

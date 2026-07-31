@@ -12,6 +12,7 @@
 	import { type PreparedImage } from '$lib/services/storage/keepsakes';
 	import ChatInput from './ChatInput.svelte';
 	import { pop, fadeFast } from '$lib/utils/motion';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		onSend: (content: string, images?: PreparedImage[]) => void;
@@ -30,7 +31,7 @@
 		onSend,
 		disabled = false,
 		visionCapable = true,
-		providerLabel = 'your AI provider',
+		providerLabel = 'tu proveedor de IA',
 		providerIsLocal = false,
 		overlay = false,
 		barHidden = false
@@ -44,16 +45,16 @@
 	let showStats = $state(false);
 
 	const datingStats = $derived([
-		{ key: 'affection', label: 'Love', icon: 'heart', value: affectionPercent, color: 'var(--stat-affection)' },
-		{ key: 'trust', label: 'Trust', icon: 'shield', value: charState.trust, color: 'var(--stat-trust)' },
-		{ key: 'intimacy', label: 'Intimacy', icon: 'sparkles', value: charState.intimacy, color: 'var(--stat-intimacy)' },
-		{ key: 'comfort', label: 'Comfort', icon: 'home', value: charState.comfort, color: 'var(--stat-comfort)' },
-		{ key: 'energy', label: 'Energy', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
-		{ key: 'respect', label: 'Respect', icon: 'award', value: charState.respect, color: 'var(--stat-respect)' }
+		{ key: 'affection', label: $t('companion.stats.love'), icon: 'heart', value: affectionPercent, color: 'var(--stat-affection)' },
+		{ key: 'trust', label: $t('companion.stats.trust'), icon: 'shield', value: charState.trust, color: 'var(--stat-trust)' },
+		{ key: 'intimacy', label: $t('companion.stats.intimacy'), icon: 'sparkles', value: charState.intimacy, color: 'var(--stat-intimacy)' },
+		{ key: 'comfort', label: $t('companion.stats.comfort'), icon: 'home', value: charState.comfort, color: 'var(--stat-comfort)' },
+		{ key: 'energy', label: $t('companion.stats.energy'), icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
+		{ key: 'respect', label: $t('companion.stats.respect'), icon: 'award', value: charState.respect, color: 'var(--stat-respect)' }
 	]);
 	const companionStats = $derived([
-		{ key: 'energy', label: 'Energy', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
-		{ key: 'chats', label: 'Chats', icon: 'message-circle', value: Math.min(charState.totalInteractions, 100), color: 'var(--stat-trust)' }
+		{ key: 'energy', label: $t('companion.stats.energy'), icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
+		{ key: 'chats', label: $t('companion.stats.chats'), icon: 'message-circle', value: Math.min(charState.totalInteractions, 100), color: 'var(--stat-trust)' }
 	]);
 	const stats = $derived(isCompanionMode ? companionStats : datingStats);
 
@@ -132,7 +133,7 @@
 							const name = path.split(/[/\\]/).pop() || 'image';
 							files.push(new File([contents], name, { type: imageMimeFromPath(path)! }));
 						} catch {
-							chatHintStore.showHint("Couldn't read that image. Try a different one.");
+							chatHintStore.showHint("No se pudo leer la imagen. Intenta con otra.");
 						}
 					}
 					if (files.length) await queueFiles(files, visionCapable);
@@ -162,7 +163,7 @@
 	>
 		<Icon name="alert" size={16} />
 		<span>{sttStore.error}</span>
-		<button type="button" class="dismiss-btn" aria-label="Dismiss">
+		<button type="button" class="dismiss-btn" aria-label={$t('common.dismiss')}>
 			<Icon name="x" size={14} />
 		</button>
 	</div>
@@ -185,18 +186,17 @@
 		class="privacy-notice"
 		out:pop={{ base: 'translateX(-50%)', y: -10, duration: 200 }}
 		role="dialog"
-		aria-label="Photo privacy"
+		aria-label={$t('photomode.photoPrivacy')}
 	>
 		<Icon name="camera" size={16} />
 		<span>
 			{#if providerIsLocal}
-				Photos you show her stay on your machine — they never leave this device.
+				Las fotos que le muestres se quedan en tu equipo; nunca salen de este dispositivo.
 			{:else}
-				Photos you show her are sent to {providerLabel} so she can see them. They're also
-				saved on this device; delete them anytime from the board.
+				Las fotos que le muestres se envían a {providerLabel} para que pueda verlas. También se guardan en este dispositivo; puedes eliminarlas en cualquier momento desde la galería.
 			{/if}
 		</span>
-		<button type="button" class="privacy-ack" onclick={() => chatHintStore.ackPrivacy()}>Got it</button>
+		<button type="button" class="privacy-ack" onclick={() => chatHintStore.ackPrivacy()}>{$t('common.gotIt')}</button>
 	</div>
 {/if}
 
@@ -217,7 +217,7 @@
 		{#if chatDraftStore.dropActive}
 			<div class="drop-zone" out:fadeFast={{ duration: 120 }}>
 				<Icon name="camera" size={22} />
-				<span>Drop a photo to show her</span>
+				<span>{$t('chat.dropPhoto')}</span>
 			</div>
 		{/if}
 		{#if showStats && !overlay}
@@ -242,7 +242,7 @@
 					{#if charState.currentStreak > 1}
 						<span class="foot-stat streak"><Icon name="flame" size={12} />{charState.currentStreak}</span>
 					{/if}
-					<a href={localPath('app', '/settings/persona')} class="foot-link">Profile <Icon name="arrow-right" size={12} /></a>
+					<a href={localPath('app', '/settings/persona')} class="foot-link">{$t('common.profile')} <Icon name="arrow-right" size={12} /></a>
 				</div>
 			</div>
 		{/if}
@@ -253,7 +253,7 @@
 					class="mood-fab"
 					class:active={showStats}
 					onclick={() => (showStats = !showStats)}
-					aria-label="Companion status"
+					aria-label={$t('companion.status')}
 					aria-expanded={showStats}
 					title={moodInfo.description}
 				>

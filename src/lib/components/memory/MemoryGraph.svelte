@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import type { FactCategory } from '$lib/types/memory';
+	import { t } from 'svelte-i18n';
 	import {
 		getFactsWithEmbeddings,
 		buildGraph,
@@ -278,27 +279,27 @@
 	<!-- Controls -->
 	<div class="controls">
 		<div class="filter-group">
-			<span class="filter-label">Categories</span>
+			<span class="filter-label">{$t('memory.categories')}</span>
 			<div class="category-toggles">
 				<label class="category-toggle" style="--cat-color: {categoryColors.user}">
 					<input type="checkbox" bind:checked={showUser} />
 					<span class="toggle-dot"></span>
-					<span>User</span>
+					<span>{$t('memory.user')}</span>
 				</label>
 				<label class="category-toggle" style="--cat-color: {categoryColors.relationship}">
 					<input type="checkbox" bind:checked={showRelationship} />
 					<span class="toggle-dot"></span>
-					<span>Relationship</span>
+					<span>{$t('memory.relationship')}</span>
 				</label>
 				<label class="category-toggle" style="--cat-color: {categoryColors.shared_experience}">
 					<input type="checkbox" bind:checked={showSharedExperience} />
 					<span class="toggle-dot"></span>
-					<span>Shared</span>
+					<span>{$t('memory.shared')}</span>
 				</label>
 			</div>
 		</div>
 
-		<button class="reset-btn" onclick={resetView}>Reset View</button>
+		<button class="reset-btn" onclick={resetView}>{$t('memory.resetView')}</button>
 	</div>
 
 	<!-- Graph container -->
@@ -306,7 +307,7 @@
 		{#if loading}
 			<div class="loading">
 				<div class="spinner"></div>
-				<span>Loading memories...</span>
+				<span>{$t('memory.loadingMemories')}</span>
 			</div>
 		{/if}
 
@@ -325,7 +326,7 @@
 			</div>
 			<div class="tooltip-content">{hoveredNode.content}</div>
 			<div class="tooltip-meta">
-				Importance: {hoveredNode.importance} · Referenced: {hoveredNode.referenceCount}x
+				{$t('memory.importance')}: {hoveredNode.importance} · {$t('memory.referenced')}: {hoveredNode.referenceCount}x
 			</div>
 		</div>
 	{/if}
@@ -341,16 +342,16 @@
 			</div>
 			<div class="detail-content">{selectedNode.content}</div>
 			<div class="detail-meta">
-				<div>Importance: {selectedNode.importance}</div>
-				<div>Referenced: {selectedNode.referenceCount}x</div>
-				<div>Created: {new Date(selectedNode.createdAt).toLocaleDateString()}</div>
+				<div>{$t('memory.importance')}: {selectedNode.importance}</div>
+				<div>{$t('memory.referenced')}: {selectedNode.referenceCount}x</div>
+				<div>{$t('memory.created')}: {new Date(selectedNode.createdAt).toLocaleDateString()}</div>
 			</div>
 		</div>
 	{/if}
 
 	<!-- Stats -->
 	<div class="stats">
-		{graphData.nodes.length} memories · {graphData.links.length} connections
+		{$t('memory.memoriesCount', { values: { count: graphData.nodes.length } })} · {$t('memory.connectionsCount', { values: { count: graphData.links.length } })}
 	</div>
 </div>
 

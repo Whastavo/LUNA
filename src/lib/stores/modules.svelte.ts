@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import type { ModuleDefinition, ModuleState, ModuleMetadata, ModuleWithState } from '$lib/types/module';
 
-const STORAGE_PREFIX = 'utsuwa-module-';
+const STORAGE_PREFIX = 'luna-module-';
 
 function createModulesStore() {
 	let registry = $state<Map<string, ModuleDefinition>>(new Map());

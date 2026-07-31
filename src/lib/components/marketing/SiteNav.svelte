@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import { page } from '$app/state';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { sectionUrl, isSection } from '$lib/config/links';
@@ -45,18 +46,18 @@
 
 <nav class="site-nav" class:scrolled={scrolled || menuOpen}>
 	<div class="site-nav-inner">
-		<a href="/" class="site-nav-brand" aria-label="Utsuwa home">
-			<img src="/brand-assets/logo.svg" alt="Utsuwa" class="site-nav-logo" />
+		<a href="/" class="site-nav-brand" aria-label={$t('app.name')}>
+			<img src="/brand-assets/logo.svg" alt="Luna" class="site-nav-logo" />
 		</a>
 
 		<div class="site-nav-links">
-			<a href="/#features" class="site-nav-link" class:active={onHome}>Features</a>
-			<a href={sectionUrl('docs')} class="site-nav-link" class:active={isSection('docs')}>Docs</a>
+			<a href="/#features" class="site-nav-link" class:active={onHome}>{$t('nav.features')}</a>
+			<a href={sectionUrl('docs')} class="site-nav-link" class:active={isSection('docs')}>{$t('nav.docs')}</a>
 
 			<!-- Blog + recent-posts dropdown. Reveal is pure hover/focus-within, no
 			     click state; the Blog link itself still navigates to /blog. -->
 			<div class="nav-item">
-				<a href="/blog" class="site-nav-link" class:active={onBlog}>Blog</a>
+				<a href="/blog" class="site-nav-link" class:active={onBlog}>{$t('nav.blog')}</a>
 
 				{#if recentPosts.length}
 					<div class="nav-dropdown">
@@ -75,14 +76,14 @@
 				{/if}
 			</div>
 
-			<a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="site-nav-link">GitHub</a>
+			<a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="site-nav-link">{$t('nav.github')}</a>
 		</div>
 
 		<div class="site-nav-right">
-			<a href="/download" class="btn btn-secondary btn-sm site-nav-cta">Download</a>
+			<a href="/download" class="btn btn-secondary btn-sm site-nav-cta">{$t('nav.download')}</a>
 			<a href={sectionUrl('app')} class="btn btn-primary btn-sm site-nav-cta">
 				<span class="live-dot" aria-hidden="true"></span>
-				Try Live
+				{$t('nav.tryLive')}
 			</a>
 			<button
 				type="button"
@@ -99,23 +100,23 @@
 
 	{#if menuOpen}
 		<!-- Blurs the page behind the open menu; tapping it closes -->
-		<button class="site-nav-backdrop" aria-label="Close menu" onclick={() => (menuOpen = false)}
+		<button class="site-nav-backdrop" aria-label={$t('common.close')} onclick={() => (menuOpen = false)}
 		></button>
 		<div id="site-nav-mobile" class="site-nav-mobile">
-			<a href="/#features" class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>Features</a>
-			<a href={sectionUrl('docs')} class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>Docs</a>
-			<a href="/blog" class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>Blog</a>
+			<a href="/#features" class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>{$t('nav.features')}</a>
+			<a href={sectionUrl('docs')} class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>{$t('nav.docs')}</a>
+			<a href="/blog" class="site-nav-mobile-link" onclick={() => (menuOpen = false)}>{$t('nav.blog')}</a>
 			<a
 				href={GITHUB_REPO}
 				target="_blank"
 				rel="noopener noreferrer"
 				class="site-nav-mobile-link"
-				onclick={() => (menuOpen = false)}>GitHub</a
+				onclick={() => (menuOpen = false)}>{$t('nav.github')}</a
 			>
 			<a
 				href="/download"
 				class="btn btn-secondary btn-block"
-				onclick={() => (menuOpen = false)}>Download</a
+				onclick={() => (menuOpen = false)}>{$t('nav.download')}</a
 			>
 			<a
 				href={sectionUrl('app')}
@@ -123,7 +124,7 @@
 				onclick={() => (menuOpen = false)}
 			>
 				<span class="live-dot" aria-hidden="true"></span>
-				Try Live
+				{$t('nav.tryLive')}
 			</a>
 		</div>
 	{/if}
@@ -286,7 +287,7 @@
 		gap: 0.625rem;
 	}
 
-	/* Live indicator dot inside the Try Live button */
+	/* Live indicator dot inside the {$t('nav.tryLive')} button */
 	.live-dot {
 		width: 6px;
 		height: 6px;

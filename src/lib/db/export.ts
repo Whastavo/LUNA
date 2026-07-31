@@ -176,10 +176,10 @@ export async function importSave(
 						// Build merged character state
 						const mergedState = {
 					// Persona fields from persona or defaults
-					name: (firstPersona?.name as string) || 'Utsuwa',
+					name: (firstPersona?.name as string) || 'Luna',
 					systemPrompt:
 						(firstPersona?.systemPrompt as string) ||
-						'You are a friendly AI assistant named Utsuwa.',
+						'You are a friendly AI assistant named Luna.',
 					extensions: (firstPersona?.extensions as Record<string, unknown>) || {},
 					// Character fields from state or defaults
 					mood: (firstCharState?.mood as MoodState) || {
@@ -284,13 +284,13 @@ export function validateSaveFile(json: unknown): SaveFile | LegacySaveFile | nul
 export function getSaveFilePreview(saveFile: SaveFile | LegacySaveFile): SaveFilePreview {
 	const isV2 = saveFile.version.startsWith('2.');
 
-	let characterName = 'Utsuwa';
+	let characterName = 'Luna';
 	if (isV2) {
 		const v2 = saveFile as SaveFile;
-		characterName = v2.data.character?.name || 'Utsuwa';
+		characterName = v2.data.character?.name || 'Luna';
 	} else {
 		const v1 = saveFile as LegacySaveFile;
-		characterName = (v1.data.personas?.[0]?.name as string) || 'Utsuwa';
+		characterName = (v1.data.personas?.[0]?.name as string) || 'Luna';
 	}
 
 	return {
@@ -313,7 +313,7 @@ export function downloadSaveFile(saveFile: SaveFile): void {
 	const url = URL.createObjectURL(blob);
 
 	const date = new Date().toISOString().split('T')[0];
-	const filename = `utsuwa-save-${date}.json`;
+	const filename = `luna-save-${date}.json`;
 
 	const a = document.createElement('a');
 	a.href = url;

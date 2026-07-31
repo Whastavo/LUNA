@@ -8,6 +8,7 @@
 		forgetKeepsakeImage,
 		type KeepsakeRecord
 	} from '$lib/services/storage/keepsakes';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		onClose: () => void;
@@ -72,8 +73,8 @@
 
 	function groupLabel(ms: number): string {
 		const week = 7 * 24 * 60 * 60 * 1000;
-		if (Date.now() - ms < week) return 'This week';
-		return new Date(ms).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+		if (Date.now() - ms < week) return $t('common.thisWeek');
+		return new Date(ms).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
 	}
 
 	const sections = $derived.by(() => {
@@ -89,10 +90,10 @@
 	});
 
 	function shortDate(ms: number): string {
-		return new Date(ms).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+		return new Date(ms).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' });
 	}
 	function fullDate(ms: number): string {
-		return new Date(ms).toLocaleDateString('en-US', {
+		return new Date(ms).toLocaleDateString('es-ES', {
 			weekday: 'long',
 			month: 'long',
 			day: 'numeric',
@@ -139,26 +140,26 @@
 	onkeydown={handleKeydown}
 	role="dialog"
 	aria-modal="true"
-	aria-label="Photoboard"
+	aria-label={$t('photoboard.title')}
 	tabindex="-1"
 >
 	<div class="board">
 		<div class="board-header">
 			<h2>
-				Things you've shown her{#if items.length}<span class="count">{items.length}</span>{/if}
+				{$t('photoboard.title')}{#if items.length}<span class="count">{items.length}</span>{/if}
 			</h2>
-			<button class="close-btn" onclick={onClose} aria-label="Close">
+			<button class="close-btn" onclick={onClose} aria-label={$t('common.close')}>
 				<Icon name="x" size={16} />
 			</button>
 		</div>
 
 		{#if loading}
-			<div class="board-empty"><span>Loading…</span></div>
+			<div class="board-empty"><span>{$t('common.loading')}</span></div>
 		{:else if items.length === 0}
 			<div class="board-empty">
 				<Icon name="camera" size={40} />
-				<p>Nothing on the board yet.</p>
-				<span>Show her a photo and she'll keep it here.</span>
+				<p>{$t('photoboard.empty')}</p>
+				<span>{$t('photoboard.emptySub')}</span>
 			</div>
 		{:else}
 			<div class="board-wall">
@@ -167,11 +168,11 @@
 					<div class="section-photos">
 						{#each section.items as item, i (item.id)}
 							<div class="photo-card" style="--rot: {ROTATIONS[i % ROTATIONS.length]}deg">
-								<button class="photo-btn" onclick={() => openLightbox(item)} aria-label="View photo">
+								<button class="photo-btn" onclick={() => openLightbox(item)} aria-label={$t('photoboard.viewPhoto')}>
 									<img src={item.url} alt="" loading="lazy" />
 								</button>
 								<div class="caption">{shortDate(item.createdAt)}</div>
-								<button class="forget-btn" aria-label="Forget this" onclick={() => forget(item.id)}>
+								<button class="forget-btn" aria-label={$t('photoboard.forget')} onclick={() => forget(item.id)}>
 									<Icon name="x" size={12} />
 								</button>
 							</div>
@@ -196,13 +197,13 @@
 		onkeydown={handleKeydown}
 		role="dialog"
 		aria-modal="true"
-		aria-label="Photo"
+		aria-label={$t('photoboard.photo')}
 		tabindex="-1"
 	>
-		<button class="lb-close" onclick={closeLightbox} aria-label="Close">
+		<button class="lb-close" onclick={closeLightbox} aria-label={$t('common.close')}>
 			<Icon name="x" size={18} />
 		</button>
-		<button class="flip-card" class:flipped onclick={() => (flipped = !flipped)} aria-label="Flip photo">
+		<button class="flip-card" class:flipped onclick={() => (flipped = !flipped)} aria-label={$t('photoboard.flipPhoto')}>
 			<div class="flip-inner">
 				<div class="flip-front">
 					{#if selectedFullUrl}<img src={selectedFullUrl} alt="" />{/if}
@@ -213,13 +214,13 @@
 						{#if selected.note}
 							<p class="back-note">“{selected.note}”</p>
 						{:else}
-							<p class="back-empty">She hasn't said much about this one… yet.</p>
+							<p class="back-empty">{$t('photoboard.noCommentsYet')}</p>
 						{/if}
 					</div>
 				</div>
 			</div>
 		</button>
-		<div class="lb-hint">Click the photo to flip it over</div>
+		<div class="lb-hint">{$t('photoboard.flipHint')}</div>
 	</div>
 {/if}
 

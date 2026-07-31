@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Icon } from '$lib/components/ui';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		name: string;
@@ -17,42 +18,42 @@
 
 <div class="ob-step">
 	<div class="ob-head">
-		<h2 class="ob-title">Name your companion</h2>
-		<p class="ob-subtitle">Give your AI companion a name and a personality.</p>
+		<h2 class="ob-title">{$t('onboarding.characterTitle')}</h2>
+		<p class="ob-subtitle">{$t('onboarding.characterSubtitle')}</p>
 	</div>
 
 	<div class="ob-field">
-		<label for="name" class="ob-label">Name</label>
+		<label for="name" class="ob-label">{$t('onboarding.nameLabel')}</label>
 		<input
 			id="name"
 			type="text"
 			class="ob-input"
 			value={name}
 			oninput={(e) => onNameChange(e.currentTarget.value)}
-			placeholder="Enter a name..."
+			placeholder={$t('onboarding.namePlaceholder')}
 		/>
 	</div>
 
 	<div class="ob-field">
-		<label for="personality" class="ob-label">Core personality</label>
+		<label for="personality" class="ob-label">{$t('onboarding.personalityLabel')}</label>
 		<textarea
 			id="personality"
 			class="ob-textarea"
 			value={systemPrompt}
 			oninput={(e) => onSystemPromptChange(e.currentTarget.value)}
-			placeholder="Describe their personality, speaking style, background..."
+			placeholder={$t('onboarding.personalityPlaceholder')}
 			rows="5"
 		></textarea>
-		<span class="ob-hint">This shapes how your companion talks and behaves.</span>
+		<span class="ob-hint">{$t('onboarding.personalityHint')}</span>
 	</div>
 
 	<div class="ob-actions ob-actions--split">
 		<button class="btn btn-secondary" onclick={onBack}>
 			<Icon name="chevron-left" size={16} />
-			Back
+			{$t('common.back')}
 		</button>
 		<button class="btn btn-primary" onclick={onNext} disabled={!isValid}>
-			Next
+			{$t('common.next')}
 			<Icon name="chevron-right" size={16} />
 		</button>
 	</div>

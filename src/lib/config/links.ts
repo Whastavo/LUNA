@@ -1,9 +1,9 @@
 import { page } from '$app/state';
 
 /**
- * Host-aware link builder for the subdomain split (docs.utsuwa.ai, app.utsuwa.ai).
+ * Host-aware link builder for the subdomain split (docs.luna.ai, app.luna.ai).
  *
- * - On the real utsuwa.ai (apex or any subdomain): links resolve to the right
+ * - On the real luna.ai (apex or any subdomain): links resolve to the right
  *   subdomain via absolute URLs. Same-origin links stay client-side (SPA) nav,
  *   cross-subdomain links do a normal full navigation.
  * - In local dev (localhost) and on *.vercel.app preview deploys: everything
@@ -14,7 +14,7 @@ import { page } from '$app/state';
  */
 
 type Section = 'docs' | 'app';
-const APEX = 'utsuwa.ai';
+const APEX = 'luna.ai';
 
 function hostname(): string {
 	return page.url?.hostname ?? '';

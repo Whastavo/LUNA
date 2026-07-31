@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { DropdownMenu } from 'bits-ui';
 	import { Icon } from '$lib/components/ui';
+	import { t } from 'svelte-i18n';
 
 	interface Model {
 		id: string;
@@ -22,11 +23,11 @@
 		models,
 		value,
 		onSelect,
-		placeholder = 'Select model...',
+		placeholder,
 		isLoading = false,
 		onRefresh,
 		disabled = false,
-		disabledMessage = 'Enter API key first'
+		disabledMessage
 	}: Props = $props();
 
 	let searchQuery = $state('');
@@ -66,14 +67,14 @@
 			{#if isLoading}
 				<span class="trigger-loading">
 					<span class="loading-spinner"></span>
-					Fetching models...
+					Obteniendo modelos...
 				</span>
 			{:else if disabled}
-				<span class="trigger-placeholder">{disabledMessage}</span>
+				<span class="trigger-placeholder">{disabledMessage ?? 'Introduce la clave API primero'}</span>
 			{:else if selectedModel}
 				<span class="trigger-label">{selectedModel.name}</span>
 			{:else}
-				<span class="trigger-placeholder">{placeholder}</span>
+				<span class="trigger-placeholder">{placeholder ?? $t('settings.llm.selectModel')}</span>
 			{/if}
 			{#if !isLoading}
 				<Icon name="chevron-down" size={14} />
@@ -87,7 +88,7 @@
 					<input
 						type="text"
 						class="search-input"
-						placeholder="Search models..."
+						placeholder={$t('ui.models.searchPlaceholder')}
 						bind:value={searchQuery}
 						onclick={(e) => e.stopPropagation()}
 						onkeydown={(e) => e.stopPropagation()}
@@ -113,7 +114,7 @@
 						</DropdownMenu.Item>
 					{/each}
 					{#if filteredModels.length === 0 && !isLoading}
-						<div class="no-models">No models found</div>
+						<div class="no-models">{$t('ui.models.noneFound')}</div>
 					{/if}
 				</div>
 			</DropdownMenu.Content>
@@ -121,7 +122,7 @@
 	</DropdownMenu.Root>
 
 	{#if onRefresh && !isLoading}
-		<button class="refresh-btn" onclick={onRefresh} title="Refresh models">
+		<button class="refresh-btn" onclick={onRefresh} title={$t('ui.models.refresh')}>
 			<Icon name="refresh-cw" size={14} />
 		</button>
 	{/if}

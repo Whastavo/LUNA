@@ -1,0 +1,11 @@
+{
+  "name": "Luna",
+  "description": "Aplicación de compañera IA con avatares VRM 3D, chat de voz, memoria semántica y soporte multi-proveedor de IA.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

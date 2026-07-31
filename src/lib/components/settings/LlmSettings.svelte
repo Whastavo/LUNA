@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import { settingsStore } from '$lib/stores/settings.svelte';
 	import { getLLMProvider } from '$lib/services/providers/registry';
 	import { Icon, ProviderDropdown, ModelDropdown, ContextSizeSlider } from '$lib/components/ui';
@@ -9,7 +10,7 @@
 
 	let { state }: { state: LlmSettingsState } = $props();
 
-	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-utsuwa-to-reach-ollama`;
+	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-luna-to-reach-ollama`;
 
 	function openLocalLlmDocs(e: MouseEvent) {
 		if (isTauri()) {
@@ -25,11 +26,11 @@
 
 {#snippet troubleHelp()}
 	<p class="provider-help">
-		Having trouble? Click <a
+		{$t('settings.llm.havingTrouble')} <a
 			href={LOCAL_LLM_DOCS_URL}
 			target="_blank"
 			rel="noopener"
-			onclick={openLocalLlmDocs}>here</a
+			onclick={openLocalLlmDocs}>{$t('settings.llm.here')}</a
 		>
 	</p>
 {/snippet}
@@ -37,12 +38,12 @@
 <div class="service-group">
 	<div class="service-header">
 		<Icon name="brain" size={14} />
-		<span>Chat (LLM)</span>
+		<span>{$t('settings.llm.serviceTitle')}</span>
 		<button
 			class="service-toggle"
 			class:enabled={state.isLLMEnabled}
 			onclick={state.toggleLLM}
-			aria-label="Toggle chat (LLM)"
+			aria-label={$t('settings.llm.toggleAria')}
 		>
 			<span class="toggle-track">
 				<span class="toggle-thumb"></span>
@@ -55,7 +56,7 @@
 			type="llm"
 			value={state.consciousnessSettings.activeProvider as string}
 			onSelect={state.handleLLMProviderChange}
-			placeholder="Select LLM provider..."
+			placeholder={$t('settings.llm.selectProvider')}
 		/>
 
 		{#if state.consciousnessSettings.activeProvider}
@@ -67,7 +68,7 @@
 						type="password"
 						class="api-key-input"
 						class:error={state.llmFetchError}
-						placeholder={provider?.custom ? 'API Key (optional)' : 'API Key'}
+						placeholder={provider?.custom ? $t('settings.apiKeyOptional') : $t('settings.apiKey')}
 						value={settingsStore.getProviderConfig(provider.id).apiKey ?? ''}
 						oninput={(e) => state.handleApiKeyChange(provider.id, e.currentTarget.value)}
 						onblur={provider?.custom ? undefined : state.handleLLMApiKeyBlur}
@@ -90,7 +91,7 @@
 						type="text"
 						class="api-key-input"
 						placeholder={provider.custom
-							? 'https://api.openai.com/v1/ or your endpoint'
+							? $t('settings.llm.customEndpointPlaceholder')
 							: provider.defaultBaseUrl || 'http://localhost:11434/v1/'}
 						value={settingsStore.getProviderConfig(provider.id).baseUrl ?? ''}
 						oninput={(e) => state.handleLLMBaseUrlChange(provider.id, e.currentTarget.value)}
@@ -108,7 +109,7 @@
 					<input
 						type="text"
 						class="api-key-input"
-						placeholder="Model (e.g. gpt-4o-mini, meta-llama/llama-3-70b)"
+						placeholder={$t('settings.llm.customModelPlaceholder')}
 						value={(state.consciousnessSettings.activeModel as string) ?? ''}
 						oninput={(e) => state.handleLLMModelChange(e.currentTarget.value.trim())}
 					/>
@@ -119,22 +120,22 @@
 							models={state.llmModels}
 							value={state.consciousnessSettings.activeModel as string}
 							onSelect={state.handleLLMModelChange}
-							placeholder="Pick a fetched model..."
+							placeholder={$t('settings.llm.chooseFetchedModel')}
 							isLoading={state.llmIsLoading}
 							onRefresh={state.refreshLLMModels}
 							disabled={false}
 						/>
 					</div>
 				{:else}
-					<p class="provider-note">Enter a base URL to fetch available models.</p>
+					<p class="provider-note">{$t('settings.llm.enterBaseUrlFirst')}</p>
 				{/if}
 
 				<details class="llm-advanced-params">
-					<summary>Advanced Parameters</summary>
+					<summary>{$t('settings.llm.advancedParameters')}</summary>
 					<div class="llm-param-grid">
 						<div class="llm-param-row">
 							<label class="llm-param-label" for="llm-temperature">
-								Temperature
+								{$t('settings.llm.temperature')}
 								<span class="llm-param-value">{((state.consciousnessSettings.temperature as number) ?? 0.7).toFixed(2)}</span>
 							</label>
 							<input
@@ -147,12 +148,12 @@
 								value={(state.consciousnessSettings.temperature as number) ?? 0.7}
 								oninput={(e) => state.handleLLMNumberSetting('temperature', Number(e.currentTarget.value))}
 							/>
-							<p class="provider-note">Controls randomness: 0 = focused, 2 = highly creative.</p>
+							<p class="provider-note">{$t('settings.llm.temperatureDesc')}</p>
 						</div>
 
 						<div class="llm-param-row">
 							<label class="llm-param-label" for="llm-top-p">
-								Top P
+								{$t('settings.llm.topP')}
 								<span class="llm-param-value">{((state.consciousnessSettings.topP as number) ?? 1.0).toFixed(2)}</span>
 							</label>
 							<input
@@ -165,12 +166,12 @@
 								value={(state.consciousnessSettings.topP as number) ?? 1.0}
 								oninput={(e) => state.handleLLMNumberSetting('topP', Number(e.currentTarget.value))}
 							/>
-							<p class="provider-note">Nucleus sampling: 1 = disabled.</p>
+							<p class="provider-note">{$t('settings.llm.topPDesc')}</p>
 						</div>
 
 						<div class="llm-param-row">
 							<label class="llm-param-label" for="llm-max-tokens">
-								Max Tokens
+								{$t('settings.llm.maxTokens')}
 								<span class="llm-param-value">{state.consciousnessSettings.maxTokens ?? '—'}</span>
 							</label>
 							<input
@@ -179,19 +180,19 @@
 								class="api-key-input"
 								min="1"
 								step="1"
-								placeholder="Unlimited"
+								placeholder={$t('settings.llm.unlimited')}
 								value={(state.consciousnessSettings.maxTokens as number) ?? ''}
 								oninput={(e) => {
 									const val = e.currentTarget.value;
 									state.handleLLMNumberSetting('maxTokens', val ? parseInt(val, 10) : undefined);
 								}}
 							/>
-							<p class="provider-note">Hard limit for the number of tokens in the response. Leave empty to use the provider default.</p>
+							<p class="provider-note">{$t('settings.llm.maxTokensDesc')}</p>
 						</div>
 
 						<div class="llm-param-row">
 							<label class="llm-param-label" for="llm-presence-penalty">
-								Presence Penalty
+								{$t('settings.llm.presencePenalty')}
 								<span class="llm-param-value">{((state.consciousnessSettings.presencePenalty as number) ?? 0).toFixed(1)}</span>
 							</label>
 							<input
@@ -204,12 +205,12 @@
 								value={(state.consciousnessSettings.presencePenalty as number) ?? 0}
 								oninput={(e) => state.handleLLMNumberSetting('presencePenalty', Number(e.currentTarget.value))}
 							/>
-							<p class="provider-note">Reduces repetition of tokens already used.</p>
+							<p class="provider-note">{$t('settings.llm.presencePenaltyDesc')}</p>
 						</div>
 
 						<div class="llm-param-row">
 							<label class="llm-param-label" for="llm-frequency-penalty">
-								Frequency Penalty
+								{$t('settings.llm.frequencyPenalty')}
 								<span class="llm-param-value">{((state.consciousnessSettings.frequencyPenalty as number) ?? 0).toFixed(1)}</span>
 							</label>
 							<input
@@ -222,7 +223,7 @@
 								value={(state.consciousnessSettings.frequencyPenalty as number) ?? 0}
 								oninput={(e) => state.handleLLMNumberSetting('frequencyPenalty', Number(e.currentTarget.value))}
 							/>
-							<p class="provider-note">Stronger penalty for frequently repeated tokens.</p>
+							<p class="provider-note">{$t('settings.llm.frequencyPenaltyDesc')}</p>
 						</div>
 					</div>
 				</details>
@@ -231,11 +232,11 @@
 					models={state.llmModels}
 					value={state.consciousnessSettings.activeModel as string}
 					onSelect={state.handleLLMModelChange}
-					placeholder="Select model..."
+					placeholder={$t('settings.llm.selectModel')}
 					isLoading={state.llmIsLoading}
 					onRefresh={state.llmHasApiKey ? state.refreshLLMModels : undefined}
 					disabled={!state.llmHasApiKey}
-					disabledMessage="Enter API key first"
+					disabledMessage={$t('settings.enterApiKeyFirst')}
 				/>
 			{/if}
 

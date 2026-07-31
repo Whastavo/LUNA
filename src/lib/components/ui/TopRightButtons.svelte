@@ -10,6 +10,7 @@
 	import { getColorMode, cycleColorMode, type ColorMode } from '$lib/utils/color-mode';
 	import { onMount } from 'svelte';
 	import type { Reminder } from '$lib/types/memory';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		onInfoClick: () => void;
@@ -55,7 +56,7 @@
 		colorMode === 'system' ? 'monitor' : colorMode === 'light' ? 'sun' : 'moon'
 	);
 	const themeLabel = $derived(
-		colorMode === 'system' ? 'Theme: System' : colorMode === 'light' ? 'Theme: Light' : 'Theme: Dark'
+		colorMode === 'system' ? $t('ui.topButtons.themeSystem') : colorMode === 'light' ? $t('ui.topButtons.themeLight') : $t('ui.topButtons.themeDark')
 	);
 
 	onMount(() => {
@@ -83,9 +84,9 @@
 		const now = new Date();
 		const diffMs = date.getTime() - now.getTime();
 		const diffMin = Math.max(0, Math.ceil(diffMs / 60000));
-		if (diffMin < 60) return `in ${diffMin} min`;
+		if (diffMin < 60) return `en ${diffMin} min`;
 		const diffH = Math.ceil(diffMin / 60);
-		return `in ${diffH} h`;
+		return `en ${diffH} h`;
 	}
 
 	function deleteReminder(id?: number) {
@@ -121,8 +122,8 @@
 				class="icon-btn"
 				class:active={remindersOpen}
 				onclick={() => (remindersOpen = !remindersOpen)}
-				aria-label="Open reminders"
-				title="Open reminders"
+				aria-label={$t('ui.topButtons.openReminders')}
+				title={$t('ui.topButtons.openReminders')}
 			>
 				<Icon name="bell" size={20} />
 				{#if upcomingReminders.length > 0}
@@ -131,9 +132,9 @@
 			</button>
 			{#if remindersOpen}
 				<div class="reminder-dropdown">
-					<div class="reminder-header">Open tasks</div>
+					<div class="reminder-header">{$t('ui.reminders.openTasks')}</div>
 					{#if upcomingReminders.length === 0}
-						<div class="reminder-empty">No open tasks or timers</div>
+						<div class="reminder-empty">{$t('ui.reminders.noTasks')}</div>
 					{:else}
 						<ul class="reminder-list">
 							{#each upcomingReminders as reminder (reminder.id)}
@@ -145,8 +146,8 @@
 									<button
 										class="reminder-delete"
 										onclick={() => deleteReminder(reminder.id)}
-										aria-label="Delete reminder"
-										title="Delete reminder"
+										aria-label={$t('common.delete')}
+										title={$t('common.delete')}
 									>
 										<Icon name="trash" size={14} />
 									</button>
@@ -156,7 +157,7 @@
 					{/if}
 
 					{#if recentFired.length > 0}
-						<div class="reminder-header reminder-header--fired">Fired or missed</div>
+						<div class="reminder-header reminder-header--fired">{$t('ui.reminders.firedOrMissed')}</div>
 						<ul class="reminder-list">
 							{#each recentFired as reminder (reminder.id)}
 								<li class="reminder-item reminder-item--fired">
@@ -167,8 +168,8 @@
 									<button
 										class="reminder-delete"
 										onclick={() => dismissRecentFired(reminder.id)}
-										aria-label="Dismiss reminder"
-										title="Dismiss reminder"
+										aria-label={$t('common.dismiss')}
+										title={$t('common.dismiss')}
 									>
 										<Icon name="check" size={14} />
 									</button>
@@ -184,27 +185,27 @@
 				class="icon-btn"
 				class:active={sidebarOpen}
 				onclick={onSidebarToggle}
-				aria-label="Chat history"
-				title="Chat history"
+				aria-label={$t('ui.topButtons.chatHistory')}
+				title={$t('ui.topButtons.chatHistory')}
 			>
 				<Icon name="message" size={20} />
 			</button>
 		{/if}
 		{#if showOverlayBtn}
-			<button class="icon-btn overlay-btn" onclick={launchOverlay} aria-label="Launch overlay" title="Launch Overlay Mode">
+			<button class="icon-btn overlay-btn" onclick={launchOverlay} aria-label={$t('ui.topButtons.launchOverlay')} title={$t('ui.topButtons.launchOverlay')}>
 				<Icon name="monitor" size={20} />
 			</button>
 		{/if}
-		<button class="icon-btn" onclick={onInfoClick} aria-label="App info">
+		<button class="icon-btn" onclick={onInfoClick} aria-label={$t('ui.topButtons.appInfo')}>
 			<Icon name="info" size={20} />
 		</button>
 		<button
 			class="icon-btn cluster-trigger"
 			class:open={clusterOpen}
 			onclick={toggleCluster}
-			aria-label="Controls"
+			aria-label={$t('ui.topButtons.controls')}
 			aria-expanded={clusterOpen}
-			title="Controls"
+			title={$t('ui.topButtons.controls')}
 		>
 			<Icon name={clusterOpen ? 'x' : 'sliders'} size={20} />
 		</button>
@@ -216,8 +217,8 @@
 				class="icon-btn cluster-item"
 				style="--i: 0"
 				onclick={() => goto(localPath('app', '/settings'))}
-				aria-label="Settings"
-				title="Settings"
+				aria-label={$t('common.settings')}
+				title={$t('common.settings')}
 			>
 				<Icon name="settings" size={20} />
 			</button>
@@ -226,8 +227,8 @@
 				class:active={showCamera}
 				style="--i: 1"
 				onclick={() => (showCamera = !showCamera)}
-				aria-label="Camera settings"
-				title="Camera"
+				aria-label={$t('ui.camera.settings')}
+				title={$t('ui.camera.title')}
 			>
 				<Icon name="video" size={20} />
 			</button>
@@ -245,8 +246,8 @@
 				class:active={arStore.active}
 				style="--i: 3"
 				onclick={handleArClick}
-				aria-label={arStore.active ? 'Exit AR' : 'Enter AR'}
-				title={arStore.active ? 'Exit AR' : 'View in AR'}
+				aria-label={arStore.active ? $t('ui.topButtons.exitAr') : $t('ui.topButtons.enterAr')}
+				title={arStore.active ? $t('ui.topButtons.exitAr') : $t('ui.topButtons.viewAr')}
 			>
 				<Icon name="cube" size={20} />
 			</button>

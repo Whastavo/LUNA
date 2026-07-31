@@ -13,15 +13,16 @@
 	import { keepImage } from '$lib/services/storage/keepsakes';
 	import { isTauri } from '$lib/services/platform';
 	import { BACKGROUND_PRESETS, presetSwatch } from '$lib/services/scene-backgrounds';
+	import { t } from 'svelte-i18n';
 
 	type Tab = 'pose' | 'face' | 'scene' | 'camera' | 'sticker';
-	const TABS: Array<{ id: Tab; label: string }> = [
-		{ id: 'camera', label: 'Camera' },
-		{ id: 'pose', label: 'Pose' },
-		{ id: 'face', label: 'Face' },
-		{ id: 'scene', label: 'Scene' },
-		{ id: 'sticker', label: 'Sticker' }
-	];
+	const TABS = $derived<Array<{ id: Tab; label: string }>>([
+		{ id: 'camera', label: $t('photomode.camera') },
+		{ id: 'pose', label: $t('photomode.pose') },
+		{ id: 'face', label: $t('photomode.face') },
+		{ id: 'scene', label: $t('photomode.scene') },
+		{ id: 'sticker', label: $t('photomode.sticker') }
+	]);
 
 	let tab = $state<Tab>('camera');
 	let collapsed = $state(false);
@@ -44,23 +45,25 @@
 
 	// Shared preset library; 'default' means "the scene as it is", which in
 	// photo terms is the room. Patterns and pastels included.
-	const BACKGROUNDS = BACKGROUND_PRESETS.map((preset) => ({
-		id: preset.id,
-		label: preset.id === 'default' ? 'Room' : preset.label,
-		bg: (preset.bg.type === 'default' ? { type: 'room' } : preset.bg) as PhotoBackground,
-		swatch: presetSwatch(preset)
-	}));
+	const BACKGROUNDS = $derived(
+		BACKGROUND_PRESETS.map((preset) => ({
+			id: preset.id,
+			label: preset.id === 'default' ? $t('photomode.room') : preset.label,
+			bg: (preset.bg.type === 'default' ? { type: 'room' } : preset.bg) as PhotoBackground,
+			swatch: presetSwatch(preset)
+		}))
+	);
 
-	const FRAMES: Array<{ id: PhotoFrameId; label: string }> = [
-		{ id: 'none', label: 'None' },
-		{ id: 'polaroid', label: 'Polaroid' },
-		{ id: 'film', label: 'Film' }
-	];
+	const FRAMES = $derived<Array<{ id: PhotoFrameId; label: string }>>([
+		{ id: 'none', label: $t('photomode.none') },
+		{ id: 'polaroid', label: $t('photomode.polaroid') },
+		{ id: 'film', label: $t('photomode.film') }
+	]);
 
 	const FILTER_IDS = Object.keys(PHOTO_FILTERS) as PhotoFilterId[];
 
 	const STICKERS: Array<{ id: string; label: string; src: string }> = [
-		{ id: 'utsuwa-logo', label: 'Utsuwa logo', src: '/brand-assets/logo.svg' }
+		{ id: 'luna-logo', label: 'Luna logo', src: '/brand-assets/logo.svg' }
 	];
 
 	const activeBackgroundId = $derived(
@@ -119,7 +122,7 @@
 			// Both platforms put the file where users expect downloads to land:
 			// the browser via a download, the desktop app by writing directly to
 			// the Downloads folder. The keepsake-store copy is kept either way.
-			const filename = `utsuwa-photo-${Date.now()}.png`;
+			const filename = `luna-photo-${Date.now()}.png`;
 			if (isTauri()) {
 				try {
 					const { writeFile, BaseDirectory } = await import('@tauri-apps/plugin-fs');
@@ -159,20 +162,20 @@
 {/if}
 
 {#if collapsed}
-	<button class="panel-pill" onclick={() => (collapsed = false)} aria-label="Open photo controls">
+	<button class="panel-pill" onclick={() => (collapsed = false)} aria-label={$t('photomode.openControls')}>
 		<Icon name="camera" size={16} />
 	</button>
 {:else}
-	<div class="photo-panel" role="toolbar" aria-label="Photo mode">
+	<div class="photo-panel" role="toolbar" aria-label={$t('photomode.title')}>
 		<div class="panel-header">
-			<span class="panel-title">Photo Mode</span>
+			<span class="panel-title">{$t('photomode.title')}</span>
 			{#if savedTick}
-				<span class="saved-tick">Saved</span>
+				<span class="saved-tick">{$t('photomode.saved')}</span>
 			{/if}
-			<button class="header-btn" onclick={() => (collapsed = true)} aria-label="Collapse panel">
+			<button class="header-btn" onclick={() => (collapsed = true)} aria-label={$t('photomode.collapsePanel')}>
 				<Icon name="chevron-up" size={14} />
 			</button>
-			<button class="header-btn" onclick={() => photomodeStore.exit()} aria-label="Exit photo mode">
+			<button class="header-btn" onclick={() => photomodeStore.exit()} aria-label={$t('photomode.exitPhotoMode')}>
 				<Icon name="x" size={14} />
 			</button>
 		</div>
@@ -199,7 +202,7 @@
 						class:selected={photomodeStore.selectedPoseId === null}
 						onclick={() => photomodeStore.setPose(null)}
 					>
-						Natural
+						{$t('photomode.natural')}
 					</button>
 					{#each poses as pose (pose.id)}
 						<button
@@ -218,7 +221,7 @@
 						class:selected={photomodeStore.selectedExpression === null}
 						onclick={() => photomodeStore.setExpression(null)}
 					>
-						Mood
+						{$t('photomode.mood')}
 					</button>
 					{#each expressions as name (name)}
 						<button
@@ -231,7 +234,7 @@
 					{/each}
 				</div>
 			{:else if tab === 'scene'}
-				<span class="mini-label">Background</span>
+				<span class="mini-label">{$t('photomode.background')}</span>
 				<div class="chip-wrap">
 					{#each BACKGROUNDS as bg (bg.id)}
 						<button
@@ -239,12 +242,12 @@
 							class:selected={activeBackgroundId === bg.id}
 							style:background={bg.swatch}
 							title={bg.label}
-							aria-label={`Background: ${bg.label}`}
+							aria-label={`${$t('photomode.background')}: ${bg.label}`}
 							onclick={() => photomodeStore.setBackground(bg.bg)}
 						></button>
 					{/each}
 				</div>
-				<span class="mini-label">Filter</span>
+				<span class="mini-label">{$t('photomode.filter')}</span>
 				<div class="chip-wrap">
 					{#each FILTER_IDS as id (id)}
 						<button
@@ -256,7 +259,7 @@
 						</button>
 					{/each}
 				</div>
-				<span class="mini-label">Frame</span>
+				<span class="mini-label">{$t('photomode.frame')}</span>
 				<div class="chip-wrap">
 					{#each FRAMES as frame (frame.id)}
 						<button
@@ -269,7 +272,7 @@
 					{/each}
 				</div>
 				<label class="toggle-row">
-					<span>Vignette</span>
+					<span>{$t('photomode.vignette')}</span>
 					<input
 						class="switch-input"
 						type="checkbox"
@@ -280,7 +283,7 @@
 				</label>
 			{:else if tab === 'camera'}
 				<span class="mini-label">
-					Lens
+					{$t('photomode.lens')}
 					<span class="mini-value">{(photomodeStore.photoFov ?? displayStore.camera.fov).toFixed(0)} deg</span>
 				</span>
 				<input
@@ -291,10 +294,10 @@
 					step="1"
 					value={photomodeStore.photoFov ?? displayStore.camera.fov}
 					oninput={(e) => photomodeStore.setPhotoFov(parseFloat(e.currentTarget.value))}
-					aria-label="Field of view"
+					aria-label={$t('photomode.fieldOfView')}
 				/>
 				<label class="toggle-row">
-					<span>Look at camera</span>
+					<span>{$t('photomode.lookAtCamera')}</span>
 					<input
 						class="switch-input"
 						type="checkbox"
@@ -304,7 +307,7 @@
 					<span class="switch" aria-hidden="true"><span class="switch-thumb"></span></span>
 				</label>
 				<label class="toggle-row">
-					<span>Thirds grid</span>
+					<span>{$t('photomode.thirdsGrid')}</span>
 					<input
 						class="switch-input"
 						type="checkbox"
@@ -313,7 +316,7 @@
 					/>
 					<span class="switch" aria-hidden="true"><span class="switch-thumb"></span></span>
 				</label>
-				<button class="panel-btn" onclick={resetFraming}>Reset framing</button>
+				<button class="panel-btn" onclick={resetFraming}>{$t('photomode.resetFraming')}</button>
 			{:else if tab === 'sticker'}
 				<div class="chip-wrap">
 					{#each STICKERS as sticker (sticker.id)}
@@ -323,23 +326,23 @@
 					{/each}
 				</div>
 				{#if photomodeStore.stickers.length > 0}
-					<span class="mini-label">On the shot</span>
+					<span class="mini-label">{$t('photomode.onTheShot')}</span>
 					{#each photomodeStore.stickers as active, i (active.id)}
 						<div class="sticker-row">
 							<img class="sticker-thumb" src={active.src} alt="" />
-							<span class="sticker-name">Sticker {i + 1}</span>
+							<span class="sticker-name">{$t('photomode.sticker')} {i + 1}</span>
 							<button
 								class="header-btn"
-								aria-label="Remove sticker"
+								aria-label={$t('photomode.removeSticker')}
 								onclick={() => photomodeStore.removeSticker(active.id)}
 							>
 								<Icon name="x" size={13} />
 							</button>
 						</div>
 					{/each}
-					<span class="hint">Drag to move. Scroll to resize. Double-click also removes.</span>
+					<span class="hint">{$t('photomode.stickerHint')}</span>
 				{:else}
-					<span class="hint">Add a sticker, then drag it anywhere on the shot.</span>
+					<span class="hint">{$t('photomode.addStickerHint')}</span>
 				{/if}
 			{/if}
 		</div>
@@ -349,14 +352,14 @@
 				class="panel-btn timer"
 				class:selected={timerOn}
 				onclick={() => (timerOn = !timerOn)}
-				title="3 second self-timer"
+				title={$t('photomode.selfTimer')}
 			>
 				3s
 			</button>
-			<button class="panel-btn" onclick={() => takePhoto(1)} disabled={capturing}>Snap</button>
+			<button class="panel-btn" onclick={() => takePhoto(1)} disabled={capturing}>{$t('photomode.snap')}</button>
 			<button class="panel-btn primary" onclick={() => takePhoto(2)} disabled={capturing}>
 				<Icon name="camera" size={14} />
-				{capturing ? (countdown > 0 ? String(countdown) : '...') : 'Capture'}
+				{capturing ? (countdown > 0 ? String(countdown) : '...') : $t('photomode.capture')}
 			</button>
 		</div>
 	</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import { slideOpen } from '$lib/utils/motion';
 	import { Icon } from '$lib/components/ui';
 	import type { PersonaPageState } from './persona-page.svelte';
@@ -10,7 +11,7 @@
 <div class="personality-section">
 	<button class="personality-toggle" onclick={() => page.personalityExpanded = !page.personalityExpanded}>
 		<Icon name="sparkles" size={16} />
-		<span>Core Personality</span>
+		<span>{$t('settings.persona.corePersonality')}</span>
 		<Icon name={page.personalityExpanded ? 'chevron-up' : 'chevron-down'} size={16} />
 	</button>
 	{#if page.personalityExpanded}
@@ -18,7 +19,7 @@
 			<textarea
 				class="personality-textarea"
 				bind:value={page.formSystemPrompt}
-				placeholder="Personality traits, speaking style, background..."
+				placeholder={$t('settings.persona.traitsPlaceholder')}
 				rows="8"
 				onblur={page.saveSystemPrompt}
 			></textarea>

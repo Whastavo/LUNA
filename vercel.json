@@ -2,43 +2,43 @@
 	"rewrites": [
 		{
 			"source": "/",
-			"has": [{ "type": "host", "value": "docs.utsuwa.ai" }],
+			"has": [{ "type": "host", "value": "docs.luna.ai" }],
 			"destination": "/docs"
 		},
 		{
 			"source": "/:path+",
-			"has": [{ "type": "host", "value": "docs.utsuwa.ai" }],
+			"has": [{ "type": "host", "value": "docs.luna.ai" }],
 			"destination": "/docs/:path+"
 		},
 		{
 			"source": "/",
-			"has": [{ "type": "host", "value": "app.utsuwa.ai" }],
+			"has": [{ "type": "host", "value": "app.luna.ai" }],
 			"destination": "/app"
 		}
 	],
 	"redirects": [
 		{
 			"source": "/docs",
-			"has": [{ "type": "host", "value": "utsuwa.ai" }],
-			"destination": "https://docs.utsuwa.ai",
+			"has": [{ "type": "host", "value": "luna.ai" }],
+			"destination": "https://docs.luna.ai",
 			"permanent": true
 		},
 		{
 			"source": "/docs/:path*",
-			"has": [{ "type": "host", "value": "utsuwa.ai" }],
-			"destination": "https://docs.utsuwa.ai/:path*",
+			"has": [{ "type": "host", "value": "luna.ai" }],
+			"destination": "https://docs.luna.ai/:path*",
 			"permanent": true
 		},
 		{
 			"source": "/app",
-			"has": [{ "type": "host", "value": "utsuwa.ai" }],
-			"destination": "https://app.utsuwa.ai",
+			"has": [{ "type": "host", "value": "luna.ai" }],
+			"destination": "https://app.luna.ai",
 			"permanent": true
 		},
 		{
 			"source": "/app/:path*",
-			"has": [{ "type": "host", "value": "utsuwa.ai" }],
-			"destination": "https://app.utsuwa.ai/:path*",
+			"has": [{ "type": "host", "value": "luna.ai" }],
+			"destination": "https://app.luna.ai/:path*",
 			"permanent": true
 		}
 	]

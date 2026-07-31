@@ -1,109 +1,13 @@
 ---
-title: Contributing
-description: How to contribute to the Utsuwa project.
+title: Guía de Contribución
+description: Cómo contribuir al código, documentación y mejoras de Luna.
 ---
 
-# Contributing
+# Guía de Contribución
 
-Contributions to Utsuwa are welcome. This page covers how to get set up and submit changes.
+¡Gracias por tu interés en contribuir a Luna! Luna es un proyecto de código abierto publicado bajo la licencia **GNU AGPL-3.0-or-later**.
 
-## Prerequisites
-
-- Node.js 22 or higher
-- pnpm
-- [Rust toolchain](https://rustup.rs/) (only needed for desktop app development)
-
-## Development Setup
-
-1. Fork the repository
-2. Clone your fork:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/utsuwa.git
-   cd utsuwa
-   ```
-3. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-4. Start the development server:
-   ```bash
-   pnpm dev
-   ```
-5. Open [http://localhost:5173](http://localhost:5173) in your browser
-6. For desktop development, run `pnpm tauri dev` instead (requires Rust)
-
-## Reporting Bugs
-
-If you find a bug, create an issue with:
-
-- A clear, descriptive title
-- Steps to reproduce the issue
-- Expected vs actual behavior
-- Your environment (web or desktop, browser if web, OS, Node version)
-- Screenshots if applicable
-
-## Suggesting Features
-
-Feature requests are welcome. Create an issue with:
-
-- A clear description of the feature
-- The problem it solves or use case it addresses
-- Any implementation ideas you have
-
-## Pull Requests
-
-1. Create a new branch for your feature or fix:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-2. Make your changes
-3. Run the quality gates; both must pass clean:
-   ```bash
-   pnpm test    # test suite (node --test)
-   pnpm check   # type checking (svelte-check)
-   ```
-4. Test your changes thoroughly
-5. Commit your changes with a clear message
-6. Push to your fork and submit a pull request
-
-## Code Style
-
-- Use TypeScript for all new code
-- Follow the existing code patterns in the project
-- Use Svelte 5 runes (`$state`, `$derived`, `$effect`) for reactivity
-- Keep components focused and single-purpose
-- Write self-documenting code with clear variable and function names
-
-## Project Structure
-
-```
-src/
-├── lib/
-│   ├── ai/            # LLM response parsing and prompt building
-│   ├── assets/        # Static assets (images, etc.)
-│   ├── components/    # Reusable Svelte components
-│   ├── config/        # App and docs configuration
-│   ├── data/          # Event definitions and static data
-│   ├── db/            # IndexedDB database (Dexie)
-│   ├── engine/        # Companion engine (state, memory, events, heuristics)
-│   ├── services/      # LLM, TTS, STT, and storage services
-│   ├── stores/        # Svelte 5 stores for state management
-│   ├── styles/        # Shared CSS (prose, etc.)
-│   ├── types/         # TypeScript type definitions
-│   └── utils/         # Utility functions
-├── content/
-│   ├── blog/          # Blog post markdown content
-│   └── docs/          # Documentation site markdown content
-├── routes/
-│   ├── app/           # Main application routes
-│   ├── api/           # API routes
-│   ├── blog/          # Blog routes
-│   ├── docs/          # Documentation site routes
-│   └── overlay/       # Desktop overlay route
-└── app.css            # Global styles
-src-tauri/              # Tauri desktop app (Rust)
-```
-
-## License
-
-By contributing to Utsuwa, you agree that your contributions are licensed under the AGPL-3.0-or-later, and you confirm you have the right to submit the work. You keep the copyright to your contribution.
+## Cómo Contribuir
+- **Reportar Errores**: Abre un *issue* en GitHub describiendo el problema y los pasos para reproducirlo.
+- **Proponer Funcionalidades**: Sugiere nuevas características o mejoras en los debates o issues del repositorio.
+- **Enviar Código**: Haz un fork del repositorio, crea una rama temática, implementa tus cambios y envía un Pull Request.

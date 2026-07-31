@@ -1,4 +1,4 @@
-import adapterAuto from '@sveltejs/adapter-auto';
+import adapterNode from '@sveltejs/adapter-node';
 import adapterStatic from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex } from 'mdsvex';
@@ -36,7 +36,10 @@ const config = {
 	kit: {
 		adapter: isTauri
 			? adapterStatic({ fallback: 'index.html' })
-			: adapterAuto(),
+			: adapterNode(),
+		prerender: {
+			handleHttpError: 'warn'
+		},
 		// Lock down the desktop webview: with a broad fs read capability, a script
 		// injection would be dangerous, so forbid inline/remote script execution.
 		// SvelteKit hashes its own inline scripts in 'hash' mode. Applied only to

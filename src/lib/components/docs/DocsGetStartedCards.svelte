@@ -1,7 +1,8 @@
 <script lang="ts">
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import { GITHUB_RELEASES } from '$lib/config/site';
-	import { localPath, sectionUrl } from '$lib/config/links';
+	import { t } from "svelte-i18n";
+	import Icon from "$lib/components/ui/Icon.svelte";
+	import { GITHUB_RELEASES } from "$lib/config/site";
+	import { localPath, sectionUrl } from "$lib/config/links";
 </script>
 
 <div class="cards">
@@ -11,14 +12,14 @@
 		</div>
 		<h3 class="card-title">Web</h3>
 		<p class="card-desc">
-			No installation required. Runs entirely in your browser — works on desktop and mobile.
+			Sin necesidad de instalación. Se ejecuta completamente en tu navegador — funciona en escritorio y móvil.
 		</p>
 		<div class="card-actions">
-			<a href={sectionUrl('app')} class="card-btn primary">
-				<span>Open App</span>
+			<a href={sectionUrl("app")} class="card-btn primary">
+				<span>{$t("legal.openApp") || "Abrir Aplicación"}</span>
 				<Icon name="arrow-right" size={14} />
 			</a>
-			<a href={localPath('docs', '/guides/web-guide')} class="card-link">How to use?</a>
+			<a href={localPath("docs", "/guides/web-guide")} class="card-link">{$t("docs.howToUse")}</a>
 		</div>
 	</div>
 
@@ -26,16 +27,16 @@
 		<div class="card-icon">
 			<Icon name="monitor" size={32} />
 		</div>
-		<h3 class="card-title">Desktop</h3>
+		<h3 class="card-title">Escritorio</h3>
 		<p class="card-desc">
-			Desktop app with transparent overlay mode for macOS, Windows, and Linux.
+			Aplicación de escritorio con modo de superposición transparente para macOS, Windows y Linux.
 		</p>
 		<div class="card-actions">
 			<a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer" class="card-btn primary">
-				<span>Download</span>
+				<span>Descargar</span>
 				<Icon name="download" size={14} />
 			</a>
-			<a href={localPath('docs', '/guides/desktop-guide')} class="card-link">Setup guide</a>
+			<a href={localPath("docs", "/guides/desktop-guide")} class="card-link">{$t("docs.setupGuide")}</a>
 		</div>
 	</div>
 </div>

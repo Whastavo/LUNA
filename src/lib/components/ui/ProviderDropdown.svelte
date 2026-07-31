@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import { DropdownMenu } from 'bits-ui';
 	import { settingsStore } from '$lib/stores/settings.svelte';
 	import {
@@ -92,7 +93,7 @@
 									</span>
 									<span class="provider-name">{provider.name}</span>
 									{#if provider.isLocal}
-										<span class="badge local">Local</span>
+										<span class="badge local">{$t('settings.stt.localModel') || 'Local'}</span>
 									{:else if isConfigured(provider.id)}
 										<span class="badge configured">
 											<Icon name="check" size={10} strokeWidth={3} />

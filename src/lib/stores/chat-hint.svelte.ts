@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 
-const PRIVACY_ACK_KEY = 'utsuwa-image-privacy-ack';
+const PRIVACY_ACK_KEY = 'luna-image-privacy-ack';
 
 /**
  * Transient chat toasts (image hints, TTS errors) plus the one-time photo

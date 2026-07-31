@@ -6,6 +6,7 @@
 	import { type PreparedImage } from '$lib/services/storage/keepsakes';
 	import AudioVisualizer from './AudioVisualizer.svelte';
 	import { pop, fadeFast } from '$lib/utils/motion';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		onSend: (content: string, images?: PreparedImage[]) => void;
@@ -94,11 +95,11 @@
 		<div class="pending-row" out:fadeFast={{ duration: 150 }}>
 			{#each chatDraftStore.pending as p (p.image.id)}
 				<div class="pending-chip" in:pop={{ duration: 200, y: 6, scale: 0.9 }} out:fadeFast={{ duration: 120 }}>
-					<img src={p.url} alt="To show her" />
+					<img src={p.url} alt={$t('chat.attachImage')} />
 					<button
 						type="button"
 						class="remove-chip"
-						aria-label="Remove image"
+						aria-label={$t('chat.removeImage')}
 						onclick={() => chatDraftStore.removePending(p.image.id)}
 					>
 						<Icon name="x" size={12} />
@@ -125,8 +126,8 @@
 			class:focused={hasContent}
 		>
 			{#if isTranscribing}
-				<div class="transcribing-label">Transcribing...</div>
-				<button type="button" class="mic-btn recording" disabled aria-label="Transcribing">
+				<div class="transcribing-label">{$t('chat.transcribing')}</div>
+				<button type="button" class="mic-btn recording" disabled aria-label={$t('chat.transcribing')}>
 					<Icon name="loader" size={20} />
 				</button>
 			{:else if isListening}
@@ -135,8 +136,8 @@
 					type="button"
 					class="mic-btn recording"
 					onclick={() => sttStore.stopListening()}
-					aria-label="Stop recording"
-					title="Stop recording"
+					aria-label={$t('chat.stopRecording')}
+					title={$t('chat.stopRecording')}
 				>
 					<Icon name="stop" size={16} />
 				</button>
@@ -147,8 +148,8 @@
 						class="mic-btn"
 						class:vision-off={!visionCapable}
 						onclick={openPicker}
-						aria-label="Attach an image"
-						title={visionCapable ? 'Attach an image' : 'This model cannot see images'}
+						aria-label={$t('chat.attachImage')}
+						title={visionCapable ? $t('chat.attachImage') : 'Este modelo no puede ver imágenes'}
 					>
 						<Icon name="paperclip" size={20} />
 					</button>
@@ -160,7 +161,7 @@
 					bind:this={textareaRef}
 					bind:value={chatDraftStore.draft}
 					onkeydown={handleKeydown}
-					placeholder="Type a message..."
+					placeholder={$t('chat.placeholder')}
 					rows="1"
 					wrap="off"
 					{disabled}
@@ -169,8 +170,8 @@
 					type="button"
 					class="mic-btn"
 					onclick={handleMicClick}
-					aria-label="Voice input"
-					title="Voice input"
+					aria-label={$t('chat.voiceInput')}
+					title={$t('chat.voiceInput')}
 				>
 					<Icon name="mic" size={20} />
 				</button>

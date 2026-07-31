@@ -15,7 +15,7 @@ const GRACE_MS = 15000;
 const CLEANUP_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
 // Largest safe date for compound-index range queries.
 const MAX_DATE = new Date(8640000000000000);
-const BROADCAST_CHANNEL_NAME = 'utsuwa-reminders';
+const BROADCAST_CHANNEL_NAME = 'luna-reminders';
 
 let upcoming = $state<Reminder[]>([]);
 let recentFired = $state<Reminder[]>([]);

@@ -38,7 +38,7 @@ export async function registerHotkey(
 		// Unregister existing shortcut for this action if any
 		await unregisterHotkey(action);
 
-		await register(shortcut, (event) => {
+		await register(shortcut, (event: any) => {
 			const handler = handlers.get(action);
 			if (!handler) return;
 

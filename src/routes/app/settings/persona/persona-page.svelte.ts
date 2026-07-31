@@ -66,7 +66,7 @@ export function createPersonaPageState() {
 	let pendingMode = $state<'companion' | 'dating_sim' | null>(null);
 
 	function saveName() {
-		personaStore.updateCard({ name: formName.trim() || 'Utsuwa' });
+		personaStore.updateCard({ name: formName.trim() || 'Luna' });
 	}
 
 	function saveSystemPrompt() {

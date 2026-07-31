@@ -28,7 +28,7 @@ import {
 	type SceneBackground
 } from '../services/scene-backgrounds.ts';
 
-const STORAGE_KEY = 'utsuwa-display';
+const STORAGE_KEY = 'luna-display';
 
 export type { CameraSettings, CameraProfile, ChatDisplayMode, SidebarPosition, TextRevealSpeed, ChatBarAlignment };
 export {

@@ -3,6 +3,7 @@
 	import { Icon } from '$lib/components/ui';
 	import { localPath } from '$lib/config/links';
 	import { pop, fadeFast } from '$lib/utils/motion';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		overlay?: boolean;
@@ -18,17 +19,17 @@
 
 	// Stats config with colors for the vertical bars
 	const datingStats = $derived([
-		{ key: 'affection', label: 'Love', icon: 'heart', value: affectionPercent, color: 'var(--stat-affection)' },
-		{ key: 'trust', label: 'Trust', icon: 'shield', value: charState.trust, color: 'var(--stat-trust)' },
-		{ key: 'intimacy', label: 'Intimacy', icon: 'sparkles', value: charState.intimacy, color: 'var(--stat-intimacy)' },
-		{ key: 'comfort', label: 'Comfort', icon: 'home', value: charState.comfort, color: 'var(--stat-comfort)' },
-		{ key: 'energy', label: 'Energy', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
-		{ key: 'respect', label: 'Respect', icon: 'award', value: charState.respect, color: 'var(--stat-respect)' }
+		{ key: 'affection', label: $t('companion.stats.love'), icon: 'heart', value: affectionPercent, color: 'var(--stat-affection)' },
+		{ key: 'trust', label: $t('companion.stats.trust'), icon: 'shield', value: charState.trust, color: 'var(--stat-trust)' },
+		{ key: 'intimacy', label: $t('companion.stats.intimacy'), icon: 'sparkles', value: charState.intimacy, color: 'var(--stat-intimacy)' },
+		{ key: 'comfort', label: $t('companion.stats.comfort'), icon: 'home', value: charState.comfort, color: 'var(--stat-comfort)' },
+		{ key: 'energy', label: $t('companion.stats.energy'), icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
+		{ key: 'respect', label: $t('companion.stats.respect'), icon: 'award', value: charState.respect, color: 'var(--stat-respect)' }
 	]);
 
 	const companionStats = $derived([
-		{ key: 'energy', label: 'Energy', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
-		{ key: 'chats', label: 'Chats', icon: 'message-circle', value: Math.min(charState.totalInteractions, 100), color: 'var(--color-success)' }
+		{ key: 'energy', label: $t('companion.stats.energy'), icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
+		{ key: 'chats', label: $t('companion.stats.chats'), icon: 'message-circle', value: Math.min(charState.totalInteractions, 100), color: 'var(--color-success)' }
 	]);
 </script>
 
@@ -143,7 +144,7 @@
 							</div>
 						{/if}
 						<a href={localPath('app', '/settings/persona')} class="quick-stat profile-link">
-							<span>Profile</span>
+							<span>{$t('common.profile')}</span>
 							<Icon name="arrow-right" size={11} />
 						</a>
 					</div>

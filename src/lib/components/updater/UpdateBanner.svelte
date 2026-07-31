@@ -4,6 +4,7 @@
 	import { pop, fadeFast } from '$lib/utils/motion';
 	import { isTauri } from '$lib/services/platform/platform';
 	import { updaterStore } from '$lib/stores/updater.svelte';
+	import { t } from 'svelte-i18n';
 
 	// Quiet check on launch — only surfaces if an update is actually waiting.
 	onMount(() => {
@@ -47,19 +48,19 @@
 			{#key status}
 				<div class="banner-body-inner" in:fadeFast={{ duration: 200 }}>
 					{#if status === 'available'}
-						<span class="banner-title">Update available</span>
-						<span class="banner-sub">Utsuwa {updaterStore.availableVersion} is ready to install</span>
+						<span class="banner-title">{$t('updater.available')}</span>
+						<span class="banner-sub">{$t('updater.readyToInstall', { values: { version: updaterStore.availableVersion } })}</span>
 					{:else if status === 'downloading'}
-						<span class="banner-title">Downloading update…</span>
+						<span class="banner-title">{$t('updater.downloading')}</span>
 						<div class="progress-track">
 							<div class="progress-fill" style="width: {updaterStore.progress}%"></div>
 						</div>
 					{:else if status === 'ready'}
-						<span class="banner-title">Update installed</span>
-						<span class="banner-sub">Restarting…</span>
+						<span class="banner-title">{$t('updater.installed')}</span>
+						<span class="banner-sub">{$t('updater.restarting')}</span>
 					{:else if status === 'error'}
-						<span class="banner-title">Update failed</span>
-						<span class="banner-sub">{updaterStore.errorMessage ?? 'Please try again later.'}</span>
+						<span class="banner-title">{$t('updater.failed')}</span>
+						<span class="banner-sub">{updaterStore.errorMessage ?? $t('common.error')}</span>
 					{/if}
 				</div>
 			{/key}
@@ -67,16 +68,16 @@
 
 		{#if status === 'available'}
 			<div class="banner-actions">
-				<button class="btn btn-ghost" onclick={() => updaterStore.dismiss()}>Later</button>
+				<button class="btn btn-ghost" onclick={() => updaterStore.dismiss()}>{$t('updater.later')}</button>
 				<button class="btn btn-primary" onclick={() => updaterStore.install()}>
-					<span>Install &amp; Restart</span>
+					<span>{$t('updater.installRestart')}</span>
 				</button>
 			</div>
 		{:else if status === 'error'}
 			<div class="banner-actions">
-				<button class="btn btn-ghost" onclick={() => updaterStore.dismiss()}>Dismiss</button>
+				<button class="btn btn-ghost" onclick={() => updaterStore.dismiss()}>{$t('common.close')}</button>
 				<button class="btn btn-primary" onclick={() => updaterStore.install()}>
-					<span>Retry</span>
+					<span>{$t('updater.retry')}</span>
 				</button>
 			</div>
 		{/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import { pop, fadeFast } from '$lib/utils/motion';
 	import { vrmStore } from '$lib/stores/vrm.svelte';
 	import { Icon } from '$lib/components/ui';
@@ -11,10 +12,10 @@
 <!-- Model Gallery (inline) -->
 <div class="model-gallery">
 	<div class="gallery-header">
-		<span class="gallery-label">Avatar</span>
+		<span class="gallery-label">{$t('settings.persona.avatar')}</span>
 		<button class="upload-btn" onclick={() => page.uploadModalOpen = true}>
 			<Icon name="upload" size={14} />
-			<span>Add Custom</span>
+			<span>{$t('settings.persona.addCustom')}</span>
 		</button>
 	</div>
 
@@ -56,7 +57,7 @@
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="upload-content" transition:pop={{ duration: 220, y: 14 }} onclick={(e) => e.stopPropagation()} onkeydown={(e) => e.stopPropagation()}>
 			<div class="upload-header">
-				<h3>Upload Custom Model</h3>
+				<h3>{$t('settings.persona.uploadCustomModel')}</h3>
 				<button class="close-btn" onclick={() => page.uploadModalOpen = false}>
 					<Icon name="x" size={20} />
 				</button>

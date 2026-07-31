@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Utsuwa, please report it by opening a GitHub issue or contacting the maintainer directly.
+If you discover a security vulnerability in Luna, please report it by opening a GitHub issue or contacting the maintainer directly.
 
 Please include:
 - A description of the vulnerability
@@ -14,24 +14,24 @@ Please include:
 
 ### API Key Storage
 
-Utsuwa stores API keys for LLM and TTS providers locally on your device. This means:
+Luna stores API keys for LLM and TTS providers locally on your device. This means:
 
 - Keys are stored locally on your device only
 - Keys are not sent to any server other than the respective API providers
 - Keys persist until you remove them in Settings or clear the app's data
 
 **Recommendations:**
-- Use Utsuwa on trusted devices only
+- Use Luna on trusted devices only
 - Consider using API keys with usage limits when possible
 - Remove API keys in Settings if using a shared device
 
 ### Client-Side Application
 
-Utsuwa stores all your data locally on your device. When self-hosting, chat and model-fetching requests are proxied through SvelteKit server-side API routes before reaching the provider. No data is stored server-side — the server acts only as a pass-through. When using the hosted version at utsuwa.ai, these requests pass through the deployment server in the same way.
+Luna stores all your data locally on your device. When self-hosting, chat and model-fetching requests are proxied through SvelteKit server-side API routes before reaching the provider. No data is stored server-side — the server acts only as a pass-through. When using the hosted version at luna.ai, these requests pass through the deployment server in the same way.
 
 ### Third-Party Services
 
-When you configure API keys, Utsuwa communicates directly with:
+When you configure API keys, Luna communicates directly with:
 - LLM providers (OpenAI, Anthropic, Google, etc.)
 - TTS providers (ElevenLabs, OpenAI, etc.)
 

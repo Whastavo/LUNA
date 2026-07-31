@@ -58,7 +58,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.metadata?.title || 'Blog'} - Utsuwa</title>
+	<title>{data.metadata?.title || 'Blog'} - Luna</title>
 	{#if data.metadata?.description}
 		<meta name="description" content={data.metadata.description} />
 	{/if}
@@ -69,7 +69,7 @@
 	{/if}
 	<meta property="og:image" content={data.metadata?.image ? `${SITE_URL}${data.metadata.image}` : `${SITE_URL}/brand-assets/thumbnail.png`} />
 	<meta property="og:url" content={`${SITE_URL}/blog/${data.slug}`} />
-	<meta property="og:site_name" content="Utsuwa" />
+	<meta property="og:site_name" content="Luna" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={data.metadata?.title || 'Blog'} />
 	{#if data.metadata?.description}
@@ -87,12 +87,12 @@
 		url: `${SITE_URL}/blog/${data.slug}`,
 		author: {
 			'@type': 'Organization',
-			name: 'Utsuwa',
+			name: 'Luna',
 			url: SITE_URL
 		},
 		publisher: {
 			'@type': 'Organization',
-			name: 'Utsuwa',
+			name: 'Luna',
 			url: SITE_URL
 		}
 	})}</script>`}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '@fontsource-variable/inter';
 	import '../app.css';
+	import '$lib/i18n';
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
@@ -61,8 +62,8 @@
 </script>
 
 <svelte:head>
-	<title>Utsuwa</title>
-	<meta name="description" content="Open-source AI companion with 3D VRM avatars, voice chat, semantic memory, and multi-provider LLM support. Self-hosted and privacy-first." />
+	<title>Luna</title>
+	<meta name="description" content="Luna es un compañero IA de código abierto con avatares 3D VRM, chat de voz, memoria semántica y soporte para múltiples proveedores LLM." />
 </svelte:head>
 
 {#if !redirecting}

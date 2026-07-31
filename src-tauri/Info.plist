@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Utsuwa needs microphone access for voice input</string>
+	<string>Luna needs microphone access for voice input</string>
 </dict>
 </plist>

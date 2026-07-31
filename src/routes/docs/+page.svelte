@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import DocsSearch from '$lib/components/docs/DocsSearch.svelte';
 	import DocsGetStartedCards from '$lib/components/docs/DocsGetStartedCards.svelte';
@@ -10,24 +11,23 @@
 </script>
 
 <svelte:head>
-	<title>Documentation - Utsuwa</title>
+	<title>{$t('docs.title')} — Luna</title>
 	<meta
 		name="description"
-		content="Guides, setup, and architecture docs for Utsuwa — the open-source AI companion with 3D VRM avatars, voice, and semantic memory."
+		content="Guías, configuración y arquitectura para Luna — la compañera de IA de código abierto con avatares VRM 3D, voz y memoria semántica."
 	/>
 	<link rel="canonical" href={DOCS_URL} />
-	<meta property="og:title" content="Utsuwa Documentation" />
+	<meta property="og:title" content="Documentación de Luna" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content={DOCS_URL} />
 </svelte:head>
 
 <div class="docs-home" data-pagefind-ignore>
 	<header class="home-hero">
-		<p class="eyebrow">Documentation</p>
-		<h1 class="home-title">Everything you need to run your vessel.</h1>
+		<p class="eyebrow">{$t('docs.title')}</p>
+		<h1 class="home-title">{$t('docs.subtitle')}</h1>
 		<p class="home-lead">
-			Guides, setup walkthroughs, and a look under the hood. Search the docs or jump straight to a
-			section below.
+			Guías, tutoriales de configuración y detalles del funcionamiento interno. Busca en la documentación o ve directamente a una sección.
 		</p>
 		<div class="home-search">
 			<DocsSearch id="docs-home-search" />
@@ -35,12 +35,12 @@
 	</header>
 
 	<section class="home-section">
-		<h2 class="section-heading">Get started</h2>
+		<h2 class="section-heading">{$t('docs.getStarted')}</h2>
 		<DocsGetStartedCards />
 	</section>
 
 	<section class="home-section">
-		<h2 class="section-heading">Browse the docs</h2>
+		<h2 class="section-heading">{$t('docs.browseDocs')}</h2>
 		<div class="section-grid">
 			{#each data.sections as section}
 				<div class="section-panel">
@@ -78,7 +78,6 @@
 		padding: 3rem 2.5rem 4rem;
 	}
 
-	/* Hero */
 	.home-hero {
 		position: relative;
 		text-align: center;
@@ -121,7 +120,6 @@
 		margin: 0 auto;
 	}
 
-	/* Sections */
 	.home-section {
 		margin-top: 3rem;
 	}
@@ -241,7 +239,6 @@
 		.docs-home {
 			padding: 2rem 1rem 3rem;
 		}
-
 		.section-grid {
 			grid-template-columns: 1fr;
 		}

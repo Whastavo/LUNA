@@ -1,5 +1,5 @@
 [package]
-name = "utsuwa"
+name = "luna"
 version = "0.12.1"
 description = "Open Source AI Soul Vessel - VRM Avatar Companion"
 authors = ["Ordinary Company Group LLC"]
@@ -7,7 +7,7 @@ edition = "2021"
 rust-version = "1.70"
 
 [lib]
-name = "utsuwa_lib"
+name = "luna_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [build-dependencies]
