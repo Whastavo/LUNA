@@ -36,9 +36,9 @@ test('cloud STT base URL is only trimmed, not path-normalized', () => {
 });
 
 test('local STT connection hint names the endpoint and origin', () => {
-	const hint = getLocalSTTConnectionHint('http://localhost:8000/v1', 'https://luna.ai');
+	const hint = getLocalSTTConnectionHint('http://localhost:8000/v1', 'https://utsuwa.ai');
 	assert.match(hint, /audio\/transcriptions/);
-	assert.match(hint, /luna\.ai/);
+	assert.match(hint, /utsuwa\.ai/);
 });
 
 test('identifies local LLM providers', () => {
@@ -70,9 +70,9 @@ test('provides local provider troubleshooting hints', () => {
 		getLocalProviderConnectionHint(
 			'ollama',
 			'http://localhost:11434',
-			'https://luna-git-fix-ollama-local-provider.vercel.app'
+			'https://utsuwa-git-fix-ollama-local-provider.vercel.app'
 		),
-		/OLLAMA_ORIGINS="https:\/\/luna-git-fix-ollama-local-provider\.vercel\.app"/
+		/OLLAMA_ORIGINS="https:\/\/utsuwa-git-fix-ollama-local-provider\.vercel\.app"/
 	);
 	assert.match(getLocalProviderConnectionHint('lmstudio', 'http://localhost:1234/v1'), /Start Server/);
 });
@@ -97,9 +97,33 @@ test('provides local TTS troubleshooting hint with CORS guidance', () => {
 	assert.match(hint, /audio\/speech/);
 	assert.match(hint, /CORS/);
 	assert.match(
-		getLocalTTSConnectionHint('http://localhost:8880', 'https://luna.app'),
-		/https:\/\/luna\.app/
+		getLocalTTSConnectionHint('http://localhost:8880', 'https://utsuwa.app'),
+		/https:\/\/utsuwa\.app/
 	);
+});
+
+// --- OmniVoice ---
+
+import { getOmniVoiceConnectionHint } from './local-endpoints.ts';
+
+test('identifies OmniVoice as a local TTS provider', () => {
+	assert.equal(isLocalTTSProvider('omnivoice'), true);
+	assert.equal(isLocalTTSProvider('openai-tts'), false);
+});
+
+test('normalizes OmniVoice base URL to a trailing-slash /v1 path', () => {
+	assert.equal(getTTSBaseUrl('omnivoice', 'http://localhost:8880'), 'http://localhost:8880/v1/');
+	assert.equal(getTTSBaseUrl('omnivoice', 'http://localhost:8880/'), 'http://localhost:8880/v1/');
+	assert.equal(getTTSBaseUrl('omnivoice', 'http://localhost:8880/v1'), 'http://localhost:8880/v1/');
+	assert.equal(getTTSBaseUrl('omnivoice', 'http://localhost:8880/v1/'), 'http://localhost:8880/v1/');
+	assert.equal(getTTSBaseUrl('omnivoice'), 'http://localhost:8881/v1/');
+});
+
+test('provides OmniVoice troubleshooting hint with CORS guidance', () => {
+	const hint = getOmniVoiceConnectionHint('http://localhost:8880');
+	assert.match(hint, /OmniVoice proxy/);
+	assert.match(hint, /audio\/speech/);
+	assert.match(hint, /CORS/);
 });
 
 // --- ensureOpenAIPath (shared by model discovery and custom-endpoint chat) ---

@@ -12,9 +12,8 @@
 	} from '$lib/services/providers/use-model-fetch';
 	import { DOCS_URL } from '$lib/config/site';
 	import { isTauri } from '$lib/services/platform';
-	import { t } from 'svelte-i18n';
 
-	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-luna-to-reach-ollama`;
+	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-utsuwa-to-reach-ollama`;
 
 	// Always open the docs subdomain; on desktop route it to the system browser.
 	function openLocalLlmDocs(e: MouseEvent) {
@@ -293,6 +292,10 @@
 		}
 	}
 
+	function handleTTSVoiceChange(voiceId: string) {
+		modulesStore.setModuleSetting('speech', 'activeVoiceId', voiceId.trim());
+	}
+
 	function handleTTSModelChange(modelId: string) {
 		modulesStore.setModuleSetting('speech', 'activeModel', modelId);
 	}
@@ -331,39 +334,39 @@
 
 {#snippet troubleHelp()}
 	<p class="provider-help">
-		{$t('onboarding.troubleHelp')} <a
+		Having trouble? Click <a
 			href={LOCAL_LLM_DOCS_URL}
 			target="_blank"
 			rel="noopener"
-			onclick={openLocalLlmDocs}>{$t('onboarding.here')}</a
+			onclick={openLocalLlmDocs}>here</a
 		>
 	</p>
 {/snippet}
 
 <div class="ob-step services-step">
 	<div class="ob-head">
-		<h2 class="ob-title">{$t('onboarding.servicesTitle')}</h2>
-		<p class="ob-subtitle">{$t('onboarding.servicesSubtitle')}</p>
+		<h2 class="ob-title">Configure AI services</h2>
+		<p class="ob-subtitle">Set up chat (required), plus speech and voice input (optional).</p>
 	</div>
 
 	<div class="security-note">
 		<Icon name="lock" size={14} />
-		<span>{$t('onboarding.securityNote')}</span>
+		<span>Your API keys are stored locally in your browser. We never store them on our servers.</span>
 	</div>
 
 	<!-- LLM Section -->
 	<div class="service-section">
 		<div class="service-header">
 			<Icon name="brain" size={16} />
-			<span class="service-title">{$t('onboarding.chatLLM')}</span>
-			<span class="required-badge">{$t('common.required')}</span>
+			<span class="service-title">Chat (LLM)</span>
+			<span class="required-badge">Required</span>
 		</div>
 
 		<ProviderDropdown
 			type="llm"
 			value={llmSettings.activeProvider as string}
 			onSelect={handleLLMProviderChange}
-			placeholder={$t('onboarding.selectLLMProvider')}
+			placeholder="Select LLM provider..."
 		/>
 
 		{#if llmProvider?.requiresApiKey || llmProvider?.custom}
@@ -371,7 +374,7 @@
 				type="password"
 				class="api-key-input"
 				class:error={llmFetchError}
-				placeholder={llmProvider?.custom ? $t('settings.apiKeyOptional') : $t('settings.apiKeyPlaceholder')}
+				placeholder={llmProvider?.custom ? 'API Key (optional)' : 'Enter API Key...'}
 				value={settingsStore.getProviderConfig(llmProvider.id).apiKey ?? ''}
 				oninput={(e) => handleLLMApiKeyChange(e.currentTarget.value)}
 				onblur={llmProvider?.custom ? undefined : handleLLMApiKeyBlur}
@@ -393,7 +396,7 @@
 				type="text"
 				class="api-key-input"
 				placeholder={llmProvider.custom
-					? $t('settings.llm.customEndpointPlaceholder')
+					? 'https://api.openai.com/v1/ or your endpoint'
 					: llmProvider.defaultBaseUrl || 'http://localhost:11434/v1/'}
 				value={settingsStore.getProviderConfig(llmProvider.id).baseUrl ?? ''}
 				oninput={(e) => handleLLMBaseUrlChange(e.currentTarget.value)}
@@ -402,7 +405,7 @@
 			{#if llmProvider.isLocal}
 				<p class="provider-note">
 					<Icon name="check-circle" size={14} />
-					{$t('settings.llm.localProviderNote')}
+					Local provider, no API key needed
 				</p>
 				{#if !llmFetchError}
 					{@render troubleHelp()}
@@ -416,7 +419,7 @@
 			<input
 				type="text"
 				class="api-key-input"
-				placeholder={$t('settings.llm.customModelPlaceholder')}
+				placeholder="Model (e.g. gpt-4o-mini, meta-llama/llama-3-70b)"
 				value={(llmSettings.activeModel as string) ?? ''}
 				oninput={(e) => handleLLMModelChange(e.currentTarget.value.trim())}
 			/>
@@ -425,24 +428,24 @@
 					models={llmModels}
 					value={llmSettings.activeModel as string}
 					onSelect={handleLLMModelChange}
-					placeholder={$t('settings.llm.chooseFetchedModel')}
+					placeholder="Pick a fetched model..."
 					isLoading={llmIsLoading}
 					onRefresh={fetchLLMModels}
 					disabled={false}
 				/>
 			{:else}
-				<p class="provider-note">{$t('settings.llm.enterBaseUrlFirst')}</p>
+				<p class="provider-note">Enter a base URL to fetch available models.</p>
 			{/if}
 		{:else if llmSettings.activeProvider}
 			<ModelDropdown
 				models={llmModels}
 				value={llmSettings.activeModel as string}
 				onSelect={handleLLMModelChange}
-				placeholder={$t('settings.llm.selectModel')}
+				placeholder="Select model..."
 				isLoading={llmIsLoading}
 				onRefresh={llmHasApiKey ? fetchLLMModels : undefined}
 				disabled={!llmHasApiKey}
-				disabledMessage={$t('settings.enterApiKeyFirst')}
+				disabledMessage="Enter API key first"
 			/>
 		{/if}
 
@@ -458,9 +461,9 @@
 	<div class="service-section">
 		<div class="service-header">
 			<Icon name="mic" size={16} />
-			<span class="service-title">{$t('onboarding.speechTTS')}</span>
-			<span class="optional-badge">{$t('common.optional')}</span>
-			<button class="toggle-btn" class:enabled={ttsEnabled} onclick={() => ttsEnabled = !ttsEnabled} aria-label={$t('settings.tts.title')}>
+			<span class="service-title">Speech (TTS)</span>
+			<span class="optional-badge">Optional</span>
+			<button class="toggle-btn" class:enabled={ttsEnabled} onclick={() => ttsEnabled = !ttsEnabled} aria-label="Toggle TTS">
 				<span class="toggle-track">
 					<span class="toggle-thumb"></span>
 				</span>
@@ -472,7 +475,7 @@
 				type="tts"
 				value={ttsSettings.activeProvider as string}
 				onSelect={handleTTSProviderChange}
-				placeholder={$t('settings.tts.selectProvider')}
+				placeholder="Select TTS provider..."
 			/>
 
 			{#if ttsProvider?.requiresApiKey}
@@ -480,7 +483,7 @@
 					type="password"
 					class="api-key-input"
 					class:error={ttsFetchError}
-					placeholder={$t('settings.apiKeyPlaceholder')}
+					placeholder="Enter API Key..."
 					value={settingsStore.getProviderConfig(ttsProvider.id).apiKey ?? ''}
 					oninput={(e) => handleTTSApiKeyChange(e.currentTarget.value)}
 					onblur={handleTTSApiKeyBlur}
@@ -492,11 +495,11 @@
 					models={ttsModels}
 					value={ttsSettings.activeModel as string}
 					onSelect={handleTTSModelChange}
-					placeholder={$t('settings.tts.selectModel')}
+					placeholder="Select model..."
 					isLoading={ttsIsLoading}
 					onRefresh={ttsHasApiKey ? fetchTTSModels : undefined}
 					disabled={!ttsHasApiKey}
-					disabledMessage={$t('settings.enterApiKeyFirst')}
+					disabledMessage="Enter API key first"
 				/>
 			{/if}
 
@@ -504,17 +507,23 @@
 				<input
 					type="text"
 					class="api-key-input"
-					placeholder={$t('settings.tts.customVoiceIdOptional')}
-					value={settingsStore.elevenLabsVoiceId}
-					oninput={(e) => settingsStore.setElevenLabsVoiceId(e.currentTarget.value)}
+					list="elevenlabs-voices"
+					placeholder="Voice ID"
+					value={ttsSettings.activeVoiceId as string ?? ''}
+					oninput={(e) => handleTTSVoiceChange(e.currentTarget.value)}
 				/>
+				<datalist id="elevenlabs-voices">
+					{#each ttsProvider?.voices ?? [] as voice}
+						<option value={voice.id}>{voice.name}</option>
+					{/each}
+				</datalist>
 			{/if}
 
 			{#if ttsProvider?.isLocal}
 				<input
 					type="text"
 					class="api-key-input"
-					placeholder={$t('settings.tts.modelVoiceName')}
+					placeholder="Model/voice name"
 					value={ttsSettings.activeModel as string ?? ''}
 					oninput={(e) => handleTTSModelChange(e.currentTarget.value)}
 				/>
@@ -530,11 +539,11 @@
 				/>
 				<p class="provider-note">
 					<Icon name="check-circle" size={14} />
-					{$t('settings.llm.localProviderNote')}
+					Local provider - no API key needed
 				</p>
 			{/if}
 		{:else}
-			<p class="skip-note">{$t('onboarding.enableTtsNote')}</p>
+			<p class="skip-note">Enable to add voice to your companion</p>
 		{/if}
 	</div>
 
@@ -542,9 +551,9 @@
 	<div class="service-section">
 		<div class="service-header">
 			<Icon name="mic" size={16} />
-			<span class="service-title">{$t('onboarding.voiceInputSTT')}</span>
-			<span class="optional-badge">{$t('common.optional')}</span>
-			<button class="toggle-btn" class:enabled={sttEnabled} onclick={() => sttEnabled = !sttEnabled} aria-label={$t('onboarding.voiceInputSTT')}>
+			<span class="service-title">Voice Input (STT)</span>
+			<span class="optional-badge">Optional</span>
+			<button class="toggle-btn" class:enabled={sttEnabled} onclick={() => sttEnabled = !sttEnabled} aria-label="Toggle voice input (STT)">
 				<span class="toggle-track">
 					<span class="toggle-thumb"></span>
 				</span>
@@ -552,12 +561,12 @@
 		</div>
 
 		{#if sttEnabled}
-			<p class="skip-note">{$t('onboarding.sttDescription')}</p>
+			<p class="skip-note">Transcribe your voice with Whisper. A local server is used if set, then Groq, then OpenAI, otherwise your browser's built-in recognition.</p>
 
 			<input
 				type="text"
 				class="api-key-input"
-				placeholder={$t('settings.stt.localServerPlaceholder')}
+				placeholder="Local server URL (http://localhost:8000/v1/)"
 				value={settingsStore.getProviderConfig('local-stt').baseUrl ?? ''}
 				oninput={(e) => {
 					const v = e.currentTarget.value.trim();
@@ -570,7 +579,7 @@
 			<input
 				type="text"
 				class="api-key-input"
-				placeholder={$t('settings.stt.localModelPlaceholder')}
+				placeholder="Local model (optional, e.g. Systran/faster-whisper-large-v3)"
 				value={settingsStore.getProviderConfig('local-stt').modelId ?? ''}
 				oninput={(e) => settingsStore.setProviderConfig('local-stt', { modelId: e.currentTarget.value.trim() })}
 			/>
@@ -578,7 +587,7 @@
 			<input
 				type="password"
 				class="api-key-input"
-				placeholder={$t('settings.stt.groqKeyPlaceholder')}
+				placeholder="Groq API Key (optional)"
 				value={settingsStore.getProviderConfig('groq-stt').apiKey ?? ''}
 				oninput={(e) => {
 					settingsStore.setProviderConfig('groq-stt', { apiKey: e.currentTarget.value });
@@ -589,7 +598,7 @@
 			<input
 				type="password"
 				class="api-key-input"
-				placeholder={$t('settings.stt.openaiKeyPlaceholder')}
+				placeholder="OpenAI API Key — Whisper (optional)"
 				value={settingsStore.getProviderConfig('openai-stt').apiKey ?? ''}
 				oninput={(e) => {
 					settingsStore.setProviderConfig('openai-stt', { apiKey: e.currentTarget.value });
@@ -597,17 +606,17 @@
 				}}
 			/>
 		{:else}
-			<p class="skip-note">{$t('onboarding.enableSttNote')}</p>
+			<p class="skip-note">Enable to set up microphone voice input</p>
 		{/if}
 	</div>
 
 	<div class="ob-actions ob-actions--split">
 		<button class="btn btn-secondary" onclick={onBack}>
 			<Icon name="chevron-left" size={16} />
-			{$t('common.back')}
+			Back
 		</button>
 		<button class="btn btn-primary" onclick={handleNext} disabled={!isLLMConfigured}>
-			{$t('common.next')}
+			Next
 			<Icon name="chevron-right" size={16} />
 		</button>
 	</div>

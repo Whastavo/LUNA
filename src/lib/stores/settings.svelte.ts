@@ -18,7 +18,7 @@ function createSettingsStore() {
 
 	// Load from localStorage on init
 	if (browser) {
-		const saved = localStorage.getItem('luna-settings');
+		const saved = localStorage.getItem('utsuwa-settings');
 		if (saved) {
 			try {
 				const parsed = JSON.parse(saved);
@@ -59,7 +59,7 @@ function createSettingsStore() {
 	function save() {
 		if (browser) {
 			localStorage.setItem(
-				'luna-settings',
+				'utsuwa-settings',
 				JSON.stringify({
 					providerConfigs,
 					addedProviders,
@@ -72,7 +72,7 @@ function createSettingsStore() {
 	// Sync settings across windows (main ↔ overlay)
 	if (browser) {
 		window.addEventListener('storage', (e) => {
-			if (e.key === 'luna-settings' && e.newValue) {
+			if (e.key === 'utsuwa-settings' && e.newValue) {
 				try {
 					const parsed = JSON.parse(e.newValue);
 					providerConfigs = parsed.providerConfigs ?? {};
@@ -177,10 +177,6 @@ function createSettingsStore() {
 		return providerConfigs.elevenlabs?.apiKey ?? '';
 	}
 
-	function getElevenLabsVoiceId(): string {
-		return providerConfigs.elevenlabs?.voiceId ?? '';
-	}
-
 	// Legacy compatibility setters
 	function setAnthropicApiKey(key: string) {
 		setProviderConfig('anthropic', { apiKey: key });
@@ -195,10 +191,6 @@ function createSettingsStore() {
 	function setElevenLabsApiKey(key: string) {
 		setProviderConfig('elevenlabs', { apiKey: key });
 		markProviderAdded('elevenlabs');
-	}
-
-	function setElevenLabsVoiceId(id: string) {
-		setProviderConfig('elevenlabs', { voiceId: id });
 	}
 
 	// Cached models management
@@ -252,9 +244,6 @@ function createSettingsStore() {
 		get elevenLabsApiKey() {
 			return getElevenLabsApiKey();
 		},
-		get elevenLabsVoiceId() {
-			return getElevenLabsVoiceId();
-		},
 
 		// Provider management
 		setProviderConfig,
@@ -270,7 +259,6 @@ function createSettingsStore() {
 		setAnthropicApiKey,
 		setOpenaiApiKey,
 		setElevenLabsApiKey,
-		setElevenLabsVoiceId,
 
 		// Cached models
 		setCachedModels,

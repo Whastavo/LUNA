@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { cycleTheme, getIconName, getLabel } from '$lib/config/docs-theme-toggle.svelte';
 	import { sectionUrl } from '$lib/config/links';
@@ -21,29 +20,26 @@
 <footer class="site-footer">
 	<div class="site-footer-inner">
 		<div class="site-footer-top">
-			<div class="site-footer-brand">
-				<img src="/brand-assets/logo.svg" alt="Luna" class="site-footer-logo" />
-				<p class="site-footer-tagline">{$t('landing.heroSubtitle')}</p>
-			</div>
+			<p class="site-footer-tagline">An open-source AI companion you can see and talk to.</p>
 
 			<div class="site-footer-cols">
 				<div class="site-footer-col">
-					<h3>{$t('footer.product')}</h3>
-					<a href="/#features">{$t('footer.features')}</a>
-					<a href="/download">{$t('footer.download')}</a>
-					<a href={sectionUrl('app')}>{$t('footer.tryLive')}</a>
+					<h3>Product</h3>
+					<a href="/#features">Features</a>
+					<a href="/download">Download</a>
+					<a href={sectionUrl('app')}>Try live</a>
 				</div>
 				<div class="site-footer-col">
-					<h3>{$t('footer.resources')}</h3>
-					<a href={sectionUrl('docs')}>{$t('footer.docs')}</a>
-					<a href="/blog">{$t('footer.blog')}</a>
-					<a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer">{$t('footer.github')}</a>
-					<a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer">{$t('footer.releases')}</a>
+					<h3>Resources</h3>
+					<a href={sectionUrl('docs')}>Docs</a>
+					<a href="/blog">Blog</a>
+					<a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer">GitHub</a>
+					<a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer">Releases</a>
 				</div>
 				<div class="site-footer-col">
-					<h3>{$t('footer.legal')}</h3>
-					<a href="/privacy">{$t('footer.privacyPolicy')}</a>
-					<a href="/terms">{$t('footer.termsOfUse')}</a>
+					<h3>Legal</h3>
+					<a href="/privacy">Privacy Policy</a>
+					<a href="/terms">Terms of Use</a>
 					<a href={`${GITHUB_REPO}/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer">
 						AGPL-3.0 License
 					</a>
@@ -52,7 +48,7 @@
 		</div>
 
 		<div class="site-footer-bottom">
-			<span>&copy; 2026 Ordinary Company Group LLC. {$t('legal.licenseAgpl')}</span>
+			<span>&copy; 2026 Juice Boxx Games LLC. Open source under AGPL-3.0.</span>
 			<div class="site-footer-actions">
 				<button
 					type="button"
@@ -68,7 +64,7 @@
 					target="_blank"
 					rel="noopener noreferrer"
 					class="site-footer-gh"
-					aria-label={$t('footer.github')}
+					aria-label="GitHub"
 				>
 				<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"
 					><path
@@ -82,75 +78,60 @@
 </footer>
 
 <style>
-	.site-footer {
-		border-top: 1px solid var(--border-subtle);
-	}
-
 	.site-footer-inner {
 		max-width: 80rem;
 		margin: 0 auto;
-		padding: 3.5rem 1.5rem 2rem;
+		padding: clamp(4rem, 7vw, 6rem) var(--marketing-gutter) 2rem;
 	}
 
 	.site-footer-top {
-		display: flex;
-		justify-content: space-between;
-		gap: 3rem;
-		flex-wrap: wrap;
-	}
-
-	.site-footer-brand {
-		max-width: 20rem;
-	}
-
-	.site-footer-logo {
-		height: 1.25rem;
-		width: auto;
-		filter: brightness(0);
-		opacity: 0.85;
-	}
-
-	:global(.dark) .site-footer-logo {
-		filter: none;
+		display: grid;
+		grid-template-columns: minmax(16rem, 1fr) auto;
+		gap: clamp(3rem, 8vw, 7.5rem);
+		align-items: start;
 	}
 
 	.site-footer-tagline {
-		margin: 0.9rem 0 0;
-		font-size: 0.9rem;
-		line-height: 1.6;
-		color: var(--text-secondary);
+		max-width: 25rem;
+		margin: 0;
+		font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+		line-height: 1.35;
+		letter-spacing: -0.025em;
+		color: var(--text-primary);
+		text-wrap: balance;
 	}
 
 	.site-footer-cols {
-		display: flex;
-		gap: 4rem;
-		flex-wrap: wrap;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(7.5rem, 1fr));
+		gap: clamp(1.5rem, 3vw, 3rem);
 	}
 
 	.site-footer-col {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		align-items: flex-start;
+		gap: 0.625rem;
 	}
 
 	.site-footer-col h3 {
-		margin: 0 0 0.25rem;
-		font-size: 0.7rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-		color: var(--text-tertiary);
+		margin: 0 0 0.375rem;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: var(--text-secondary);
 	}
 
 	.site-footer-col a {
-		font-size: 0.85rem;
-		color: var(--text-secondary);
+		position: relative;
+		font-size: 0.875rem;
+		line-height: 1.5;
+		color: var(--text-primary);
 		text-decoration: none;
 		transition: color 0.15s ease;
 	}
 
 	.site-footer-col a:hover {
-		color: var(--text-primary);
+		color: var(--text-secondary);
 	}
 
 	.site-footer-bottom {
@@ -158,40 +139,38 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
-		margin-top: 3rem;
-		padding-top: 1.5rem;
-		border-top: 1px solid var(--border-subtle);
+		margin-top: clamp(4rem, 8vw, 7rem);
 	}
 
 	.site-footer-bottom span {
 		font-size: 0.75rem;
-		color: var(--text-tertiary);
+		line-height: 1.5;
+		color: var(--text-secondary);
 	}
 
 	.site-footer-actions {
 		display: flex;
+		flex-shrink: 0;
 		align-items: center;
-		gap: 0.625rem;
+		gap: 0.125rem;
 	}
 
-	/* Theme toggle (flat gray fill, same treatment as the old nav one) */
 	.site-footer-theme-btn {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		width: 2rem;
-		height: 2rem;
+		width: 2.5rem;
+		height: 2.5rem;
 		border-radius: var(--radius-full);
-		color: var(--text-secondary);
-		background: var(--bg-tertiary);
+		color: var(--text-tertiary);
+		background: transparent;
 		border: none;
 		cursor: pointer;
-		transition: color 0.2s ease, background 0.2s ease, transform 0.1s ease;
+		transition: color 0.15s ease, transform 0.1s ease;
 	}
 
 	.site-footer-theme-btn:hover {
 		color: var(--text-primary);
-		background: color-mix(in srgb, var(--bg-tertiary), var(--text-primary) 8%);
 	}
 
 	.site-footer-theme-btn:active {
@@ -200,17 +179,57 @@
 
 	.site-footer-gh {
 		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: var(--radius-full);
 		color: var(--text-tertiary);
-		transition: color 0.15s ease;
+		transition: color 0.15s ease, transform 0.1s ease;
 	}
 
 	.site-footer-gh:hover {
 		color: var(--text-primary);
 	}
 
-	@media (max-width: 640px) {
+	.site-footer-gh:active {
+		transform: scale(0.96);
+	}
+
+	.site-footer-theme-btn:focus-visible,
+	.site-footer-gh:focus-visible {
+		outline: 1px solid var(--text-secondary);
+		outline-offset: -4px;
+	}
+
+	@media (max-width: 960px) {
+		.site-footer-inner {
+			padding-top: 4rem;
+		}
+
+		.site-footer-top {
+			grid-template-columns: 1fr;
+			gap: 3rem;
+		}
+
+		.site-footer-tagline {
+			max-width: 20rem;
+		}
+	}
+
+	@media (max-width: 600px) {
 		.site-footer-cols {
-			gap: 2.5rem;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 2.5rem 1.5rem;
+		}
+
+		.site-footer-bottom {
+			align-items: flex-end;
+			margin-top: 4rem;
+		}
+
+		.site-footer-bottom span {
+			max-width: 15rem;
 		}
 	}
 </style>

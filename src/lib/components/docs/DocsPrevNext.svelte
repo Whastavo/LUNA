@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import { getPrevNext } from '$lib/utils/docs-nav';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { localPath } from '$lib/config/links';
@@ -13,12 +12,12 @@
 	const { prev, next } = $derived(getPrevNext(slug));
 </script>
 
-<nav class="prev-next" aria-label={$t('docs.pageNav')}>
+<nav class="prev-next" aria-label="Page navigation">
 	{#if prev}
 		<a href={localPath('docs', `/${prev.slug}`)} class="nav-link prev">
 			<Icon name="chevron-left" size={16} />
 			<div class="nav-text">
-				<span class="label">{$t('docs.previous')}</span>
+				<span class="label">Previous</span>
 				<span class="title">{prev.title}</span>
 			</div>
 		</a>
@@ -29,7 +28,7 @@
 	{#if next}
 		<a href={localPath('docs', `/${next.slug}`)} class="nav-link next">
 			<div class="nav-text">
-				<span class="label">{$t('docs.next')}</span>
+				<span class="label">Next</span>
 				<span class="title">{next.title}</span>
 			</div>
 			<Icon name="chevron-right" size={16} />

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import '@fontsource-variable/inter';
 	import '../app.css';
-	import '$lib/i18n';
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { modulesStore } from '$lib/stores/modules.svelte';
 	import { moduleRegistry } from '$lib/services/modules';
+	import { migrateLegacyElevenLabsVoice } from '$lib/services/tts/legacy-voice-migration';
 	import { isDesktopBuild } from '$lib/services/platform/platform';
 	import { SITE_URL } from '$lib/config/site';
 
@@ -28,6 +28,7 @@
 		for (const mod of moduleRegistry) {
 			modulesStore.registerModule(mod);
 		}
+		migrateLegacyElevenLabsVoice();
 
 		// React to system theme changes in real-time when using "system" mode
 		const themeQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -62,8 +63,8 @@
 </script>
 
 <svelte:head>
-	<title>Luna</title>
-	<meta name="description" content="Luna es un compañero IA de código abierto con avatares 3D VRM, chat de voz, memoria semántica y soporte para múltiples proveedores LLM." />
+	<title>Utsuwa</title>
+	<meta name="description" content="Open-source AI companion with 3D VRM avatars, voice chat, semantic memory, and multi-provider LLM support. Self-hosted and privacy-first." />
 </svelte:head>
 
 {#if !redirecting}

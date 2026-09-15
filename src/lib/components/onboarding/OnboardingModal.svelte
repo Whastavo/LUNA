@@ -25,7 +25,7 @@
 	let direction = $state<'forward' | 'back'>('forward');
 
 	// Form state
-	let characterName = $state('Luna');
+	let characterName = $state('Utsuwa');
 	let systemPrompt = $state(DEFAULT_SYSTEM_PROMPT);
 	let appMode = $state<AppMode>('dating_sim');
 
@@ -38,7 +38,7 @@
 
 			// Save data when leaving certain steps
 			if (currentStep === 'character') {
-				characterStore.updatePersona({ name: characterName.trim() || 'Luna', systemPrompt });
+				characterStore.updatePersona({ name: characterName.trim() || 'Utsuwa', systemPrompt });
 			}
 			if (currentStep === 'mode') {
 				characterStore.setAppMode(appMode);

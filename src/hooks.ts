@@ -1,8 +1,8 @@
 import type { Reroute } from '@sveltejs/kit';
 
-// Subdomain → internal route prefix. On docs.luna.ai a request for
+// Subdomain → internal route prefix. On docs.utsuwa.ai a request for
 // `/overview/introduction` is routed to `/docs/overview/introduction`, and
-// app.luna.ai/settings → /app/settings. This runs on both the server and
+// app.utsuwa.ai/settings → /app/settings. This runs on both the server and
 // during client-side navigation, so clean subdomain URLs resolve everywhere.
 // "Prepend only if missing" keeps already-prefixed paths working as a safety net.
 export const reroute: Reroute = ({ url }) => {

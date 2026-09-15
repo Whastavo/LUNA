@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import {
 		CONTEXT_SIZE_STEPS,
 		DEFAULT_CONTEXT_SIZE,
@@ -18,12 +17,8 @@
 		contextSize,
 		onChange,
 		id = 'llm-context-size-toggle',
-		note
+		note = 'When enabled, memory injection and chat history are scaled to fit the selected model\'s context window.'
 	}: Props = $props();
-
-	const noteText = $derived(
-		note ?? $t('settings.llm.contextWindowDesc')
-	);
 
 	const enabled = $derived(contextSize !== undefined && contextSize > 0);
 
@@ -39,11 +34,11 @@
 
 <div class="context-size-row">
 	<label class="context-size-label" for={id}>
-		{$t('settings.llm.contextWindow')}
+		Context Window
 		{#if enabled}
 			<span class="context-size-value">{formatContextSize(snapContextSize(contextSize as number))}</span>
 		{:else}
-			<span class="context-size-value">{$t('common.default')}</span>
+			<span class="context-size-value">Default</span>
 		{/if}
 	</label>
 	<button
@@ -51,7 +46,7 @@
 		class="context-size-toggle"
 		class:enabled
 		onclick={handleToggle}
-		aria-label={$t('settings.llm.contextWindow')}
+		aria-label="Toggle context window scaling"
 	>
 		<span class="toggle-track">
 			<span class="toggle-thumb"></span>
@@ -76,7 +71,7 @@
 		</div>
 	</div>
 {/if}
-<p class="context-size-note">{noteText}</p>
+<p class="context-size-note">{note}</p>
 
 <style>
 	.context-size-row {

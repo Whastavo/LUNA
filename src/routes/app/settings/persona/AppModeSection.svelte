@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import { Icon } from '$lib/components/ui';
 	import type { PersonaPageState } from './persona-page.svelte';
 
@@ -8,7 +7,7 @@
 
 <!-- App Mode Toggle -->
 <div class="mode-section">
-	<span class="section-label">{$t('settings.persona.appMode')}</span>
+	<span class="section-label">App Mode</span>
 	<div class="mode-toggle">
 		<button
 			class="mode-option"
@@ -16,7 +15,7 @@
 			onclick={() => page.requestModeChange('companion')}
 		>
 			<Icon name="sparkles" size={14} />
-			{$t('settings.persona.companionMode') || 'Compañera'}
+			Companion
 		</button>
 		<button
 			class="mode-option"
@@ -24,7 +23,7 @@
 			onclick={() => page.requestModeChange('dating_sim')}
 		>
 			<Icon name="heart" size={14} />
-			{$t('settings.persona.datingSimMode') || 'Simulador de Citas'}
+			Dating Sim
 		</button>
 	</div>
 </div>

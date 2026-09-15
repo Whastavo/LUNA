@@ -13,7 +13,7 @@ function createOverlayStore() {
 
 	// Load persisted position on init
 	if (browser) {
-		const saved = localStorage.getItem('luna-overlay-position');
+		const saved = localStorage.getItem('utsuwa-overlay-position');
 		if (saved) {
 			try {
 				position = JSON.parse(saved);
@@ -45,7 +45,7 @@ function createOverlayStore() {
 	function setPosition(newPosition: OverlayPosition) {
 		position = newPosition;
 		if (browser) {
-			localStorage.setItem('luna-overlay-position', JSON.stringify(position));
+			localStorage.setItem('utsuwa-overlay-position', JSON.stringify(position));
 		}
 	}
 

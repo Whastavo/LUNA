@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import DocsPrevNext from '$lib/components/docs/DocsPrevNext.svelte';
 	import { DOCS_URL, SITE_URL } from '$lib/config/site';
@@ -45,6 +44,7 @@
 		let observer: IntersectionObserver | null = null;
 		const raf = requestAnimationFrame(() => {
 			addCodeCopyButtons('.docs-content');
+
 			const headings = Array.from(
 				articleEl!.querySelectorAll<HTMLElement>('h2[id], h3[id]')
 			);
@@ -56,7 +56,6 @@
 			activeId = headings[0]?.id ?? '';
 
 			if (!headings.length) return;
-
 			observer = new IntersectionObserver(
 				(entries) => {
 					for (const entry of entries) {
@@ -65,7 +64,6 @@
 				},
 				{ rootMargin: '0px 0px -75% 0px', threshold: 0 }
 			);
-
 			headings.forEach((h) => observer!.observe(h));
 		});
 
@@ -77,18 +75,18 @@
 </script>
 
 <svelte:head>
-	<title>{data.metadata?.title || $t('docs.title')} - Luna</title>
+	<title>{data.metadata?.title || 'Docs'} - Utsuwa</title>
 	{#if data.metadata?.description}
 		<meta name="description" content={data.metadata.description} />
 	{/if}
 	<meta property="og:type" content="article" />
-	<meta property="og:title" content={data.metadata?.title || $t('docs.title')} />
+	<meta property="og:title" content={data.metadata?.title || 'Docs'} />
 	{#if data.metadata?.description}
 		<meta property="og:description" content={data.metadata.description} />
 	{/if}
 	<meta property="og:url" content={`${DOCS_URL}/${data.slug}`} />
 	<meta name="twitter:card" content="summary" />
-	<meta name="twitter:title" content={data.metadata?.title || $t('docs.title')} />
+	<meta name="twitter:title" content={data.metadata?.title || 'Docs'} />
 	{#if data.metadata?.description}
 		<meta name="twitter:description" content={data.metadata.description} />
 	{/if}
@@ -101,7 +99,7 @@
 		url: `${DOCS_URL}/${data.slug}`,
 		publisher: {
 			'@type': 'Organization',
-			name: 'Luna',
+			name: 'Utsuwa',
 			url: SITE_URL
 		}
 	})}</script>`}
@@ -110,33 +108,31 @@
 
 <div class="doc-wrap">
 	<div class="doc-main">
-		<nav class="breadcrumb" aria-label={$t('docs.breadcrumb')}>
-			<a href={localPath('docs')}>{$t('docs.title')}</a>
+		<nav class="breadcrumb" aria-label="Breadcrumb">
+			<a href={localPath('docs')}>Docs</a>
 			{#if section}
 				<Icon name="chevron-right" size={12} />
 				<span class="crumb-section">{section.title}</span>
 			{/if}
 			<Icon name="chevron-right" size={12} />
-			<span class="crumb-current">{data.metadata?.title || 'Página'}</span>
+			<span class="crumb-current">{data.metadata?.title || 'Page'}</span>
 		</nav>
 
 		<article class="docs-content prose" bind:this={articleEl}>
 			<div class="page-toolbar">
-				<button type="button" class="btn btn-secondary" onclick={copyPage} title={$t('docs.copyContent')}>
+				<button type="button" class="btn btn-secondary" onclick={copyPage} title="Copy page content">
 					<Icon name={copied ? 'check' : 'copy'} size={14} />
-					<span>{copied ? $t('docs.copied') : $t('docs.copyPage')}</span>
+					<span>{copied ? 'Copied' : 'Copy page'}</span>
 				</button>
 			</div>
-
 			<data.content />
-
 			<DocsPrevNext slug={data.slug} />
 		</article>
 	</div>
 
 	{#if toc.length}
-		<aside class="toc" aria-label={$t('docs.tableOfContents')}>
-			<p class="toc-title">{$t('docs.tableOfContents')}</p>
+		<aside class="toc" aria-label="Table of contents">
+			<p class="toc-title">Table of contents</p>
 			<ul class="toc-list">
 				{#each toc as heading}
 					<li class:sub={heading.level === 3}>
@@ -275,6 +271,7 @@
 		.toc {
 			display: none;
 		}
+
 		.doc-wrap {
 			max-width: 52rem;
 		}

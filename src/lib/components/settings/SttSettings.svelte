@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import { settingsStore } from '$lib/stores/settings.svelte';
 	import { Icon } from '$lib/components/ui';
 	import './ai-services-settings.css';
@@ -8,16 +7,16 @@
 <div class="service-group">
 	<div class="service-header">
 		<Icon name="mic" size={14} />
-		<span>{$t('settings.stt.title')}</span>
+		<span>Voice Input (STT)</span>
 	</div>
-	<p class="stt-hint">{$t('onboarding.sttDescription')}</p>
+	<p class="stt-hint">Higher quality voice input via Whisper. A local server is used if configured, then Groq, then OpenAI, then the browser's built-in recognition. Required on desktop (which has no built-in recognition).</p>
 
-	<span class="stt-sublabel">{$t('settings.stt.groqKey')}</span>
+	<span class="stt-sublabel">Groq API Key</span>
 	<div class="api-key-row">
 		<input
 			type="password"
 			class="api-key-input"
-			placeholder={$t('settings.stt.groqKeyPlaceholder')}
+			placeholder="Groq API Key"
 			value={settingsStore.getProviderConfig('groq-stt').apiKey ?? ''}
 			oninput={(e) => {
 				const v = e.currentTarget.value;
@@ -28,12 +27,12 @@
 		/>
 	</div>
 
-	<span class="stt-sublabel">{$t('settings.stt.openaiKey') || 'Clave API de OpenAI (Whisper)'}</span>
+	<span class="stt-sublabel">OpenAI API Key (Whisper)</span>
 	<div class="api-key-row">
 		<input
 			type="password"
 			class="api-key-input"
-			placeholder={$t('settings.stt.openaiKeyPlaceholder')}
+			placeholder="OpenAI API Key"
 			value={settingsStore.getProviderConfig('openai-stt').apiKey ?? ''}
 			oninput={(e) => {
 				const v = e.currentTarget.value;
@@ -44,12 +43,12 @@
 		/>
 	</div>
 
-	<span class="stt-sublabel">{$t('settings.stt.localServerLabel')}</span>
+	<span class="stt-sublabel">Local server (Speaches, faster-whisper-server, whisper.cpp)</span>
 	<div class="api-key-row">
 		<input
 			type="text"
 			class="api-key-input"
-			placeholder={$t('settings.stt.localServerPlaceholder')}
+			placeholder="http://localhost:8000/v1/"
 			value={settingsStore.getProviderConfig('local-stt').baseUrl ?? ''}
 			oninput={(e) => {
 				const v = e.currentTarget.value.trim();
@@ -63,7 +62,7 @@
 		<input
 			type="text"
 			class="api-key-input"
-			placeholder={$t('settings.stt.localModelPlaceholder')}
+			placeholder="Model (e.g. Systran/faster-whisper-large-v3)"
 			value={settingsStore.getProviderConfig('local-stt').modelId ?? ''}
 			oninput={(e) => {
 				settingsStore.setProviderConfig('local-stt', { modelId: e.currentTarget.value.trim() });

@@ -37,7 +37,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 		icon: '🤖',
 		requiresApiKey: true,
 		supportsVision: true,
-		defaultBaseUrl: DEFAULT_CHAT_BASE_URLS.openai
+		defaultBaseUrl: DEFAULT_CHAT_BASE_URLS.openai,
 	},
 	{
 		id: 'anthropic',
@@ -67,7 +67,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 		category: 'llm',
 		icon: '🔍',
 		requiresApiKey: true,
-		defaultBaseUrl: DEFAULT_CHAT_BASE_URLS.deepseek
+		defaultBaseUrl: DEFAULT_CHAT_BASE_URLS.deepseek,
 	},
 	{
 		id: 'xai',
@@ -77,7 +77,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 		icon: '𝕏',
 		requiresApiKey: true,
 		supportsVision: true,
-		defaultBaseUrl: DEFAULT_CHAT_BASE_URLS.xai
+		defaultBaseUrl: DEFAULT_CHAT_BASE_URLS.xai,
 	},
 	// Local LLMs discover installed models from the user's running local server.
 	{
@@ -89,7 +89,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 		requiresApiKey: false,
 		isLocal: true,
 		defaultBaseUrl: DEFAULT_CHAT_BASE_URLS.ollama,
-		models: []
+		models: [],
 	},
 	{
 		id: 'lmstudio',
@@ -100,7 +100,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 		requiresApiKey: false,
 		isLocal: true,
 		defaultBaseUrl: DEFAULT_CHAT_BASE_URLS.lmstudio,
-		models: []
+		models: [],
 	},
 	{
 		id: 'openai-compatible',
@@ -191,6 +191,33 @@ export const TTS_PROVIDERS: ProviderMetadata[] = [
 			{ id: 'am_michael', name: 'Michael (US, male)' },
 			{ id: 'bf_emma', name: 'Emma (UK, female)' },
 			{ id: 'bm_george', name: 'George (UK, male)' }
+		]
+	},
+	// OmniVoice - local OmniVoice proxy running on the user's machine.
+	{
+		id: 'omnivoice',
+		name: 'OmniVoice',
+		description: 'Local OmniVoice TTS',
+		category: 'tts',
+		icon: '🔊',
+		requiresApiKey: false,
+		isLocal: true,
+		defaultBaseUrl: 'http://localhost:8881/v1/',
+		models: [{ id: 'omnivoice', name: 'OmniVoice' }],
+		voices: [
+			{ id: 'alloy', name: 'Alloy' },
+			{ id: 'ash', name: 'Ash' },
+			{ id: 'ballad', name: 'Ballad' },
+			{ id: 'cedar', name: 'Cedar' },
+			{ id: 'coral', name: 'Coral' },
+			{ id: 'echo', name: 'Echo' },
+			{ id: 'fable', name: 'Fable' },
+			{ id: 'marin', name: 'Marin' },
+			{ id: 'nova', name: 'Nova' },
+			{ id: 'onyx', name: 'Onyx' },
+			{ id: 'sage', name: 'Sage' },
+			{ id: 'shimmer', name: 'Shimmer' },
+			{ id: 'verse', name: 'Verse' }
 		]
 	},
 ];

@@ -8,14 +8,35 @@ export interface TTSOptions {
 	model?: string;
 	baseUrl?: string;
 	speed?: number;
-	pitch?: number;
 	volume?: number;
 	/** Primary language for multilingual TTS. */
 	language?: string;
+	/** Natural-language description of the synthetic voice (OmniVoice). */
+	instructions?: string;
+	/** OmniVoice synthesis quality steps. */
+	numStep?: number;
+	/** OmniVoice position temperature. */
+	positionTemperature?: number;
+	/** OmniVoice class temperature. */
+	classTemperature?: number;
 	/** Alternative language that triggers the alternative voice. */
 	altLanguage?: string;
 	/** Voice ID used when the alternative language is active. */
 	altVoiceId?: string;
+	/** Whether the alternative voice/language switch is enabled by the user. */
+	enableAltLanguage?: boolean;
+	/** Alternative voice speed (0.5-2.0). Falls back to `speed` when unset. */
+	altSpeed?: number;
+	/** Voice design instructions for the alternative language (OmniVoice). */
+	altInstructions?: string;
+	/** Alternative voice quality / diffusion steps (OmniVoice). Falls back to `numStep` when unset. */
+	altNumStep?: number;
+	/** Alternative voice diversity temperature (OmniVoice). Falls back to `positionTemperature` when unset. */
+	altPositionTemperature?: number;
+	/** Alternative voice token sampling temperature (OmniVoice). Falls back to `classTemperature` when unset. */
+	altClassTemperature?: number;
+	/** Force a language per speech segment via LLM function calling (OmniVoice). */
+	enableToolCalling?: boolean;
 }
 
 // Result from TTS speak method
@@ -36,6 +57,12 @@ export interface StreamOptions {
 	speed?: number;
 	pitch?: number;
 	volume?: number;
+	instructions?: string;
+	numStep?: number;
+	positionTemperature?: number;
+	classTemperature?: number;
+	guidanceScale?: number;
+	postprocessOutput?: boolean;
 	signal?: AbortSignal;
 }
 
@@ -79,6 +106,17 @@ export function getSharedAudioContext(): AudioContext {
 	return sharedAudioContext;
 }
 
+// iOS Safari keeps an AudioContext suspended unless resume() runs inside a
+// user gesture; the providers' own resume calls happen after the TTS fetch,
+// which no longer counts. Call this synchronously from send and mic handlers.
+// Checks !== 'running' rather than === 'suspended' because Safari also reports
+// a nonstandard 'interrupted' state after calls or backgrounding.
+export function unlockAudioContext(): void {
+	if (typeof AudioContext === 'undefined') return;
+	const ctx = getSharedAudioContext();
+	if (ctx.state !== 'running') ctx.resume().catch(() => {});
+}
+
 // Import individual providers
 import { ElevenLabsTTS } from './elevenlabs.ts';
 import { OpenAITTS } from './openai-tts.ts';
@@ -97,7 +135,12 @@ export function getTTSProvider(options: TTSOptions): ITTSProvider {
 		currentOptions.voiceId === options.voiceId &&
 		currentOptions.model === options.model &&
 		currentOptions.baseUrl === options.baseUrl &&
-		currentOptions.speed === options.speed
+		currentOptions.speed === options.speed &&
+		currentOptions.language === options.language &&
+		currentOptions.instructions === options.instructions &&
+		currentOptions.numStep === options.numStep &&
+		currentOptions.positionTemperature === options.positionTemperature &&
+		currentOptions.classTemperature === options.classTemperature
 	) {
 		return currentProvider;
 	}
@@ -112,9 +155,11 @@ export function getTTSProvider(options: TTSOptions): ITTSProvider {
 			currentProvider = new OpenAITTS(options);
 			break;
 
-		// Local TTS is OpenAI-compatible, so it reuses the OpenAI client with a
-		// localhost base URL. The provider id drives URL/key/error handling.
+		// Local TTS and the OmniVoice proxy are OpenAI-compatible, so they reuse
+		// the OpenAI client with a localhost base URL. The provider id drives URL,
+		// key, request format, and error handling.
 		case 'local-tts':
+		case 'omnivoice':
 			currentProvider = new OpenAITTS(options);
 			break;
 

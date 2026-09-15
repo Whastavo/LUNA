@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
-
 	interface Props {
 		onNext: () => void;
 	}
@@ -43,10 +41,10 @@
 		</svg>
 	</div>
 
-	<p class="ob-subtitle">{$t('onboarding.welcomeSubtitle')}</p>
+	<p class="ob-subtitle">A few gentle steps to bring your companion to life.</p>
 
 	<button class="btn btn-primary btn-lg btn-block" onclick={onNext}>
-		{$t('onboarding.getStarted')}
+		Get started
 	</button>
 </div>
 

@@ -11,37 +11,38 @@ export interface DocsNavSection {
 
 export const docsNav: DocsNavSection[] = [
 	{
-		title: 'Visión General',
+		title: 'Overview',
 		icon: 'book',
-		items: [{ title: 'Introducción', slug: 'overview/introduction' }]
+		items: [{ title: 'Introduction', slug: 'overview/introduction' }]
 	},
 	{
-		title: 'Guías',
+		title: 'Guides',
 		icon: 'compass',
 		items: [
-			{ title: 'Guía Web', slug: 'guides/web-guide' },
-			{ title: 'Guía de Escritorio', slug: 'guides/desktop-guide' },
-			{ title: 'Configuración LLM Local', slug: 'guides/local-llm-setup' },
-			{ title: 'Configuración TTS Local', slug: 'guides/local-tts-setup' },
-			{ title: 'Configuración STT Local', slug: 'guides/local-stt-setup' },
-			{ title: 'Solución de Problemas', slug: 'guides/troubleshooting' }
+			{ title: 'Web Guide', slug: 'guides/web-guide' },
+			{ title: 'Desktop Guide', slug: 'guides/desktop-guide' },
+			{ title: 'Local LLM Setup', slug: 'guides/local-llm-setup' },
+			{ title: 'Local TTS Setup', slug: 'guides/local-tts-setup' },
+			{ title: 'OmniVoice Setup', slug: 'guides/omnivoice' },
+			{ title: 'Local STT Setup', slug: 'guides/local-stt-setup' },
+			{ title: 'Troubleshooting', slug: 'guides/troubleshooting' }
 		]
 	},
 	{
-		title: 'Tecnología',
+		title: 'Technology',
 		icon: 'code',
 		items: [
-			{ title: 'Visión General de la Arquitectura', slug: 'technology/architecture' },
-			{ title: 'Sistema de Compañera', slug: 'technology/companion-system' },
-			{ title: 'Grafo de Memoria', slug: 'technology/memory-graph' }
+			{ title: 'Architecture Overview', slug: 'technology/architecture' },
+			{ title: 'Companion System', slug: 'technology/companion-system' },
+			{ title: 'Memory Graph', slug: 'technology/memory-graph' }
 		]
 	},
 	{
-		title: 'Comunidad',
+		title: 'Community',
 		icon: 'users',
 		items: [
-			{ title: 'Recursos', slug: 'community/resources' },
-			{ title: 'Contribución', slug: 'community/contributing' }
+			{ title: 'Resources', slug: 'community/resources' },
+			{ title: 'Contributing', slug: 'community/contributing' }
 		]
 	}
 ];

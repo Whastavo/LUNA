@@ -11,7 +11,6 @@
 	import { type PreparedImage } from '$lib/services/storage/keepsakes';
 	import { chatDraftStore } from '$lib/stores/chat-draft.svelte';
 	import ChatInput from './ChatInput.svelte';
-	import { t } from 'svelte-i18n';
 
 	interface Props {
 		open: boolean;
@@ -42,7 +41,7 @@
 	// The panel floats: drag it by the header, resize it from any edge. Its
 	// rect persists so it comes back where you left it. Until the user drags,
 	// it anchors to the docked side from settings.
-	const GEOMETRY_KEY = 'luna-chat-panel';
+	const GEOMETRY_KEY = 'utsuwa-chat-panel';
 	const DEFAULT_WIDTH = 460;
 	const DEFAULT_HEIGHT_VH = 0.72;
 	const MIN_WIDTH = 260;
@@ -259,7 +258,7 @@
 
 	function handleClearHistory() {
 		if (!browser) return;
-		if (confirm($t('chat.clearHistoryConfirm'))) {
+		if (confirm('Delete all messages in this chat?')) {
 			chatStore.clearMessages();
 		}
 	}
@@ -294,30 +293,30 @@
 		<span class="mood-chip" style="color: {moodInfo.color}" title={moodInfo.description}>
 			<Icon name={moodInfo.icon} size={16} />
 		</span>
-		<span class="window-title">{$t('chat.title')}</span>
-		<button class="dock-btn" onclick={() => snapTo('left')} aria-label={$t('chat.snapLeft')} title={$t('chat.snapLeft')}>
+		<span class="window-title">Chat</span>
+		<button class="dock-btn" onclick={() => snapTo('left')} aria-label="Snap to left edge" title="Snap left">
 			<Icon name="chevron-left" size={16} />
 		</button>
-		<button class="dock-btn" onclick={() => snapTo('right')} aria-label={$t('chat.snapRight')} title={$t('chat.snapRight')}>
+		<button class="dock-btn" onclick={() => snapTo('right')} aria-label="Snap to right edge" title="Snap right">
 			<Icon name="chevron-right" size={16} />
 		</button>
 		<button
 			class="clear-btn"
 			onclick={handleClearHistory}
-			aria-label={$t('chat.clearHistory')}
-			title={$t('chat.clearHistory')}
+			aria-label="Clear chat history"
+			title="Clear chat history"
 			disabled={visibleMessages.length === 0}
 		>
 			<Icon name="trash" size={14} />
 		</button>
-		<button class="close-btn" onclick={onClose} aria-label={$t('common.close')} title={$t('common.close')}>
+		<button class="close-btn" onclick={onClose} aria-label="Close chat" title="Close chat">
 			<Icon name="x" size={16} />
 		</button>
 	</div>
 
 	<div class="messages" bind:this={messagesEl}>
 		{#if visibleMessages.length === 0 && !isTyping}
-			<p class="empty-hint">{$t('chat.emptyHistory')}</p>
+			<p class="empty-hint">No messages yet.</p>
 		{:else}
 			{#each visibleMessages as msg (msg.id)}
 				{@const isLastAssistant = msg.id === lastAssistantId}
@@ -355,7 +354,7 @@
 	{#if open && chatDraftStore.dropActive}
 		<div class="drop-overlay">
 			<Icon name="camera" size={22} />
-			<span>{$t('chat.dropPhoto')}</span>
+			<span>Drop a photo to show her</span>
 		</div>
 	{/if}
 </div>

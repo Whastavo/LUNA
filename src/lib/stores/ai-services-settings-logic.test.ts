@@ -3,7 +3,11 @@ import assert from 'node:assert/strict';
 import {
 	selectDefaultModel,
 	isProviderReadyForFetch,
-	createFetchSignature
+	createFetchSignature,
+	buildInstructions,
+	buildPresetInstructions,
+	parseInstructions,
+	DEFAULT_OMNI_VOICE_DESIGN
 } from './ai-services-settings-logic.ts';
 import type { ProviderMetadata } from '$lib/services/providers/registry';
 import type { ProviderConfig } from '$lib/types';
@@ -79,4 +83,74 @@ test('createFetchSignature distinguishes different endpoints', () => {
 	const a = createFetchSignature('ollama', 'http://a:11434');
 	const b = createFetchSignature('ollama', 'http://b:11434');
 	assert.notEqual(a, b);
+});
+
+test('buildInstructions produces the expected OmniVoice instruction string', () => {
+	assert.equal(
+		buildInstructions('female', 'young adult', 'moderate', 'american'),
+		'female, young adult, moderate pitch, american accent'
+	);
+});
+
+test('buildInstructions omits neutral accent', () => {
+	assert.equal(
+		buildInstructions('male', 'middle-aged', 'low', 'neutral'),
+		'male, middle-aged, low pitch'
+	);
+});
+
+test('buildInstructions omits empty accent', () => {
+	assert.equal(buildInstructions('female', 'young adult', 'moderate', ''), 'female, young adult, moderate pitch');
+});
+
+const PRESETS: Record<string, { gender: string; age: string; pitch: string; accent: string }> = {
+	alloy: { gender: 'female', age: 'young adult', pitch: 'moderate', accent: 'american' },
+	coral: { gender: 'female', age: 'young adult', pitch: 'high', accent: 'australian' }
+};
+
+test('buildPresetInstructions includes accent for English', () => {
+	assert.equal(
+		buildPresetInstructions('alloy', 'en', PRESETS),
+		'female, young adult, moderate pitch, american accent'
+	);
+});
+
+test('buildPresetInstructions omits accent for non-English languages', () => {
+	assert.equal(buildPresetInstructions('alloy', 'de', PRESETS), 'female, young adult, moderate pitch');
+});
+
+test('buildPresetInstructions falls back to the default design for unknown voices', () => {
+	assert.equal(
+		buildPresetInstructions('unknown', 'en', PRESETS),
+		'female, young adult, moderate pitch, american accent'
+	);
+});
+
+test('buildPresetInstructions omits accent for English when preset accent is neutral', () => {
+	const presets = {
+		neutral: { gender: 'male', age: 'middle-aged', pitch: 'low', accent: 'neutral' }
+	};
+	assert.equal(buildPresetInstructions('neutral', 'en', presets), 'male, middle-aged, low pitch');
+});
+
+test('parseInstructions falls back to defaults for empty strings', () => {
+	assert.deepEqual(parseInstructions(''), DEFAULT_OMNI_VOICE_DESIGN);
+});
+
+test('parseInstructions extracts all design attributes', () => {
+	assert.deepEqual(parseInstructions('male, elderly, very low pitch, british accent'), {
+		gender: 'male',
+		age: 'elderly',
+		pitch: 'very low',
+		accent: 'british'
+	});
+});
+
+test('parseInstructions ignores unsupported accent values', () => {
+	assert.deepEqual(parseInstructions('female, young adult, high pitch, martian accent'), {
+		gender: 'female',
+		age: 'young adult',
+		pitch: 'high',
+		accent: DEFAULT_OMNI_VOICE_DESIGN.accent
+	});
 });

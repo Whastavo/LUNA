@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import { slideOpen } from '$lib/utils/motion';
 	import { Icon, Tooltip } from '$lib/components/ui';
 	import type { PersonaPageState } from './persona-page.svelte';
@@ -10,7 +9,7 @@
 <!-- Right Panel: Stats -->
 <div class="stats-panel">
 	{#if page.isCharacterLoading}
-		<div class="loading-stats">{$t('settings.persona.loadingCharacter')}</div>
+		<div class="loading-stats">Loading character data...</div>
 	{/if}
 
 	{#if page.isDatingSimMode}
@@ -18,7 +17,7 @@
 		<div class="bond-section">
 			<div class="bond-progress">
 				<div class="bond-header">
-					<Tooltip content={$t('settings.persona.affectionTooltip')} side="left">
+					<Tooltip content="Overall affection level. Grows through positive interactions, compliments, and time spent together." side="left">
 						<div class="bond-icon">
 							<Icon name="heart" size={18} />
 						</div>
@@ -43,11 +42,11 @@
 
 		<!-- Relationship Stats (Dating Sim Mode only) - Sims-style vertical bars -->
 		<div class="stats-section">
-			<Tooltip content={$t('settings.persona.statsOverview')}>
-				<span class="section-label">{$t('settings.persona.relationshipStats')}</span>
+			<Tooltip content="Core relationship attributes that evolve based on your interactions.">
+				<span class="section-label">Relationship Stats</span>
 			</Tooltip>
 			<div class="sims-stat-bars">
-				<Tooltip content={$t('settings.persona.trustTooltip')}>
+				<Tooltip content="How much she relies on and believes in you. Built through honesty and keeping promises.">
 					<div class="sims-stat" style="--bar-color: var(--stat-trust); --bar-glow: rgba(77, 208, 255, 0.5)">
 						<div class="sims-bar-track">
 							<div class="sims-bar-fill" style="height: {page.charState.trust}%">
@@ -56,10 +55,10 @@
 						<div class="sims-stat-icon">
 							<Icon name="shield" size={14} />
 						</div>
-						<span class="sims-stat-label">{$t('settings.persona.trust')}</span>
+						<span class="sims-stat-label">Trust</span>
 					</div>
 				</Tooltip>
-				<Tooltip content={$t('settings.persona.intimacyTooltip')}>
+				<Tooltip content="Emotional closeness and vulnerability. Grows from meaningful conversations and shared experiences.">
 					<div class="sims-stat" style="--bar-color: var(--stat-intimacy); --bar-glow: rgba(192, 132, 252, 0.5)">
 						<div class="sims-bar-track">
 							<div class="sims-bar-fill" style="height: {page.charState.intimacy}%">
@@ -68,10 +67,10 @@
 						<div class="sims-stat-icon">
 							<Icon name="heart" size={14} />
 						</div>
-						<span class="sims-stat-label">{$t('settings.persona.intimacy')}</span>
+						<span class="sims-stat-label">Intimacy</span>
 					</div>
 				</Tooltip>
-				<Tooltip content={$t('settings.persona.comfortTooltip')}>
+				<Tooltip content="How at ease she feels around you. Increases with consistent, supportive presence.">
 					<div class="sims-stat" style="--bar-color: var(--stat-comfort); --bar-glow: rgba(74, 222, 128, 0.5)">
 						<div class="sims-bar-track">
 							<div class="sims-bar-fill" style="height: {page.charState.comfort}%">
@@ -80,10 +79,10 @@
 						<div class="sims-stat-icon">
 							<Icon name="home" size={14} />
 						</div>
-						<span class="sims-stat-label">{$t('settings.persona.comfort')}</span>
+						<span class="sims-stat-label">Comfort</span>
 					</div>
 				</Tooltip>
-				<Tooltip content={$t('settings.persona.respectTooltip')}>
+				<Tooltip content="How much she admires and values you. Earned through thoughtful actions and integrity.">
 					<div class="sims-stat" style="--bar-color: var(--stat-respect); --bar-glow: rgba(96, 165, 250, 0.5)">
 						<div class="sims-bar-track">
 							<div class="sims-bar-fill" style="height: {page.charState.respect}%">
@@ -92,10 +91,10 @@
 						<div class="sims-stat-icon">
 							<Icon name="award" size={14} />
 						</div>
-						<span class="sims-stat-label">{$t('settings.persona.respect')}</span>
+						<span class="sims-stat-label">Respect</span>
 					</div>
 				</Tooltip>
-				<Tooltip content={$t('settings.persona.energyTooltip')}>
+				<Tooltip content="Her current energy level. Affects mood and responsiveness. Replenishes over time.">
 					<div class="sims-stat" style="--bar-color: var(--stat-energy); --bar-glow: rgba(251, 191, 36, 0.5)">
 						<div class="sims-bar-track">
 							<div class="sims-bar-fill" style="height: {page.charState.energy}%">
@@ -104,7 +103,7 @@
 						<div class="sims-stat-icon">
 							<Icon name="zap" size={14} />
 						</div>
-						<span class="sims-stat-label">{$t('settings.persona.energy')}</span>
+						<span class="sims-stat-label">Energy</span>
 					</div>
 				</Tooltip>
 			</div>
@@ -114,14 +113,14 @@
 		<div class="companion-mode-section">
 			<div class="companion-badge">
 				<Icon name="sparkles" size={20} />
-				<span>{$t('settings.persona.companionMode')}</span>
+				<span>Companion Mode</span>
 			</div>
-			<p class="companion-description">{$t('settings.persona.companionModeInfo')}</p>
+			<p class="companion-description">Relationship stats and events are disabled. Only mood and energy are tracked.</p>
 		</div>
 
 		<!-- Energy bar (Companion Mode) - Sims-style -->
 		<div class="stats-section companion-energy">
-			<span class="section-label">{$t('settings.persona.energy')}</span>
+			<span class="section-label">Energy</span>
 			<div class="sims-stat-bars single">
 				<div class="sims-stat" style="--bar-color: var(--stat-energy); --bar-glow: rgba(251, 191, 36, 0.5)">
 					<div class="sims-bar-track tall">
@@ -131,7 +130,7 @@
 					<div class="sims-stat-icon">
 						<Icon name="zap" size={16} />
 					</div>
-					<span class="sims-stat-label">{$t('settings.persona.energy')}</span>
+					<span class="sims-stat-label">Energy</span>
 				</div>
 			</div>
 		</div>
@@ -139,8 +138,8 @@
 
 	<!-- Mood - Sims-style glossy card -->
 	<div class="mood-section">
-		<Tooltip content={$t('settings.persona.moodTooltip')}>
-			<span class="section-label">{$t('settings.persona.currentMood')}</span>
+		<Tooltip content="Her emotional state right now, influenced by recent interactions and events.">
+			<span class="section-label">Current Mood</span>
 		</Tooltip>
 		<div class="mood-card" style="--mood-color: {page.moodInfo.color}">
 			<div class="mood-icon-badge">
@@ -160,35 +159,35 @@
 
 	<!-- Activity - Sims-style stat tiles -->
 	<div class="activity-section">
-		<span class="section-label">{$t('settings.persona.activity')}</span>
+		<span class="section-label">Activity</span>
 		<div class="activity-grid">
 			<div class="activity-tile" style="--tile-color: #ff8f3f; --tile-glow: rgba(255, 143, 63, 0.4)">
 				<div class="activity-tile-icon">
 					<Icon name="flame" size={16} />
 				</div>
 				<span class="activity-tile-value">{page.charState.currentStreak}</span>
-				<span class="activity-tile-label">{$t('settings.persona.streak')}</span>
+				<span class="activity-tile-label">Streak</span>
 			</div>
 			<div class="activity-tile" style="--tile-color: #fbbf24; --tile-glow: rgba(251, 191, 36, 0.4)">
 				<div class="activity-tile-icon">
 					<Icon name="trophy" size={16} />
 				</div>
 				<span class="activity-tile-value">{page.charState.longestStreak}</span>
-				<span class="activity-tile-label">{$t('settings.persona.best')}</span>
+				<span class="activity-tile-label">Best</span>
 			</div>
 			<div class="activity-tile" style="--tile-color: #4dd0ff; --tile-glow: rgba(77, 208, 255, 0.4)">
 				<div class="activity-tile-icon">
 					<Icon name="message-circle" size={16} />
 				</div>
 				<span class="activity-tile-value">{page.charState.totalInteractions}</span>
-				<span class="activity-tile-label">{$t('settings.persona.chats')}</span>
+				<span class="activity-tile-label">Chats</span>
 			</div>
 			<div class="activity-tile" style="--tile-color: #4ade80; --tile-glow: rgba(74, 222, 128, 0.4)">
 				<div class="activity-tile-icon">
 					<Icon name="calendar" size={16} />
 				</div>
 				<span class="activity-tile-value">{page.charState.daysKnown}</span>
-				<span class="activity-tile-label">{$t('settings.persona.days')}</span>
+				<span class="activity-tile-label">Days</span>
 			</div>
 		</div>
 	</div>
@@ -200,7 +199,7 @@
 				<div class="events-toggle-icon">
 					<Icon name="star" size={16} />
 				</div>
-				<span>{$t('settings.persona.achievements')}</span>
+				<span>Achievements</span>
 				{#if page.achievements.length > 0}
 					<span class="events-count">{page.achievements.length}</span>
 				{/if}
@@ -238,8 +237,8 @@
 							<div class="empty-icon">
 								<Icon name="sparkles" size={28} />
 							</div>
-							<span class="empty-title">{$t('settings.persona.noAchievements')}</span>
-							<span class="empty-hint">{$t('settings.persona.keepChatting')}</span>
+							<span class="empty-title">No achievements yet</span>
+							<span class="empty-hint">Keep chatting to unlock special moments!</span>
 						</div>
 					{/if}
 				</div>

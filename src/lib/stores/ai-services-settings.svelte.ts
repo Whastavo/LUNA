@@ -241,7 +241,11 @@ export function createTtsSettingsState() {
 
 	let ttsIsLoading = $state(false);
 	let ttsFetchError = $state<string | null>(null);
-	let ttsDynamicModels = $state<ModelInfo[] | null>(null);
+	// Start from the cached list so a provider without static models (ElevenLabs)
+	// shows the saved model instead of the placeholder until someone hits refresh.
+	let ttsDynamicModels = $state<ModelInfo[] | null>(
+		getCachedModelsForProvider(modulesStore.getModuleSettings('speech').activeProvider as string)
+	);
 
 	const staticTTSModels = $derived.by(() => {
 		const providerId = speechSettings.activeProvider as string;
@@ -333,7 +337,76 @@ export function createTtsSettingsState() {
 	}
 
 	function handleTTSVoiceChange(voiceId: string) {
-		modulesStore.setModuleSetting('speech', 'activeVoiceId', voiceId);
+		modulesStore.setModuleSetting('speech', 'activeVoiceId', voiceId.trim());
+	}
+
+	function handleTTSLanguageChange(language: string) {
+		modulesStore.setModuleSetting('speech', 'activeLanguage', language);
+	}
+
+	function handleTTSEnableAltLanguageChange(enabled: boolean) {
+		modulesStore.setModuleSetting('speech', 'enableAltLanguage', enabled);
+	}
+
+	function handleTTSEnableToolCallingChange(enabled: boolean) {
+		modulesStore.setModuleSetting('speech', 'enableToolCalling', enabled);
+	}
+
+	function handleTTSAltLanguageChange(language: string) {
+		modulesStore.setModuleSetting('speech', 'altLanguage', language);
+	}
+
+	function handleTTSAltVoiceChange(voiceId: string) {
+		modulesStore.setModuleSetting('speech', 'altVoiceId', voiceId);
+	}
+
+	function handleTTSAltInstructionsChange(instructions: string | undefined) {
+		modulesStore.setModuleSetting('speech', 'altInstructions', instructions ?? '');
+	}
+
+	function handleTTSAltSpeedChange(speed: number | undefined) {
+		if (speed !== undefined && Number.isNaN(speed)) return;
+		modulesStore.setModuleSetting('speech', 'altSpeed', speed ?? 1);
+	}
+
+	function handleTTSAltNumStepChange(numStep: number | undefined) {
+		if (numStep !== undefined && Number.isNaN(numStep)) return;
+		modulesStore.setModuleSetting('speech', 'altNumStep', numStep ?? 32);
+	}
+
+	function handleTTSAltPositionTemperatureChange(positionTemperature: number | undefined) {
+		if (positionTemperature !== undefined && Number.isNaN(positionTemperature)) return;
+		modulesStore.setModuleSetting('speech', 'altPositionTemperature', positionTemperature ?? 1);
+	}
+
+	function handleTTSAltClassTemperatureChange(classTemperature: number | undefined) {
+		if (classTemperature !== undefined && Number.isNaN(classTemperature)) return;
+		modulesStore.setModuleSetting('speech', 'altClassTemperature', classTemperature ?? 0.2);
+	}
+
+	function handleTTSSpeedChange(speed: number | undefined) {
+		if (speed !== undefined && Number.isNaN(speed)) return;
+		modulesStore.setModuleSetting('speech', 'speed', speed ?? 1);
+	}
+
+	function handleTTSInstructionsChange(instructions: string | undefined) {
+		modulesStore.setModuleSetting('speech', 'instructions', instructions ?? '');
+	}
+
+
+	function handleTTSNumStepChange(numStep: number | undefined) {
+		if (numStep !== undefined && Number.isNaN(numStep)) return;
+		modulesStore.setModuleSetting('speech', 'numStep', numStep ?? 32);
+	}
+
+	function handleTTSPositionTemperatureChange(positionTemperature: number | undefined) {
+		if (positionTemperature !== undefined && Number.isNaN(positionTemperature)) return;
+		modulesStore.setModuleSetting('speech', 'positionTemperature', positionTemperature ?? 1);
+	}
+
+	function handleTTSClassTemperatureChange(classTemperature: number | undefined) {
+		if (classTemperature !== undefined && Number.isNaN(classTemperature)) return;
+		modulesStore.setModuleSetting('speech', 'classTemperature', classTemperature ?? 0.2);
 	}
 
 	function handleTTSApiKeyBlur() {
@@ -376,9 +449,24 @@ export function createTtsSettingsState() {
 		},
 		fetchTTSModels,
 		debouncedFetchTTSModels,
-		handleTTSProviderChange,
-		handleTTSModelChange,
-		handleTTSVoiceChange,
+	handleTTSProviderChange,
+	handleTTSModelChange,
+	handleTTSVoiceChange,
+	handleTTSLanguageChange,
+	handleTTSEnableAltLanguageChange,
+	handleTTSEnableToolCallingChange,
+	handleTTSAltLanguageChange,
+	handleTTSAltVoiceChange,
+	handleTTSAltInstructionsChange,
+	handleTTSAltSpeedChange,
+	handleTTSAltNumStepChange,
+	handleTTSAltPositionTemperatureChange,
+	handleTTSAltClassTemperatureChange,
+	handleTTSSpeedChange,
+		handleTTSInstructionsChange,
+		handleTTSNumStepChange,
+		handleTTSPositionTemperatureChange,
+		handleTTSClassTemperatureChange,
 		handleTTSApiKeyBlur,
 		handleApiKeyChange,
 		toggleTTS

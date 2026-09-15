@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import { DropdownMenu } from 'bits-ui';
 	import { settingsStore } from '$lib/stores/settings.svelte';
 	import {
@@ -9,6 +8,15 @@
 		getTTSProvider,
 		type ProviderMetadata
 	} from '$lib/services/providers/registry';
+
+	import {
+		checkTTSProviderHealth,
+		getTTSProviderHealth,
+		subscribeTTSProviderHealth,
+		type HealthStatus
+	} from '$lib/services/providers/health-check';
+
+	import { isLocalTTSProvider } from '$lib/services/providers/local-endpoints';
 	import ProviderIcon from '$lib/components/icons/ProviderIcons.svelte';
 	import { Icon } from '$lib/components/ui';
 
@@ -37,7 +45,7 @@
 	// Group providers by category for TTS
 	const ttsCategories = [
 		{ id: 'cloud', label: 'Cloud TTS', providers: ['elevenlabs', 'openai-tts', 'azure-speech', 'deepgram', 'alibaba-cosyvoice', 'volcengine', 'comet-tts'] },
-		{ id: 'local', label: 'Local / Free', providers: ['local-tts', 'web-speech', 'index-tts', 'browser-local', 'app-local'] },
+		{ id: 'local', label: 'Local / Free', providers: ['local-tts', 'omnivoice', 'web-speech', 'index-tts', 'browser-local', 'app-local'] },
 		{ id: 'generic', label: 'Generic', providers: ['openai-compatible-tts', 'player2-tts'] }
 	];
 
@@ -57,18 +65,56 @@
 			.filter((p): p is ProviderMetadata => p !== undefined);
 	}
 
+	let isOpen = $state(false);
+	let healthRevision = $state(0);
+
+	$effect(() => {
+		return subscribeTTSProviderHealth(() => {
+			healthRevision += 1;
+		});
+	});
+
+	function providerHealthStatus(providerId: string): HealthStatus {
+		// Reference the revision so Svelte re-runs this when health state changes.
+		healthRevision;
+		if (type !== 'tts') return 'unknown';
+		if (!isLocalTTSProvider(providerId)) return 'unknown';
+		const config = settingsStore.getProviderConfig(providerId);
+		return getTTSProviderHealth(providerId, config.baseUrl);
+	}
+
+	function runTTSHealthChecks() {
+		if (type !== 'tts') return;
+		for (const provider of TTS_PROVIDERS) {
+			if (isLocalTTSProvider(provider.id)) {
+				const config = settingsStore.getProviderConfig(provider.id);
+				checkTTSProviderHealth(provider.id, config.baseUrl);
+			}
+		}
+	}
+
+	function handleOpenChange(open: boolean) {
+		isOpen = open;
+		if (open) {
+			runTTSHealthChecks();
+		}
+	}
 	function handleSelect(providerId: string) {
 		onSelect(providerId);
 	}
 </script>
 
-<DropdownMenu.Root>
+<DropdownMenu.Root onOpenChange={handleOpenChange}>
 	<DropdownMenu.Trigger class="dropdown-trigger">
 		{#if selectedProvider}
 			<span class="trigger-icon">
 				<ProviderIcon provider={selectedProvider.id} size={18} themed />
 			</span>
 			<span class="trigger-label">{selectedProvider.name}</span>
+				{@const status = providerHealthStatus(selectedProvider.id)}
+				{#if status !== 'unknown'}
+					<span class="health-dot {status}" title={status === 'healthy' ? 'Reachable' : 'Unreachable'}></span>
+				{/if}
 		{:else}
 			<span class="trigger-placeholder">{placeholder}</span>
 		{/if}
@@ -92,8 +138,12 @@
 										<ProviderIcon provider={provider.id} size={16} themed />
 									</span>
 									<span class="provider-name">{provider.name}</span>
+							{@const status = providerHealthStatus(provider.id)}
+							{#if status !== 'unknown'}
+								<span class="health-dot {status}" title={status === 'healthy' ? 'Reachable' : 'Unreachable'}></span>
+							{/if}
 									{#if provider.isLocal}
-										<span class="badge local">{$t('settings.stt.localModel') || 'Local'}</span>
+										<span class="badge local">Local</span>
 									{:else if isConfigured(provider.id)}
 										<span class="badge configured">
 											<Icon name="check" size={10} strokeWidth={3} />
@@ -270,5 +320,21 @@
 		background: var(--color-success);
 		color: #fff;
 		border-radius: 50%;
+	}
+
+	.health-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--text-tertiary);
+		flex-shrink: 0;
+	}
+
+	.health-dot.healthy {
+		background: var(--color-success);
+	}
+
+	.health-dot.unhealthy {
+		background: var(--color-error);
 	}
 </style>

@@ -1,4 +1,4 @@
-import adapterNode from '@sveltejs/adapter-node';
+import adapterAuto from '@sveltejs/adapter-auto';
 import adapterStatic from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex } from 'mdsvex';
@@ -9,7 +9,7 @@ const isTauri = !!process.env.TAURI_ENV_PLATFORM;
 
 const highlighter = await createHighlighter({
 	themes: ['github-light', 'github-dark'],
-	langs: ['js', 'ts', 'bash', 'json', 'svelte', 'html', 'css', 'md']
+	langs: ['js', 'ts', 'bash', 'json', 'svelte', 'html', 'css', 'md', 'yaml']
 });
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -36,10 +36,7 @@ const config = {
 	kit: {
 		adapter: isTauri
 			? adapterStatic({ fallback: 'index.html' })
-			: adapterNode(),
-		prerender: {
-			handleHttpError: 'warn'
-		},
+			: adapterAuto(),
 		// Lock down the desktop webview: with a broad fs read capability, a script
 		// injection would be dangerous, so forbid inline/remote script execution.
 		// SvelteKit hashes its own inline scripts in 'hash' mode. Applied only to

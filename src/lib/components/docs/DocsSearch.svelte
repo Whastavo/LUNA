@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import Icon from '$lib/components/ui/Icon.svelte';
@@ -146,7 +145,7 @@
 			bind:this={inputEl}
 			{id}
 			type="text"
-			placeholder={$t('docs.searchPlaceholder')}
+			placeholder="Search docs..."
 			value={query}
 			oninput={handleInput}
 			onfocus={handleFocus}
@@ -162,7 +161,7 @@
 	{#if showDropdown}
 		<div class="search-dropdown">
 			{#if isDev && !pagefind}
-				<div class="search-message">{$t('docs.searchProdOnly')}</div>
+				<div class="search-message">Search available in production build</div>
 			{:else if results.length === 0 && query.trim()}
 				<div class="search-message">No results for "{query}"</div>
 			{:else}

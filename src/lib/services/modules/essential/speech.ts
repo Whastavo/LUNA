@@ -35,11 +35,112 @@ export const speechModule: ModuleDefinition = {
 				placeholder: 'Select a voice'
 			},
 			{
+				key: 'activeLanguage',
+				type: 'text',
+				label: 'Language',
+				description: 'Primary language for multilingual TTS (ISO 639-1)',
+				placeholder: 'en',
+				defaultValue: 'en'
+			},
+			{
+				key: 'enableAltLanguage',
+				type: 'boolean',
+				label: 'Enable Alternative Language',
+				description: 'Use a different voice for foreign-language text',
+				defaultValue: false
+			},
+			{
+				key: 'enableToolCalling',
+				type: 'boolean',
+				label: 'Enable Function Calling',
+				description: 'Force language per speech segment (more reliable, but requires LLM function-calling support)',
+				defaultValue: true
+			},
+			{
+				key: 'altLanguage',
+				type: 'text',
+				label: 'Alternative Language',
+				description: 'ISO 639-1 code for the alternative language',
+				placeholder: 'es',
+				defaultValue: ''
+			},
+			{
+				key: 'altVoiceId',
+				type: 'text',
+				label: 'Alternative Voice',
+				description: 'Voice ID for the alternative language',
+				placeholder: 'Select a voice',
+				defaultValue: ''
+			},
+			{
+				key: 'altInstructions',
+				type: 'text',
+				label: 'Alternative Voice Instructions',
+				description: 'Voice design instructions for the alternative language',
+				placeholder: 'e.g. male, middle-aged',
+				defaultValue: ''
+			},
+			{
+				key: 'altSpeed',
+				type: 'number',
+				label: 'Alternative Voice Speed',
+				description: 'Speech rate for the alternative language (0.5-2.0). Falls back to primary speed.',
+				defaultValue: 1.0
+			},
+			{
+				key: 'altNumStep',
+				type: 'number',
+				label: 'Alternative Voice Num Steps',
+				description: 'OmniVoice quality steps for the alternative language (4-64). Falls back to primary.',
+				defaultValue: 32
+			},
+			{
+				key: 'altPositionTemperature',
+				type: 'number',
+				label: 'Alternative Position Temperature',
+				description: 'Voice diversity temperature for the alternative language (0-2). Falls back to primary.',
+				defaultValue: 1.0
+			},
+			{
+				key: 'altClassTemperature',
+				type: 'number',
+				label: 'Alternative Class Temperature',
+				description: 'Token sampling temperature for the alternative language (0-2). Falls back to primary.',
+				defaultValue: 0.2
+			},
+			{
 				key: 'speed',
 				type: 'number',
 				label: 'Speed',
 				description: 'Speech rate (0.5-2.0)',
 				defaultValue: 1.0
+			},
+			{
+				key: 'instructions',
+				type: 'text',
+				label: 'Voice Instructions',
+				description: 'Natural-language description of the synthetic voice',
+			},
+			{
+				key: 'numStep',
+				type: 'number',
+				label: 'Num Steps',
+				description: 'OmniVoice quality steps (4-64)',
+				defaultValue: 32
+			},
+			{
+				key: 'positionTemperature',
+				type: 'number',
+				label: 'Position Temperature',
+				description: 'OmniVoice position temperature (0-2)',
+				defaultValue: 1.0
+			},
+			{
+				key: 'classTemperature',
+				type: 'number',
+				label: 'Class Temperature',
+				description: 'OmniVoice class temperature (0-2)',
+				defaultValue: 0.2
 			}
 		]
 	},

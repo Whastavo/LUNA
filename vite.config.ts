@@ -7,11 +7,6 @@ const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
-	server: {
-		host: '0.0.0.0',
-		port: 3000,
-		allowedHosts: true
-	},
 	define: {
 		'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version),
 		// True only when the frontend is built by the Tauri CLI (which sets

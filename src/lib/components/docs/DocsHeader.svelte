@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import DocsSearch from './DocsSearch.svelte';
 	import { page } from '$app/state';
@@ -31,12 +30,12 @@
 <header class="docs-header">
 	<div class="header-left">
 		{#if onToggleSidebar}
-			<button type="button" class="hamburger" onclick={onToggleSidebar} aria-label={sidebarOpen ? "Cerrar menú" : "Abrir menú"}>
+			<button type="button" class="hamburger" onclick={onToggleSidebar} aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}>
 				<Icon name={sidebarOpen ? 'xmark' : 'bars'} size={18} />
 			</button>
 		{/if}
 		<a href={localPath('docs')} class="logo desktop-logo">
-			<img src="/brand-assets/logo.svg" alt="{$t('app.name')}" class="logo-img" />
+			<img src="/brand-assets/logo.svg" alt="Utsuwa" class="logo-img" />
 		</a>
 	</div>
 	{#if !hideSearch}
@@ -46,19 +45,19 @@
 	{/if}
 	<div class="header-right">
 		<nav class="header-nav">
-			<a href={localPath('docs')} class="nav-link" class:active={isSection('docs')}>{$t('docs.title')}</a>
-			<a href={mainUrl('/blog')} class="nav-link" class:active={currentPath.startsWith('/blog')}>{$t('blog.title')}</a>
+			<a href={localPath('docs')} class="nav-link" class:active={isSection('docs')}>Docs</a>
+			<a href={mainUrl('/blog')} class="nav-link" class:active={currentPath.startsWith('/blog')}>Blog</a>
 		</nav>
 		{#if !hideThemeToggle}
 			<button type="button" class="header-btn" onclick={cycleTheme} aria-label={label} title={label}>
 				<Icon name={iconName} size={18} />
 			</button>
 		{/if}
-		<a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm download-btn">
+		<a href={GITHUB_RELEASES} aria-label="Download Utsuwa" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm download-btn">
 			<Icon name="download" size={14} />
-			{$t("nav.download") || "Descargar"}
+			<span class="download-label">Download</span>
 		</a>
-		<a href={sectionUrl('app')} class="btn btn-primary btn-sm try-live-btn">{$t('docs.tryLive')}</a>
+		<a href={sectionUrl('app')} class="btn btn-primary btn-sm try-live-btn">Try Live</a>
 	</div>
 </header>
 
@@ -214,6 +213,11 @@
 
 		.header-right {
 			gap: 0.25rem;
+		}
+	}
+	@media (max-width: 360px) {
+		.download-label {
+			display: none;
 		}
 	}
 </style>

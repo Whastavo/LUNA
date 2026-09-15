@@ -1,45 +1,36 @@
 ---
-title: Introducción
-description: Qué es Luna y cómo empezar.
+title: Introduction
+description: What is Utsuwa and how to get started.
 ---
 
-# Introducción
+# Introduction
 
-## Resumen Rápido
-- Una aplicación compañera de código abierto con avatares VRM 3D.
-- Carga un modelo VRM, conecta cualquier proveedor de LLM y da vida a tu compañera de IA.
-- Voz, memoria y un sistema de relaciones integrados.
-- Enfoque local prioritario: tus datos permanecen en tu propio dispositivo.
-- Aplicación de escritorio con modo de superposición transparente para macOS, Windows y Linux.
+## TL;DR
 
-## ¿Qué es Luna?
-La mayoría de las compañeras de IA actuales son interfaces de chat de texto o están atrapadas en plataformas cerradas. Luna combina un renderizador de avatares 3D interactivos con un motor de IA flexible que se conecta a cualquier proveedor de tu elección (Ollama local, OpenAI, Anthropic, Gemini, Groq, OpenRouter o vLLM).
+- An open-source VRM avatar companion app
+- Load a VRM model, connect any LLM provider, and bring your AI companion to life
+- Voice, memory, and a relationship system built in
+- Local-first — your data stays on your device
+- Desktop app with transparent overlay mode for macOS, Windows, and Linux
 
-Luna está diseñada para la compañía, la creatividad y el entretenimiento. Te permite personalizar avatares, voces, personalidades y comportamientos manteniendo el control total de tus datos.
+## What is Utsuwa?
 
-## Características Principales
+Most AI companions today are either text-only chat interfaces or locked behind proprietary platforms. You don't own the character and you don't own the data.
 
-### Avatares VRM 3D Interactivos
-Carga cualquier archivo de avatar VRM 3D estándar. Luna renderiza el modelo con expresiones faciales automáticas, sincronización labial (lip sync) basada en voz o audio y físicas de movimiento en tiempo real (spring bones).
+Utsuwa takes a different approach. It gives you a 3D avatar that speaks, remembers your conversations, and develops a relationship with you over time. No accounts, no subscriptions. Your data stays on your device.
 
-### Trae tu Propia IA
-Sin dependencias forzadas de un único proveedor. Conéctate a modelos en la nube como OpenAI, Anthropic, Gemini, Groq u OpenRouter, o ejecuta modelos totalmente locales mediante Ollama o endpoints compatibles con OpenAI (vLLM, LM Studio, Jan, LocalAI).
+Connect any LLM provider you want — OpenAI, Anthropic, Google, DeepSeek, xAI, any OpenAI-compatible endpoint (OpenRouter, Together, vLLM), or a local model through Ollama or LM Studio. Add voice with ElevenLabs, OpenAI TTS, or a local TTS server. For voice input, use a local Whisper server, Groq, OpenAI, or your browser's built-in speech recognition. Load any VRM model as your companion's body. Everything is modular and swappable — and can run entirely on your own machine.
 
-### Arquitectura Local-First
-Tus conversaciones, memoria, configuraciones y datos de personaje se almacenan localmente en tu navegador/equipo usando IndexedDB (a través de Dexie.js). Sin servidores centrales recopilando tus datos.
+"Utsuwa" means "vessel" in Japanese — a container for AI to inhabit visually. The app is the vessel; you choose what goes inside.
 
-### Sistema de Memoria Semántica
-Luna recuerda hechos, preferencias e interacciones clave de conversaciones anteriores utilizando incrustaciones (embeddings) semánticas y un grafo de memoria interactivo visualizable.
+## Getting Started
 
-### Voz y Audio
-Soporte para síntesis de voz (TTS) mediante la API del navegador o motores TTS locales/remotos (como Piper, ElevenLabs o Web Speech API) y reconocimiento de voz (STT) para interactuar mediante la voz.
+<script>
+import DocsGetStartedCards from '$lib/components/docs/DocsGetStartedCards.svelte';
+</script>
 
-### Modos de Aplicación
-- **Modo Compañera**: Conversación fluida con gestos, expresiones y memoria continua.
-- **Modo Novia / Simulador de Citas**: Incluye mecánicas de afinidad, estado de ánimo, niveles de relación y eventos interactivos.
-- **Modo Overlay de Escritorio**: La aplicación de escritorio fija a tu compañera transparente sobre cualquier ventana de trabajo o juego.
+<DocsGetStartedCards />
 
-## Siguientes Pasos
-- Consulta la [Guía Web](/docs/guides/web-guide) para usar Luna en el navegador.
-- Explora la [Guía de Escritorio](/docs/guides/desktop-guide) para instalar la app de escritorio.
-- Configura tu IA local con la [Configuración LLM Local](/docs/guides/local-llm-setup).
+## Contributing
+
+Utsuwa is open source and welcomes contributions. See the [Contributing Guidelines](/docs/community/contributing) for how to get involved.

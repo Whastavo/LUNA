@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { marketingImage } from '$lib/utils/marketing-images';
 	import '$lib/styles/prose.css';
 	import { formatDate } from '$lib/utils/format-date';
 	import { SITE_URL } from '$lib/config/site';
@@ -58,7 +59,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.metadata?.title || 'Blog'} - Luna</title>
+	<title>{data.metadata?.title || 'Blog'} - Utsuwa</title>
 	{#if data.metadata?.description}
 		<meta name="description" content={data.metadata.description} />
 	{/if}
@@ -69,7 +70,7 @@
 	{/if}
 	<meta property="og:image" content={data.metadata?.image ? `${SITE_URL}${data.metadata.image}` : `${SITE_URL}/brand-assets/thumbnail.png`} />
 	<meta property="og:url" content={`${SITE_URL}/blog/${data.slug}`} />
-	<meta property="og:site_name" content="Luna" />
+	<meta property="og:site_name" content="Utsuwa" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={data.metadata?.title || 'Blog'} />
 	{#if data.metadata?.description}
@@ -87,12 +88,12 @@
 		url: `${SITE_URL}/blog/${data.slug}`,
 		author: {
 			'@type': 'Organization',
-			name: 'Luna',
+			name: 'Utsuwa',
 			url: SITE_URL
 		},
 		publisher: {
 			'@type': 'Organization',
-			name: 'Luna',
+			name: 'Utsuwa',
 			url: SITE_URL
 		}
 	})}</script>`}
@@ -127,7 +128,7 @@
 
 	{#if data.metadata?.image}
 		<div class="blog-banner">
-			<img src={data.metadata.image} alt="" />
+			<img {...marketingImage(data.metadata.image, '(max-width: 1280px) calc(100vw - 40px), 1216px')} fetchpriority="high" alt="" />
 		</div>
 	{/if}
 
@@ -194,9 +195,9 @@
 
 	.post-title {
 		font-size: clamp(2.25rem, 5vw, 3.25rem);
-		font-weight: 700;
+		font-weight: 600;
 		line-height: 1.1;
-		letter-spacing: -0.02em;
+		letter-spacing: -0.035em;
 		color: var(--text-primary);
 		margin: 0 0 1.25rem;
 	}

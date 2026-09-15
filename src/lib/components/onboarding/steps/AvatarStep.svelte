@@ -2,7 +2,6 @@
 	import { Icon } from '$lib/components/ui';
 	import { vrmStore } from '$lib/stores/vrm.svelte';
 	import VrmUploader from '$lib/components/vrm/VrmUploader.svelte';
-	import { t } from 'svelte-i18n';
 
 	interface Props {
 		onNext: () => void;
@@ -25,8 +24,8 @@
 
 <div class="ob-step">
 	<div class="ob-head">
-		<h2 class="ob-title">{$t('onboarding.avatarTitle')}</h2>
-		<p class="ob-subtitle">{$t('onboarding.avatarSubtitle')}</p>
+		<h2 class="ob-title">Choose your avatar</h2>
+		<p class="ob-subtitle">Select a VRM model or upload your own.</p>
 	</div>
 
 	<div class="gallery">
@@ -50,7 +49,7 @@
 				</div>
 				<span class="model-name">{model.name}</span>
 				{#if model.isDefault}
-					<span class="default-badge">{$t('common.default')}</span>
+					<span class="default-badge">Default</span>
 				{/if}
 			</button>
 		{/each}
@@ -59,7 +58,7 @@
 			<div class="upload-icon">
 				<Icon name="upload" size={24} />
 			</div>
-			<span class="upload-text">{$t('onboarding.uploadVRM')}</span>
+			<span class="upload-text">Upload VRM</span>
 		</button>
 	</div>
 
@@ -71,7 +70,7 @@
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div class="uploader-container" onclick={(e) => e.stopPropagation()}>
 				<div class="uploader-header">
-					<h3>{$t('vrm.uploadModel')}</h3>
+					<h3>Upload VRM model</h3>
 					<button class="close-btn" onclick={() => showUploader = false}>
 						<Icon name="x" size={18} />
 					</button>
@@ -84,10 +83,10 @@
 	<div class="ob-actions ob-actions--split">
 		<button class="btn btn-secondary" onclick={onBack}>
 			<Icon name="chevron-left" size={16} />
-			{$t('common.back')}
+			Back
 		</button>
 		<button class="btn btn-primary" onclick={onNext}>
-			{$t('common.next')}
+			Next
 			<Icon name="chevron-right" size={16} />
 		</button>
 	</div>

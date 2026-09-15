@@ -14,7 +14,7 @@ const HOUR = 1000 * 60 * 60;
 
 function makeState(overrides: Partial<CharacterState> = {}): CharacterState {
 	return {
-		name: 'Luna',
+		name: 'Utsuwa',
 		systemPrompt: '',
 		extensions: {},
 		mood: { primary: 'neutral', intensity: 50, causes: [] },

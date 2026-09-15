@@ -6,9 +6,8 @@
 	import Scene from './Scene.svelte';
 	import { vrmStore } from '$lib/stores/vrm.svelte';
 	import { arStore } from '$lib/stores/ar.svelte';
-	const CanvasAny = Canvas as any;
-	const XRAny = XR as any;
 	import { preGenerateThumbnails } from '$lib/utils/vrmThumbnail';
+	import { isWebGLAvailable } from '$lib/utils/webgl';
 
 	interface Props {
 		centered?: boolean;
@@ -18,6 +17,7 @@
 
 	let { centered = false, locked = false, overlay = false }: Props = $props();
 	let mounted = $state(false);
+	let webglError = $state(false);
 
 	// Custom renderer factory for screenshot support
 	function createRenderer(canvas: HTMLCanvasElement) {
@@ -30,20 +30,37 @@
 			console.warn('WebGL context restored');
 		});
 
-		const renderer = new WebGLRenderer({
-			canvas,
-			antialias: true,
-			alpha: true,
-			preserveDrawingBuffer: true
-		});
+		// Chrome blocks new contexts after a loss involved page state; the
+		// pre-mount check above normally catches that, this is the last line
+		// of defense for a race between check and creation.
+		try {
+			const renderer = new WebGLRenderer({
+				canvas,
+				antialias: true,
+				alpha: true,
+				preserveDrawingBuffer: true
+			});
 
-		renderer.outputColorSpace = SRGBColorSpace;
-		renderer.toneMapping = NoToneMapping;
+			renderer.outputColorSpace = SRGBColorSpace;
+			renderer.toneMapping = NoToneMapping;
 
-		return renderer;
+			return renderer;
+		} catch (err) {
+			console.error('WebGL renderer creation failed:', err);
+			webglError = true;
+			throw err;
+		}
 	}
 
 	onMount(() => {
+		// After a context loss the browser blocks new contexts for this page
+		// until a reload; creating the renderer would throw an uncaught error
+		// and leave a blank scene. Fail gracefully instead.
+		if (!isWebGLAvailable()) {
+			console.error('WebGL is unavailable — showing fallback');
+			webglError = true;
+			return;
+		}
 		mounted = true;
 
 		// Pre-generate thumbnails for models without previews. Wait for storage
@@ -60,18 +77,23 @@
 </script>
 
 <div class="vrm-scene">
-	{#if mounted}
-		<CanvasAny createRenderer={createRenderer} toneMapping={NoToneMapping}>
+	{#if mounted && !webglError}
+		<Canvas {createRenderer} toneMapping={NoToneMapping}>
 			<!-- Session management only: XR renders children solely while presenting,
 			     so the scene lives beside it and stays mounted in both modes -->
-			<XRAny
-				
-				
+			<XR
+				offerSession={false}
+				enterGrantedSession={false}
 				onsessionstart={() => arStore.setActive(true)}
 				onsessionend={() => arStore.setActive(false)}
 			/>
 			<Scene {centered} {locked} {overlay} />
-		</CanvasAny>
+		</Canvas>
+	{:else if webglError}
+		<div class="vrm-scene-fallback">
+			<p>WebGL is unavailable on this device or browser.</p>
+			<button onclick={() => window.location.reload()}>Reload</button>
+		</div>
 	{/if}
 </div>
 
@@ -79,5 +101,17 @@
 	.vrm-scene {
 		width: 100%;
 		height: 100%;
+	}
+
+	.vrm-scene-fallback {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		align-items: center;
+		justify-content: center;
+		padding: 1rem;
+		text-align: center;
 	}
 </style>

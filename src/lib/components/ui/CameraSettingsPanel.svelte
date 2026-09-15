@@ -12,7 +12,6 @@
 		PHYSICS_INTENSITY_DEFAULT
 	} from '$lib/engine/spring-physics';
 	import { BACKGROUND_PRESETS, presetSwatch } from '$lib/services/scene-backgrounds';
-	import { t } from 'svelte-i18n';
 
 	// Transparent is a photo-capture concept; the scene picker skips it
 	const SCENE_PRESETS = BACKGROUND_PRESETS.filter((p) => !p.photoOnly);
@@ -32,10 +31,10 @@
 	);
 </script>
 
-<div class="camera-panel" role="dialog" aria-label={$t('ui.camera.settings')}>
+<div class="camera-panel" role="dialog" aria-label="Camera settings">
 	<div class="panel-header">
-		<span class="panel-title">{$t('ui.camera.title')}</span>
-		<button class="panel-close" onclick={onclose} aria-label={$t('ui.camera.close')}>
+		<span class="panel-title">Camera</span>
+		<button class="panel-close" onclick={onclose} aria-label="Close camera settings">
 			<Icon name="x" size={14} />
 		</button>
 	</div>
@@ -57,7 +56,7 @@
 
 	<label class="control">
 		<span class="control-label">
-			Altura
+			Height
 			<span class="control-value">{cam.height > 0 ? '+' : ''}{(cam.height * 100).toFixed(0)} cm</span>
 		</span>
 		<input
@@ -72,7 +71,7 @@
 
 	<label class="control">
 		<span class="control-label">
-			{$t('photomode.fieldOfView')}
+			Field of view
 			<span class="control-value">{cam.fov.toFixed(0)}°</span>
 		</span>
 		<input
@@ -86,12 +85,12 @@
 	</label>
 
 	<button class="reset-btn" onclick={() => displayStore.resetCamera(profile)} disabled={isDefault}>
-		Restablecer cámara
+		Reset camera
 	</button>
 
 	{#if profile === 'main'}
 		<div class="section-divider">
-			<span class="section-label">{$t('ui.camera.background')}</span>
+			<span class="section-label">Background</span>
 		</div>
 
 		<div class="swatch-row">
@@ -102,7 +101,7 @@
 						displayStore.sceneBackground.value === preset.bg.value}
 					style:background={presetSwatch(preset)}
 					title={preset.label}
-					aria-label={`Fondo: ${preset.label}`}
+					aria-label={`Background: ${preset.label}`}
 					onclick={() => displayStore.setSceneBackground(preset.bg)}
 				></button>
 			{/each}
@@ -110,15 +109,15 @@
 	{/if}
 
 	<div class="section-divider">
-		<span class="section-label">{$t('ui.camera.physics')}</span>
+		<span class="section-label">Physics</span>
 	</div>
 
 	<label class="control">
 		<span class="control-label">
-			Intensidad de movimiento
+			Movement intensity
 			<span class="control-value">
 				{displayStore.physicsIntensity === PHYSICS_INTENSITY_DEFAULT
-					? $t('common.default')
+					? 'Default'
 					: `${displayStore.physicsIntensity.toFixed(2)}x`}
 			</span>
 		</span>
@@ -131,8 +130,8 @@
 			oninput={(e) => displayStore.setPhysicsIntensity(parseFloat(e.currentTarget.value))}
 		/>
 		<span class="range-ends" aria-hidden="true">
-			<span>{$t('ui.camera.subtle')}</span>
-			<span>{$t('ui.camera.lively')}</span>
+			<span>Subtle</span>
+			<span>Lively</span>
 		</span>
 	</label>
 </div>

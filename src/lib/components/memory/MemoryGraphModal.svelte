@@ -2,7 +2,6 @@
 	import { Icon } from '$lib/components/ui';
 	import MemoryGraph from './MemoryGraph.svelte';
 	import { fadeFast } from '$lib/utils/motion';
-	import { t } from 'svelte-i18n';
 
 	interface Props {
 		onClose: () => void;
@@ -19,14 +18,14 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="modal-overlay" out:fadeFast={{ duration: 160 }} role="dialog" aria-modal="true" aria-label={$t('memory.title')}>
+<div class="modal-overlay" out:fadeFast={{ duration: 160 }} role="dialog" aria-modal="true" aria-label="Memory Graph">
 	<div class="modal-container">
 		<header class="modal-header">
 			<div class="header-info">
 				<Icon name="brain" size={20} />
-				<h2>{$t('memory.title')}</h2>
+				<h2>Memory Graph</h2>
 			</div>
-			<button class="close-btn" onclick={onClose} aria-label={$t('common.close')}>
+			<button class="close-btn" onclick={onClose} aria-label="Close">
 				<Icon name="x" size={20} />
 			</button>
 		</header>

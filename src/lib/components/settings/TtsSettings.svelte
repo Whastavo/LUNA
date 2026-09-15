@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import { settingsStore } from '$lib/stores/settings.svelte';
 	import { getTTSProvider } from '$lib/services/providers/registry';
 	import { Icon, ProviderDropdown, ModelDropdown } from '$lib/components/ui';
+	import OmniVoiceSettings from './OmniVoiceSettings.svelte';
+
+import { checkTTSProviderHealth } from '$lib/services/providers/health-check';
 	import type { TtsSettingsState } from '$lib/stores/ai-services-settings.svelte';
 	import './ai-services-settings.css';
 
@@ -12,12 +14,12 @@
 <div class="service-group">
 	<div class="service-header">
 		<Icon name="mic" size={14} />
-		<span>{$t('settings.tts.title')}</span>
+		<span>Speech (TTS)</span>
 		<button
 			class="service-toggle"
 			class:enabled={state.isTTSEnabled}
 			onclick={state.toggleTTS}
-			aria-label={$t('settings.tts.title')}
+			aria-label="Toggle speech (TTS)"
 		>
 			<span class="toggle-track">
 				<span class="toggle-thumb"></span>
@@ -30,7 +32,7 @@
 			type="tts"
 			value={state.speechSettings.activeProvider as string}
 			onSelect={state.handleTTSProviderChange}
-			placeholder={$t('settings.tts.selectProvider')}
+			placeholder="Select TTS provider..."
 		/>
 
 		{#if state.speechSettings.activeProvider}
@@ -42,7 +44,7 @@
 						type="password"
 						class="api-key-input"
 						class:error={state.ttsFetchError}
-						placeholder={$t('settings.apiKey')}
+						placeholder="API Key"
 						value={settingsStore.getProviderConfig(provider.id).apiKey ?? ''}
 						oninput={(e) => state.handleApiKeyChange(provider.id, e.currentTarget.value)}
 						onblur={state.handleTTSApiKeyBlur}
@@ -55,11 +57,11 @@
 					models={state.ttsModels}
 					value={state.speechSettings.activeModel as string}
 					onSelect={state.handleTTSModelChange}
-					placeholder={$t('settings.tts.selectModel')}
+					placeholder="Select model..."
 					isLoading={state.ttsIsLoading}
 					onRefresh={state.ttsHasApiKey ? state.fetchTTSModels : undefined}
 					disabled={!state.ttsHasApiKey}
-					disabledMessage={$t('settings.enterApiKeyFirst')}
+					disabledMessage="Enter API key first"
 				/>
 			{/if}
 
@@ -68,20 +70,26 @@
 					<input
 						type="text"
 						class="api-key-input"
-						placeholder={$t('settings.tts.customVoiceIdOptional')}
-						value={settingsStore.elevenLabsVoiceId}
-						onchange={(e) => settingsStore.setElevenLabsVoiceId(e.currentTarget.value)}
+						list="elevenlabs-voices"
+						placeholder="Voice ID"
+						value={state.speechSettings.activeVoiceId as string ?? ''}
+						onchange={(e) => state.handleTTSVoiceChange(e.currentTarget.value)}
 					/>
+					<datalist id="elevenlabs-voices">
+						{#each provider?.voices ?? [] as voice}
+							<option value={voice.id}>{voice.name}</option>
+						{/each}
+					</datalist>
 				</div>
 			{/if}
 
-			{#if provider?.isLocal}
+			{#if provider?.isLocal && state.speechSettings.activeProvider !== 'omnivoice'}
 				<div class="api-key-row">
 					<input
 						type="text"
 						class="api-key-input"
 						list="local-tts-voices"
-						placeholder={$t('settings.tts.voicePlaceholder')}
+						placeholder="Voice (e.g. af_bella)"
 						value={state.speechSettings.activeVoiceId as string ?? ''}
 						onchange={(e) => state.handleTTSVoiceChange(e.currentTarget.value)}
 					/>
@@ -95,7 +103,7 @@
 					<input
 						type="text"
 						class="api-key-input"
-						placeholder={$t('settings.tts.modelOptionalPlaceholder')}
+						placeholder="Model (optional, e.g. kokoro)"
 						value={state.speechSettings.activeModel as string ?? ''}
 						onchange={(e) => state.handleTTSModelChange(e.currentTarget.value)}
 					/>
@@ -106,9 +114,16 @@
 						class="api-key-input"
 						placeholder={provider.defaultBaseUrl || 'http://localhost:8880/v1/'}
 						value={settingsStore.getProviderConfig(provider.id).baseUrl ?? ''}
-						onchange={(e) => settingsStore.setProviderConfig(provider.id, { baseUrl: e.currentTarget.value })}
+						onchange={(e) => {
+							settingsStore.setProviderConfig(provider.id, { baseUrl: e.currentTarget.value });
+							checkTTSProviderHealth(provider.id, e.currentTarget.value);
+						}}
 					/>
 				</div>
+			{/if}
+
+			{#if provider && state.speechSettings.activeProvider === 'omnivoice'}
+				<OmniVoiceSettings {state} {provider} />
 			{/if}
 		{/if}
 	{/if}

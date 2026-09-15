@@ -3,10 +3,10 @@
 	import { sttStore } from '$lib/stores/stt.svelte';
 	import { chatDraftStore } from '$lib/stores/chat-draft.svelte';
 	import { queueFiles, showVisionHint } from './attach-files';
+	import { unlockAudioContext } from '$lib/services/tts';
 	import { type PreparedImage } from '$lib/services/storage/keepsakes';
 	import AudioVisualizer from './AudioVisualizer.svelte';
 	import { pop, fadeFast } from '$lib/utils/motion';
-	import { t } from 'svelte-i18n';
 
 	interface Props {
 		onSend: (content: string, images?: PreparedImage[]) => void;
@@ -57,6 +57,8 @@
 	// Single send path: text plus any queued images
 	function doSend() {
 		if (disabled) return;
+		// Inside the gesture, before any await: iOS Safari refuses later
+		unlockAudioContext();
 		const { text, images } = chatDraftStore.takeAll();
 		if (!text && images.length === 0) return;
 		onSend(text, images);
@@ -76,6 +78,7 @@
 	}
 
 	function handleMicClick() {
+		unlockAudioContext();
 		if (!sttStore.isSupported()) {
 			sttStore.showUnsupportedError();
 			return;
@@ -95,11 +98,11 @@
 		<div class="pending-row" out:fadeFast={{ duration: 150 }}>
 			{#each chatDraftStore.pending as p (p.image.id)}
 				<div class="pending-chip" in:pop={{ duration: 200, y: 6, scale: 0.9 }} out:fadeFast={{ duration: 120 }}>
-					<img src={p.url} alt={$t('chat.attachImage')} />
+					<img src={p.url} alt="To show her" />
 					<button
 						type="button"
 						class="remove-chip"
-						aria-label={$t('chat.removeImage')}
+						aria-label="Remove image"
 						onclick={() => chatDraftStore.removePending(p.image.id)}
 					>
 						<Icon name="x" size={12} />
@@ -126,8 +129,8 @@
 			class:focused={hasContent}
 		>
 			{#if isTranscribing}
-				<div class="transcribing-label">{$t('chat.transcribing')}</div>
-				<button type="button" class="mic-btn recording" disabled aria-label={$t('chat.transcribing')}>
+				<div class="transcribing-label">Transcribing...</div>
+				<button type="button" class="mic-btn recording" disabled aria-label="Transcribing">
 					<Icon name="loader" size={20} />
 				</button>
 			{:else if isListening}
@@ -136,8 +139,8 @@
 					type="button"
 					class="mic-btn recording"
 					onclick={() => sttStore.stopListening()}
-					aria-label={$t('chat.stopRecording')}
-					title={$t('chat.stopRecording')}
+					aria-label="Stop recording"
+					title="Stop recording"
 				>
 					<Icon name="stop" size={16} />
 				</button>
@@ -148,8 +151,8 @@
 						class="mic-btn"
 						class:vision-off={!visionCapable}
 						onclick={openPicker}
-						aria-label={$t('chat.attachImage')}
-						title={visionCapable ? $t('chat.attachImage') : 'Este modelo no puede ver imágenes'}
+						aria-label="Attach an image"
+						title={visionCapable ? 'Attach an image' : 'This model cannot see images'}
 					>
 						<Icon name="paperclip" size={20} />
 					</button>
@@ -161,7 +164,7 @@
 					bind:this={textareaRef}
 					bind:value={chatDraftStore.draft}
 					onkeydown={handleKeydown}
-					placeholder={$t('chat.placeholder')}
+					placeholder="Type a message..."
 					rows="1"
 					wrap="off"
 					{disabled}
@@ -170,8 +173,8 @@
 					type="button"
 					class="mic-btn"
 					onclick={handleMicClick}
-					aria-label={$t('chat.voiceInput')}
-					title={$t('chat.voiceInput')}
+					aria-label="Voice input"
+					title="Voice input"
 				>
 					<Icon name="mic" size={20} />
 				</button>

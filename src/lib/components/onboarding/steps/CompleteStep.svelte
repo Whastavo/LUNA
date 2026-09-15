@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Icon } from '$lib/components/ui';
 	import { vrmStore } from '$lib/stores/vrm.svelte';
-	import { t } from 'svelte-i18n';
 
 	interface Props {
 		characterName: string;
@@ -25,12 +24,12 @@
 	</div>
 
 	<div class="ob-head">
-		<h2 class="ob-title">{$t('onboarding.completeTitle', { values: { name: characterName } })}</h2>
-		<p class="ob-subtitle">{$t('onboarding.completeSubtitle')}</p>
+		<h2 class="ob-title">Meet {characterName}</h2>
+		<p class="ob-subtitle">Your companion is ready — say hello whenever you like.</p>
 	</div>
 
 	<button class="btn btn-primary btn-lg btn-block" onclick={onComplete}>
-		{$t('onboarding.startChatting')}
+		Start chatting
 		<Icon name="arrow-right" size={16} />
 	</button>
 </div>

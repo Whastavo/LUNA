@@ -1,6 +1,6 @@
 # Design System
 
-The single reference for how Luna looks. The app and the site (landing, blog, docs) share one token set and one button vocabulary. Read this before adding UI so new work stays consistent.
+The single reference for how Utsuwa looks. The app and the site (landing, blog, docs) share one token set and one button vocabulary. Read this before adding UI so new work stays consistent.
 
 Source of truth: `src/app.css` (`:root` + `.dark`). Everything else consumes those tokens.
 

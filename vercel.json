@@ -1,44 +1,55 @@
 {
+	"headers": [
+		{
+			"source": "/:dir(models|animations|poses|blog|landing-page|brand-assets|audio)/:path*",
+			"headers": [
+				{
+					"key": "Cache-Control",
+					"value": "public, max-age=2592000, immutable"
+				}
+			]
+		}
+	],
 	"rewrites": [
 		{
 			"source": "/",
-			"has": [{ "type": "host", "value": "docs.luna.ai" }],
+			"has": [{ "type": "host", "value": "docs.utsuwa.ai" }],
 			"destination": "/docs"
 		},
 		{
 			"source": "/:path+",
-			"has": [{ "type": "host", "value": "docs.luna.ai" }],
+			"has": [{ "type": "host", "value": "docs.utsuwa.ai" }],
 			"destination": "/docs/:path+"
 		},
 		{
 			"source": "/",
-			"has": [{ "type": "host", "value": "app.luna.ai" }],
+			"has": [{ "type": "host", "value": "app.utsuwa.ai" }],
 			"destination": "/app"
 		}
 	],
 	"redirects": [
 		{
 			"source": "/docs",
-			"has": [{ "type": "host", "value": "luna.ai" }],
-			"destination": "https://docs.luna.ai",
+			"has": [{ "type": "host", "value": "utsuwa.ai" }],
+			"destination": "https://docs.utsuwa.ai",
 			"permanent": true
 		},
 		{
 			"source": "/docs/:path*",
-			"has": [{ "type": "host", "value": "luna.ai" }],
-			"destination": "https://docs.luna.ai/:path*",
+			"has": [{ "type": "host", "value": "utsuwa.ai" }],
+			"destination": "https://docs.utsuwa.ai/:path*",
 			"permanent": true
 		},
 		{
 			"source": "/app",
-			"has": [{ "type": "host", "value": "luna.ai" }],
-			"destination": "https://app.luna.ai",
+			"has": [{ "type": "host", "value": "utsuwa.ai" }],
+			"destination": "https://app.utsuwa.ai",
 			"permanent": true
 		},
 		{
 			"source": "/app/:path*",
-			"has": [{ "type": "host", "value": "luna.ai" }],
-			"destination": "https://app.luna.ai/:path*",
+			"has": [{ "type": "host", "value": "utsuwa.ai" }],
+			"destination": "https://app.utsuwa.ai/:path*",
 			"permanent": true
 		}
 	]

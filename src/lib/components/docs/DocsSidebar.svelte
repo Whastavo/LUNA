@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n';
 	import DocsSidebarSection from './DocsSidebarSection.svelte';
 	import DocsSearch from './DocsSearch.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
@@ -39,7 +38,7 @@
 			<Icon name={iconName} size={14} />
 			<span>{label}</span>
 		</button>
-		<a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="footer-btn" title={$t('footer.github')}>
+		<a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="footer-btn" title="GitHub">
 			<Icon name="github" size={14} />
 		</a>
 	</div>

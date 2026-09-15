@@ -5,7 +5,6 @@
 	import ChoiceDialog from './ChoiceDialog.svelte';
 	import { nextPhase, type ScenePhase } from './scene-flow';
 	import { pop, fadeFast } from '$lib/utils/motion';
-	import { t } from 'svelte-i18n';
 
 	interface Props {
 		scene: Scene;
@@ -88,12 +87,12 @@
 					<Icon name={eventIcon} size={18} />
 					<span>{eventName}</span>
 				</div>
-				<button class="close-btn" onclick={onClose} aria-label={$t('common.close')}>
+				<button class="close-btn" onclick={onClose} aria-label="Close">
 					<Icon name="x" size={16} />
 				</button>
 			</div>
 		{:else}
-			<button class="close-btn floating" onclick={onClose} aria-label={$t('common.close')}>
+			<button class="close-btn floating" onclick={onClose} aria-label="Close">
 				<Icon name="x" size={16} />
 			</button>
 		{/if}
@@ -106,7 +105,7 @@
 			{#if phase === 'intro' && scene.intro}
 				<div class="scene-intro">
 					<p class="intro-text">{scene.intro}</p>
-					<button class="continue-btn" onclick={advance}>{$t('common.continue')}</button>
+					<button class="continue-btn" onclick={advance}>Continue</button>
 				</div>
 			{/if}
 
@@ -116,7 +115,7 @@
 					<div class="speaker-name">{companionName}</div>
 					<p class="dialogue-text">"{scene.dialogue}"</p>
 					{#if !scene.choices || scene.choices.length === 0}
-						<button class="continue-btn" onclick={advance}>{$t('common.continue')}</button>
+						<button class="continue-btn" onclick={advance}>Continue</button>
 					{/if}
 				</div>
 			{/if}
@@ -134,12 +133,12 @@
 			{#if phase === 'response' && selectedChoice}
 				<div class="scene-response">
 					<div class="your-choice">
-						<span class="choice-label">{$t('events.youSaid')}</span>
+						<span class="choice-label">You said:</span>
 						<p class="choice-text">"{selectedChoice.text}"</p>
 					</div>
 					<div class="speaker-name">{companionName}</div>
 					<p class="dialogue-text">"{selectedChoice.response}"</p>
-					<button class="continue-btn" onclick={advance}>{$t('common.continue')}</button>
+					<button class="continue-btn" onclick={advance}>Continue</button>
 				</div>
 			{/if}
 
@@ -147,13 +146,13 @@
 			{#if phase === 'outro' && scene.outro}
 				<div class="scene-outro">
 					<p class="outro-text">{scene.outro}</p>
-					<button class="continue-btn" onclick={advance}>{$t('common.finish')}</button>
+					<button class="continue-btn" onclick={advance}>Finish</button>
 				</div>
 			{/if}
 
 			<!-- Click to continue hint -->
 			{#if phase !== 'choices'}
-				<div class="hint">{$t('events.clickContinue')}</div>
+				<div class="hint">Click anywhere to continue</div>
 			{/if}
 				</div>
 			{/key}

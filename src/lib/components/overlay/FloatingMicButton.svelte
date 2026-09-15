@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Icon } from '$lib/components/ui';
 	import { sttStore } from '$lib/stores/stt.svelte';
-	import { t } from 'svelte-i18n';
 
 	interface Props {
 		onTranscript: (text: string) => void;
@@ -29,13 +28,13 @@
 	<div class="recording-container">
 		<div class="listening-pill">
 			<span class="listening-dot"></span>
-			<span class="listening-text">{$t('chat.listening')}</span>
+			<span class="listening-text">Listening</span>
 		</div>
 		<button
 			class="floating-mic-btn recording"
 			onclick={handleClick}
-			aria-label={$t('chat.stopRecording')}
-			title={$t('chat.stopRecording')}
+			aria-label="Stop recording"
+			title="Stop recording"
 		>
 			<span class="icon-inner">
 				<Icon name="stop" size={18} />
@@ -46,12 +45,12 @@
 {:else if isTranscribing}
 	<div class="recording-container">
 		<div class="listening-pill transcribing-pill">
-			<span class="listening-text">{$t('chat.transcribing')}</span>
+			<span class="listening-text">Transcribing...</span>
 		</div>
 		<button
 			class="floating-mic-btn transcribing"
 			disabled
-			aria-label={$t('chat.transcribing')}
+			aria-label="Transcribing"
 		>
 			<span class="icon-inner">
 				<Icon name="loader" size={20} />
@@ -62,8 +61,8 @@
 	<button
 		class="floating-mic-btn"
 		onclick={handleClick}
-		aria-label={$t('overlay.quickVoiceInput')}
-		title={$t('overlay.quickVoiceInput')}
+		aria-label="Quick voice input"
+		title="Quick voice input"
 	>
 		<span class="icon-inner">
 			<Icon name="mic" size={20} />

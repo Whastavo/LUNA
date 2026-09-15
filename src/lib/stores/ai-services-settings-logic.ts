@@ -48,3 +48,109 @@ export function isProviderReadyForFetch(
 export function createFetchSignature(providerId: string, baseUrl: string | undefined): string {
 	return `${providerId}:${baseUrl ?? ''}`;
 }
+
+// ── OmniVoice voice design helpers ───────────────────────────────────────────
+
+export const OMNI_VOICE_GENDERS = ['male', 'female'] as const;
+export type OmniVoiceGender = (typeof OMNI_VOICE_GENDERS)[number];
+
+export const OMNI_VOICE_AGES = ['child', 'teenager', 'young adult', 'middle-aged', 'elderly'] as const;
+export type OmniVoiceAge = (typeof OMNI_VOICE_AGES)[number];
+
+export const OMNI_VOICE_PITCHES = ['very low', 'low', 'moderate', 'high', 'very high'] as const;
+export type OmniVoicePitch = (typeof OMNI_VOICE_PITCHES)[number];
+
+export const OMNI_VOICE_ACCENTS = ['american', 'british', 'australian', 'indian', 'neutral'] as const;
+export type OmniVoiceAccent = (typeof OMNI_VOICE_ACCENTS)[number];
+
+export interface OmniVoiceDesign {
+	gender: OmniVoiceGender;
+	age: OmniVoiceAge;
+	pitch: OmniVoicePitch;
+	accent: OmniVoiceAccent;
+}
+
+export const DEFAULT_OMNI_VOICE_DESIGN: OmniVoiceDesign = {
+	gender: 'female',
+	age: 'young adult',
+	pitch: 'moderate',
+	accent: 'american'
+};
+
+export interface OmniVoicePresetAttributes {
+	gender: string;
+	age: string;
+	pitch: string;
+	accent: string;
+}
+
+/**
+ * Builds the OmniVoice instruction string from voice design attributes.
+ * Example: "female, young adult, moderate pitch, american accent".
+ */
+export function buildInstructions(
+	gender: string,
+	age: string,
+	pitch: string,
+	accent: string
+): string {
+	const accentPart = accent && accent !== 'neutral' ? `, ${accent} accent` : '';
+	return `${gender}, ${age}, ${pitch} pitch${accentPart}`;
+}
+
+/**
+ * Builds the OmniVoice instruction string for a preset voice.
+ * If the active language is not 'en', the accent part is omitted.
+ */
+export function buildPresetInstructions(
+	voiceId: string,
+	language: string,
+	presetAttributes: Record<string, OmniVoicePresetAttributes>
+): string {
+	const attrs = presetAttributes[voiceId] ?? DEFAULT_OMNI_VOICE_DESIGN;
+	const accent = language === 'en' ? attrs.accent : '';
+	return buildInstructions(attrs.gender, attrs.age, attrs.pitch, accent);
+}
+
+/**
+ * Parses a previously stored instruction string back into design attributes.
+ * Missing or unrecognised parts fall back to the default design.
+ */
+export function parseInstructions(instructions: string): OmniVoiceDesign {
+	const i = instructions.toLowerCase();
+
+	let gender: OmniVoiceGender = DEFAULT_OMNI_VOICE_DESIGN.gender;
+	// Check female first so the substring "male" inside "female" is not picked.
+	if (i.includes('female')) {
+		gender = 'female';
+	} else if (i.includes('male')) {
+		gender = 'male';
+	}
+
+	let pitch: OmniVoicePitch = DEFAULT_OMNI_VOICE_DESIGN.pitch;
+	for (const p of [...OMNI_VOICE_PITCHES].sort((a, b) => b.length - a.length)) {
+		if (i.includes(p)) {
+			pitch = p;
+			break;
+		}
+	}
+
+	let age: OmniVoiceAge = DEFAULT_OMNI_VOICE_DESIGN.age;
+	for (const a of OMNI_VOICE_AGES) {
+		if (i.includes(a)) {
+			age = a;
+			break;
+		}
+	}
+
+	let accent: OmniVoiceAccent = DEFAULT_OMNI_VOICE_DESIGN.accent;
+	const accentMatch = i.match(/(\w+)\s+accent/);
+	if (accentMatch) {
+		const parsedAccent = accentMatch[1];
+		if (OMNI_VOICE_ACCENTS.includes(parsedAccent as OmniVoiceAccent)) {
+			accent = parsedAccent as OmniVoiceAccent;
+		}
+	}
+
+	return { gender, age, pitch, accent };
+}

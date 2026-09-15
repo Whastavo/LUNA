@@ -5,10 +5,59 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.0] - 2026-09-09
+
+### Added
+- OmniVoice can switch languages and voices within a reply. Configure an alternative language with its own preset or cloned voice, speed, and synthesis settings under Settings > Speech (TTS). A test button previews the alternative voice, and its profile warms up in the background. Contributed by @dezihh in [#154](https://github.com/JuiceBoxxGames/utsuwa/pull/154).
+- Optional native speech tool calls require a language for each segment. Local language detection helps validate language tags and route speech to the configured voice. Inline speech markup remains available for models without tool support, including Anthropic.
+
+### Changed
+- The landing, download, blog, and docs pages have updated layouts and navigation, with responsive images and smaller image downloads.
+- OmniVoice prepares short foreign-language segments to reduce silent or swallowed words and supports expressive speech markers without displaying them in chat.
+
+### Fixed
+- Streaming chat and speech now handle fragmented markup, reasoning blocks, internal state, and reminder tags without leaking control text into dialogue. Ordinary dialogue, apostrophes, and decimal numbers survive speech cleanup.
+- Queued speech playback keeps avatar lip-sync working.
+- The avatar view shows a fallback when WebGL is unavailable instead of crashing during renderer creation.
+
+### Upgrade notes
+- Update and restart your local OmniVoice proxy to use the new synthesis parameters. Docker users should rebuild the image after pulling the updated source. See the [OmniVoice guide](https://docs.utsuwa.ai/docs/guides/omnivoice#updating-the-proxy-after-code-changes).
+- Multilingual speech is in beta, with the most testing in German, Spanish, and English. Other languages are less mature, and very short foreign words can still produce weak or missing audio.
+- If your model rejects speech tools or speaks mixed text/tool replies out of order, disable **Force language per segment** in OmniVoice settings.
+
+## [0.13.2] - 2026-08-25
+
+### Fixed
+- **Your ElevenLabs voice is actually yours now**: the custom Voice ID box was saving to a setting the speech pipeline never read, so everyone heard the default voice no matter what they pasted. The field now drives the voice that plays, offers the built-in voices as suggestions, carries over any ID you had already entered, and a wrong ID tells you so instead of quietly falling back. Reported by @Jessika07.
+- The TTS model dropdown no longer forgets your selection every time you open the tab.
+- **Download Save File works in the desktop app**: it writes the file straight into your Downloads folder and shows you the filename. A brand-new profile also could not export at all, on web or desktop; that is fixed too.
+
+## [0.13.1] - 2026-08-03
+
+### Added
+- **Design your OmniVoice voice**: OmniVoice grew a proper settings panel. Pick a language and a preset voice side by side, or describe the voice you want by gender, age, pitch, and accent and let it build one. Sliders for speed and synthesis quality, a Test button that speaks a phrase in the active language, and a Regenerate button when a voice drifts and you want a fresh one. Voices now keep a persistent profile, so the speaker sounds like the same person from sentence to sentence instead of shifting between takes. You can also clone a voice from a few seconds of reference audio, manage your clones, and switch between synthetic and cloned modes. Contributed by @dezihh.
+
+### Fixed
+- **She speaks on iPhones again**: iOS Safari requires audio to start inside your tap, and her voice arrived just late enough to be refused, silently. The audio pipeline now unlocks the moment you hit send, so TTS works on iOS for every provider. One thing the fix cannot do: if the ring/silent switch is on, iOS mutes her anyway. Check the switch before assuming she has nothing to say.
+- Animation files are fetched once and reused instead of being downloaded again on every idle cycle. Less network chatter, quicker transitions.
+
+## [0.13.0] - 2026-07-28
+
+### Added
+- **OmniVoice, a local voice that speaks a lot of languages**: a new keyless TTS provider that runs entirely on your own machine, no cloud account and no API key. Pick it under Settings > Speech (TTS), choose one of thirteen preset voices, set a language and a speed, and she talks. It needs a small proxy you run yourself, which ships in `tools/omnivoice` with a Docker setup for both NVIDIA and CPU machines. The [setup guide](/docs/guides/omnivoice) walks through it. An NVIDIA GPU makes it quick; CPU works but takes its time. Contributed by @dezihh.
+- **You can see whether your local voice server is awake**: local TTS providers now show a small green or red dot in the provider dropdown, so you know at a glance whether the thing on the other end is actually running before you send a message and wait for silence. Contributed by @dezihh.
+
+### Changed
+- The OmniVoice proxy listens on port 8881 rather than 8880, so it can sit alongside a Kokoro or openedai-speech server without the two fighting over the same address.
+- The OmniVoice proxy is published on localhost only. It has no password and accepts requests from anywhere, so it stays on your machine unless you deliberately open it up. The setup guide shows the one-line change if you want to reach it from another device, and what you are agreeing to when you do.
+
+### Fixed
+- Docker Desktop users on Mac and Windows can reach the OmniVoice proxy now. The old container setup used a networking mode that only ever worked on Linux and quietly did nothing everywhere else.
+
 ## [0.12.1] - 2026-07-19
 
 ### License
-- Luna is now licensed under AGPL-3.0-or-later. Everything you could do before you can still do: use it, change it, self-host it, share it. The one new rule is for people who ship a modified Luna to others, including as a hosted service: their changes have to stay open too. Releases up to 0.12.0 remain MIT.
+- Utsuwa is now licensed under AGPL-3.0-or-later. Everything you could do before you can still do: use it, change it, self-host it, share it. The one new rule is for people who ship a modified Utsuwa to others, including as a hosted service: their changes have to stay open too. Releases up to 0.12.0 remain MIT.
 
 ### Added
 - **The chat window grew up**: the old sidebar is now a proper messenger-style window with the input docked inside it. Type where you read. Drag it anywhere by the header, resize it from any edge or corner, snap it to either side, and it remembers exactly where you left it. On phones it opens low on the screen so her face stays in view above the conversation. If it ever ends up somewhere off screen, a Reset position button in Settings > Display brings it home.
@@ -104,7 +153,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Every change now runs the full test suite (197 tests) and type checks in CI before it can merge.
 
 ### Note for existing users
-On your first launch after this update, Luna downloads the new multilingual memory model (about 100 MB, one time, cached after that) and re-indexes your saved memories in the background. Everything keeps working during the re-index; memory recall briefly leans on keyword matching until it finishes.
+On your first launch after this update, Utsuwa downloads the new multilingual memory model (about 100 MB, one time, cached after that) and re-indexes your saved memories in the background. Everything keeps working during the re-index; memory recall briefly leans on keyword matching until it finishes.
 
 ## [0.8.0] - 2026-07-04
 
@@ -147,7 +196,7 @@ On your first launch after this update, Luna downloads the new multilingual memo
 ## [0.7.0] - 2026-07-03
 
 ### Added
-- **Custom OpenAI-compatible LLM endpoint**: point Luna at any OpenAI-compatible API (OpenRouter, Together, Mistral, Perplexity, a local vLLM, LiteLLM, and more) with a base URL, an optional API key, and a model of your choice.
+- **Custom OpenAI-compatible LLM endpoint**: point Utsuwa at any OpenAI-compatible API (OpenRouter, Together, Mistral, Perplexity, a local vLLM, LiteLLM, and more) with a base URL, an optional API key, and a model of your choice.
 - **Local speech-to-text**: run voice input entirely on your machine with any OpenAI-compatible Whisper server (Speaches, faster-whisper-server, whisper.cpp). Audio never leaves your device, and there's no API key or per-minute cost. Includes a new Local STT Setup guide.
 - **OpenAI (Whisper) speech-to-text**: OpenAI's cloud Whisper is now a voice-input option alongside Groq, a local server, and the browser's Web Speech API.
 - **Developer animation preview**: the animation dropdown in the developer panel now lists the bundled emote clips so you can trigger them directly.
@@ -178,7 +227,7 @@ On your first launch after this update, Luna downloads the new multilingual memo
 
 ### Fixed
 - Desktop app now reliably boots into the app on **macOS** (and all platforms). The previous launch raced on macOS WebKit; the window now opens directly into the app, with routing gated by a build-time flag so the landing page and docs are never reachable inside the desktop window.
-- Info modal "Docs" link now points to the docs subdomain (docs.luna.ai) and opens in the system browser on desktop.
+- Info modal "Docs" link now points to the docs subdomain (docs.utsuwa.ai) and opens in the system browser on desktop.
 - Info modal logo is now a clean mark (blue in light mode, white in dark) without the badge container.
 - Desktop update notification now appears from the top of the window.
 - OpenAI TTS now respects the selected model instead of always using `tts-1`.

@@ -1,4 +1,5 @@
 import { db } from '$lib/db';
+import { saveToDownloads } from '$lib/utils/save-to-downloads';
 import { characterStore } from '$lib/stores/character.svelte';
 import { partitionNewRecords, factKey, sessionKey, turnKey, eventKey } from './import-dedup';
 import type {
@@ -66,8 +67,10 @@ export async function exportSave(): Promise<SaveFile> {
 		]
 	);
 
-	// Get the single character state (or use current store state)
-	const characterState = characterStates[0] || $state.snapshot(characterStore.state);
+	// Get the single character state (or use current store state). Runes are
+	// not available in a plain .ts module, so unwrap the store proxy the same
+	// way the file itself is serialised.
+	const characterState = characterStates[0] || JSON.parse(JSON.stringify(characterStore.state));
 
 	// Remove IndexedDB auto-increment ids and derived data (embeddings) from export
 	const { id: _charId, ...cleanCharacter } = characterState as CharacterState & { id?: number };
@@ -176,10 +179,10 @@ export async function importSave(
 						// Build merged character state
 						const mergedState = {
 					// Persona fields from persona or defaults
-					name: (firstPersona?.name as string) || 'Luna',
+					name: (firstPersona?.name as string) || 'Utsuwa',
 					systemPrompt:
 						(firstPersona?.systemPrompt as string) ||
-						'You are a friendly AI assistant named Luna.',
+						'You are a friendly AI assistant named Utsuwa.',
 					extensions: (firstPersona?.extensions as Record<string, unknown>) || {},
 					// Character fields from state or defaults
 					mood: (firstCharState?.mood as MoodState) || {
@@ -284,13 +287,13 @@ export function validateSaveFile(json: unknown): SaveFile | LegacySaveFile | nul
 export function getSaveFilePreview(saveFile: SaveFile | LegacySaveFile): SaveFilePreview {
 	const isV2 = saveFile.version.startsWith('2.');
 
-	let characterName = 'Luna';
+	let characterName = 'Utsuwa';
 	if (isV2) {
 		const v2 = saveFile as SaveFile;
-		characterName = v2.data.character?.name || 'Luna';
+		characterName = v2.data.character?.name || 'Utsuwa';
 	} else {
 		const v1 = saveFile as LegacySaveFile;
-		characterName = (v1.data.personas?.[0]?.name as string) || 'Luna';
+		characterName = (v1.data.personas?.[0]?.name as string) || 'Utsuwa';
 	}
 
 	return {
@@ -307,20 +310,18 @@ export function getSaveFilePreview(saveFile: SaveFile | LegacySaveFile): SaveFil
 	};
 }
 
-export function downloadSaveFile(saveFile: SaveFile): void {
+export async function downloadSaveFile(
+	saveFile: SaveFile
+): Promise<{ filename: string; savedToDownloads: boolean }> {
 	const json = JSON.stringify(saveFile, null, 2);
 	const blob = new Blob([json], { type: 'application/json' });
-	const url = URL.createObjectURL(blob);
 
-	const date = new Date().toISOString().split('T')[0];
-	const filename = `luna-save-${date}.json`;
-
-	const a = document.createElement('a');
-	a.href = url;
-	a.download = filename;
-	a.click();
-
-	URL.revokeObjectURL(url);
+	// Date plus time so two exports on the same day never overwrite each other
+	// on desktop, where the file is written directly instead of auto-renamed.
+	const stamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '');
+	const filename = `utsuwa-save-${stamp}.json`;
+	const savedToDownloads = await saveToDownloads(filename, blob);
+	return { filename, savedToDownloads };
 }
 
 export async function clearAllData(): Promise<void> {

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Icon } from '$lib/components/ui';
 	import { overlayStore } from '$lib/stores/overlay.svelte';
-	import { t } from 'svelte-i18n';
 
 	const isExpanded = $derived(overlayStore.chatExpanded);
 
@@ -14,8 +13,8 @@
 	class="floating-chat-icon"
 	class:expanded={isExpanded}
 	onclick={handleClick}
-	aria-label={isExpanded ? $t('chat.collapseChat') : $t('chat.openChat')}
-	title={isExpanded ? $t('chat.collapseChat') : $t('chat.openChat')}
+	aria-label={isExpanded ? 'Collapse chat' : 'Open chat'}
+	title={isExpanded ? 'Collapse chat' : 'Open chat'}
 >
 	<span class="icon-inner">
 		{#if isExpanded}
