@@ -258,22 +258,12 @@ export function cipher(plain) {
 
 /** @param {Buffer} raw @returns {Promise<Buffer>} */
 export async function decipherLCX(raw) {
-	// WebCrypto solo acepta TypedArrays respaldados por ArrayBuffer, y un Buffer
-	// de Node es Uint8Array<ArrayBufferLike>. Copiar una vez a un Uint8Array
-	// propio permite que iv/data conserven el tipo sin copias extra por subarray.
-	const bytes = Uint8Array.from(raw);
-	const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+	const view = new DataView(raw.buffer, raw.byteOffset, raw.byteLength);
 	const ivLen = view.getUint32(0, true);
-	const iv = bytes.subarray(4, 4 + ivLen);
-	const data = bytes.subarray(4 + ivLen);
+	const iv = new Uint8Array(raw.buffer, raw.byteOffset + 4, ivLen);
+	const data = new Uint8Array(raw.buffer, raw.byteOffset + 4 + ivLen);
 	const { webcrypto } = await import('node:crypto');
-	const key = await webcrypto.subtle.importKey(
-		'raw',
-		Uint8Array.from(KEY),
-		'AES-GCM',
-		false,
-		['decrypt']
-	);
+	const key = await webcrypto.subtle.importKey('raw', KEY, 'AES-GCM', false, ['decrypt']);
 	return Buffer.from(await webcrypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data));
 }
 
