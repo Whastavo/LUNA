@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Utsuwa",
+  "productName": "Luna",
   "version": "0.14.0",
-  "identifier": "com.utsuwa.app",
+  "identifier": "com.luna.app",
   "build": {
     "beforeBuildCommand": "pnpm build",
     "beforeDevCommand": "pnpm dev",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Utsuwa",
+        "title": "Luna",
         "url": "/app",
         "width": 1200,
         "height": 800,
@@ -24,7 +24,7 @@
       },
       {
         "label": "overlay",
-        "title": "Utsuwa Companion",
+        "title": "Luna Companion",
         "url": "/overlay",
         "width": 400,
         "height": 600,
@@ -45,7 +45,7 @@
   "plugins": {
     "updater": {
       "endpoints": [
-        "https://github.com/JuiceBoxxGames/utsuwa/releases/latest/download/latest.json"
+        "https://github.com/JuiceBoxxGames/luna/releases/latest/download/latest.json"
       ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDVFOUNENjZFQTkyOTUxM0UKUldRK1VTbXBidGFjWHVHckhFSitveFRHNHlkTmpWeXhTa3IzZWdpeVNlSDVRMVppeFVhQml2TjgK"
     }
@@ -62,8 +62,8 @@
       "icons/icon.ico"
     ],
     "category": "Entertainment",
-    "shortDescription": "Open Source AI Soul Vessel",
-    "longDescription": "Utsuwa is a VRM avatar viewer with LLM chat and TTS. Load VRM models, chat with AI, and have the avatar speak responses with lip-sync.",
+    "shortDescription": "Tu compañera de IA de Whizzend",
+    "longDescription": "Luna is a VRM avatar viewer with LLM chat and TTS. Load VRM models, chat with AI, and have the avatar speak responses with lip-sync.",
     "macOS": {
       "minimumSystemVersion": "10.15",
       "entitlements": null,

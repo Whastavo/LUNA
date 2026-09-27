@@ -139,17 +139,17 @@ const MAX_FUTURE_MS = 365 * 24 * 60 * 60 * 1000;
  */
 export function validateReminder(content: string, triggerAt: Date): string | null {
 	if (!content.trim()) {
-		return 'Reminder content cannot be empty';
+		return 'El contenido del recordatorio no puede estar vacío';
 	}
 
 	const triggerMs = triggerAt.getTime();
 	if (Number.isNaN(triggerMs)) {
-		return 'Invalid reminder trigger time';
+		return 'Hora de activación del recordatorio no válida';
 	}
 
 	const now = Date.now();
 	if (triggerMs > now + MAX_FUTURE_MS) {
-		return 'Reminder trigger time is too far in the future';
+		return 'La hora de activación del recordatorio es demasiado lejana';
 	}
 
 	return null;

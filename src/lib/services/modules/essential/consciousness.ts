@@ -13,58 +13,50 @@ export const consciousnessModule: ModuleDefinition = {
 		fields: [
 			{
 				key: 'activeProvider',
-				type: 'provider-select',
-				label: 'LLM Provider',
-				description: 'Select from your configured LLM providers',
+				type: 'provider-select',					label: 'Proveedor LLM',
+					description: 'Selecciona entre tus proveedores LLM configurados',
 				providerCategory: 'llm',
 				defaultValue: ''
 			},
 			{
 				key: 'activeModel',
-				type: 'model-select',
-				label: 'Model',
-				description: 'Select a model from the chosen provider',
+				type: 'model-select',					label: 'Modelo',
+					description: 'Selecciona un modelo del proveedor elegido',
 				dependsOnField: 'activeProvider',
 				providerCategory: 'llm'
 			},
 			{
 				key: 'temperature',
-				type: 'number',
-				label: 'Temperature',
-				description: 'Controls randomness in responses (0.0-2.0)',
+				type: 'number',					label: 'Temperatura',
+					description: 'Controla la aleatoriedad en las respuestas (0.0-2.0)',
 				defaultValue: 0.7
 			},
 			{
 				key: 'topP',
-				type: 'number',
-				label: 'Top P',
-				description: 'Nucleus sampling threshold (0.0-1.0)',
+				type: 'number',					label: 'Top P',
+					description: 'Umble de muestreo por núcleo (0.0-1.0)',
 				defaultValue: 1.0
 			},
 			{
 				key: 'maxTokens',
-				type: 'number',
-				label: 'Max Tokens',
-				description: 'Maximum tokens in response. Leave empty to use the provider default.'
+				type: 'number',					label: 'Tokens máximos',
+					description: 'Tokens máximos en la respuesta. Déjalo vacío para usar el valor por defecto del proveedor.'
 			},
 			{
 				key: 'contextSize',
-				type: 'number',
-				label: 'Context Window',
-				description: 'Maximum context size of the selected model in tokens. Used to scale memory injection and truncate history. Leave empty to keep the default behavior.'
+				type: 'number',					label: 'Ventana de contexto',
+					description: 'Tamaño máximo de contexto del modelo seleccionado en tokens. Se usa para escalar la inyección de memoria y truncar el historial. Déjalo vacío para mantener el comportamiento por defecto.'
 			},
 			{
 				key: 'presencePenalty',
-				type: 'number',
-				label: 'Presence Penalty',
-				description: 'Penalizes tokens that have already appeared (-2.0 to 2.0)',
+				type: 'number',					label: 'Penalización de presencia',
+					description: 'Penaliza tokens que ya han aparecido (-2.0 a 2.0)',
 				defaultValue: 0
 			},
 			{
 				key: 'frequencyPenalty',
-				type: 'number',
-				label: 'Frequency Penalty',
-				description: 'Penalizes tokens based on how often they appeared (-2.0 to 2.0)',
+				type: 'number',					label: 'Penalización de frecuencia',
+					description: 'Penaliza tokens según la frecuencia con la que han aparecido (-2.0 a 2.0)',
 				defaultValue: 0
 			}
 		]

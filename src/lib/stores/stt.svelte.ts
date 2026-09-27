@@ -40,8 +40,7 @@ function createSttStore() {
 		openAiSttService.configure({
 			baseUrl,
 			model,
-			apiKey: config.apiKey || undefined,
-			label: isLocal ? 'the local STT server' : (meta?.name ?? 'the STT server'),
+			apiKey: config.apiKey || undefined,				label: isLocal ? 'el servidor STT local' : (meta?.name ?? 'el servidor STT'),
 			connectionHint: isLocal
 				? getLocalSTTConnectionHint(baseUrl, browser ? window.location.origin : undefined)
 				: undefined
@@ -170,9 +169,9 @@ function createSttStore() {
 
 	function showUnsupportedError() {
 		if (isTauri()) {
-			setError('Add a Groq key or a local STT server in Settings → Persona for voice input on desktop.');
+			setError('Añade una clave de Groq o un servidor STT local en Ajustes → Persona para la entrada de voz en escritorio.');
 		} else {
-			setError('Voice input is not supported in this browser. Add a Groq key or a local STT server in Settings → Persona, or try Chrome/Edge.');
+			setError('La entrada de voz no es compatible con este navegador. Añade una clave de Groq o un servidor STT local en Ajustes → Persona, o prueba Chrome/Edge.');
 		}
 	}
 

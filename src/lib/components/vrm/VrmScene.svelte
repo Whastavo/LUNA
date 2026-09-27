@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { Canvas } from '@threlte/core';
-	import { XR } from '@threlte/xr';
 	import { WebGLRenderer, SRGBColorSpace, NoToneMapping } from 'three';
 	import { onMount } from 'svelte';
 	import Scene from './Scene.svelte';
+	import type { ChatFrame } from './chat-framing';
 	import { vrmStore } from '$lib/stores/vrm.svelte';
-	import { arStore } from '$lib/stores/ar.svelte';
 	import { preGenerateThumbnails } from '$lib/utils/vrmThumbnail';
 	import { isWebGLAvailable } from '$lib/utils/webgl';
 
@@ -13,9 +12,11 @@
 		centered?: boolean;
 		locked?: boolean;
 		overlay?: boolean;
+		/** Chat dock framing (0.15.0): passed through to the Scene. */
+		framing?: ChatFrame;
 	}
 
-	let { centered = false, locked = false, overlay = false }: Props = $props();
+	let { centered = false, locked = false, overlay = false, framing }: Props = $props();
 	let mounted = $state(false);
 	let webglError = $state(false);
 
@@ -65,8 +66,12 @@
 
 		// Pre-generate thumbnails for models without previews. Wait for storage
 		// init first, otherwise saved previews look missing and get regenerated.
+		// El render offscreen es respaldo para customs SIN retrato ya
+		// persistido: nunca pisa la captura viva ni la restaurada.
 		vrmStore.whenReady().then(() => {
-			const modelsNeedingThumbnails = vrmStore.models.filter((m) => !m.previewUrl);
+			const modelsNeedingThumbnails = vrmStore.models.filter(
+				(m) => !m.previewUrl && !vrmStore.hasSessionPortrait(m.id)
+			);
 			if (modelsNeedingThumbnails.length > 0) {
 				preGenerateThumbnails(modelsNeedingThumbnails, (modelId, dataUrl) => {
 					vrmStore.setModelPreview(modelId, dataUrl);
@@ -79,20 +84,12 @@
 <div class="vrm-scene">
 	{#if mounted && !webglError}
 		<Canvas {createRenderer} toneMapping={NoToneMapping}>
-			<!-- Session management only: XR renders children solely while presenting,
-			     so the scene lives beside it and stays mounted in both modes -->
-			<XR
-				offerSession={false}
-				enterGrantedSession={false}
-				onsessionstart={() => arStore.setActive(true)}
-				onsessionend={() => arStore.setActive(false)}
-			/>
-			<Scene {centered} {locked} {overlay} />
+			<Scene {centered} {locked} {overlay} {framing} />
 		</Canvas>
 	{:else if webglError}
 		<div class="vrm-scene-fallback">
-			<p>WebGL is unavailable on this device or browser.</p>
-			<button onclick={() => window.location.reload()}>Reload</button>
+			<p>WebGL no está disponible en este dispositivo o navegador.</p>
+			<button onclick={() => window.location.reload()}>Recargar</button>
 		</div>
 	{/if}
 </div>

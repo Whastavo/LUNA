@@ -27,7 +27,7 @@
 		placeholder?: string;
 	}
 
-	let { type, value, onSelect, placeholder = 'Select provider...' }: Props = $props();
+	let { type, value, onSelect, placeholder = 'Selecciona proveedor...' }: Props = $props();
 
 	const providers = $derived(type === 'llm' ? LLM_PROVIDERS : TTS_PROVIDERS);
 	const getProvider = $derived(type === 'llm' ? getLLMProvider : getTTSProvider);
@@ -122,7 +122,7 @@
 	</DropdownMenu.Trigger>
 
 	<DropdownMenu.Portal>
-		<DropdownMenu.Content class="dropdown-content" align="start" sideOffset={4}>
+		<DropdownMenu.Content class="dropdown-content glass-panel" align="start" sideOffset={4}>
 			<div class="dropdown-scroll">
 				{#each categories as category}
 					{@const categoryProviders = getProvidersByCategory(category.providers)}
@@ -166,7 +166,7 @@
 		gap: 0.5rem;
 		width: 100%;
 		padding: 0.75rem 1rem;
-		background: var(--bg-tertiary);
+		background: var(--chrome-wash);
 		border: 1px solid transparent;
 		border-radius: var(--radius-md);
 		cursor: pointer;
@@ -207,10 +207,8 @@
 		z-index: 1050;
 		min-width: 280px;
 		max-width: 320px;
-		background: var(--bg-primary);
 		border-radius: var(--radius-lg);
 		padding: 0.5rem;
-		box-shadow: var(--shadow-lg);
 		animation: slideDown 0.16s var(--ease-brand);
 	}
 
@@ -272,7 +270,7 @@
 
 	:global(.provider-item:hover),
 	:global(.provider-item[data-highlighted]) {
-		background: var(--bg-secondary);
+		background: var(--hover-wash-strong);
 	}
 
 	:global(.provider-item.selected) {

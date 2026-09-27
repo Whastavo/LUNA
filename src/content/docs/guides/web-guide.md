@@ -1,117 +1,113 @@
 ---
-title: Web Guide
-description: How to set up and use Utsuwa on the web.
+title: Guía web
+description: Cómo configurar y usar Luna en la web.
 ---
 
-# Web Guide
+# Guía web
 
-This guide walks you through using Utsuwa, whether on the hosted version at [utsuwa.ai](https://utsuwa.ai) or a self-hosted instance.
+Esta guía te acompaña en el uso de Luna, ya sea en la versión alojada en [luna.ai](https://luna.ai) o en una instancia auto-alojada.
 
-## Self-Hosting Setup
+## Auto-alojamiento
 
-### Prerequisites
+### Requisitos previos
 
-- Node.js 22 or higher
+- Node.js 22 o superior
 - pnpm
-- A modern browser (Chrome, Firefox, Safari, Edge)
+- Un navegador moderno (Chrome, Firefox, Safari, Edge)
 
-### Installation
+### Instalación
 
 ```bash
-git clone https://github.com/JuiceBoxxGames/utsuwa.git
-cd utsuwa
+git clone https://github.com/JuiceBoxxGames/luna.git
+cd luna
 pnpm install
 pnpm dev
 ```
 
-The app will be available at `http://localhost:5173`.
+La app estará disponible en `http://localhost:5173`.
 
-## Initial Configuration
+## Configuración inicial
 
-### 1. Configure an LLM Provider
+### 1. Configurar un proveedor de LLM
 
-Your companion needs an LLM to generate responses.
+Tu compañera necesita un LLM para generar respuestas.
 
-1. Open the **Controls** panel (sliders icon, top right) and click the **Settings** (gear) button
-2. Navigate to the **Character** tab and open the **AI Services** section
-3. Enable the Chat (LLM) toggle, then select a provider from the dropdown and enter your API key
-4. Alternatively, use a local server like Ollama or LM Studio (no API key needed)
+1. Abre el panel de **Controles** (icono de deslizadores, arriba a la derecha) y pulsa el botón de **Ajustes** (engranaje)
+2. Ve a la pestaña **Personaje** y abre la sección de **Servicios de IA**
+3. Activa el interruptor de Chat (LLM), luego selecciona un proveedor del desplegable e introduce tu clave de API
+4. Alternativamente, usa un servidor local como Ollama o LM Studio (no necesita clave de API)
 
-All API keys are stored locally on your device and never sent anywhere except the respective provider's API.
+Todas las claves de API se guardan localmente en tu dispositivo y nunca se envían a ningún sitio salvo a la API del proveedor correspondiente.
 
-### 2. Load a VRM Model
+### 2. Cargar un modelo VRM
 
-Utsuwa comes with a default avatar, but you can load your own:
+Luna trae un avatar por defecto, pero puedes cargar el tuyo:
 
-1. Go to **Settings > Character**
-2. Click **Add Custom** in the Avatar section and select a local `.vrm` file (drag-and-drop works too)
+1. Ve a **Ajustes > Personaje**
+2. Pulsa **Añadir personalizado** en la sección Avatar y selecciona un archivo `.vrm` local (arrastrar y soltar también funciona)
 
-### 3. Configure Text-to-Speech (Optional)
+### 3. Configurar texto-a-voz (opcional)
 
-To have your companion speak responses aloud:
+Para que tu compañera hable las respuestas en voz alta:
 
-1. Go to **Settings > Character** and open the **AI Services** section
-2. Enable the Speech (TTS) toggle, then select a provider (ElevenLabs, OpenAI TTS, or Local TTS)
-3. Enter your API key (cloud providers) and configure voice settings
+1. Ve a **Ajustes > Personaje** y abre la sección de **Servicios de IA**
+2. Activa el interruptor de Voz (TTS), luego selecciona un proveedor (ElevenLabs, OpenAI TTS o TTS local)
+3. Introduce tu clave de API (proveedores en la nube) y configura los ajustes de voz
 
-## Using the Chat
+## Usar el chat
 
-Type a message in the bottom chat bar and press Enter. Your companion's response will appear as a 3D speech bubble tracking the avatar's head.
+Escribe un mensaje en la barra de chat inferior y pulsa Enter. La respuesta de tu compañera aparecerá como una burbuja de diálogo 3D que sigue la cabeza del avatar.
 
-If TTS is enabled, the avatar will speak the response with lip-synced animation.
+Si el TTS está activado, el avatar hablará la respuesta con animación de lip-sync.
 
-## Voice Input
+## Entrada de voz
 
-Click the microphone button in the chat bar to use speech-to-text. Three options are available:
+Pulsa el botón del micrófono en la barra de chat para usar voz-a-texto. Hay tres opciones disponibles:
 
-- **Local Whisper server** — Self-hosted, OpenAI-compatible transcription (Speaches, faster-whisper-server, whisper.cpp) via the `/v1/audio/transcriptions` endpoint. Audio never leaves your machine. Configure it in **Settings > Character** under Voice Input (STT) with a base URL (default `http://localhost:8000/v1/`) and a model name.
-- **Groq or OpenAI Whisper** — Higher-quality cloud transcription via Groq's or OpenAI's Whisper API. Requires the respective API key, added in the same Voice Input (STT) section.
-- **Web Speech API** — Built into your browser (Chrome, Edge, Safari). No API key required. The default in the browser when nothing else is configured.
+- **Servidor Whisper local** — Transcripción auto-alojada compatible con OpenAI (Speaches, faster-whisper-server, whisper.cpp) vía el endpoint `/v1/audio/transcriptions`. El audio nunca sale de tu máquina. Configúralo en **Ajustes > Personaje** bajo Entrada de voz (STT) con una URL base (por defecto `http://localhost:8000/v1/`) y un nombre de modelo.
+- **Whisper de Groq u OpenAI** — Transcripción en la nube de mayor calidad vía la API Whisper de Groq u OpenAI. Requiere la clave de API correspondiente, añadida en la misma sección de Entrada de voz (STT).
+- **Web Speech API** — Integrada en tu navegador (Chrome, Edge, Safari). No requiere clave de API. Es la opción por defecto en el navegador cuando no hay nada más configurado.
 
-Selection is automatic by priority: a configured local server wins, then Groq, then OpenAI, then Web Speech. On the desktop app the Web Speech API is unavailable, so configure either a local Whisper server or a Groq key for voice input.
+La selección es automática por prioridad: gana un servidor local configurado, luego Groq, luego OpenAI, luego Web Speech. En la app de escritorio la Web Speech API no está disponible, así que configura un servidor Whisper local o una clave de Groq para la entrada de voz.
 
-See [Local STT Setup](/docs/guides/local-stt-setup) for running a local Whisper server.
+Consulta [Configurar STT local](/docs/guides/local-stt-setup) para ejecutar un servidor Whisper local.
 
-## Photo Mode
+## Modo foto
 
-Click the **camera button** (top left) to open Photo Mode. A compact tabbed panel appears in the corner:
+Pulsa el **botón de cámara** (arriba a la izquierda) para abrir el modo foto. Aparece un panel compacto con pestañas en la esquina:
 
-- **Camera** — lens (field of view) slider, a head-tracking toggle so she looks at your camera, a rule-of-thirds grid, and framing reset. Orbit, pan, and zoom freely while posing
-- **Pose** — hold a pose from the pose library, or Natural for her regular stance
-- **Face** — pick from the expressions your model actually ships
-- **Scene** — background presets (including transparent for stickers), color filters, a vignette, and polaroid or film frames
-- **Sticker** — drop stickers on the shot, drag to move, scroll to resize, double-click or use the list to remove
+- **Cámara** — deslizador de lente (campo de visión), un interruptor de seguimiento de cabeza para que te mire, una cuadrícula de tercios y restablecer el encuadre. Orbita, desplaza y haz zoom libremente mientras posas
+- **Pose** — mantén una pose de la biblioteca de poses, o Natural para su postura habitual
+- **Cara** — elige entre las expresiones que realmente incluye tu modelo
+- **Escena** — fondos predefinidos (incluido transparente para stickers), filtros de color, una viñeta y marcos de polaroid o película
+- **Sticker** — suelta stickers en la toma, arrástralos para moverlos, usa la rueda para redimensionarlos, doble clic o la lista para quitarlos
 
-Capture at high resolution, take a quick snap, or use the 3 second self-timer. What you see in the preview is exactly what the file contains. Captures land in your Downloads folder on both the web and desktop apps; they are kept out of the photoboard, which stays reserved for images you have shown her. Press Escape or the X to exit.
+Captura en alta resolución, toma un instantáneo rápido o usa el temporizador de 3 segundos. Lo que ves en la vista previa es exactamente lo que contiene el archivo. Las capturas van a tu carpeta de Descargas tanto en la app web como en la de escritorio; se mantienen fuera del tablero de fotos, que queda reservado a las imágenes que le has mostrado. Pulsa Escape o la X para salir.
 
-## Reminders and Timers
+## Recordatorios y temporizadores
 
-Ask her in chat: "remind me in 10 minutes to stretch." She schedules it, brings it up herself when it fires, and notices timers that came due while the app was closed. The alarm bell (top right) shows pending tasks and fired or missed reminders; dismissals persist. Reminders stay in sync between the main app and the desktop overlay.
+Pídeselo en el chat: «recuérdame en 10 minutos estirarme». Ella lo programa, lo menciona ella misma cuando salta, y se fija en los temporizadores que vencieron mientras la app estaba cerrada. La campana de alarma (arriba a la derecha) muestra las tareas pendientes y los recordatorios activados o perdidos; los descartes se conservan. Los recordatorios se mantienen sincronizados entre la app principal y la superposición de escritorio.
 
-## Touch
+## Tocar
 
-Tap her and she reacts: an expression and a small ripple through her hair and clothes. Where you tap matters, and so does your relationship stage; early on she is easily flustered, and warmer reactions come with closeness. A quick tap reacts; dragging orbits the camera and never triggers her.
+Tócala y reacciona: una expresión y una pequeña onda por su pelo y su ropa. Dónde toques importa, y también tu etapa de relación; al principio se sonroja con facilidad, y las reacciones más cálidas llegan con la cercanía. Un toque rápido provoca una reacción; arrastrar orbita la cámara y nunca la activa.
 
-## Scene Controls
+## Controles de escena
 
-The **Controls** panel (sliders icon, top right, then the camera icon) holds the scene:
+El panel de **Controles** (icono de deslizadores, arriba a la derecha, y luego el icono de cámara) guarda la escena:
 
-- **Camera** — zoom, height, and field of view sliders with a reset
-- **Background** — persistent scene backdrops: solids, pastel gradients (Sakura, Peach, Lavender, and more), and patterns (dots, hearts, sparkles, candy stripes, gingham)
-- **Physics** — a Movement intensity slider from Subtle to Lively that scales spring-bone motion (hair, skirts, ribbons) while respecting each model's own tuning
+- **Cámara** — deslizadores de zoom, altura y campo de visión con restablecimiento
+- **Fondo** — fondos de escena persistentes: colores sólidos, degradados pastel (Sakura, Melocotón, Lavanda y más) y patrones (puntos, corazones, destellos, rayas de caramelo, vichy)
+- **Física** — un deslizador de intensidad de movimiento de Sutil a Vivo que escala el movimiento de huesos con muelle (pelo, faldas, lazos) respetando el ajuste propio de cada modelo
 
-## AR Mode
+## Gestión de datos
 
-On WebXR-capable devices (Android Chrome, headset browsers), the cube icon in the Controls cluster places your companion in your real space: put her on your floor, drag her around, and pinch to resize. Entering Photo Mode ends an AR session first; photos always compose against the regular scene.
+Todos los datos se guardan localmente en tu dispositivo.
 
-## Data Management
+- **Exportar** — Ve a Ajustes > Datos > Exportar guardado para descargar una copia de seguridad JSON
+- **Importar** — Ve a Ajustes > Datos > Importar guardado para restaurar desde una copia
+- **Combinar o reemplazar** — Elige si añadir los datos importados a los existentes o reemplazarlos por completo
 
-All data is stored locally on your device.
+## Temas
 
-- **Export** — Go to Settings > Data > Export Save to download a JSON backup
-- **Import** — Go to Settings > Data > Import Save to restore from a backup
-- **Merge or Replace** — Choose whether to add imported data to existing data or replace it entirely
-
-## Themes
-
-Utsuwa supports light and dark modes with automatic system preference detection. Open the **Controls** panel (sliders icon, top right) and click the theme button to cycle System, Light, and Dark.
+Luna admite modos claro y oscuro con detección automática de la preferencia del sistema. Abre el panel de **Controles** (icono de deslizadores, arriba a la derecha) y pulsa el botón de tema para alternar Sistema, Claro y Oscuro.

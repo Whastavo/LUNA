@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>Luna · No disponible</title>
+		<style>
+			:root {
+				color-scheme: light dark;
+				--pagina: #ffffff;
+				--texto: #1d1d1f;
+				--secundario: #6e6e73;
+				--borde: #d2d2d7;
+			}
+
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--pagina: #000000;
+					--texto: #f5f5f7;
+					--secundario: #a1a1a6;
+					--borde: #2a2a2e;
+				}
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				min-height: 100vh;
+				display: grid;
+				place-items: center;
+				background: var(--pagina);
+				color: var(--texto);
+				font-family: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+				padding: 2rem 1.25rem;
+			}
+
+			.contenido {
+				text-align: center;
+				max-width: 32rem;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 0.75rem;
+			}
+
+			.retrato {
+				width: clamp(88px, 18vw, 116px);
+				aspect-ratio: 1;
+				border-radius: 50%;
+				object-fit: cover;
+				background: var(--secundario);
+				border: 3px solid var(--borde);
+				margin-bottom: 0.5rem;
+			}
+
+			.estado {
+				font-size: 0.8125rem;
+				font-weight: 600;
+				letter-spacing: 0.14em;
+				color: var(--secundario);
+			}
+
+			h1 {
+				font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+				font-weight: 700;
+				letter-spacing: -0.02em;
+				line-height: 1.15;
+			}
+
+			p {
+				color: var(--secundario);
+				font-size: 1rem;
+				line-height: 1.55;
+				max-width: 27rem;
+			}
+
+			.acciones {
+				display: flex;
+				gap: 0.625rem;
+				flex-wrap: wrap;
+				justify-content: center;
+				margin-top: 1rem;
+			}
+
+			button,
+			a.boton {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				height: 44px;
+				padding: 0 1.375rem;
+				border-radius: 999px;
+				font-size: 0.9375rem;
+				font-weight: 600;
+				font-family: inherit;
+				cursor: pointer;
+				text-decoration: none;
+			}
+
+			button {
+				background: var(--texto);
+				color: var(--pagina);
+				border: none;
+			}
+
+			a.boton {
+				background: transparent;
+				color: var(--texto);
+				border: 1px solid var(--borde);
+			}
+		</style>
+	</head>
+	<body>
+		<main class="contenido">
+			<img class="retrato" src="/luna/faces/luna.png" alt="" draggable="false" />
+			<p class="estado">%sveltekit.status%</p>
+			<h1>Luna no está disponible ahora mismo</h1>
+			<p>%sveltekit.error.message% — normalmente es pasajero. Reintenta en unos segundos; tu historial y tus recuerdos están a salvo.</p>
+			<div class="acciones">
+				<button onclick="location.reload()">Reintentar</button>
+				<a class="boton" href="/">Ir al inicio</a>
+			</div>
+		</main>
+	</body>
+</html>

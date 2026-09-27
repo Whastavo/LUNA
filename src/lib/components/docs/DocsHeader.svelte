@@ -3,7 +3,6 @@
 	import DocsSearch from './DocsSearch.svelte';
 	import { page } from '$app/state';
 	import { cycleTheme, getIconName, getLabel } from '$lib/config/docs-theme-toggle.svelte';
-	import { GITHUB_RELEASES } from '$lib/config/site';
 	import { localPath, sectionUrl, mainUrl, isSection } from '$lib/config/links';
 
 	interface Props {
@@ -30,12 +29,12 @@
 <header class="docs-header">
 	<div class="header-left">
 		{#if onToggleSidebar}
-			<button type="button" class="hamburger" onclick={onToggleSidebar} aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}>
+			<button type="button" class="hamburger" onclick={onToggleSidebar} aria-label={sidebarOpen ? 'Cerrar menú' : 'Abrir menú'}>
 				<Icon name={sidebarOpen ? 'xmark' : 'bars'} size={18} />
 			</button>
 		{/if}
 		<a href={localPath('docs')} class="logo desktop-logo">
-			<img src="/brand-assets/logo.svg" alt="Utsuwa" class="logo-img" />
+			<img src="/brand-assets/logo.svg" alt="Luna" class="logo-img" />
 		</a>
 	</div>
 	{#if !hideSearch}
@@ -45,7 +44,7 @@
 	{/if}
 	<div class="header-right">
 		<nav class="header-nav">
-			<a href={localPath('docs')} class="nav-link" class:active={isSection('docs')}>Docs</a>
+			<a href={localPath('docs')} class="nav-link" class:active={isSection('docs')}>Documentación</a>
 			<a href={mainUrl('/blog')} class="nav-link" class:active={currentPath.startsWith('/blog')}>Blog</a>
 		</nav>
 		{#if !hideThemeToggle}
@@ -53,11 +52,11 @@
 				<Icon name={iconName} size={18} />
 			</button>
 		{/if}
-		<a href={GITHUB_RELEASES} aria-label="Download Utsuwa" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm download-btn">
+		<a href="/descargar" aria-label="Descargar Luna" class="btn btn-secondary btn-sm download-btn">
 			<Icon name="download" size={14} />
-			<span class="download-label">Download</span>
+			<span class="download-label">Descargar</span>
 		</a>
-		<a href={sectionUrl('app')} class="btn btn-primary btn-sm try-live-btn">Try Live</a>
+		<a href={sectionUrl('app')} class="btn btn-primary btn-sm try-live-btn">Pruébala</a>
 	</div>
 </header>
 
@@ -102,7 +101,8 @@
 	}
 
 	.logo-img {
-		height: 1.5rem;
+		/* Same optical size as the landing nav (1.125rem) — one brand, one scale */
+		height: 1.125rem;
 		width: auto;
 		filter: var(--docs-logo-filter, none);
 	}

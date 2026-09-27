@@ -59,7 +59,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.metadata?.title || 'Blog'} - Utsuwa</title>
+	<title>{data.metadata?.title || 'Blog'} - Luna</title>
 	{#if data.metadata?.description}
 		<meta name="description" content={data.metadata.description} />
 	{/if}
@@ -70,7 +70,7 @@
 	{/if}
 	<meta property="og:image" content={data.metadata?.image ? `${SITE_URL}${data.metadata.image}` : `${SITE_URL}/brand-assets/thumbnail.png`} />
 	<meta property="og:url" content={`${SITE_URL}/blog/${data.slug}`} />
-	<meta property="og:site_name" content="Utsuwa" />
+	<meta property="og:site_name" content="Luna" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={data.metadata?.title || 'Blog'} />
 	{#if data.metadata?.description}
@@ -88,12 +88,12 @@
 		url: `${SITE_URL}/blog/${data.slug}`,
 		author: {
 			'@type': 'Organization',
-			name: 'Utsuwa',
+			name: 'Luna',
 			url: SITE_URL
 		},
 		publisher: {
 			'@type': 'Organization',
-			name: 'Utsuwa',
+			name: 'Luna',
 			url: SITE_URL
 		}
 	})}</script>`}
@@ -103,7 +103,7 @@
 <div class="blog-post-layout">
 	<a href="/blog" class="btn btn-secondary back-link">
 		<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-		<span>Back to Blog</span>
+		<span>Volver al blog</span>
 	</a>
 
 	<header class="blog-post-header">
@@ -134,8 +134,8 @@
 
 	<div class="blog-post-body" class:no-toc={!toc.length}>
 		{#if toc.length}
-			<aside class="toc" aria-label="Table of contents">
-				<p class="toc-title">Table of contents</p>
+			<aside class="toc" aria-label="Tabla de contenidos">
+				<p class="toc-title">Tabla de contenidos</p>
 				<ul class="toc-list">
 					{#each toc as heading}
 						<li class:sub={heading.level === 3}>

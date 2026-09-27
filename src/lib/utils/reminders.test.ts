@@ -170,17 +170,17 @@ test('isOldExecutedReminder identifies executed reminders past the TTL', () => {
 });
 
 test('validateReminder rejects empty content', () => {
-	assert.equal(validateReminder('  ', new Date(Date.now() + 60000)), 'Reminder content cannot be empty');
-	assert.equal(validateReminder('', new Date(Date.now() + 60000)), 'Reminder content cannot be empty');
+	assert.equal(validateReminder('  ', new Date(Date.now() + 60000)), 'El contenido del recordatorio no puede estar vacío');
+	assert.equal(validateReminder('', new Date(Date.now() + 60000)), 'El contenido del recordatorio no puede estar vacío');
 });
 
 test('validateReminder rejects invalid trigger time', () => {
-	assert.equal(validateReminder('drink water', new Date(Number.NaN)), 'Invalid reminder trigger time');
+	assert.equal(validateReminder('drink water', new Date(Number.NaN)), 'Hora de activación del recordatorio no válida');
 });
 
 test('validateReminder rejects times too far in the future', () => {
 	const tooFar = new Date(Date.now() + 366 * 24 * 60 * 60 * 1000);
-	assert.equal(validateReminder('drink water', tooFar), 'Reminder trigger time is too far in the future');
+	assert.equal(validateReminder('drink water', tooFar), 'La hora de activación del recordatorio es demasiado lejana');
 });
 
 test('validateReminder accepts valid reminders', () => {

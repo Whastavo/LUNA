@@ -20,14 +20,14 @@ export const GET: RequestHandler = () => {
 	}));
 
 	const docPages: SitemapEntry[] = Object.keys(docsModules).map((path) => ({
-		url: `${SITE_URL}/docs/${path.replace('/src/content/docs/', '').replace('.md', '')}`,
+		url: `${SITE_URL}/documentacion/${path.replace('/src/content/docs/', '').replace('.md', '')}`,
 		priority: '0.6'
 	}));
 
 	const staticPages: SitemapEntry[] = [
 		{ url: SITE_URL, priority: '1.0' },
-		{ url: `${SITE_URL}/download`, priority: '0.8' },
-		{ url: `${SITE_URL}/docs/overview/introduction`, priority: '0.8' },
+		{ url: `${SITE_URL}/descargar`, priority: '0.8' },
+		{ url: `${SITE_URL}/documentacion/overview/introduction`, priority: '0.8' },
 		{ url: `${SITE_URL}/blog`, priority: '0.8' },
 		{ url: `${SITE_URL}/privacy`, priority: '0.3' },
 		{ url: `${SITE_URL}/terms`, priority: '0.3' }

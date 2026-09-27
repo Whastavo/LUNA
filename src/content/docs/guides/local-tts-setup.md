@@ -1,89 +1,89 @@
 ---
-title: Local TTS Setup
-description: Give your companion a voice that runs entirely on your machine using Kokoro-FastAPI or openedai-speech.
+title: Configurar TTS local
+description: Dale a tu compañera una voz que funciona por completo en tu máquina usando Kokoro-FastAPI o openedai-speech.
 ---
 
-# Local TTS Setup
+# Configurar TTS local
 
-If you already run local LLMs with Ollama or LM Studio, you can give your companion a local voice too. The audio is generated on your machine, so nothing leaves the device and there are no API keys or per-character costs.
+Si ya ejecutas LLMs locales con Ollama o LM Studio, también puedes darle a tu compañera una voz local. El audio se genera en tu máquina, así que nada sale del dispositivo y no hay claves de API ni costes por carácter.
 
-Utsuwa talks to any TTS server that exposes the OpenAI `/v1/audio/speech` endpoint. The two we recommend are **Kokoro-FastAPI** and **openedai-speech**. Lip-sync works automatically because Utsuwa animates the mouth from the audio itself, no extra data needed.
+Luna habla con cualquier servidor TTS que exponga el endpoint de OpenAI `/v1/audio/speech`. Los dos que recomendamos son **Kokoro-FastAPI** y **openedai-speech**. El lip-sync funciona automáticamente porque Luna anima la boca a partir del propio audio, sin datos extra.
 
-For a fully local, multi-language voice that needs no external API, see the [OmniVoice Setup](/docs/guides/omnivoice) guide. The rest of this page covers generic OpenAI-compatible local TTS servers.
+Para una voz totalmente local y multilenguaje que no necesita API externa, consulta la guía de [Configurar OmniVoice](/docs/guides/omnivoice). El resto de esta página cubre servidores TTS locales genéricos compatibles con OpenAI.
 
-## Kokoro-FastAPI (recommended)
+## Kokoro-FastAPI (recomendado)
 
-[Kokoro-FastAPI](https://github.com/remsky/Kokoro-FastAPI) wraps the Kokoro voice model and serves the OpenAI speech API directly. It is fast on CPU and sounds great for its size.
+[Kokoro-FastAPI](https://github.com/remsky/Kokoro-FastAPI) envuelve el modelo de voz Kokoro y sirve la API de voz de OpenAI directamente. Es rápido en CPU y suena muy bien para su tamaño.
 
-### Installation
+### Instalación
 
-The quickest path is Docker:
+El camino más rápido es Docker:
 
 ```bash
 docker run -p 8880:8880 ghcr.io/remsky/kokoro-fastapi-cpu:latest
 ```
 
-If you have an NVIDIA GPU, use the `kokoro-fastapi-gpu` image instead. See the project README for non-Docker installs.
+Si tienes una GPU NVIDIA, usa la imagen `kokoro-fastapi-gpu` en su lugar. Consulta el README del proyecto para instalaciones sin Docker.
 
-This serves the API at `http://localhost:8880/v1`.
+Esto sirve la API en `http://localhost:8880/v1`.
 
-### Connecting to Utsuwa
+### Conectar con Luna
 
-1. Open the **Controls** panel (sliders icon, top right) and click **Settings** (gear)
-2. Navigate to the **Character** tab and open the **AI Services** section
-3. Enable the **Speech (TTS)** toggle, then select **Local TTS** from the provider dropdown
-4. Leave the base URL as `http://localhost:8880/v1/` unless you changed the port
-5. Pick a **voice** (start typing in the voice field to see suggestions like `af_bella`)
-6. Leave **Model** blank to use the default, or set it to `kokoro`
-7. Send a message and your companion speaks
+1. Abre el panel de **Controles** (icono de deslizadores, arriba a la derecha) y pulsa **Ajustes** (engranaje)
+2. Ve a la pestaña **Personaje** y abre la sección de **Servicios de IA**
+3. Activa el interruptor de **Voz (TTS)**, luego selecciona **TTS local** en el desplegable de proveedores
+4. Deja la URL base como `http://localhost:8880/v1/` salvo que hayas cambiado el puerto
+5. Elige una **voz** (empieza a escribir en el campo de voz para ver sugerencias como `af_bella`)
+6. Deja **Modelo** en blanco para usar el predeterminado, o ponlo en `kokoro`
+7. Envía un mensaje y tu compañera habla
 
-### Voices
+### Voces
 
-Kokoro voice names encode region and gender, for example `af_bella` (American female) or `bm_george` (British male). Utsuwa seeds a few common ones in the voice field, and you can type any voice your server supports.
+Los nombres de voz de Kokoro codifican región y género, por ejemplo `af_bella` (mujer estadounidense) o `bm_george` (hombre británico). Luna pre-carga algunas voces comunes en el campo de voz, y puedes escribir cualquier voz que tu servidor soporte.
 
 ## openedai-speech
 
-[openedai-speech](https://github.com/matatonic/openedai-speech) is another OpenAI-compatible server that can run Piper and other engines. Set up its server, then point Utsuwa's Local TTS base URL at it (default `http://localhost:8000/v1/`). Use the voice names that server exposes.
+[openedai-speech](https://github.com/matatonic/openedai-speech) es otro servidor compatible con OpenAI que puede ejecutar Piper y otros motores. Configura su servidor y apunta la URL base de TTS local de Luna hacia él (por defecto `http://localhost:8000/v1/`). Usa los nombres de voz que expone ese servidor.
 
-## Custom Base URL
+## URL base personalizada
 
-Running the server on a different machine or port? Enter the full URL in the Local TTS base URL field. Utsuwa normalizes it to end in `/v1/`, so `http://localhost:8880`, `http://localhost:8880/v1`, and `http://localhost:8880/v1/` all work. Examples:
+¿Ejecutas el servidor en otra máquina o puerto? Introduce la URL completa en el campo de URL base de TTS local. Luna la normaliza para que termine en `/v1/`, así que `http://localhost:8880`, `http://localhost:8880/v1` y `http://localhost:8880/v1/` funcionan todos. Ejemplos:
 
-- Custom port: `http://localhost:9000/v1/`
-- Remote machine: `http://192.168.1.50:8880/v1/` (desktop app only, see below)
+- Puerto personalizado: `http://localhost:9000/v1/`
+- Máquina remota: `http://192.168.1.50:8880/v1/` (solo app de escritorio, ver abajo)
 
-## Desktop app vs hosted website
+## App de escritorio vs sitio web alojado
 
-Local TTS works best in the **desktop app**, where it needs no extra setup. The desktop app talks to your local server directly, with no browser origin, mixed-content, or local-network restrictions. If you want the smoothest experience, use the desktop app.
+El TTS local funciona mejor en la **app de escritorio**, donde no necesita configuración extra. La app de escritorio habla con tu servidor local directamente, sin restricciones de origen de navegador, contenido mixto ni red local. Si quieres la experiencia más fluida, usa la app de escritorio.
 
-On the **hosted website** (`https://app.utsuwa.ai`) it can still work, but because a public HTTPS page is reaching a server on your own machine, the browser adds a few rules:
+En el **sitio web alojado** (`https://app.luna.ai`) aún puede funcionar, pero como una página HTTPS pública está alcanzando un servidor en tu propia máquina, el navegador añade algunas reglas:
 
-- **Same machine only.** The server has to be on `localhost` / `127.0.0.1`. A TTS server on another machine over plain `http://` is blocked by the browser as mixed content. (`localhost` is exempt from that block, which is the only reason the local case works at all.) The remote-machine base URL above therefore works in the desktop app but not on the hosted site.
-- **The server must allow the site's origin.** Your TTS server needs to send CORS headers permitting `https://app.utsuwa.ai`. Kokoro-FastAPI and openedai-speech allow all origins by default, so this usually just works; a hardened or proxied server may need the origin added explicitly. (In that case the desktop app's origin is `tauri://localhost` on macOS and `http://tauri.localhost` on Windows and Linux.)
-- **Your browser may ask permission.** Recent versions of Chrome treat a public site reaching `localhost` as a local-network request and may prompt you to allow it (or require the server to opt in). Allow it if asked.
+- **Solo la misma máquina.** El servidor tiene que estar en `localhost` / `127.0.0.1`. Un servidor TTS en otra máquina por `http://` simple queda bloqueado por el navegador como contenido mixto. (`localhost` está exento de ese bloqueo, que es la única razón por la que el caso local funciona.) Por eso la URL base de máquina remota de arriba funciona en la app de escritorio pero no en el sitio alojado.
+- **El servidor debe permitir el origen del sitio.** Tu servidor TTS necesita enviar cabeceras CORS que permitan `https://app.luna.ai`. Kokoro-FastAPI y openedai-speech permiten todos los orígenes por defecto, así que esto normalmente funciona sin más; un servidor reforzado o tras proxy puede necesitar añadir el origen explícitamente. (En ese caso, el origen de la app de escritorio es `tauri://localhost` en macOS y `http://tauri.localhost` en Windows y Linux.)
+- **Tu navegador puede pedir permiso.** Versiones recientes de Chrome tratan un sitio público alcanzando `localhost` como una petición de red local y puede pedirte permitirla (o requerir que el servidor lo permita). Permítelo si te lo pide.
 
-With the default servers, none of this applies to the desktop app. The only case that needs attention is a server you've hardened to restrict origins, which would need the desktop origin above allowed. This is the same set of rules local LLMs (Ollama, LM Studio) follow on the hosted site.
+Con los servidores por defecto, nada de esto aplica a la app de escritorio. El único caso que requiere atención es un servidor que hayas reforzado para restringir orígenes, que necesitaría permitir el origen de escritorio de arriba. Es el mismo conjunto de reglas que siguen los LLM locales (Ollama, LM Studio) en el sitio alojado.
 
-## Troubleshooting
+## Solución de problemas
 
-### No sound and no error
+### Sin sonido y sin error
 
-Make sure the **Speech (TTS)** module is enabled and a voice is set. If the voice field is empty, type a valid voice for your server (e.g. `af_bella` for Kokoro).
+Asegúrate de que el módulo de **Voz (TTS)** está activado y de que hay una voz configurada. Si el campo de voz está vacío, escribe una voz válida para tu servidor (p. ej. `af_bella` para Kokoro).
 
-### "Could not reach a local TTS server"
+### «No se pudo conectar con un servidor TTS local»
 
-The server isn't running or isn't reachable at the base URL. Confirm it's up:
+El servidor no está en ejecución o no se puede alcanzar en la URL base. Confirma que está arriba:
 
 ```bash
 curl http://localhost:8880/v1/audio/voices
 ```
 
-If that returns data but Utsuwa still can't reach it from a browser, it's almost certainly an origin or local-network block. On the hosted site the server has to allow the `https://app.utsuwa.ai` origin (Kokoro-FastAPI allows all origins by default; a proxied or hardened server may need it added), and your browser may prompt to allow access to local-network devices. See [Desktop app vs hosted website](#desktop-app-vs-hosted-website) for the full list. None of this applies to the **desktop app**, which is the smoothest way to run local TTS.
+Si eso devuelve datos pero Luna aún no puede alcanzarlo desde un navegador, es casi seguro un bloqueo de origen o de red local. En el sitio alojado, el servidor tiene que permitir el origen `https://app.luna.ai` (Kokoro-FastAPI permite todos los orígenes por defecto; un servidor tras proxy o reforzado puede necesitar añadirlo), y tu navegador puede pedir permiso para acceder a dispositivos de la red local. Consulta [App de escritorio vs sitio web alojado](#app-de-escritorio-vs-sitio-web-alojado) para la lista completa. Nada de esto aplica a la **app de escritorio**, que es la forma más fluida de usar TTS local.
 
-### "Local TTS server returned 400/404"
+### «El servidor TTS local devolvió 400/404»
 
-The model or voice isn't valid for that server. Leave the model blank (Utsuwa sends `tts-1`, which most servers accept), and double-check the voice name against your server's voice list.
+El modelo o la voz no son válidos para ese servidor. Deja el modelo en blanco (Luna envía `tts-1`, que la mayoría de los servidores aceptan) y revisa el nombre de la voz contra la lista de voces de tu servidor.
 
-### Choppy or delayed speech
+### Voz entrecortada o con retardo
 
-Local TTS generates the full clip before playback. On slower hardware, try a CPU-optimized build or a GPU image, and keep responses shorter.
+El TTS local genera el clip completo antes de reproducirlo. En hardware más lento, prueba una build optimizada para CPU o una imagen de GPU, y mantén las respuestas más cortas.

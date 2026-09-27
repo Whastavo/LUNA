@@ -1,152 +1,156 @@
 <script lang="ts">
-	import { SITE_URL, GITHUB_REPO } from '$lib/config/site';
+	import { SITE_URL } from '$lib/config/site';
 </script>
 
 <svelte:head>
-	<title>Privacy Policy — Utsuwa</title>
+	<title>Política de privacidad — Luna</title>
 	<meta
 		name="description"
-		content="How Utsuwa handles your data: no accounts, no analytics, no tracking. Your conversations, memories, and settings live on your device."
+		content="Cómo Luna gestiona tus datos: sin cuentas, sin analíticas, sin rastreo. Tus conversaciones, recuerdos y ajustes viven en tu dispositivo."
 	/>
 	<link rel="canonical" href={`${SITE_URL}/privacy`} />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content="Privacy Policy — Utsuwa" />
+	<meta property="og:title" content="Política de privacidad — Luna" />
 	<meta
 		property="og:description"
-		content="How Utsuwa handles your data: no accounts, no analytics, no tracking."
+		content="Cómo Luna gestiona tus datos: sin cuentas, sin analíticas, sin rastreo."
 	/>
 	<meta property="og:url" content={`${SITE_URL}/privacy`} />
-	<meta property="og:site_name" content="Utsuwa" />
+	<meta property="og:site_name" content="Luna" />
 </svelte:head>
 
 <header class="legal-header">
-	<h1>Privacy Policy</h1>
-	<p class="legal-date">Effective: July 3, 2026</p>
+	<h1>Política de privacidad</h1>
+	<p class="legal-date">Vigente desde: 3 de julio de 2026</p>
 </header>
 
 <div class="legal-summary">
-	<p class="legal-summary-title">The short version</p>
+	<p class="legal-summary-title">La versión corta</p>
 	<ul>
-		<li>No accounts, no analytics, no ads, no tracking cookies.</li>
-		<li>Your conversations, memories, and settings are stored on your device, not on our servers.</li>
-		<li>Messages go to the AI provider you choose, using your own API keys.</li>
-		<li>We never sell your personal information. We don't even have any.</li>
+		<li>Sin cuentas, sin analíticas, sin anuncios, sin cookies de rastreo.</li>
+		<li>Tus conversaciones, recuerdos y ajustes se guardan en tu dispositivo, no en nuestros servidores.</li>
+		<li>Los mensajes van al proveedor de IA que elijas, usando tus propias claves API.</li>
+		<li>Nunca vendemos tu información personal. Ni siquiera tenemos ninguna.</li>
 	</ul>
 </div>
 
 <article class="prose legal-prose">
 	<p>
-		Utsuwa is an open-source AI companion built to be local-first. This policy explains what
-		happens to your data when you use the Utsuwa website and hosted web app (utsuwa.ai and its
-		subdomains) and the Utsuwa desktop app, operated by Juice Boxx Games LLC. The short
-		version: your companion lives on your device, and we like it that way.
+		Luna es una compañera de IA construida para ser local primero. Esta
+		política explica qué ocurre con tus datos cuando usas el sitio web de Luna y la app web
+		alojada (luna.ai y sus subdominios) y la app de escritorio de Luna, operadas por
+		Whizzend. La versión corta: tu compañera vive en tu dispositivo, y nos gusta así.
 	</p>
 
-	<h2 id="what-we-dont-collect">What we don't collect</h2>
+	<h2 id="what-we-dont-collect">Lo que no recopilamos</h2>
 	<p>
-		Utsuwa has no account system, so we never ask for your name, email address, or a password. We
-		run no analytics or tracking scripts on the website or in the app, we set no advertising or
-		tracking cookies, and we show no ads. There is no database of users on our side, and we can't
-		see your conversations. We couldn't sell your personal information if we wanted to, because we
-		don't have any.
+		Luna no tiene sistema de cuentas, así que nunca te pedimos tu nombre, dirección de correo o
+		contraseña. No ejecutamos analíticas ni scripts de rastreo en el sitio web ni en la app, no
+		ponemos cookies publicitarias ni de rastreo, y no mostramos anuncios. No hay base de datos de
+		usuarios de nuestro lado, y no podemos ver tus conversaciones. No podríamos vender tu
+		información personal aunque quisiéramos, porque no tenemos ninguna.
 	</p>
 
-	<h2 id="where-your-data-lives">Where your data lives</h2>
+	<h2 id="where-your-data-lives">Dónde viven tus datos</h2>
 	<p>
-		Everything that makes your companion yours lives on your device: conversation history,
-		extracted memories, companion state, persona and display settings, and the API keys you enter.
-		In the web app this is your browser's local storage (IndexedDB and localStorage); in the
-		desktop app it's the app's own local storage on your computer. None of it is uploaded to or
-		stored on our servers.
+		Todo lo que hace que tu compañera sea tuya vive en tu dispositivo: historial de conversación,
+		recuerdos extraídos, estado de la compañera, ajustes de persona y de pantalla, y las claves
+		API que introduces. En la app web esto es el almacenamiento local de tu navegador (IndexedDB
+		y localStorage); en la app de escritorio es el almacenamiento local propio de la app en tu
+		ordenador. Nada de ello se sube ni se guarda en nuestros servidores.
 	</p>
 	<p>
-		To delete your data, use the reset options in the app's settings, clear your browser's site
-		data, or uninstall the desktop app. There is no copy on our side to ask us to delete.
+		Para eliminar tus datos, usa las opciones de reinicio en los ajustes de la app, borra los
+		datos del sitio en tu navegador o desinstala la app de escritorio. No hay copia de nuestro
+		lado que pedirnos que borremos.
 	</p>
 
-	<h2 id="how-messages-reach-your-provider">How your messages reach your AI provider</h2>
+	<h2 id="how-messages-reach-your-provider">Cómo llegan tus mensajes a tu proveedor de IA</h2>
 	<p>
-		Utsuwa is bring-your-own-AI: you connect it to a provider you choose (for example OpenAI,
-		Anthropic, or a local model through Ollama or LM Studio) using your own API key. How your
-		messages travel depends on where you run Utsuwa:
+		Luna es de trae-tu-propia-IA: la conectas a un proveedor que tú eliges (por ejemplo OpenAI,
+		Anthropic, o un modelo local mediante Ollama o LM Studio) usando tu propia clave API. Cómo
+		viajan tus mensajes depende de dónde ejecutes Luna:
 	</p>
 	<ul>
 		<li>
-			<strong>Desktop app:</strong> your messages go directly from your device to your chosen
-			provider. They do not pass through our servers.
+			<strong>App de escritorio:</strong> tus mensajes van directamente de tu dispositivo al
+			proveedor que hayas elegido. No pasan por nuestros servidores.
 		</li>
 		<li>
-			<strong>Web app:</strong> because of browser cross-origin restrictions, requests to cloud
-			providers may be relayed through our servers. The relay forwards your request to your
-			provider and streams the response back to you. We do not store your messages or API keys,
-			and we do not write conversation content to our logs.
+			<strong>App web:</strong> por las restricciones cross-origin de los navegadores, las
+			peticiones a proveedores en la nube pueden retransmitirse a través de nuestros servidores.
+			El relé reenvía tu petición a tu proveedor y te transmite la respuesta en streaming. No
+			guardamos tus mensajes ni tus claves API, y no escribimos contenido de conversaciones en
+			nuestros logs.
 		</li>
 		<li>
-			<strong>Local providers:</strong> if you use Ollama or LM Studio, your conversations never
-			leave your machine or local network at all.
+			<strong>Proveedores locales:</strong> si usas Ollama o LM Studio, tus conversaciones nunca
+			salen de tu máquina ni de tu red local.
 		</li>
 	</ul>
 	<p>
-		Once a message reaches your provider, that provider's own privacy policy governs how it is
-		handled. We encourage you to review the data-use policies of whichever provider you connect.
+		Cuando un mensaje llega a tu proveedor, la política de privacidad de ese proveedor gobierna
+		cómo se trata. Te animamos a revisar las políticas de uso de datos de cualquier proveedor al
+		que te conectes.
 	</p>
 
-	<h2 id="voice">Voice features</h2>
+	<h2 id="voice">Funciones de voz</h2>
 	<p>
-		If you use voice chat, microphone audio is captured only while you're actively using it and is
-		sent directly from your device to the speech provider you configured for transcription.
-		Generated speech works the same way in reverse. We don't receive or store your audio.
+		Si usas el chat por voz, el audio del micrófono se captura solo mientras lo estás usando
+		activamente y se envía directamente desde tu dispositivo al proveedor de voz que hayas
+		configurado para su transcripción. La voz generada funciona igual a la inversa. Nosotros no
+		recibimos ni almacenamos tu audio.
 	</p>
 
-	<h2 id="memory">Memory runs on your device</h2>
+	<h2 id="memory">La memoria funciona en tu dispositivo</h2>
 	<p>
-		Semantic search over your companion's memories happens entirely on your device, using a small
-		embedding model that runs locally in the app. The model file is downloaded once from a public
-		CDN (Hugging Face). The memories themselves are stored in your local storage like everything
-		else.
+		La búsqueda semántica sobre los recuerdos de tu compañera ocurre por completo en tu
+		dispositivo, usando un pequeño modelo de embeddings que se ejecuta localmente en la app. El
+		archivo del modelo se descarga una vez desde una CDN pública (Hugging Face). Los recuerdos en
+		sí se guardan en tu almacenamiento local como todo lo demás.
 	</p>
 
-	<h2 id="third-parties">Third-party services we rely on</h2>
+	<h2 id="third-parties">Servicios de terceros de los que dependemos</h2>
 	<ul>
 		<li>
-			<strong>Your AI providers</strong> process the messages and audio you send them under their
-			own privacy policies.
+			<strong>Tus proveedores de IA</strong> procesan los mensajes y el audio que les envías bajo
+			sus propias políticas de privacidad.
 		</li>
 		<li>
-			<strong>Vercel</strong> hosts the website and web app. Like any host, it produces standard,
-			short-lived infrastructure logs (such as IP addresses and request timestamps) as part of
-			serving pages. We don't use these to identify or profile anyone.
+			<strong>Vercel</strong> aloja el sitio web y la app web. Como cualquier alojamiento,
+			genera logs de infraestructura estándar y de vida corta (como direcciones IP y marcas de
+			tiempo de las peticiones) como parte de servir las páginas. No los usamos para identificar
+			nor perfilar a nadie.
 		</li>
 		<li>
-			<strong>GitHub</strong> serves our source code, releases, and desktop downloads. The desktop
-			app also checks GitHub Releases for updates, so GitHub receives standard request data (like
-			your IP address) when it does.
+			<strong>GitHub</strong> sirve nuestro código fuente, releases y descargas de escritorio. La
+			app de escritorio también comprueba GitHub Releases en busca de actualizaciones, así que
+			GitHub recibe datos estándar de petición (como tu dirección IP) cuando lo hace.
 		</li>
 		<li>
-			<strong>Hugging Face</strong> serves the on-device memory model file the first time the app
-			loads it.
+			<strong>Hugging Face</strong> sirve el archivo del modelo de memoria en el dispositivo la
+			primera vez que la app lo carga.
 		</li>
 	</ul>
 
-	<h2 id="children">Age</h2>
+	<h2 id="children">Edad</h2>
 	<p>
-		Utsuwa is intended for adults aged 18 and over. It is not designed for or directed at anyone
-		under 18, and we do not knowingly collect personal information from anyone, minors included,
-		since we don't collect personal information at all.
+		Luna está pensada para adultos de 18 años o más. No está diseñada ni dirigida a menores de
+		18, y no recopilamos a sabiendas información personal de nadie, menores incluidos, ya que no
+		recopilamos información personal en absoluto.
 	</p>
 
-	<h2 id="changes">Changes to this policy</h2>
+	<h2 id="changes">Cambios en esta política</h2>
 	<p>
-		If we change this policy, we'll update this page and the date at the top. If a change is
-		significant (for example, if a future feature ever introduces data collection), we'll say so
-		clearly in our release notes.
+		Si cambiamos esta política, actualizaremos esta página y la fecha de arriba. Si un cambio es
+		significativo (por ejemplo, si alguna función futura introdujera recopilación de datos), lo
+		diremos claramente en nuestras notas de la versión.
 	</p>
 
-	<h2 id="contact">Contact</h2>
+	<h2 id="contact">Contacto</h2>
 	<p>
-		The fastest way to reach us is on
-		<a href={`${GITHUB_REPO}/issues`} target="_blank" rel="noopener noreferrer">GitHub</a>. Utsuwa
-		is maintained by Juice Boxx Games LLC, a limited liability company formed in Ohio, USA.
+		La forma más rápida de contactarnos es a través de los canales oficiales de Whizzend. Luna
+		es mantenida por Whizzend.
 	</p>
 </article>
 

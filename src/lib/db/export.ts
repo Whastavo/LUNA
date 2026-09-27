@@ -8,6 +8,7 @@ import type {
 	RelationshipStage,
 	PersonalityProfile
 } from '$lib/types/character';
+import { normalizeSystemPrompt } from '$lib/types/character';
 import type { Fact, SessionSummary, ConversationTurn } from '$lib/types/memory';
 import type { CompletedEventRecord } from '$lib/types/events';
 
@@ -179,10 +180,10 @@ export async function importSave(
 						// Build merged character state
 						const mergedState = {
 					// Persona fields from persona or defaults
-					name: (firstPersona?.name as string) || 'Utsuwa',
-					systemPrompt:
-						(firstPersona?.systemPrompt as string) ||
-						'You are a friendly AI assistant named Utsuwa.',
+					name: (firstPersona?.name as string) || 'Luna',
+					systemPrompt: normalizeSystemPrompt(
+						(firstPersona?.systemPrompt as string) || undefined
+					),
 					extensions: (firstPersona?.extensions as Record<string, unknown>) || {},
 					// Character fields from state or defaults
 					mood: (firstCharState?.mood as MoodState) || {
@@ -287,13 +288,13 @@ export function validateSaveFile(json: unknown): SaveFile | LegacySaveFile | nul
 export function getSaveFilePreview(saveFile: SaveFile | LegacySaveFile): SaveFilePreview {
 	const isV2 = saveFile.version.startsWith('2.');
 
-	let characterName = 'Utsuwa';
+	let characterName = 'Luna';
 	if (isV2) {
 		const v2 = saveFile as SaveFile;
-		characterName = v2.data.character?.name || 'Utsuwa';
+		characterName = v2.data.character?.name || 'Luna';
 	} else {
 		const v1 = saveFile as LegacySaveFile;
-		characterName = (v1.data.personas?.[0]?.name as string) || 'Utsuwa';
+		characterName = (v1.data.personas?.[0]?.name as string) || 'Luna';
 	}
 
 	return {
@@ -319,7 +320,7 @@ export async function downloadSaveFile(
 	// Date plus time so two exports on the same day never overwrite each other
 	// on desktop, where the file is written directly instead of auto-renamed.
 	const stamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '');
-	const filename = `utsuwa-save-${stamp}.json`;
+	const filename = `luna-save-${stamp}.json`;
 	const savedToDownloads = await saveToDownloads(filename, blob);
 	return { filename, savedToDownloads };
 }
@@ -330,6 +331,7 @@ export async function clearAllData(): Promise<void> {
 		db.facts.clear(),
 		db.sessions.clear(),
 		db.conversationTurns.clear(),
-		db.completedEvents.clear()
+		db.completedEvents.clear(),
+		db.reminders.clear()
 	]);
 }

@@ -1,4 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
+import { DEFAULT_SYSTEM_PROMPT } from '$lib/types/character';
 import type { CharacterState } from '$lib/types/character';
 import type { Fact, SessionSummary, ConversationTurn, Reminder } from '$lib/types/memory';
 import type { CompletedEventRecord } from '$lib/types/events';
@@ -29,10 +30,10 @@ export interface DBReminder extends Omit<Reminder, 'id'> {
 }
 
 // Legacy persona storage keys (for migration)
-const LEGACY_PERSONA_CARDS_KEY = 'utsuwa-persona-cards';
-const LEGACY_PERSONA_ACTIVE_KEY = 'utsuwa-persona-active-id';
+const LEGACY_PERSONA_CARDS_KEY = 'luna-persona-cards';
+const LEGACY_PERSONA_ACTIVE_KEY = 'luna-persona-active-id';
 
-class UtsuwaDatabase extends Dexie {
+class LunaDatabase extends Dexie {
 	characterStates!: EntityTable<DBCharacterState, 'id'>;
 	facts!: EntityTable<DBFact, 'id'>;
 	sessions!: EntityTable<DBSessionSummary, 'id'>;
@@ -41,7 +42,7 @@ class UtsuwaDatabase extends Dexie {
 	reminders!: EntityTable<DBReminder, 'id'>;
 
 	constructor() {
-		super('utsuwa-db');
+		super('luna-db');
 
 		// Version 1: Original multi-persona schema (legacy)
 		this.version(1).stores({
@@ -74,9 +75,8 @@ class UtsuwaDatabase extends Dexie {
 					existingStates[0];
 
 				// Read persona from localStorage
-				let personaName = 'Utsuwa';
-				let personaPrompt =
-					'You are a friendly AI assistant named Utsuwa. You communicate through a VRM avatar and can express emotions through facial expressions and gestures. Be helpful, conversational, and engaging.';
+				let personaName = 'Luna';
+				let personaPrompt = DEFAULT_SYSTEM_PROMPT;
 				let personaExtensions = {};
 
 				if (typeof window !== 'undefined') {
@@ -159,4 +159,4 @@ class UtsuwaDatabase extends Dexie {
 	}
 }
 
-export const db = new UtsuwaDatabase();
+export const db = new LunaDatabase();

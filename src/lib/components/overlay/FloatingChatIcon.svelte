@@ -61,7 +61,7 @@
 
 	.floating-chat-icon.expanded {
 		background: var(--accent);
-		color: #fff;
+		color: var(--accent-contrast, #fff);
 	}
 
 	.floating-chat-icon.expanded:hover {

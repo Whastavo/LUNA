@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '@fontsource-variable/inter';
 	import '../app.css';
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
@@ -15,14 +14,22 @@
 	// Marketing/content routes that should never live inside the desktop app.
 	const isWebOnly = (path: string) =>
 		path === '/' ||
+		path.startsWith('/documentacion') ||
 		path.startsWith('/docs') ||
 		path.startsWith('/blog') ||
+		path.startsWith('/descargar') ||
 		path.startsWith('/download');
+
+	// Rutas legadas de configuración: el modal de /app las reemplazó. Cualquier
+	// /app/ajustes/* o /app/settings/* salta a /app, que abre el modal (deep link).
+	const esAjustesLegado = (path: string) => path.startsWith('/app/ajustes') || path.startsWith('/app/settings');
 
 	// The desktop build must only ever show the app. The window now boots at
 	// "/app" (tauri.conf.json), but this also bounces any web-only route to the
 	// app as a safety net, using the build-time flag so it can't race.
-	const redirecting = $derived(browser && isDesktopBuild() && isWebOnly(page.url.pathname));
+	const redirecting = $derived(
+		browser && (isDesktopBuild() && isWebOnly(page.url.pathname) || esAjustesLegado(page.url.pathname))
+	);
 
 	if (browser) {
 		for (const mod of moduleRegistry) {
@@ -56,15 +63,18 @@
 		}, true);
 	}
 
-	// Bounce the desktop app off the landing route into the app itself.
+	// Bounce the desktop app off the landing route into the app itself; las
+	// rutas legadas de ajustes además llevan el hash que abre el modal.
 	$effect(() => {
-		if (redirecting) goto('/app', { replaceState: true });
+		if (!redirecting) return;
+		const destino = esAjustesLegado(page.url.pathname) ? '/app#ajustes' : '/app';
+		goto(destino, { replaceState: true });
 	});
 </script>
 
 <svelte:head>
-	<title>Utsuwa</title>
-	<meta name="description" content="Open-source AI companion with 3D VRM avatars, voice chat, semantic memory, and multi-provider LLM support. Self-hosted and privacy-first." />
+	<title>Luna</title>
+	<meta name="description" content="Compañera IA con avatares VRM 3D, chat de voz, memoria semántica y soporte multi-proveedor de LLM. Privacidad primero." />
 </svelte:head>
 
 {#if !redirecting}

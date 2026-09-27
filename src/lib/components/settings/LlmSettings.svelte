@@ -9,7 +9,7 @@
 
 	let { state }: { state: LlmSettingsState } = $props();
 
-	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-utsuwa-to-reach-ollama`;
+	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-luna-to-reach-ollama`;
 
 	function openLocalLlmDocs(e: MouseEvent) {
 		if (isTauri()) {
@@ -25,11 +25,11 @@
 
 {#snippet troubleHelp()}
 	<p class="provider-help">
-		Having trouble? Click <a
+		¿Tienes problemas? Haz clic <a
 			href={LOCAL_LLM_DOCS_URL}
 			target="_blank"
 			rel="noopener"
-			onclick={openLocalLlmDocs}>here</a
+			onclick={openLocalLlmDocs}>aquí</a
 		>
 	</p>
 {/snippet}
@@ -42,7 +42,7 @@
 			class="service-toggle"
 			class:enabled={state.isLLMEnabled}
 			onclick={state.toggleLLM}
-			aria-label="Toggle chat (LLM)"
+			aria-label="Activar chat (LLM)"
 		>
 			<span class="toggle-track">
 				<span class="toggle-thumb"></span>
@@ -55,7 +55,7 @@
 			type="llm"
 			value={state.consciousnessSettings.activeProvider as string}
 			onSelect={state.handleLLMProviderChange}
-			placeholder="Select LLM provider..."
+			placeholder="Selecciona proveedor LLM…"
 		/>
 
 		{#if state.consciousnessSettings.activeProvider}
@@ -67,7 +67,7 @@
 						type="password"
 						class="api-key-input"
 						class:error={state.llmFetchError}
-						placeholder={provider?.custom ? 'API Key (optional)' : 'API Key'}
+						placeholder={provider?.custom ? 'Clave de API (opcional)' : 'Clave de API'}
 						value={settingsStore.getProviderConfig(provider.id).apiKey ?? ''}
 						oninput={(e) => state.handleApiKeyChange(provider.id, e.currentTarget.value)}
 						onblur={provider?.custom ? undefined : state.handleLLMApiKeyBlur}
@@ -90,7 +90,7 @@
 						type="text"
 						class="api-key-input"
 						placeholder={provider.custom
-							? 'https://api.openai.com/v1/ or your endpoint'
+							? 'https://api.openai.com/v1/ o tu endpoint'
 							: provider.defaultBaseUrl || 'http://localhost:11434/v1/'}
 						value={settingsStore.getProviderConfig(provider.id).baseUrl ?? ''}
 						oninput={(e) => state.handleLLMBaseUrlChange(provider.id, e.currentTarget.value)}
@@ -108,7 +108,7 @@
 					<input
 						type="text"
 						class="api-key-input"
-						placeholder="Model (e.g. gpt-4o-mini, meta-llama/llama-3-70b)"
+						placeholder="Modelo (p. ej. gpt-4o-mini, meta-llama/llama-3-70b)"
 						value={(state.consciousnessSettings.activeModel as string) ?? ''}
 						oninput={(e) => state.handleLLMModelChange(e.currentTarget.value.trim())}
 					/>
@@ -119,22 +119,21 @@
 							models={state.llmModels}
 							value={state.consciousnessSettings.activeModel as string}
 							onSelect={state.handleLLMModelChange}
-							placeholder="Pick a fetched model..."
+							placeholder="Elige un modelo obtenido…"
 							isLoading={state.llmIsLoading}
 							onRefresh={state.refreshLLMModels}
 							disabled={false}
 						/>
 					</div>
-				{:else}
-					<p class="provider-note">Enter a base URL to fetch available models.</p>
+				{:else}						<p class="provider-note">Introduce una URL base para obtener los modelos disponibles.</p>
 				{/if}
 
 				<details class="llm-advanced-params">
-					<summary>Advanced Parameters</summary>
+					<summary>Parámetros avanzados</summary>
 					<div class="llm-param-grid">
 						<div class="llm-param-row">
 							<label class="llm-param-label" for="llm-temperature">
-								Temperature
+								Temperatura
 								<span class="llm-param-value">{((state.consciousnessSettings.temperature as number) ?? 0.7).toFixed(2)}</span>
 							</label>
 							<input
@@ -147,7 +146,7 @@
 								value={(state.consciousnessSettings.temperature as number) ?? 0.7}
 								oninput={(e) => state.handleLLMNumberSetting('temperature', Number(e.currentTarget.value))}
 							/>
-							<p class="provider-note">Controls randomness: 0 = focused, 2 = highly creative.</p>
+							<p class="provider-note">Controla la aleatoriedad: 0 = enfocado, 2 = muy creativo.</p>
 						</div>
 
 						<div class="llm-param-row">
@@ -165,12 +164,12 @@
 								value={(state.consciousnessSettings.topP as number) ?? 1.0}
 								oninput={(e) => state.handleLLMNumberSetting('topP', Number(e.currentTarget.value))}
 							/>
-							<p class="provider-note">Nucleus sampling: 1 = disabled.</p>
+							<p class="provider-note">Muestreo nucleus: 1 = desactivado.</p>
 						</div>
 
 						<div class="llm-param-row">
 							<label class="llm-param-label" for="llm-max-tokens">
-								Max Tokens
+								Máx. de tokens
 								<span class="llm-param-value">{state.consciousnessSettings.maxTokens ?? '—'}</span>
 							</label>
 							<input
@@ -179,19 +178,19 @@
 								class="api-key-input"
 								min="1"
 								step="1"
-								placeholder="Unlimited"
+								placeholder="Sin límite"
 								value={(state.consciousnessSettings.maxTokens as number) ?? ''}
 								oninput={(e) => {
 									const val = e.currentTarget.value;
 									state.handleLLMNumberSetting('maxTokens', val ? parseInt(val, 10) : undefined);
 								}}
 							/>
-							<p class="provider-note">Hard limit for the number of tokens in the response. Leave empty to use the provider default.</p>
+							<p class="provider-note">Límite máximo de tokens en la respuesta. Déjalo vacío para usar el valor por defecto del proveedor.</p>
 						</div>
 
 						<div class="llm-param-row">
 							<label class="llm-param-label" for="llm-presence-penalty">
-								Presence Penalty
+								Penalización de presencia
 								<span class="llm-param-value">{((state.consciousnessSettings.presencePenalty as number) ?? 0).toFixed(1)}</span>
 							</label>
 							<input
@@ -204,12 +203,12 @@
 								value={(state.consciousnessSettings.presencePenalty as number) ?? 0}
 								oninput={(e) => state.handleLLMNumberSetting('presencePenalty', Number(e.currentTarget.value))}
 							/>
-							<p class="provider-note">Reduces repetition of tokens already used.</p>
+							<p class="provider-note">Reduce la repetición de tokens ya usados.</p>
 						</div>
 
 						<div class="llm-param-row">
 							<label class="llm-param-label" for="llm-frequency-penalty">
-								Frequency Penalty
+								Penalización de frecuencia
 								<span class="llm-param-value">{((state.consciousnessSettings.frequencyPenalty as number) ?? 0).toFixed(1)}</span>
 							</label>
 							<input
@@ -222,7 +221,7 @@
 								value={(state.consciousnessSettings.frequencyPenalty as number) ?? 0}
 								oninput={(e) => state.handleLLMNumberSetting('frequencyPenalty', Number(e.currentTarget.value))}
 							/>
-							<p class="provider-note">Stronger penalty for frequently repeated tokens.</p>
+							<p class="provider-note">Penalización más fuerte para tokens repetidos con frecuencia.</p>
 						</div>
 					</div>
 				</details>
@@ -231,11 +230,11 @@
 					models={state.llmModels}
 					value={state.consciousnessSettings.activeModel as string}
 					onSelect={state.handleLLMModelChange}
-					placeholder="Select model..."
+					placeholder="Selecciona modelo…"
 					isLoading={state.llmIsLoading}
 					onRefresh={state.llmHasApiKey ? state.refreshLLMModels : undefined}
 					disabled={!state.llmHasApiKey}
-					disabledMessage="Enter API key first"
+					disabledMessage="Introduce primero la clave de API"
 				/>
 			{/if}
 

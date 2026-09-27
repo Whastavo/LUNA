@@ -1,13 +1,73 @@
 <script lang="ts">
 	import VrmScene from '$lib/components/vrm/VrmScene.svelte';
 	import FloatingStatIndicators from '$lib/components/ui/FloatingStatIndicators.svelte';
-	import { TopRightButtons, TopLeftButtons, InfoModal } from '$lib/components/ui';
+	import { TopRightButtons, BrandHeader } from '$lib/components/ui';
 	import BottomChatBar from '$lib/components/chat/BottomChatBar.svelte';
 	import PhotoModeDock from '$lib/components/photomode/PhotoModeDock.svelte';
 	import PhotoStickerLayer from '$lib/components/photomode/PhotoStickerLayer.svelte';
 	import PhotoFramePreview from '$lib/components/photomode/PhotoFramePreview.svelte';
 	import { photomodeStore, PHOTO_FILTERS } from '$lib/stores/photomode.svelte';
-	import { backgroundToCss, type SceneBackground } from '$lib/services/scene-backgrounds';
+	import {
+		backgroundToCss,
+		getSceneImage,
+		type SceneBackground
+	} from '$lib/services/scene-backgrounds';
+
+	// Backdrop crossfade state: the PREVIOUS backdrop stays painted underneath
+	// while the new one decodes and dissolves in, so switching scenes never
+	// flashes white or pops. `imageReady` gates the fade on actual decode.
+	let shownBackdrop = $state<SceneBackground | null>(null);
+	let underBackdrop = $state<SceneBackground | null>(null);
+	let imageReady = $state(false);
+	let underTimer: ReturnType<typeof setTimeout> | undefined;
+
+	$effect(() => {
+		const bg = effectiveBackdrop;
+		if (bg !== shownBackdrop) {
+			if (shownBackdrop) {
+				underBackdrop = shownBackdrop;
+				clearTimeout(underTimer);
+				underTimer = setTimeout(() => (underBackdrop = null), 800);
+			}
+			shownBackdrop = bg;
+		}
+	});
+
+	$effect(() => {
+		const bg = effectiveBackdrop;
+		// Every backdrop change mounts hidden (opacity 0, pre-scaled) and
+		// waits for its release: images gate on ACTUAL decode — the Ken
+		// Burns settle starts with pixels on screen, never over an empty
+		// layer. Solids/gradients/patterns need no decode: a one-beat
+		// timeout releases after the first painted frame. Promise/timeout
+		// driven — never stalls in a background tab (rAF would suspend).
+		imageReady = false;
+		let cancelled = false;
+		const release = () => {
+			if (!cancelled) {
+				imageReady = true;
+				// HANDOVER with the pre-app boot layer (app.html): the boot scene
+				// moved to the BODY background, which paints UNDER this fade —
+				// so the layer dissolves in over the already-visible scene and a
+				// black frame is structurally impossible. Once fully opaque, the
+				// body hands back to the theme color (the layer covers it).
+				setTimeout(() => {
+					document.body.style.background = '';
+				}, 900);
+			}
+		};
+		if (bg && bg.type === 'image' && bg.value) {
+			getSceneImage(bg.value).then(release, release);
+			return () => {
+				cancelled = true;
+			};
+		}
+		const t = setTimeout(release, 16);
+		return () => {
+			cancelled = true;
+			clearTimeout(t);
+		};
+	});
 
 	// Live preview filter shared with the capture composite
 	const photoFilterCss = $derived(
@@ -15,6 +75,19 @@
 			? PHOTO_FILTERS[photomodeStore.filterId].css
 			: undefined
 	);
+
+	// Edge color of a custom backdrop for the scene fades: gradients carry
+	// "top,bottom" in value; solids are their own color. Images/patterns get
+	// null → they use the blurred-clone treatment instead.
+
+	// Blur-clone fade over custom backdrops: the SAME background painted in a
+	// full-screen element, element-filter blurred, and masked to the edges.
+	// (mask + backdrop-filter composites WHITE bands in WebKit — element
+	// filter + mask is safe: the mask applies after the element's own filter.)
+	// For solid/gradient backdrops the fade color IS the backdrop's own edge
+	// color (top for the top fade, bottom for the bottom one) — a mathematically
+	// seamless dissolve that also works over flat colors (where a blur clone
+	// is invisible). Images/patterns keep the blur-clone treatment.
 
 	// The backdrop behind the (then transparent) GL canvas: a photo-mode
 	// override wins while posing; otherwise the persistent scene background.
@@ -26,13 +99,10 @@
 		return null;
 	});
 	import SpeechBubble from '$lib/components/chat/SpeechBubble.svelte';
-	import ChatWindow from '$lib/components/chat/ChatWindow.svelte';
 	import { type ThinkingPhase } from '$lib/services/chat/chat-phase';
 	import ThinkingImages from '$lib/components/chat/ThinkingImages.svelte';
-	import Photoboard from '$lib/components/chat/Photoboard.svelte';
 	import { EventScene } from '$lib/components/events';
-	import { OnboardingModal } from '$lib/components/onboarding';
-	import MemoryGraphModal from '$lib/components/memory/MemoryGraphModal.svelte';
+	import { chatSurface } from '$lib/stores/chat-surface.svelte';
 	import { vrmStore } from '$lib/stores/vrm.svelte';
 	import { chatStore } from '$lib/stores/chat.svelte';
 	import { modulesStore } from '$lib/stores/modules.svelte';
@@ -44,16 +114,20 @@
 	import { getLLMProvider, providerSupportsVision } from '$lib/services/providers/registry';
 	import { isLocalLLMProvider } from '$lib/services/providers/local-endpoints';
 	import { canShowImages } from '$lib/services/providers/vision';
+	import { isOpenAICompatibleProvider } from '$lib/services/providers/local-endpoints';
 	import { onDestroy } from 'svelte';
 	import { sendCompanionMessage, type SendCompanionMessageOptions } from '$lib/services/chat/companion-chat';
 	import { createReminderFiredHandler } from '$lib/services/chat/reminder-chat';
 	import { reminderStore } from '$lib/stores/reminders.svelte';
 	import { type PreparedImage } from '$lib/services/storage/keepsakes';
-	import { isTauri } from '$lib/services/platform';
 	import { browser } from '$app/environment';
+	import { isTauri } from '$lib/services/platform';
 	import type { StateUpdates } from '$lib/types/character';
 	import type { EventDefinition } from '$lib/types/events';
 	import { pop, fadeFast } from '$lib/utils/motion';
+	import SettingsModal from '$lib/components/settings/modal/SettingsModal.svelte';
+	import { settingsModal } from '$lib/stores/settings-modal.svelte';
+	import { applyScreenWakeLock, reapplyScreenWakeLockIfVisible } from '$lib/services/platform/wake-lock';
 
 	// V2 companion system imports
 	import {
@@ -70,36 +144,20 @@
 	// Event scene state
 	let activeEvent = $state<EventDefinition | null>(null);
 
-	// Info modal state
-	let showInfoModal = $state(false);
-	let showBoard = $state(false);
 	// Her impression from the latest turn, attached to a kept photo as its note.
 	let lastNewMemory: string | undefined;
-
-	// Memory graph modal state
-	let showMemoryGraph = $state(false);
-
-	// Onboarding state
-	let showOnboarding = $state(false);
-	let onboardingDismissed = $state(false);
 
 	// Speech bubble state
 	let latestResponse = $state('');
 	let isTyping = $state(false);
 	// What she's doing this turn, for the shimmer label
 	let thinkingPhase = $state<ThinkingPhase>('thinking');
-	// Chat sidebar state — start open when sidebar mode is enabled
-	let sidebarOpen = $state(
-		displayStore.chatDisplayMode === 'sidebar' || displayStore.chatDisplayMode === 'both'
-	);
 
-	// In sidebar-only mode the panel is the only place a reply can appear, so a
-	// closed panel reopens when she starts responding; you should never miss
-	// her answer. In 'both' mode the 3D bubble already shows it, so a manual
-	// close is respected.
+	// In sidebar modes a reply must never be missed: an incoming answer reopens
+	// the chat surface (bubble mode shows it in the 3D bubble instead).
 	$effect(() => {
-		if (isTyping && displayStore.chatDisplayMode === 'sidebar' && !sidebarOpen) {
-			sidebarOpen = true;
+		if (isTyping && displayStore.chatDisplayMode !== 'bubble' && !chatSurface.open) {
+			chatSurface.openView('chat');
 		}
 	});
 
@@ -134,9 +192,6 @@
 	const showBubble = $derived(
 		displayStore.chatDisplayMode === 'bubble' || displayStore.chatDisplayMode === 'both'
 	);
-	const showSidebarTrigger = $derived(
-		displayStore.chatDisplayMode === 'sidebar' || displayStore.chatDisplayMode === 'both'
-	);
 	// Images she's currently being shown, floated above her head while she thinks
 	let thinkingImages = $state<{ id: string; url: string }[]>([]);
 
@@ -146,7 +201,10 @@
 		const provider = cs.activeProvider as string;
 		const model = cs.activeModel as string;
 		if (!provider) return false;
-		return canShowImages(providerSupportsVision(provider), isLocalLLMProvider(provider), model);
+		// OpenAI-compatible endpoints sniff the model name too: an aggregator
+		// serving gemini/gpt-4o models can see, a text-only endpoint cannot.
+		const localLike = isLocalLLMProvider(provider) || isOpenAICompatibleProvider(provider);
+		return canShowImages(providerSupportsVision(provider), localLike, model);
 	});
 
 	// Provider info for the one-time "where do photos go" disclosure.
@@ -183,22 +241,31 @@
 		});
 	});
 
-	// Check for first-run (onboarding). ?onboarding=1 force-opens it for testing
-	// without resetting the companion.
-	$effect(() => {
-		if (characterStore.isReady && !onboardingDismissed) {
-			const forced = browser && new URLSearchParams(window.location.search).has('onboarding');
-			const { lastInteraction, totalInteractions } = characterStore.state;
-			showOnboarding = forced || (lastInteraction === null && totalInteractions === 0);
-		}
-	});
-
 	// Check for debug events (from developer tools)
 	$effect(() => {
 		const debugEvent = debugEventsStore.consume();
 		if (debugEvent) {
 			activeEvent = debugEvent;
 		}
+	});
+
+	// Screen wake lock (utsuwa 0.15.0): follow the user's preference and
+	// re-acquire when the page becomes visible again (locks do not survive hide).
+	$effect(() => {
+		void applyScreenWakeLock(displayStore.screenWakeLock);
+	});
+
+	// Deep link legado: /app#ajustes (antes /app/ajustes/*) abre el modal.
+	$effect(() => {
+		if (!browser) return;
+		if (window.location.hash === '#ajustes') {
+			settingsModal.show();
+			history.replaceState(null, '', window.location.pathname);
+		}
+	});
+	$effect(() => {
+		document.addEventListener('visibilitychange', reapplyScreenWakeLockIfVisible);
+		return () => document.removeEventListener('visibilitychange', reapplyScreenWakeLockIfVisible);
 	});
 
 	// Start reminder polling and react to fired reminders by sending them back
@@ -290,31 +357,19 @@
 
 <div class="app-container">
 {#if !photomodeStore.active}
-		<TopLeftButtons onOpenMemoryGraph={() => showMemoryGraph = true} onBoardClick={() => showBoard = true} />
-		<TopRightButtons
-			onInfoClick={() => showInfoModal = true}
-			upcomingReminders={reminderStore.upcoming}
-			onDeleteReminder={reminderStore.deleteReminder}
-			recentFired={reminderStore.recentFired}
-			onDismissRecentFired={reminderStore.dismissRecentFired}
-			sidebarOpen={sidebarOpen && showSidebarTrigger}
-			onSidebarToggle={() => sidebarOpen = !sidebarOpen}
-		/>
-	{/if}
-	{#if showInfoModal}
-		<InfoModal onClose={() => showInfoModal = false} />
-	{/if}
-	{#if showBoard}
-		<Photoboard onClose={() => showBoard = false} />
-	{/if}
-	{#if showMemoryGraph}
-		<MemoryGraphModal onClose={() => showMemoryGraph = false} />
+		<BrandHeader />			<TopRightButtons
+				upcomingReminders={reminderStore.upcoming}
+				onDeleteReminder={reminderStore.deleteReminder}
+				recentFired={reminderStore.recentFired}
+				onDismissRecentFired={reminderStore.dismissRecentFired}
+				onMessagesToggle={() => chatSurface.toggleView('chat')}
+			/>
 	{/if}
 
 	<main class="main-content">
 		<!-- VRM Stage (Full Background) -->
 		<div class="stage-container">
-			{#if vrmStore.isLoading || !vrmStore.modelUrl}
+			{#if !vrmStore.vrm || vrmStore.isLoading}
 				<div class="loading-dots" out:fadeFast={{ duration: 300 }}>
 					<span class="dot"></span>
 					<span class="dot"></span>
@@ -332,16 +387,20 @@
 					onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); vrmStore.setError(null); } }}
 				>
 					<span>{vrmStore.error}</span>
-					<button type="button" class="toast-dismiss" aria-label="Dismiss">✕</button>
+					<button type="button" class="toast-dismiss" aria-label="Descartar">✕</button>
 				</div>
 			{/if}
 
 			<!-- Backdrop behind the transparent GL canvas: the persistent scene
 			     background in daily use, or the photo-mode override while posing.
 			     Captures composite the identical background. -->
+			{#if underBackdrop}
+				<div class="photo-bg-layer bg-under" style:background={backgroundToCss(underBackdrop)}></div>
+			{/if}
 			{#if effectiveBackdrop}
 				<div
 					class="photo-bg-layer"
+					class:bg-ready={imageReady}
 					style:filter={photoFilterCss}
 					style:background={backgroundToCss(effectiveBackdrop)}
 				></div>
@@ -355,6 +414,35 @@
 			>
 				<VrmScene />
 			</div>
+
+			<!-- Cinematic fades: dissolve the scene behind the floating chrome
+			     (brand bar up top, dock + brand line below) like ai-luna. Below
+			     the glass chrome, never over it — pointer-events none. Hidden in
+			     photo mode so the preview stays faithful to the capture. With a
+			     custom backdrop the fade is a BLURRED CLONE of the backdrop
+			     itself, masked to the edges: it dissolves with the backdrop's own
+			     colors (element filter + mask is safe; backdrop-filter + mask
+			     composites WHITE bands in WebKit). -->
+			{#if !photomodeStore.active}
+				{#if effectiveBackdrop && effectiveBackdrop.type !== 'image' && effectiveBackdrop.type !== 'pattern' && effectiveBackdrop.value}
+					<!-- Solid/gradient: dissolve with the backdrop's OWN edge colors -->					<div
+						class="scene-fade scene-fade-top edge-color"
+						aria-hidden="true"
+						style:--fade-color={effectiveBackdrop.type === 'gradient' ? effectiveBackdrop.value.split(',')[0] : effectiveBackdrop.value}
+					></div>					<div
+						class="scene-fade scene-fade-bottom edge-color"
+						aria-hidden="true"
+						style:--fade-color={effectiveBackdrop.type === 'gradient' ? effectiveBackdrop.value.split(',').pop() : effectiveBackdrop.value}
+					></div>
+				{:else if effectiveBackdrop}
+					<!-- Image/pattern: blurred clone of the backdrop itself -->
+					<div class="fade-blur fade-blur-top" aria-hidden="true" style:background={backgroundToCss(effectiveBackdrop)}></div>
+					<div class="fade-blur fade-blur-bottom" aria-hidden="true" style:background={backgroundToCss(effectiveBackdrop)}></div>
+				{:else}
+					<div class="scene-fade scene-fade-top" aria-hidden="true"></div>
+					<div class="scene-fade scene-fade-bottom" aria-hidden="true"></div>
+				{/if}
+			{/if}
 
 			{#if photomodeStore.active && photomodeStore.vignette}
 				<div class="photo-vignette" aria-hidden="true"></div>
@@ -389,28 +477,18 @@
 			/>
 		{/if}
 
-			<!-- Chat window (hides with the rest of the chat UI in photo mode) -->
-			<ChatWindow
-				open={sidebarOpen && showSidebarTrigger}
-				onClose={() => sidebarOpen = false}
-				isTyping={isTyping && typingDotsVisible}
-				phase={thinkingPhase}
-				onSend={handleSend}
-				disabled={chatStore.isLoading}
-				{visionCapable}
-			/>
-
 			<!-- The image she's being shown, floated above her head while she considers it -->
 			<ThinkingImages images={thinkingImages} show={isTyping} />
 
-			<!-- Bottom Chat Bar (its input docks into the chat window while open) -->
+			<!-- Expandable command surface: rail views + composer (chat included) -->
 			<BottomChatBar
 				onSend={handleSend}
 				disabled={chatStore.isLoading}
 				{visionCapable}
 				providerLabel={imageProvider.label}
 				providerIsLocal={imageProvider.isLocal}
-				barHidden={sidebarOpen && showSidebarTrigger}
+				isTyping={isTyping && typingDotsVisible}
+				phase={thinkingPhase}
 			/>
 		</div>
 		{#if photomodeStore.active}
@@ -428,7 +506,7 @@
 				onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chatStore.setError(null); } }}
 			>
 				<span>{chatStore.error}</span>
-				<button type="button" class="toast-dismiss" aria-label="Dismiss">✕</button>
+				<button type="button" class="toast-dismiss" aria-label="Descartar">✕</button>
 			</div>
 		{/if}
 
@@ -443,23 +521,21 @@
 				onClose={handleEventClose}
 			/>
 		{/if}
-	</main>
 
-	<!-- Onboarding Modal (first-run) -->
-	{#if showOnboarding}
-		<OnboardingModal onComplete={() => {
-			onboardingDismissed = true;
-			showOnboarding = false;
-		}} />
-	{/if}
+		<!-- Configuración: modal sobre la escena -->
+		<SettingsModal />
+	</main>
 </div>
 
 <style>
 	.app-container {
 		display: flex;
 		flex-direction: column;
-		height: 100vh;
+		/* dvh: sigue el viewport real del móvil (con/sin barra del navegador).
+		   100vh fijo desbordaba y el fondo se arrastraba al deslizar. */
+		height: 100dvh;
 		overflow: hidden;
+		overscroll-behavior: none;
 	}
 
 	.main-content {
@@ -475,11 +551,121 @@
 		z-index: 0;
 	}
 
-	/* Photo-mode background preview sits behind the transparent GL canvas */
+	/* Photo-mode background preview sits behind the transparent GL canvas.
+	   Invisible until its pixels exist (bg-ready), pre-scaled so the Ken
+	   Burns settle has room to breathe: the backdrop then fades in WHILE
+	   it gently zooms 1.035 → 1 — the scene composes instead of popping. */
 	.photo-bg-layer {
 		position: absolute;
 		inset: 0;
 		z-index: 0;
+		opacity: 0;
+		transform: scale(1.035);
+	}
+
+	.photo-bg-layer.bg-ready {
+		opacity: 1;
+		transform: scale(1);
+		transition:
+			opacity 0.55s ease,
+			transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.photo-bg-layer.bg-under {
+		opacity: 1;
+		transform: scale(1); /* held steady — never rides the settle */
+		transition: none;
+	}
+
+	/* Edge fades paint the INSTANT the backdrop mounts — the ambiance is
+	   there first and the full scene arrives INTO it (main layer keeps its
+	   decode gate + Ken Burns settle: bands lead, center follows). The
+	   progressive top-down sweep is prevented upstream: app.html preloads
+	   the persisted scene image at HTML parse, so on any repeat visit the
+	   bands paint a fully-decoded image instead of a streaming one. */
+
+	@media (prefers-reduced-motion: reduce) {
+		.photo-bg-layer.bg-ready {
+			transition: opacity 0.2s ease;
+		}
+	}
+
+	/* Cinematic scene fades over DEFAULT scenes: page-color gradient (photo
+	   captures composite the backdrop, not this overlay). */
+	.scene-fade {
+		position: absolute;
+		left: 0;
+		right: 0;
+		z-index: 2; /* above model (1) + vignette (2), below chrome (20+) */
+		pointer-events: none;
+	}
+
+	/* Top fade spans the WHOLE header band (brand + icon row) so the model
+	   dissolves behind all of it — the bottom fade's counterpart, subtler. */
+	.scene-fade-top {
+		top: 0;
+		height: 14.5rem;
+		background: linear-gradient(
+			to bottom,
+			color-mix(in srgb, var(--bg-page) 86%, transparent) 0%,
+			color-mix(in srgb, var(--bg-page) 42%, transparent) 40%,
+			transparent 100%
+		);
+	}
+
+	.scene-fade-bottom {
+		bottom: 0;
+		height: 11rem;
+		background: linear-gradient(
+			to top,
+			color-mix(in srgb, var(--bg-page) 85%, transparent) 0%,
+			color-mix(in srgb, var(--bg-page) 45%, transparent) 50%,
+			transparent 100%
+		);
+	}
+
+	/* Custom backdrops (gradient/image): a blurred CLONE of the backdrop,
+	   masked to the screen edges. Same box as the real backdrop → the clone's
+	   background aligns exactly; the mask dissolves it into the scene. Element
+	   filter + mask is safe everywhere (mask applies AFTER the element's own
+	   filter — the backdrop-filter + mask white-band bug doesn't apply). */
+	.fade-blur {
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+		pointer-events: none;
+		filter: blur(28px) saturate(1.12);
+		transform: scale(1.08); /* pushes the blur's edge-bleed off-screen */
+	}
+
+	/* Solid/gradient backdrops: fade with the backdrop's own edge color —
+	   seamless by construction (same color above the fade = invisible seam). */
+	.scene-fade.edge-color {
+		background: linear-gradient(
+			to bottom,
+			color-mix(in srgb, var(--fade-color) 92%, transparent) 0%,
+			color-mix(in srgb, var(--fade-color) 48%, transparent) 38%,
+			transparent 100%
+		);
+	}
+
+	.scene-fade.edge-color.scene-fade-bottom {
+		background: linear-gradient(
+			to top,
+			color-mix(in srgb, var(--fade-color) 92%, transparent) 0%,
+			color-mix(in srgb, var(--fade-color) 50%, transparent) 45%,
+			transparent 100%
+		);
+	}
+
+	.fade-blur-top {
+		-webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 14.5rem);
+		mask-image: linear-gradient(to bottom, black 0%, transparent 14.5rem);
+	}
+
+	.fade-blur-bottom {
+		-webkit-mask-image: linear-gradient(to top, black 0%, transparent 11rem);
+		mask-image: linear-gradient(to top, black 0%, transparent 11rem);
 	}
 
 	/* Vignette preview matching the capture composite */
@@ -505,20 +691,18 @@
 		mix-blend-mode: difference;
 	}
 
-	/* The scene sits blurred and dimmed while the model loads, then resolves
-	   into focus. Base state carries no filter so nothing lingers after. */
+	/* The scene fades in softly once the model is ready. Opacity only:
+	   interpolating a fullscreen-canvas blur drops frames right at the
+	   reveal (the jarring snap), while opacity stays on the cheap path. */
 	.vrm-stage {
 		position: relative;
 		z-index: 1; /* above the photo background layer */
 		height: 100%;
-		transition:
-			opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-			filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+		transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
 	.vrm-stage.is-loading {
 		opacity: 0;
-		filter: blur(14px);
 	}
 
 	.loading-dots {

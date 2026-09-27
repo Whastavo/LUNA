@@ -5,6 +5,7 @@ import {
 	type PersonaExtensions,
 	type AppMode,
 	createDefaultCharacterState,
+	normalizeSystemPrompt,
 	RELATIONSHIP_STAGE_INFO,
 	MOOD_INFO
 } from '$lib/types/character';
@@ -72,6 +73,14 @@ function createCharacterStore() {
 			state = loaded;
 
 			let needsSave = false;
+
+			// Los guardados antiguos llevaban el prompt por defecto en inglés;
+			// se normaliza al español (y se persiste) la primera vez que se carga.
+			const normalizedPrompt = normalizeSystemPrompt(state.systemPrompt);
+			if (normalizedPrompt !== state.systemPrompt) {
+				state = { ...state, systemPrompt: normalizedPrompt };
+				needsSave = true;
+			}
 
 			// Older saves reached committed before it gated on the commitment-talk
 			// outcome marker; patch them so the stricter gate can't demote them.
@@ -395,7 +404,7 @@ function createCharacterStore() {
 		// Listen before the initial load so a boot-time patch save in another
 		// window is never missed.
 		if (typeof BroadcastChannel !== 'undefined') {
-			syncChannel = new BroadcastChannel('utsuwa-character-state');
+			syncChannel = new BroadcastChannel('luna-character-state');
 			syncChannel.onmessage = async () => {
 				// Still booting: loadState is about to read fresh data anyway
 				if (isLoading) return;

@@ -32,7 +32,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'openai',
 		name: 'OpenAI',
-		description: 'GPT-4, o1, and more',
+		description: 'GPT-4, o1 y más',
 		category: 'llm',
 		icon: '🤖',
 		requiresApiKey: true,
@@ -42,7 +42,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'anthropic',
 		name: 'Anthropic',
-		description: 'Claude models',
+		description: 'Modelos Claude',
 		category: 'llm',
 		icon: '🧠',
 		requiresApiKey: true,
@@ -52,7 +52,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'google',
 		name: 'Google Gemini',
-		description: 'Gemini models',
+		description: 'Modelos Gemini',
 		category: 'llm',
 		icon: '✨',
 		iconColor: '#4285F4',
@@ -63,7 +63,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'deepseek',
 		name: 'DeepSeek',
-		description: 'DeepSeek models',
+		description: 'Modelos DeepSeek',
 		category: 'llm',
 		icon: '🔍',
 		requiresApiKey: true,
@@ -72,7 +72,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'xai',
 		name: 'xAI (Grok)',
-		description: 'Grok models',
+		description: 'Modelos Grok',
 		category: 'llm',
 		icon: '𝕏',
 		requiresApiKey: true,
@@ -83,7 +83,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'ollama',
 		name: 'Ollama',
-		description: 'Run LLMs locally on your machine',
+		description: 'Ejecuta LLMs localmente en tu máquina',
 		category: 'llm',
 		icon: '🦙',
 		requiresApiKey: false,
@@ -94,7 +94,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'lmstudio',
 		name: 'LM Studio',
-		description: 'Local LLM with GUI interface',
+		description: 'LLM local con interfaz gráfica',
 		category: 'llm',
 		icon: '🖥️',
 		requiresApiKey: false,
@@ -105,7 +105,7 @@ export const LLM_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'openai-compatible',
 		name: 'OpenAI-Compatible',
-		description: 'Any OpenAI-compatible endpoint (OpenRouter, Together, Mistral, vLLM, LiteLLM, ...)',
+		description: 'Cualquier endpoint compatible con OpenAI (OpenRouter, Together, Mistral, vLLM, LiteLLM, ...)',
 		category: 'llm',
 		icon: '🔌',
 		requiresApiKey: false,
@@ -123,7 +123,7 @@ export const TTS_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'elevenlabs',
 		name: 'ElevenLabs',
-		description: 'High-quality AI voices',
+		description: 'Voces de IA de alta calidad',
 		category: 'tts',
 		icon: '🎙️',
 		requiresApiKey: true,
@@ -141,7 +141,7 @@ export const TTS_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'openai-tts',
 		name: 'OpenAI TTS',
-		description: 'OpenAI text-to-speech voices',
+		description: 'Voces de texto a voz de OpenAI',
 		category: 'tts',
 		icon: '🔊',
 		requiresApiKey: true,
@@ -173,7 +173,7 @@ export const TTS_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'local-tts',
 		name: 'Local TTS',
-		description: 'Run a voice model locally (Kokoro, openedai-speech)',
+		description: 'Ejecuta un modelo de voz localmente (Kokoro, openedai-speech)',
 		category: 'tts',
 		icon: '🏠',
 		requiresApiKey: false,
@@ -197,7 +197,7 @@ export const TTS_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'omnivoice',
 		name: 'OmniVoice',
-		description: 'Local OmniVoice TTS',
+		description: 'TTS local OmniVoice',
 		category: 'tts',
 		icon: '🔊',
 		requiresApiKey: false,
@@ -230,7 +230,7 @@ export const STT_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'groq-stt',
 		name: 'Groq',
-		description: 'Fast speech-to-text via Whisper',
+		description: 'Voz a texto rápido mediante Whisper',
 		category: 'stt',
 		icon: '🎤',
 		requiresApiKey: true,
@@ -239,7 +239,7 @@ export const STT_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'openai-stt',
 		name: 'OpenAI',
-		description: 'Cloud speech-to-text via Whisper / gpt-4o-transcribe',
+		description: 'Voz a texto en la nube mediante Whisper / gpt-4o-transcribe',
 		category: 'stt',
 		icon: '🎤',
 		requiresApiKey: true,
@@ -253,7 +253,7 @@ export const STT_PROVIDERS: ProviderMetadata[] = [
 	{
 		id: 'local-stt',
 		name: 'Local STT',
-		description: 'Run Whisper locally (Speaches, faster-whisper-server, whisper.cpp)',
+		description: 'Ejecuta Whisper localmente (Speaches, faster-whisper-server, whisper.cpp)',
 		category: 'stt',
 		icon: '🏠',
 		requiresApiKey: false,

@@ -49,8 +49,8 @@
 	const chatExpanded = $derived(overlayStore.chatExpanded);
 
 	// --- Overlay window sizing & lock ---
-	const SIZE_KEY = 'utsuwa-overlay-size';
-	const LOCK_KEY = 'utsuwa-overlay-locked';
+	const SIZE_KEY = 'luna-overlay-size';
+	const LOCK_KEY = 'luna-overlay-locked';
 
 	// Restore lock preference and last window size
 	$effect(() => {
@@ -297,22 +297,22 @@
 			onpointerup={onResizeEnd}
 			onpointercancel={onResizeEnd}
 			role="separator"
-			aria-label="Resize overlay"
-			title="Drag to resize"
+			aria-label="Redimensionar overlay"
+			title="Arrastra para redimensionar"
 		></div>
 	{/if}
 
 	<!-- Control rail (revealed on hover) -->
 	<div class="overlay-rail">
-		<button class="rail-btn" onclick={exitToMain} aria-label="Exit to main app" title="Back to app">
+		<button class="rail-btn" onclick={exitToMain} aria-label="Salir a la app principal" title="Volver a la app">
 			<Icon name="x" size={15} />
 		</button>
 		<button
 			class="rail-btn"
 			class:rail-btn-active={showCamera}
 			onclick={() => (showCamera = !showCamera)}
-			aria-label="Camera settings"
-			title="Camera"
+			aria-label="Ajustes de cámara"
+			title="Cámara"
 		>
 			<Icon name="video" size={15} />
 		</button>
@@ -320,8 +320,8 @@
 			class="rail-btn"
 			class:rail-btn-active={positionLocked}
 			onclick={toggleLock}
-			aria-label={positionLocked ? 'Unlock position' : 'Lock position'}
-			title={positionLocked ? 'Position locked' : 'Lock position'}
+			aria-label={positionLocked ? 'Posición desbloqueada' : 'Bloquear posición'}
+			title={positionLocked ? 'Posición bloqueada' : 'Bloquear posición'}
 		>
 			<Icon name={positionLocked ? 'lock' : 'lock-open'} size={15} />
 		</button>

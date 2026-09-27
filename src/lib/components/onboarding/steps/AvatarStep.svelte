@@ -24,8 +24,8 @@
 
 <div class="ob-step">
 	<div class="ob-head">
-		<h2 class="ob-title">Choose your avatar</h2>
-		<p class="ob-subtitle">Select a VRM model or upload your own.</p>
+		<h2 class="ob-title">Elige tu avatar</h2>
+		<p class="ob-subtitle">Selecciona un modelo VRM o sube el tuyo.</p>
 	</div>
 
 	<div class="gallery">
@@ -36,8 +36,8 @@
 				onclick={() => selectModel(model.id)}
 			>
 				<div class="model-preview">
-					{#if model.previewUrl}
-						<img src={model.previewUrl} alt={model.name} />
+					{#if vrmStore.getModelPortrait(model.id, 'bust')}
+						<img src={vrmStore.getModelPortrait(model.id, 'bust')} alt={model.name} />
 					{:else}
 						<Icon name="user" size={32} />
 					{/if}
@@ -49,7 +49,7 @@
 				</div>
 				<span class="model-name">{model.name}</span>
 				{#if model.isDefault}
-					<span class="default-badge">Default</span>
+					<span class="default-badge">Predeterminado</span>
 				{/if}
 			</button>
 		{/each}
@@ -58,7 +58,7 @@
 			<div class="upload-icon">
 				<Icon name="upload" size={24} />
 			</div>
-			<span class="upload-text">Upload VRM</span>
+			<span class="upload-text">Subir VRM</span>
 		</button>
 	</div>
 
@@ -70,7 +70,7 @@
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div class="uploader-container" onclick={(e) => e.stopPropagation()}>
 				<div class="uploader-header">
-					<h3>Upload VRM model</h3>
+					<h3>Subir modelo VRM</h3>
 					<button class="close-btn" onclick={() => showUploader = false}>
 						<Icon name="x" size={18} />
 					</button>
@@ -83,10 +83,10 @@
 	<div class="ob-actions ob-actions--split">
 		<button class="btn btn-secondary" onclick={onBack}>
 			<Icon name="chevron-left" size={16} />
-			Back
+			Atrás
 		</button>
 		<button class="btn btn-primary" onclick={onNext}>
-			Next
+			Siguiente
 			<Icon name="chevron-right" size={16} />
 		</button>
 	</div>
@@ -156,7 +156,7 @@
 		align-items: center;
 		justify-content: center;
 		background: var(--accent);
-		color: #fff;
+		color: var(--accent-contrast, #fff);
 		border-radius: var(--radius-full);
 		box-shadow: var(--shadow-sm);
 	}

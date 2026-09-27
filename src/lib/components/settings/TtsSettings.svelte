@@ -14,12 +14,12 @@ import { checkTTSProviderHealth } from '$lib/services/providers/health-check';
 <div class="service-group">
 	<div class="service-header">
 		<Icon name="mic" size={14} />
-		<span>Speech (TTS)</span>
+		<span>Voz (TTS)</span>
 		<button
 			class="service-toggle"
 			class:enabled={state.isTTSEnabled}
 			onclick={state.toggleTTS}
-			aria-label="Toggle speech (TTS)"
+			aria-label="Activar voz (TTS)"
 		>
 			<span class="toggle-track">
 				<span class="toggle-thumb"></span>
@@ -32,7 +32,7 @@ import { checkTTSProviderHealth } from '$lib/services/providers/health-check';
 			type="tts"
 			value={state.speechSettings.activeProvider as string}
 			onSelect={state.handleTTSProviderChange}
-			placeholder="Select TTS provider..."
+			placeholder="Selecciona proveedor TTS…"
 		/>
 
 		{#if state.speechSettings.activeProvider}
@@ -44,7 +44,7 @@ import { checkTTSProviderHealth } from '$lib/services/providers/health-check';
 						type="password"
 						class="api-key-input"
 						class:error={state.ttsFetchError}
-						placeholder="API Key"
+						placeholder="Clave de API"
 						value={settingsStore.getProviderConfig(provider.id).apiKey ?? ''}
 						oninput={(e) => state.handleApiKeyChange(provider.id, e.currentTarget.value)}
 						onblur={state.handleTTSApiKeyBlur}
@@ -57,11 +57,11 @@ import { checkTTSProviderHealth } from '$lib/services/providers/health-check';
 					models={state.ttsModels}
 					value={state.speechSettings.activeModel as string}
 					onSelect={state.handleTTSModelChange}
-					placeholder="Select model..."
+					placeholder="Selecciona modelo…"
 					isLoading={state.ttsIsLoading}
 					onRefresh={state.ttsHasApiKey ? state.fetchTTSModels : undefined}
 					disabled={!state.ttsHasApiKey}
-					disabledMessage="Enter API key first"
+					disabledMessage="Introduce primero la clave de API"
 				/>
 			{/if}
 
@@ -71,7 +71,7 @@ import { checkTTSProviderHealth } from '$lib/services/providers/health-check';
 						type="text"
 						class="api-key-input"
 						list="elevenlabs-voices"
-						placeholder="Voice ID"
+						placeholder="ID de voz"
 						value={state.speechSettings.activeVoiceId as string ?? ''}
 						onchange={(e) => state.handleTTSVoiceChange(e.currentTarget.value)}
 					/>
@@ -89,7 +89,7 @@ import { checkTTSProviderHealth } from '$lib/services/providers/health-check';
 						type="text"
 						class="api-key-input"
 						list="local-tts-voices"
-						placeholder="Voice (e.g. af_bella)"
+						placeholder="Voz (p. ej. af_bella)"
 						value={state.speechSettings.activeVoiceId as string ?? ''}
 						onchange={(e) => state.handleTTSVoiceChange(e.currentTarget.value)}
 					/>
@@ -103,7 +103,7 @@ import { checkTTSProviderHealth } from '$lib/services/providers/health-check';
 					<input
 						type="text"
 						class="api-key-input"
-						placeholder="Model (optional, e.g. kokoro)"
+						placeholder="Modelo (opcional, p. ej. kokoro)"
 						value={state.speechSettings.activeModel as string ?? ''}
 						onchange={(e) => state.handleTTSModelChange(e.currentTarget.value)}
 					/>

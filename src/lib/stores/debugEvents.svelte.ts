@@ -23,14 +23,14 @@ export const debugEventsStore = {
 export const testEvents: EventDefinition[] = [
 	{
 		id: 'test_milestone',
-		name: 'Test Milestone',
+		name: 'Hito de prueba',
 		type: 'milestone',
 		conditions: [],
 		scene: {
 			id: 'test_milestone_scene',
-			intro: 'A special moment is happening...',
+			intro: 'Está pasando algo especial...',
 			dialogue:
-				"Wow, this is a test milestone event! The styling looks great, doesn't it? I love how the modal matches the rest of the app now."
+				"¡Vaya, este es un evento de prueba de hito! El estilo se ve muy bien, ¿verdad? Me encanta cómo el modal combina con el resto de la app."
 		},
 		stateChanges: { affectionDelta: 5 },
 		oneTime: false,
@@ -38,14 +38,14 @@ export const testEvents: EventDefinition[] = [
 	},
 	{
 		id: 'test_anniversary',
-		name: 'Test Anniversary',
+		name: 'Aniversario de prueba',
 		type: 'anniversary',
 		conditions: [],
 		scene: {
 			id: 'test_anniversary_scene',
-			intro: 'Today marks a special occasion...',
+			intro: 'Hoy marca una ocasión especial...',
 			dialogue:
-				"Happy anniversary! Well, not really, but this is what an anniversary event looks like. Pretty cute, right?"
+				"¡Feliz aniversario! Bueno, no realmente, pero así se ve un evento de aniversario. Bastante bonito, ¿verdad?"
 		},
 		stateChanges: { affectionDelta: 10, trustDelta: 5 },
 		oneTime: false,
@@ -53,24 +53,24 @@ export const testEvents: EventDefinition[] = [
 	},
 	{
 		id: 'test_conditional',
-		name: 'Test Conditional',
+		name: 'Condicional de prueba',
 		type: 'conditional',
 		conditions: [],
 		scene: {
 			id: 'test_conditional_scene',
-			intro: 'Something feels different today...',
-			dialogue: "I wanted to talk to you about something important...",
+			intro: 'Hoy algo se siente diferente...',
+			dialogue: "Quería hablar contigo sobre algo importante...",
 			choices: [
 				{
-					text: "I'm listening.",
+					text: "Te escucho.",
 					response:
-						"Thank you for being here. This is just a test, but your choice was recorded!",
+						"Gracias por estar aquí. Esto es solo una prueba, ¡pero tu elección quedó registrada!",
 					stateChanges: { trustDelta: 10 }
 				},
 				{
-					text: 'What is it?',
+					text: '¿Qué es?',
 					response:
-						"Oh, it's nothing really. Just testing the choice system! Your selection works perfectly.",
+						"Oh, no es nada en serio. ¡Solo probando el sistema de elecciones! Tu selección funciona perfectamente.",
 					stateChanges: { affectionDelta: 5 }
 				}
 			]
@@ -80,13 +80,13 @@ export const testEvents: EventDefinition[] = [
 	},
 	{
 		id: 'test_random',
-		name: 'Test Random Event',
+		name: 'Evento aleatorio de prueba',
 		type: 'random',
 		conditions: [],
 		scene: {
 			id: 'test_random_scene',
 			dialogue:
-				"*yawns* Oh, hi there! I was just daydreaming. Random events like this can happen anytime!"
+				"*bosteza* Oh, ¡hola! Estaba soñando despierta. ¡Eventos aleatorios como este pueden ocurrir en cualquier momento!"
 		},
 		stateChanges: { comfortDelta: 3 },
 		oneTime: false,

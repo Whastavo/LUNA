@@ -1,17 +1,17 @@
 ---
-title: Local LLM Setup
-description: How to set up and connect local LLMs to Utsuwa using Ollama or LM Studio.
+title: Configurar LLM local
+description: Cómo configurar y conectar LLMs locales a Luna usando Ollama o LM Studio.
 ---
 
-# Local LLM Setup
+# Configurar LLM local
 
-Running a local LLM means your conversations never leave your machine. No API keys, no usage costs, and full offline support.
+Ejecutar un LLM local significa que tus conversaciones nunca salen de tu máquina. Sin claves de API, sin costes de uso y con soporte completo fuera de línea.
 
 ## Ollama
 
-[Ollama](https://ollama.ai) is a lightweight tool for running open-source LLMs locally. Available on macOS, Linux, and Windows.
+[Ollama](https://ollama.ai) es una herramienta ligera para ejecutar LLMs localmente. Disponible en macOS, Linux y Windows.
 
-### Installation
+### Instalación
 
 **macOS**
 
@@ -27,192 +27,192 @@ curl -fsSL https://ollama.ai/install.sh | sh
 
 **Windows**
 
-Download the installer from [ollama.ai](https://ollama.ai) and run it.
+Descarga el instalador desde [ollama.ai](https://ollama.ai) y ejecútalo.
 
-### Pulling a Model
+### Descargar un modelo
 
-Download a model before you can use it:
+Descarga un modelo antes de poder usarlo:
 
 ```bash
 ollama pull llama3.2
 ```
 
-Other options worth trying: `mistral`, `phi3`, `codellama`.
+Otras opciones que vale la pena probar: `mistral`, `phi3`, `codellama`.
 
-### Starting the Server
+### Iniciar el servidor
 
 ```bash
 ollama serve
 ```
 
-This starts the Ollama API on `http://localhost:11434`.
+Esto inicia la API de Ollama en `http://localhost:11434`.
 
-### Connecting to Utsuwa
+### Conectar con Luna
 
-1. Open the **Controls** panel (sliders icon, top right) and click **Settings** (gear)
-2. Navigate to the **Character** tab and open the **AI Services** section
-3. Enable the Chat (LLM) toggle, then select **Ollama** from the provider dropdown
-4. Leave the base URL as `http://localhost:11434` unless you changed Ollama's port
-5. Utsuwa will fetch models installed on your machine. Click the refresh icon if you just pulled a new model.
-6. Select an installed model from the dropdown
-7. Start chatting
+1. Abre el panel de **Controles** (icono de deslizadores, arriba a la derecha) y pulsa **Ajustes** (engranaje)
+2. Ve a la pestaña **Personaje** y abre la sección de **Servicios de IA**
+3. Activa el interruptor de Chat (LLM), luego selecciona **Ollama** en el desplegable de proveedores
+4. Deja la URL base como `http://localhost:11434` salvo que hayas cambiado el puerto de Ollama
+5. Luna obtendrá los modelos instalados en tu máquina. Pulsa el icono de actualizar si acabas de descargar un modelo nuevo.
+6. Selecciona un modelo instalado del desplegable
+7. Empieza a chatear
 
-If the dropdown is empty, check your installed Ollama models with:
+Si el desplegable está vacío, revisa tus modelos de Ollama instalados con:
 
 ```bash
 ollama list
 ```
 
-### Allowing Utsuwa to reach Ollama
+### Permitir que Luna llegue a Ollama
 
-Ollama only answers requests from origins on its allowlist. If it isn't allowing Utsuwa, you'll see the model list stay empty and Ollama's own log will show `403` responses on `/api/tags`. Which origin you need to allow depends on how you run Utsuwa.
+Ollama solo responde peticiones de orígenes en su lista de permitidos. Si no permite a Luna, verás que la lista de modelos se queda vacía y el registro de Ollama mostrará respuestas `403` en `/api/tags`. Qué origen necesitas permitir depende de cómo ejecutes Luna.
 
-**Desktop app**
+**App de escritorio**
 
-| Your OS | Setup needed | What to do |
+| Tu SO | Configuración necesaria | Qué hacer |
 |---------|--------------|------------|
-| macOS | None | Ollama already allows the macOS app's `tauri://localhost` origin. Just run `ollama serve`. |
-| Windows | Yes | Allow `http://tauri.localhost` (see below). |
-| Linux | Yes | Allow `http://tauri.localhost` (see below). |
+| macOS | Ninguna | Ollama ya permite el origen `tauri://localhost` de la app de macOS. Solo ejecuta `ollama serve`. |
+| Windows | Sí | Permite `http://tauri.localhost` (ver abajo). |
+| Linux | Sí | Permite `http://tauri.localhost` (ver abajo). |
 
-The desktop app on Windows and Linux reports its origin to Ollama as `http://tauri.localhost`, which is not on Ollama's default allowlist, so you have to add it once.
+La app de escritorio en Windows y Linux reporta su origen a Ollama como `http://tauri.localhost`, que no está en la lista de permitidos por defecto de Ollama, así que tienes que añadirlo una vez.
 
-On **Windows**, set it and then fully restart Ollama:
+En **Windows**, configúralo y reinicia Ollama por completo:
 
 ```
 setx OLLAMA_ORIGINS "http://tauri.localhost"
 ```
 
-`setx` only applies to programs started afterward, so quit Ollama from the system tray (right-click the tray icon, Quit) and start it again. If you run `ollama serve` in a terminal instead, use `set OLLAMA_ORIGINS=http://tauri.localhost` in that same window before running it.
+`setx` solo aplica a programas iniciados después, así que cierra Ollama desde la bandeja del sistema (clic derecho en el icono de la bandeja, Salir) y arráncalo de nuevo. Si ejecutas `ollama serve` en una terminal en su lugar, usa `set OLLAMA_ORIGINS=http://tauri.localhost` en esa misma ventana antes de ejecutarlo.
 
-On **Linux**, start Ollama with the origin in its environment:
+En **Linux**, inicia Ollama con el origen en su entorno:
 
 ```bash
 OLLAMA_ORIGINS=http://tauri.localhost ollama serve
 ```
 
-If Ollama runs as a systemd service, run `systemctl edit ollama`, add `Environment="OLLAMA_ORIGINS=http://tauri.localhost"` under `[Service]`, then `sudo systemctl restart ollama`.
+Si Ollama corre como servicio systemd, ejecuta `systemctl edit ollama`, añade `Environment="OLLAMA_ORIGINS=http://tauri.localhost"` bajo `[Service]`, y luego `sudo systemctl restart ollama`.
 
-**Hosted website (app.utsuwa.ai)**
+**Sitio web alojado (app.luna.ai)**
 
-The web app runs at `app.utsuwa.ai`, and your browser connects directly to Ollama on your machine, so allow that origin:
+La app web corre en `app.luna.ai`, y tu navegador se conecta directamente a Ollama en tu máquina, así que permite ese origen:
 
 ```bash
-OLLAMA_ORIGINS=https://app.utsuwa.ai ollama serve
+OLLAMA_ORIGINS=https://app.luna.ai ollama serve
 ```
 
-Match whatever is in your browser's address bar. For local development use `http://localhost:5173`. For a Vercel preview, use the exact origin shown in the address bar (no trailing slash), such as `https://your-preview.vercel.app`. Comma-separate multiple origins, or use `OLLAMA_ORIGINS=*` to allow any origin on your machine.
+Usa lo que aparezca en la barra de direcciones de tu navegador. Para desarrollo local usa `http://localhost:5173`. Para una vista previa de Vercel, usa el origen exacto mostrado en la barra de direcciones (sin barra final), como `https://tu-preview.vercel.app`. Separa varios orígenes con comas, o usa `OLLAMA_ORIGINS=*` para permitir cualquier origen en tu máquina.
 
 ## LM Studio
 
-[LM Studio](https://lmstudio.ai) provides a GUI for downloading and running local models. Good option if you prefer not to use the terminal.
+[LM Studio](https://lmstudio.ai) ofrece una GUI para descargar y ejecutar modelos locales. Buena opción si prefieres no usar la terminal.
 
-### Installation
+### Instalación
 
-Download from [lmstudio.ai](https://lmstudio.ai) and install it.
+Descarga desde [lmstudio.ai](https://lmstudio.ai) e instálalo.
 
-### Downloading Models
+### Descargar modelos
 
-Open LM Studio and browse the built-in model catalog. Search for a model, click download, and wait for it to finish.
+Abre LM Studio y explora el catálogo de modelos integrado. Busca un modelo, pulsa descargar y espera a que termine.
 
-### Starting the Server
+### Iniciar el servidor
 
-1. Go to the **Server** tab in LM Studio
-2. Click **Start Server**
+1. Ve a la pestaña **Server** en LM Studio
+2. Pulsa **Start Server**
 
-This starts an OpenAI-compatible API on `http://localhost:1234`.
+Esto inicia una API compatible con OpenAI en `http://localhost:1234`.
 
-### Connecting to Utsuwa
+### Conectar con Luna
 
-1. Open the **Controls** panel (sliders icon, top right) and click **Settings** (gear)
-2. Navigate to the **Character** tab and open the **AI Services** section
-3. Enable the Chat (LLM) toggle, then select **LM Studio** from the provider dropdown
-4. Leave the base URL as `http://localhost:1234/v1` unless you changed LM Studio's port
-5. Utsuwa will fetch models from the running LM Studio server. Click the refresh icon if you load a different model.
-6. Select the loaded model from the dropdown
-7. Start chatting
+1. Abre el panel de **Controles** (icono de deslizadores, arriba a la derecha) y pulsa **Ajustes** (engranaje)
+2. Ve a la pestaña **Personaje** y abre la sección de **Servicios de IA**
+3. Activa el interruptor de Chat (LLM), luego selecciona **LM Studio** en el desplegable de proveedores
+4. Deja la URL base como `http://localhost:1234/v1` salvo que hayas cambiado el puerto de LM Studio
+5. Luna obtendrá los modelos del servidor de LM Studio en ejecución. Pulsa el icono de actualizar si cargas un modelo distinto.
+6. Selecciona el modelo cargado del desplegable
+7. Empieza a chatear
 
-## Recommended Models
+## Modelos recomendados
 
-| Model | Size | Best For | RAM Required |
+| Modelo | Tamaño | Ideal para | RAM necesaria |
 |-------|------|----------|--------------|
-| Llama 3.2 (3B) | ~2GB | General chat, fast responses | 8GB |
-| Llama 3.1 (8B) | ~4.7GB | Better quality responses | 16GB |
-| Mistral (7B) | ~4.1GB | Good balance of speed and quality | 16GB |
-| Phi-3 (3.8B) | ~2.3GB | Lightweight, efficient | 8GB |
+| Llama 3.2 (3B) | ~2GB | Chat general, respuestas rápidas | 8GB |
+| Llama 3.1 (8B) | ~4.7GB | Respuestas de mayor calidad | 16GB |
+| Mistral (7B) | ~4.1GB | Buen equilibrio de velocidad y calidad | 16GB |
+| Phi-3 (3.8B) | ~2.3GB | Ligero, eficiente | 8GB |
 
-Start with **Llama 3.2 (3B)** if you're unsure. It runs well on most hardware and gives solid results for conversational use.
+Empieza con **Llama 3.2 (3B)** si no estás seguro. Funciona bien en la mayoría del hardware y da resultados sólidos para uso conversacional.
 
-## Custom Base URL
+## URL base personalizada
 
-If you're running the LLM server on a different machine or non-default port, enter the full URL in the provider settings. For example:
+Si estás ejecutando el servidor LLM en otra máquina o en un puerto no predeterminado, introduce la URL completa en los ajustes del proveedor. Por ejemplo:
 
-- Remote machine: `http://192.168.1.50:11434`
-- Custom port: `http://localhost:8080`
+- Máquina remota: `http://192.168.1.50:11434`
+- Puerto personalizado: `http://localhost:8080`
 
-For Ollama, either `http://localhost:11434` or `http://localhost:11434/v1` works. Utsuwa uses `/api/tags` for model discovery and `/v1/chat/completions` for chat.
+Para Ollama, tanto `http://localhost:11434` como `http://localhost:11434/v1` funcionan. Luna usa `/api/tags` para descubrir modelos y `/v1/chat/completions` para el chat.
 
-## Troubleshooting
+## Solución de problemas
 
-### "Failed to fetch models"
+### «Error al obtener modelos»
 
-The LLM server may not be running, or it may not be allowing Utsuwa's origin. Start the server:
+El servidor LLM puede no estar en ejecución, o puede no estar permitiendo el origen de Luna. Inicia el servidor:
 
 - Ollama: `ollama serve`
-- LM Studio: Go to the Server tab and click Start Server
+- LM Studio: ve a la pestaña Server y pulsa Start Server
 
-If the server is running but the list is still empty, it's almost always an origin problem. Ollama's log will show `403` on `/api/tags`. Allow Utsuwa's origin as described in [Allowing Utsuwa to reach Ollama](#allowing-utsuwa-to-reach-ollama): on the **Windows or Linux desktop app** that means `OLLAMA_ORIGINS=http://tauri.localhost`; on the **hosted website** it's `OLLAMA_ORIGINS=https://app.utsuwa.ai`. The macOS desktop app needs nothing. Restart Ollama after changing it, then click the refresh icon in Utsuwa's model dropdown.
+Si el servidor está en ejecución pero la lista sigue vacía, casi siempre es un problema de origen. El registro de Ollama mostrará `403` en `/api/tags`. Permite el origen de Luna como se describe en [Permitir que Luna llegue a Ollama](#permitir-que-luna-llegue-a-ollama): en la **app de escritorio de Windows o Linux** eso significa `OLLAMA_ORIGINS=http://tauri.localhost`; en el **sitio web alojado** es `OLLAMA_ORIGINS=https://app.luna.ai`. La app de escritorio de macOS no necesita nada. Reinicia Ollama tras cambiarlo y pulsa el icono de actualizar en el desplegable de modelos de Luna.
 
-### "model not found"
+### «model not found»
 
-The selected model is no longer installed locally, or the local server returned a stale model list.
+El modelo seleccionado ya no está instalado localmente, o el servidor local devolvió una lista de modelos obsoleta.
 
-For Ollama:
+Para Ollama:
 
 ```bash
 ollama list
 ollama pull llama3.2
 ```
 
-Then select the installed model from Utsuwa's model dropdown.
+Luego selecciona el modelo instalado en el desplegable de modelos de Luna.
 
-### "Connection refused"
+### «Connection refused»
 
-The port doesn't match. Default ports:
+El puerto no coincide. Puertos por defecto:
 
-| Provider | Port |
+| Proveedor | Puerto |
 |----------|------|
 | Ollama | 11434 |
 | LM Studio | 1234 |
 
-Make sure the URL in Utsuwa matches the port your server is using.
+Asegúrate de que la URL en Luna coincide con el puerto que usa tu servidor.
 
-### Models still won't load (try 127.0.0.1)
+### Los modelos siguen sin cargar (prueba 127.0.0.1)
 
-If Ollama is running and you've allowed the origin but the model list is still empty, change the base URL in Utsuwa from `http://localhost:11434` to `http://127.0.0.1:11434`. On some systems (most often Windows) `localhost` resolves to the IPv6 address `::1` first, while Ollama listens on the IPv4 address `127.0.0.1`, so the connection never reaches it. Pointing Utsuwa straight at `127.0.0.1` avoids the mismatch. This is machine-dependent, so it won't affect everyone.
+Si Ollama está en ejecución y ya permitiste el origen pero la lista de modelos sigue vacía, cambia la URL base en Luna de `http://localhost:11434` a `http://127.0.0.1:11434`. En algunos sistemas (la mayoría de las veces Windows) `localhost` resuelve primero a la dirección IPv6 `::1`, mientras que Ollama escucha en la dirección IPv4 `127.0.0.1`, así que la conexión nunca llega. Apuntar Luna directamente a `127.0.0.1` evita el desajuste. Esto depende de la máquina, así que no afectará a todo el mundo.
 
-### Slow responses
+### Respuestas lentas
 
-- Try a smaller model (3B parameters instead of 7B+)
-- Check that GPU acceleration is enabled in your LLM tool's settings
-- Close other memory-heavy applications
+- Prueba un modelo más pequeño (3B de parámetros en vez de 7B+)
+- Comprueba que la aceleración por GPU está activada en los ajustes de tu herramienta LLM
+- Cierra otras aplicaciones que consuman mucha memoria
 
-### CORS errors in browser
+### Errores CORS en el navegador
 
-If you're running Utsuwa in a browser and getting CORS errors with Ollama, set the origins environment variable before starting the server:
-
-```bash
-OLLAMA_ORIGINS=https://app.utsuwa.ai ollama serve
-```
-
-Ollama documents this under [allowing additional web origins](https://docs.ollama.com/faq#how-can-i-allow-additional-web-origins-to-access-ollama).
-
-For Vercel previews, replace the value with the exact preview origin from the browser address bar:
+Si ejecutas Luna en un navegador y obtienes errores de CORS con Ollama, configura la variable de entorno de orígenes antes de iniciar el servidor:
 
 ```bash
-OLLAMA_ORIGINS=https://your-preview.vercel.app ollama serve
+OLLAMA_ORIGINS=https://app.luna.ai ollama serve
 ```
 
-If you use multiple Utsuwa origins, comma-separate them. Use `OLLAMA_ORIGINS=http://localhost:5173` for local development, or `OLLAMA_ORIGINS=*` only if you intentionally want to allow any browser origin on your machine.
+Ollama documenta esto en [allowing additional web origins](https://docs.ollama.com/faq#how-can-i-allow-additional-web-origins-to-access-ollama).
 
-The **desktop app** hits the same Ollama allowlist. macOS works with no setup, but the Windows and Linux desktop apps need `OLLAMA_ORIGINS=http://tauri.localhost`. See [Allowing Utsuwa to reach Ollama](#allowing-utsuwa-to-reach-ollama).
+Para vistas previas de Vercel, reemplaza el valor por el origen de vista previa exacto de la barra de direcciones:
+
+```bash
+OLLAMA_ORIGINS=https://tu-preview.vercel.app ollama serve
+```
+
+Si usas varios orígenes de Luna, sepáralos con comas. Usa `OLLAMA_ORIGINS=http://localhost:5173` para desarrollo local, o `OLLAMA_ORIGINS=*` solo si quieres permitir deliberadamente cualquier origen de navegador en tu máquina.
+
+La **app de escritorio** pasa por la misma lista de permitidos de Ollama. macOS funciona sin configuración, pero las apps de escritorio de Windows y Linux necesitan `OLLAMA_ORIGINS=http://tauri.localhost`. Consulta [Permitir que Luna llegue a Ollama](#permitir-que-luna-llegue-a-ollama).

@@ -1,47 +1,47 @@
 ---
-title: Resources
-description: Tools and marketplaces to enhance your Utsuwa experience.
+title: Recursos
+description: Herramientas y mercados para mejorar tu experiencia con Luna.
 ---
 
-# Resources
+# Recursos
 
-A collection of tools and marketplaces that pair well with Utsuwa. Whether you want to create your own avatar from scratch or find the perfect accessories, these resources have you covered.
+Una colección de herramientas y mercados que combinan bien con Luna. Ya sea que quieras crear tu propio avatar desde cero o encontrar los accesorios perfectos, estos recursos te cubren.
 
 ---
 
 ## VRoid Studio
 
-[![VRoid Studio interface](https://vroid.com/_next/static/images/ui-en-440896a487deee363c9dc61d01a14f37.jpg)](https://vroid.com/en/studio)
+[![Interfaz de VRoid Studio](https://vroid.com/_next/static/images/ui-en-440896a487deee363c9dc61d01a14f37.jpg)](https://vroid.com/en/studio)
 
-[VRoid Studio](https://vroid.com/en/studio) is a free 3D character creation tool by Pixiv. It makes building custom VRM avatars as intuitive as drawing — no 3D modeling experience required.
+[VRoid Studio](https://vroid.com/en/studio) es una herramienta gratuita de creación de personajes 3D de Pixiv. Hace que construir avatares VRM personalizados sea tan intuitivo como dibujar — no se necesita experiencia en modelado 3D.
 
-**Why it's useful:**
+**Por qué es útil:**
 
-- Create fully custom VRM models from scratch
-- Intuitive drawing-based workflow for hair, face, and clothing
-- Export directly to `.vrm` format, ready to load into Utsuwa
-- Available on Windows, macOS, and iPad
-- Completely free to use
+- Crea modelos VRM completamente personalizados desde cero
+- Flujo de trabajo intuitivo basado en dibujo para pelo, cara y ropa
+- Exporta directamente a formato `.vrm`, listo para cargar en Luna
+- Disponible en Windows, macOS e iPad
+- Completamente gratis
 
-VRoid Studio is the easiest way to go from zero to a personalized avatar. Design your character, export the VRM file, and drop it into Utsuwa.
+VRoid Studio es la forma más fácil de pasar de cero a un avatar personalizado. Diseña tu personaje, exporta el archivo VRM y suéltalo en Luna.
 
-[Get VRoid Studio &rarr;](https://vroid.com/en/studio)
+[Descargar VRoid Studio &rarr;](https://vroid.com/en/studio)
 
 ---
 
 ## BOOTH
 
-[![BOOTH marketplace](https://cdn-1.webcatalog.io/catalog/booth-pm/booth-pm-social-preview.png?v=1714781303794)](https://booth.pm/)
+[![Mercado BOOTH](https://cdn-1.webcatalog.io/catalog/booth-pm/booth-pm-social-preview.png?v=1714781303794)](https://booth.pm/)
 
-[BOOTH](https://booth.pm/) is a Japanese indie marketplace run by Pixiv, popular in the VRM and VTuber community. It's the go-to place for avatar assets.
+[BOOTH](https://booth.pm/) es un mercado indie japonés gestionado por Pixiv, popular en la comunidad VRM y VTuber. Es el lugar de referencia para assets de avatares.
 
-**What you can find:**
+**Qué puedes encontrar:**
 
-- Complete VRM avatar models ready to use
-- Clothing, hairstyles, and accessories for VRoid-based models
-- Props, textures, and custom items
-- Both free and paid items from independent creators
+- Modelos VRM completos listos para usar
+- Ropa, peinados y accesorios para modelos basados en VRoid
+- Props, texturas y artículos personalizados
+- Artículos gratuitos y de pago de creadores independientes
 
-Many creators sell VRoid-compatible outfits and accessories on BOOTH that you can import into VRoid Studio, customize, and then export as a VRM for use in Utsuwa.
+Muchos creadores venden ropa y accesorios compatibles con VRoid en BOOTH que puedes importar a VRoid Studio, personalizar y luego exportar como VRM para usar en Luna.
 
-[Browse BOOTH &rarr;](https://booth.pm/)
+[Explorar BOOTH &rarr;](https://booth.pm/)

@@ -63,6 +63,13 @@ function createChatStore() {
 		messages = [];
 	}
 
+	/** Drop specific messages by id (failed-turn rollback: the unanswered
+	 *  question and the empty assistant placeholder leave the history). */
+	function removeMessages(ids: string[]) {
+		const doomed = new Set(ids);
+		messages = messages.filter((m) => !doomed.has(m.id));
+	}
+
 	return {
 		get messages() {
 			return messages;
@@ -77,7 +84,8 @@ function createChatStore() {
 		updateLastMessage,
 		setLoading,
 		setError,
-		clearMessages
+		clearMessages,
+		removeMessages
 	};
 }
 

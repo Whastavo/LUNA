@@ -1,220 +1,220 @@
 ---
-title: Architecture Overview
-description: High-level architecture of Utsuwa's VRM viewer, chat system, and companion engine.
+title: Visión de la arquitectura
+description: Arquitectura de alto nivel del visor VRM, el sistema de chat y el motor de compañera de Luna.
 ---
 
-# Architecture Overview
+# Visión de la arquitectura
 
-Utsuwa is a client-side application that combines 3D avatar rendering, LLM chat, text-to-speech, and a relationship simulation engine. Everything runs locally on the user's device — in a browser or the desktop app — with no backend required.
+Luna es una aplicación del lado del cliente que combina renderizado de avatar 3D, chat con LLM, texto-a-voz y un motor de simulación de relación. Todo funciona localmente en el dispositivo del usuario — en un navegador o en la app de escritorio — sin backend necesario.
 
-## System Diagram
+## Diagrama del sistema
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                   Client (Browser or Desktop)                    │
+│                  Cliente (Navegador o Escritorio)                │
 │  ┌───────────────────────────────────────────────────────────┐  │
-│  │                      SvelteKit App                         │  │
+│  │                      App SvelteKit                         │  │
 │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐│  │
-│  │  │   Chat UI   │  │  3D Scene   │  │   Settings Panel    ││  │
+│  │  │   UI Chat   │  │  Escena 3D  │  │   Panel de Ajustes  ││  │
 │  │  └──────┬──────┘  └──────┬──────┘  └─────────────────────┘│  │
 │  │         │                │                                 │  │
 │  │  ┌──────▼──────┐  ┌──────▼──────┐                         │  │
-│  │  │  LLM Client │  │  Three.js   │                         │  │
+│  │  │ Cliente LLM │  │  Three.js   │                         │  │
 │  │  │ xsAI/fetch  │  │  + Threlte  │                         │  │
 │  │  └──────┬──────┘  └──────┬──────┘                         │  │
 │  │         │                │                                 │  │
 │  │  ┌──────▼──────┐  ┌──────▼──────┐  ┌─────────────────────┐│  │
-│  │  │  Companion  │  │  VRM Model  │  │   TTS Pipeline      ││  │
-│  │  │   Engine    │  │  @pixiv/vrm │  │   + Lip-sync        ││  │
+│  │  │  Motor de   │  │ Modelo VRM  │  │   Pipeline TTS      ││  │
+│  │  │  compañera  │  │ @pixiv/vrm  │  │   + Lip-sync        ││  │
 │  │  └──────┬──────┘  └─────────────┘  └──────────┬──────────┘│  │
 │  │         │                                      │           │  │
 │  │  ┌──────▼─────────────────────────────────────▼──────────┐│  │
-│  │  │              Svelte 5 Runes Stores                     ││  │
+│  │  │              Stores con Runes de Svelte 5              ││  │
 │  │  │  (character.svelte.ts, vrm.svelte.ts, settings.svelte.ts)│  │
 │  │  └──────────────────────────┬────────────────────────────┘│  │
 │  │                             │                              │  │
 │  │  ┌──────────────────────────▼────────────────────────────┐│  │
 │  │  │              IndexedDB (Dexie.js)                      ││  │
-│  │  │      Character state, facts, turns, events            ││  │
+│  │  │      Estado del personaje, datos, turnos, eventos     ││  │
 │  │  └───────────────────────────────────────────────────────┘│  │
 │  └───────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
               ┌───────────────────────────────┐
-              │       External APIs           │
+              │         APIs externas         │
               │  LLM: OpenAI / Anthropic / etc│
               │  TTS: ElevenLabs / OpenAI TTS │
               │  STT: Web Speech / Groq / Local│
               └───────────────────────────────┘
 ```
 
-## Core Components
+## Componentes principales
 
-### VRM Rendering
+### Renderizado VRM
 
-The 3D avatar system uses Three.js with Threlte (a Svelte wrapper) for integration.
+El sistema de avatar 3D usa Three.js con Threlte (un envoltorio para Svelte) para la integración.
 
-**Key files:**
-- `src/lib/components/vrm/Scene.svelte` — Main 3D scene with camera, lighting, and post-processing
-- `src/lib/components/vrm/VrmModel.svelte` — VRM model loading, animation, and expression control
-- `src/lib/stores/vrm.svelte.ts` — VRM state including head tracking for UI positioning
+**Archivos clave:**
+- `src/lib/components/vrm/Scene.svelte` — Escena 3D principal con cámara, iluminación y post-procesado
+- `src/lib/components/vrm/VrmModel.svelte` — Carga del modelo VRM, animación y control de expresiones
+- `src/lib/stores/vrm.svelte.ts` — Estado VRM incluido el seguimiento de cabeza para el posicionamiento de la UI
 
-**Libraries:**
-- `@pixiv/three-vrm` — VRM model loading and runtime
-- `@pixiv/three-vrm-animation` — VRMA animation support
-- `@threlte/core` — Svelte-Three.js integration
-- `n8ao` and `postprocessing` — Visual effects
+**Librerías:**
+- `@pixiv/three-vrm` — Carga y runtime de modelos VRM
+- `@pixiv/three-vrm-animation` — Soporte de animaciones VRMA
+- `@threlte/core` — Integración Svelte-Three.js
+- `n8ao` y `postprocessing` — Efectos visuales
 
-**How it works:**
-1. User uploads a `.vrm` file or URL
-2. VRM loader parses the model and creates a Three.js scene object
-3. Threlte manages the render loop and integrates with Svelte's reactivity
-4. Expressions and animations are applied via the VRM humanoid and expression APIs
+**Cómo funciona:**
+1. El usuario sube un archivo `.vrm` o una URL
+2. El cargador VRM analiza el modelo y crea un objeto de escena Three.js
+3. Threlte gestiona el bucle de renderizado y se integra con la reactividad de Svelte
+4. Las expresiones y animaciones se aplican vía las APIs humanoides y de expresiones de VRM
 
-### Chat System
+### Sistema de chat
 
-Messages flow through two transports:
-- **Server route (web + cloud providers):** SvelteKit route using the xsAI SDK (`src/routes/api/chat/+server.ts`)
-- **Direct fetch (local providers + desktop):** streams straight from the provider (`src/lib/services/chat/client-chat.ts`) — used for Ollama/LM Studio and all Tauri builds
+Los mensajes fluyen por dos transportes:
+- **Ruta de servidor (web + proveedores en la nube):** ruta SvelteKit usando el SDK xsAI (`src/routes/api/chat/+server.ts`)
+- **Fetch directo (proveedores locales + escritorio):** transmite directamente desde el proveedor (`src/lib/services/chat/client-chat.ts`) — usado para Ollama/LM Studio y todas las builds Tauri
 
-**Key files:**
-- `src/lib/components/chat/BottomChatBar.svelte` — User input interface (text, voice, and showing images)
-- `src/lib/components/chat/SpeechBubble.svelte` — Message display
-- `src/lib/ai/prompt-builder.ts` — System prompt construction (incl. the forced-JSON extraction prompt)
-- `src/lib/ai/response-parser.ts` — Extract dialogue + state and defensively normalize model output
-- `src/lib/services/chat/client-chat.ts` — Direct streaming + the decoupled `extractStateUpdates` fallback
-- `src/lib/services/chat/content.ts` — Per-provider image serialization
-- `src/lib/engine/` — Core companion engine logic
+**Archivos clave:**
+- `src/lib/components/chat/BottomChatBar.svelte` — Interfaz de entrada del usuario (texto, voz y mostrar imágenes)
+- `src/lib/components/chat/SpeechBubble.svelte` — Visualización de mensajes
+- `src/lib/ai/prompt-builder.ts` — Construcción del prompt de sistema (incl. el prompt de extracción JSON forzado)
+- `src/lib/ai/response-parser.ts` — Extrae diálogo + estado y normaliza a la defensiva la salida del modelo
+- `src/lib/services/chat/client-chat.ts` — Streaming directo + el fallback desacoplado `extractStateUpdates`
+- `src/lib/services/chat/content.ts` — Serialización de imágenes por proveedor
+- `src/lib/engine/` — Lógica central del motor de compañera
 
-**Flow:**
+**Flujo:**
 ```
-User Input
+Entrada del usuario
     │
     ▼
 ┌──────────────┐
-│ Heuristics   │ ── Calculate baseline state changes
-│ Engine       │    (energy decay, streak updates)
+│ Heurísticas  │ ── Calcula cambios de estado base
+│ Motor        │    (decaimiento de energía, actualización de rachas)
 └──────┬───────┘
        │
        ▼
 ┌──────────────┐
-│ Memory       │ ── Retrieve relevant facts + recent turns by semantic
-│ Retrieval    │    similarity (keyword fallback until embeddings warm up)
+│ Recuperación │ ── Recupera datos relevantes + turnos recientes por
+│ de memoria   │    similitud semántica (fallback por palabra clave hasta
+└──────┬───────┘    que los embeddings se calienten)
+       │
+       ▼
+┌──────────────┐
+│ Constructor  │ ── Combina prompt de sistema + estado del personaje
+│ de prompts   │    + contexto de memoria + instrucciones
 └──────┬───────┘
        │
        ▼
 ┌──────────────┐
-│ Prompt       │ ── Combine system prompt + character state
-│ Builder      │    + memory context + instructions
+│ Proveedor    │ ── Transmite la respuesta de OpenAI/Anthropic/etc.
+│ LLM          │
 └──────┬───────┘
        │
        ▼
 ┌──────────────┐
-│ LLM Provider │ ── Stream response from OpenAI/Anthropic/etc.
-│(xsAI or fetch)│
+│ Analizador   │ ── Elimina tokens de razonamiento/parada + turnos
+│ de respuesta │    alucinados, extrae diálogo + JSON en línea
+└──────┬───────┘    (tolerante a formato inválido)
+       │
+       ▼
+┌──────────────┐
+│ Respaldo de  │ ── Si el JSON en línea falta (modelos pequeños/RP),
+│ extracción   │    una llamada JSON forzada re-deriva ánimo/deltas/memoria
 └──────┬───────┘
        │
        ▼
 ┌──────────────┐
-│ Response     │ ── Strip reasoning/stop tokens + hallucinated turns,
-│ Parser       │    extract dialogue + inline JSON (tolerant of malformed)
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│ Extraction   │ ── If the inline JSON is missing (small/RP models), a
-│ Fallback     │    forced-JSON call re-derives mood/deltas/memory
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│ State        │ ── Merge heuristic baseline + LLM deltas, persist to
-│ Merger       │    IndexedDB; store new memories (facts + embeddings)
-└──────────────┘
+│ Fusionador   │ ── Fusiona la línea base heurística + deltas del LLM,
+│ de estado    │    persiste en IndexedDB; guarda recuerdos nuevos
+└──────────────┘    (datos + embeddings)
 ```
 
-**State extraction (two paths):** The model replies in character and ends with a JSON block of state updates (mood, relationship deltas, `new_memory`). Capable models emit it inline; when a model skips or mangles it (common on small, local, and roleplay-tuned models), a second forced-JSON call re-derives the state so memory and relationship movement still land. See [Companion System](/docs/technology/companion-system) for the two-path model and the parser's robustness layers.
+**Extracción de estado (dos caminos):** El modelo responde en personaje y termina con un bloque JSON de actualizaciones de estado (ánimo, deltas de relación, `new_memory`). Los modelos capaces lo emiten en línea; cuando un modelo lo omite o lo estropea (común en modelos pequeños, locales y afinados para roleplay), una segunda llamada JSON forzada re-deriva el estado para que la memoria y el movimiento de la relación sigan aterrizando. Consulta [Sistema de compañera](/docs/technology/companion-system) para el modelo de dos caminos y las capas de robustez del analizador.
 
-**Showing images:** A shown image (camera or drag-drop) is serialized per provider — OpenAI-style `image_url` data URLs or Anthropic base64 `source` blocks (`content.ts`) — and only reaches vision-capable models. Kept photos are stored locally (blob + thumbnail) via `src/lib/services/storage/keepsakes.ts`.
+**Mostrar imágenes:** Una imagen mostrada (cámara o arrastrar-y-soltar) se serializa por proveedor — URLs de datos `image_url` estilo OpenAI o bloques base64 `source` de Anthropic (`content.ts`) — y solo llega a modelos con visión. Las fotos guardadas se almacenan localmente (blob + miniatura) vía `src/lib/services/storage/keepsakes.ts`.
 
-### TTS Pipeline
+### Pipeline TTS
 
-Text-to-speech converts LLM responses to audio with lip-sync.
+El texto-a-voz convierte las respuestas del LLM en audio con lip-sync.
 
-**Key files:**
-- `src/lib/services/lipsync/analyzer.ts` — Lip-sync audio analysis
-- `src/lib/services/tts/elevenlabs.ts` — ElevenLabs provider
-- `src/lib/services/tts/openai-tts.ts` — OpenAI-compatible provider (cloud OpenAI TTS and local servers)
-- `src/lib/services/tts/index.ts` — Provider factory and shared audio context
-- `src/lib/services/providers/local-endpoints.ts` — Local TTS base-URL resolution and connection hints
+**Archivos clave:**
+- `src/lib/services/lipsync/analyzer.ts` — Análisis de audio para el lip-sync
+- `src/lib/services/tts/elevenlabs.ts` — Proveedor ElevenLabs
+- `src/lib/services/tts/openai-tts.ts` — Proveedor compatible con OpenAI (TTS en la nube de OpenAI y servidores locales)
+- `src/lib/services/tts/index.ts` — Fábrica de proveedores y contexto de audio compartido
+- `src/lib/services/providers/local-endpoints.ts` — Resolución de URL base de TTS local y pistas de conexión
 
-**Supported providers (3):**
-- **ElevenLabs** (cloud, high quality, requires API key)
-- **OpenAI TTS** (cloud, requires API key)
-- **Local TTS** — any OpenAI-compatible TTS server exposing `/v1/audio/speech` (e.g. Kokoro-FastAPI, openedai-speech). No key; defaults to `http://localhost:8880/v1`, and reuses the OpenAI TTS client pointed at the local base URL
+**Proveedores soportados (3):**
+- **ElevenLabs** (nube, alta calidad, requiere clave de API)
+- **OpenAI TTS** (nube, requiere clave de API)
+- **TTS local** — cualquier servidor TTS compatible con OpenAI que exponga `/v1/audio/speech` (p. ej. Kokoro-FastAPI, openedai-speech). Sin clave; por defecto `http://localhost:8880/v1`, y reutiliza el cliente de OpenAI TTS apuntado a la URL base local
 
-**Flow:**
-1. LLM response text is sent to TTS provider
-2. Audio is received as a buffer
-3. Web Audio API plays the audio
-4. Audio analyzer extracts volume/frequency data
-5. VRM model maps audio data to mouth blend shapes in real-time
+**Flujo:**
+1. El texto de respuesta del LLM se envía al proveedor TTS
+2. El audio se recibe como un buffer
+3. La Web Audio API reproduce el audio
+4. El analizador de audio extrae datos de volumen/frecuencia
+5. El modelo VRM mapea los datos de audio a las formas de mezcla de la boca en tiempo real
 
-### Speech-to-Text (STT)
+### Voz-a-texto (STT)
 
-Voice input converts microphone audio to text through one of four providers, chosen automatically by priority.
+La entrada de voz convierte el audio del micrófono en texto a través de uno de cuatro proveedores, elegido automáticamente por prioridad.
 
-**Key files:**
-- `src/lib/services/stt/openai-stt.ts` — OpenAI-compatible transcription client (Groq and local Whisper servers via `/v1/audio/transcriptions`)
-- `src/lib/services/stt/web-speech.ts` — Browser Web Speech API provider
-- `src/lib/stores/stt.svelte.ts` — Active-provider selection and session state
+**Archivos clave:**
+- `src/lib/services/stt/openai-stt.ts` — Cliente de transcripción compatible con OpenAI (Groq y servidores Whisper locales vía `/v1/audio/transcriptions`)
+- `src/lib/services/stt/web-speech.ts` — Proveedor de la Web Speech API del navegador
+- `src/lib/stores/stt.svelte.ts` — Selección del proveedor activo y estado de sesión
 
-**Supported providers (priority order):**
-- **Local STT** — any OpenAI-compatible Whisper server (Speaches, faster-whisper-server, whisper.cpp). No key; defaults to `http://localhost:8000/v1`
-- **Groq (Whisper)** — cloud transcription, requires an API key
-- **OpenAI (Whisper)** — cloud transcription via the OpenAI API, requires an API key
-- **Web Speech API** — browser built-in, no key, unavailable in the desktop webview
+**Proveedores soportados (orden de prioridad):**
+- **STT local** — cualquier servidor Whisper compatible con OpenAI (Speaches, faster-whisper-server, whisper.cpp). Sin clave; por defecto `http://localhost:8000/v1`
+- **Groq (Whisper)** — transcripción en la nube, requiere clave de API
+- **OpenAI (Whisper)** — transcripción en la nube vía la API de OpenAI, requiere clave de API
+- **Web Speech API** — integrada en el navegador, sin clave, no disponible en el webview de escritorio
 
-Selection: a configured local server wins, then Groq, then OpenAI, then Web Speech.
+Selección: gana un servidor local configurado, luego Groq, luego OpenAI, luego Web Speech.
 
-### Memory System
+### Sistema de memoria
 
-Three-tier memory architecture for context and recall.
+Arquitectura de memoria de tres niveles para el contexto y el recuerdo.
 
-**Key files:**
-- `src/lib/engine/memory.ts` — Memory management
-- `src/lib/types/memory.ts` — Memory type definitions
-- `src/lib/db/index.ts` — Database schema
+**Archivos clave:**
+- `src/lib/engine/memory.ts` — Gestión de memoria
+- `src/lib/types/memory.ts` — Definiciones de tipos de memoria
+- `src/lib/db/index.ts` — Esquema de la base de datos
 
-**Tiers:**
-1. **Working Memory** — In-memory buffer of recent conversation turns
-2. **Facts** — IndexedDB-stored facts with vector embeddings for semantic search
-3. **Sessions** — Conversation summaries for long-term context
+**Niveles:**
+1. **Memoria de trabajo** — Buffer en memoria de los turnos recientes de conversación
+2. **Datos** — Datos guardados en IndexedDB con embeddings vectoriales para búsqueda semántica
+3. **Sesiones** — Resúmenes de conversación para el contexto a largo plazo
 
-**Semantic search:**
-Uses `@xenova/transformers` to run the multilingual `paraphrase-multilingual-MiniLM-L12-v2` embedding model locally on the user's device. Facts are embedded as 384-dimensional vectors and can be retrieved by cosine similarity to the current conversation.
+**Búsqueda semántica:**
+Usa `@xenova/transformers` para ejecutar localmente en el dispositivo del usuario el modelo de embeddings multilingüe `paraphrase-multilingual-MiniLM-L12-v2`. Los datos se incrustan como vectores de 384 dimensiones y pueden recuperarse por similitud coseno con la conversación actual.
 
-See [Companion System](/docs/technology/companion-system) and [Memory Graph](/docs/technology/memory-graph) for detailed memory documentation.
+Consulta [Sistema de compañera](/docs/technology/companion-system) y [Grafo de memoria](/docs/technology/memory-graph) para la documentación detallada de la memoria.
 
-### State Management
+### Gestión de estado
 
-Svelte 5 runes-based stores for reactive state.
+Stores basados en las runes de Svelte 5 para el estado reactivo.
 
-**Key stores:**
-- `src/lib/stores/character.svelte.ts` — Character/companion state
-- `src/lib/stores/vrm.svelte.ts` — 3D model state, head tracking
-- `src/lib/stores/settings.svelte.ts` — Provider configurations (LLM, TTS, STT)
-- `src/lib/stores/persona.svelte.ts` — Persona card management
-- `src/lib/stores/chat.svelte.ts` — Chat session state
-- `src/lib/stores/tts.svelte.ts` — Text-to-speech state
-- `src/lib/stores/stt.svelte.ts` — Speech-to-text state
-- `src/lib/stores/display.svelte.ts` — Camera distance and display settings
-- `src/lib/stores/overlay.svelte.ts` — Desktop overlay mode state
+**Stores clave:**
+- `src/lib/stores/character.svelte.ts` — Estado del personaje/compañera
+- `src/lib/stores/vrm.svelte.ts` — Estado del modelo 3D, seguimiento de cabeza
+- `src/lib/stores/settings.svelte.ts` — Configuraciones de proveedores (LLM, TTS, STT)
+- `src/lib/stores/persona.svelte.ts` — Gestión de la tarjeta de persona
+- `src/lib/stores/chat.svelte.ts` — Estado de la sesión de chat
+- `src/lib/stores/tts.svelte.ts` — Estado del texto-a-voz
+- `src/lib/stores/stt.svelte.ts` — Estado de la voz-a-texto
+- `src/lib/stores/display.svelte.ts` — Distancia de cámara y ajustes de pantalla
+- `src/lib/stores/overlay.svelte.ts` — Estado del modo superposición de escritorio
 
-**Pattern:**
+**Patrón:**
 ```typescript
-// Svelte 5 runes pattern
+// Patrón de runes de Svelte 5
 let count = $state(0);
 const doubled = $derived(count * 2);
 
@@ -223,183 +223,183 @@ $effect(() => {
 });
 ```
 
-### Photo Mode
+### Modo foto
 
-A studio inside the scene: poses, expressions, backgrounds, filters, frames, stickers, head tracking, and high-resolution capture.
+Un estudio dentro de la escena: poses, expresiones, fondos, filtros, marcos, stickers, seguimiento de cabeza y captura en alta resolución.
 
-**Key files:**
-- `src/lib/stores/photomode.svelte.ts` — mode state, session-only lens override, capture options
-- `src/lib/services/poses.ts` — pose manifest loading (`/static/poses/manifest.json`) with cached VRMA animations; adding a pose is a data change
-- `src/lib/services/scene-backgrounds.ts` — shared background preset library: gradients as CSS values, patterns as procedurally drawn canvas tiles reused for the live preview and capture compositing
-- `src/lib/services/photo-capture.ts` — capture composite helpers (backgrounds, frames, vignette, stickers)
-- `src/lib/components/photomode/` — the tabbed panel, draggable sticker layer, and frame preview
+**Archivos clave:**
+- `src/lib/stores/photomode.svelte.ts` — estado del modo, override de lente solo en sesión, opciones de captura
+- `src/lib/services/poses.ts` — carga del manifiesto de poses (`/static/luna/poses/manifest.json`) con animaciones VRMA en caché; añadir una pose es un cambio de datos
+- `src/lib/services/scene-backgrounds.ts` — biblioteca compartida de fondos predefinidos: degradados como valores CSS, patrones como mosaicos de canvas dibujados proceduralmente reutilizados para la vista previa en vivo y la composición de capturas
+- `src/lib/services/photo-capture.ts` — ayudantes de composición de captura (fondos, marcos, viñeta, stickers)
+- `src/lib/components/photomode/` — el panel con pestañas, la capa arrastrable de stickers y la vista previa de marcos
 
-Captures render one supersampled frame in place (the canvas keeps its drawing buffer), then composite the background, filter, vignette, frame, and stickers on a 2D canvas so the saved PNG matches the preview exactly. Photo captures are stored under a separate keepsake kind and never appear on the photoboard; the file itself lands in the Downloads folder (a browser download on web, a direct write via the fs plugin on desktop).
+Las capturas renderizan un fotograma con supermuestreo en el sitio (el canvas conserva su buffer de dibujo), y luego componen el fondo, el filtro, la viñeta, el marco y los stickers en un canvas 2D para que el PNG guardado coincida exactamente con la vista previa. Las capturas de foto se almacenan bajo un tipo de recuerdo separado y nunca aparecen en el tablero de fotos; el archivo mismo va a la carpeta de Descargas (una descarga del navegador en web, una escritura directa vía el plugin de fs en escritorio).
 
-### Tap Reactions and Physics
+### Reacciones al tacto y física
 
-- `src/lib/services/photo-touch.ts` — buckets a raycast tap into a coarse touch zone by nearest humanoid bone
-- `src/lib/engine/photo-reactions.ts` — the data-driven reaction table keyed on zone and relationship tier; repeat taps escalate and cool down. This file is the single knob for tone tuning
-- `src/lib/engine/spring-physics.ts` — the physics intensity mapping (multipliers over each rig's authored spring values, clamped to stable ranges) and the frame-delta clamp that prevents spring-bone blowups after tab refocus
+- `src/lib/services/photo-touch.ts` — clasifica un toque por raycast en una zona táctil gruesa según el hueso humanoide más cercano
+- `src/lib/engine/photo-reactions.ts` — la tabla de reacciones basada en datos indexada por zona y etapa de relación; toques repetidos escalan y se enfrían. Este archivo es la única palanca para afinar el tono
+- `src/lib/engine/spring-physics.ts` — el mapeo de intensidad de física (multiplicadores sobre los valores de muelle autorados de cada rig, acotados a rangos estables) y el límite de delta de fotograma que evita explosiones de huesos con muelle tras volver a la pestaña
 
-Reactions work in the chat view and photo mode alike: an expression flash plus a decaying bone nudge that only the spring physics inherits.
+Las reacciones funcionan por igual en la vista de chat y en el modo foto: un destello de expresión más un empujón de hueso decayente que solo hereda la física de muelles.
 
-### Reminders and Scheduling
+### Recordatorios y programación
 
-Companion-scheduled tasks and timers, multi-window aware.
+Tareas y temporizadores programados por la compañera, conscientes de múltiples ventanas.
 
-**Key files:**
-- `src/lib/utils/reminders.ts` — reminder tag parsing (`[reminder:5min]...[/reminder]`), natural-language fallback extraction, and pure policy helpers
-- `src/lib/stores/reminders.svelte.ts` — the poll loop: fires due reminders, reports missed ones, coordinates across windows via `BroadcastChannel` with an atomic claim so the LLM reacts exactly once
-- `src/lib/services/chat/reminder-chat.ts` — delivers fired reminders through the chat pipeline as system events
+**Archivos clave:**
+- `src/lib/utils/reminders.ts` — análisis de etiquetas de recordatorio (`[reminder:5min]...[/reminder]`), extracción de respaldo por lenguaje natural, y ayudantes de política puros
+- `src/lib/stores/reminders.svelte.ts` — el bucle de sondeo: dispara recordatorios vencidos, reporta los perdidos, coordina entre ventanas vía `BroadcastChannel` con una reclamación atómica para que el LLM reaccione exactamente una vez
+- `src/lib/services/chat/reminder-chat.ts` — entrega los recordatorios disparados por el pipeline de chat como eventos de sistema
 
-Fired reminders enter the prompt as an `<event>` layer rather than a user turn and skip all relationship-state mutation. See the Companion System doc for the systemEvent turn path.
+Los recordatorios disparados entran al prompt como una capa `<event>` en vez de un turno de usuario y se saltan toda la mutación del estado de relación. Consulta el documento del Sistema de compañera para el camino de turno systemEvent.
 
-### Storage Layer
+### Capa de almacenamiento
 
-All data persists client-side via IndexedDB using Dexie.js.
+Todos los datos persisten del lado del cliente vía IndexedDB usando Dexie.js.
 
-**Database tables:**
-- `characterStates` — Character state and relationship data
-- `facts` — Memory facts with embeddings
-- `sessions` — Conversation session summaries
-- `conversationTurns` — Conversation history
-- `completedEvents` — Milestone events that have fired
-- `reminders` — Scheduled tasks and timers with their fired/dismissed state
+**Tablas de la base de datos:**
+- `characterStates` — Estado del personaje y datos de relación
+- `facts` — Datos de memoria con embeddings
+- `sessions` — Resúmenes de sesiones de conversación
+- `conversationTurns` — Historial de conversación
+- `completedEvents` — Eventos de hitos que se han disparado
+- `reminders` — Tareas y temporizadores programados con su estado disparado/descartado
 
-**Key file:** `src/lib/db/index.ts`
+**Archivo clave:** `src/lib/db/index.ts`
 
-**Benefits:**
-- No server required
-- Data stays on user's device
-- Works offline after initial load
-- Large storage capacity (typically 50MB+)
+**Beneficios:**
+- Sin servidor necesario
+- Los datos se quedan en el dispositivo del usuario
+- Funciona fuera de línea tras la carga inicial
+- Gran capacidad de almacenamiento (típicamente 50MB+)
 
-## Project Structure
+## Estructura del proyecto
 
 ```
 src/
 ├── lib/
-│   ├── ai/               # LLM prompt building and response parsing
+│   ├── ai/               # Construcción de prompts LLM y análisis de respuestas
 │   ├── components/
-│   │   ├── chat/          # Chat UI (BottomChatBar, SpeechBubble)
-│   │   ├── docs/          # Documentation site components
-│   │   ├── events/        # Event scene and choice UI
-│   │   ├── icons/         # Icon components
-│   │   ├── marketing/     # Landing page components
-│   │   ├── memory/        # Memory graph visualization
-│   │   ├── onboarding/    # First-run setup
-│   │   ├── overlay/       # Desktop overlay UI
-│   │   ├── photomode/     # Photo mode panel, stickers, frame preview
-│   │   ├── settings/      # Settings page components
-│   │   ├── ui/            # Shared UI primitives
-│   │   ├── updater/       # Desktop auto-update UI
-│   │   └── vrm/           # 3D scene and model
-│   ├── config/            # App and docs configuration
-│   ├── data/              # Static data (event definitions)
-│   ├── db/                # Database schema and export/import
-│   ├── engine/            # Companion engine (heuristics, stages, state, events, memory)
+│   │   ├── chat/          # UI de chat (BottomChatBar, SpeechBubble)
+│   │   ├── docs/          # Componentes del sitio de documentación
+│   │   ├── events/        # Escena de eventos y UI de elección
+│   │   ├── icons/         # Componentes de iconos
+│   │   ├── marketing/     # Componentes de la página de aterrizaje
+│   │   ├── memory/        # Visualización del grafo de memoria
+│   │   ├── onboarding/    # Configuración de primera ejecución
+│   │   ├── overlay/       # UI de superposición de escritorio
+│   │   ├── photomode/     # Panel de modo foto, stickers, vista previa de marcos
+│   │   ├── settings/      # Componentes de la página de ajustes
+│   │   ├── ui/            # Primitivas de UI compartidas
+│   │   ├── updater/       # UI de auto-actualización de escritorio
+│   │   └── vrm/           # Escena y modelo 3D
+│   ├── config/            # Configuración de la app y la documentación
+│   ├── data/              # Datos estáticos (definiciones de eventos)
+│   ├── db/                # Esquema de base de datos y exportación/importación
+│   ├── engine/            # Motor de compañera (heurísticas, etapas, estado, eventos, memoria)
 │   ├── services/
-│   │   ├── chat/          # Chat client
-│   │   ├── lipsync/       # Audio analysis for lip-sync
-│   │   ├── modules/       # Module system
-│   │   ├── platform/      # Tauri/web platform abstraction
-│   │   ├── providers/     # LLM provider registry and model fetching
-│   │   ├── storage/       # IndexedDB storage layer
-│   │   ├── stt/           # Speech-to-text providers
-│   │   └── tts/           # Text-to-speech providers
-│   ├── stores/            # Svelte 5 runes stores
-│   ├── types/             # TypeScript types
-│   └── utils/             # Utility functions
+│   │   ├── chat/          # Cliente de chat
+│   │   ├── lipsync/       # Análisis de audio para lip-sync
+│   │   ├── modules/       # Sistema de módulos
+│   │   ├── platform/      # Abstracción de plataforma Tauri/web
+│   │   ├── providers/     # Registro de proveedores LLM y obtención de modelos
+│   │   ├── storage/       # Capa de almacenamiento IndexedDB
+│   │   ├── stt/           # Proveedores de voz-a-texto
+│   │   └── tts/           # Proveedores de texto-a-voz
+│   ├── stores/            # Stores con runes de Svelte 5
+│   ├── types/             # Tipos TypeScript
+│   └── utils/             # Funciones de utilidad
 ├── routes/
-│   ├── app/               # Main app and settings routes
-│   ├── blog/              # Blog pages
-│   ├── docs/              # Documentation site
-│   └── overlay/           # Desktop overlay route
+│   ├── app/               # Rutas de la app principal y ajustes
+│   ├── blog/              # Páginas del blog
+│   ├── docs/              # Sitio de documentación
+│   └── overlay/           # Ruta de superposición de escritorio
 └── content/
-    ├── blog/              # Blog post markdown content
-    └── docs/              # Documentation site markdown
+    ├── blog/              # Contenido markdown de las entradas del blog
+    └── docs/              # Markdown del sitio de documentación
 ```
 
-## Key Interactions
+## Interacciones clave
 
-### Expression Updates
+### Actualización de expresiones
 
-When the companion's mood changes:
+Cuando cambia el ánimo de la compañera:
 
-1. Companion engine calculates new mood state
-2. State is written to `character.svelte.ts` store
-3. `VrmModel.svelte` component reacts to store change
-4. Mood is mapped to VRM blend shapes (expressions)
-5. VRM model's face updates in real-time
+1. El motor de compañera calcula el nuevo estado de ánimo
+2. El estado se escribe en el store de `character.svelte.ts`
+3. El componente `VrmModel.svelte` reacciona al cambio del store
+4. El ánimo se mapea a las formas de mezcla VRM (expresiones)
+5. La cara del modelo VRM se actualiza en tiempo real
 
-### Event Triggering
+### Disparo de eventos
 
-When relationship thresholds are crossed:
+Cuando se cruzan umbrales de relación:
 
-1. State merger detects threshold crossing
-2. Event system checks for eligible events
-3. Matching event is marked as triggered
-4. UI displays event content (if any)
-5. Event ID is added to `completedEvents`
+1. El fusionador de estado detecta el cruce del umbral
+2. El sistema de eventos comprueba eventos elegibles
+3. El evento coincidente se marca como disparado
+4. La UI muestra el contenido del evento (si lo hay)
+5. El ID del evento se añade a `completedEvents`
 
-## Desktop Application (Tauri)
+## Aplicación de escritorio (Tauri)
 
-The desktop app wraps the same SvelteKit application using Tauri v2.
+La app de escritorio envuelve la misma aplicación SvelteKit usando Tauri v2.
 
-### Platform Layer
+### Capa de plataforma
 
-A platform abstraction layer allows code to behave differently on web vs desktop:
+Una capa de abstracción de plataforma permite que el código se comporte distinto en web vs escritorio:
 
-**Key files:**
-- `src/lib/services/platform/platform.ts` — `isTauri()` / `isWeb()` detection
-- `src/lib/services/platform/window.ts` — Window management (position, drag, click-through)
-- `src/lib/services/platform/hotkeys.ts` — Global shortcut registration
+**Archivos clave:**
+- `src/lib/services/platform/platform.ts` — detección de `isTauri()` / `isWeb()`
+- `src/lib/services/platform/window.ts` — Gestión de ventanas (posición, arrastre, clic-a-través)
+- `src/lib/services/platform/hotkeys.ts` — Registro de atajos globales
 
-**Detection pattern:**
+**Patrón de detección:**
 ```typescript
 import { isTauri } from '$lib/services/platform';
 
 if (isTauri()) {
-  // Desktop-only code
+  // Código solo de escritorio
   await startDragging();
 }
 ```
 
-### Multi-Window Architecture
+### Arquitectura multi-ventana
 
-The desktop app uses two windows:
+La app de escritorio usa dos ventanas:
 
-| Window | Purpose |
+| Ventana | Propósito |
 |--------|---------|
-| `main` | Full application with all features |
-| `overlay` | Transparent, always-on-top companion view |
+| `main` | Aplicación completa con todas las funciones |
+| `overlay` | Vista de compañera transparente siempre encima |
 
-**Switching logic:**
-- Main → Overlay: Invoke `show_overlay` command, hide main window
-- Overlay → Main: Show main window, hide overlay
+**Lógica de cambio:**
+- Principal → Superposición: invocar el comando `show_overlay`, ocultar la ventana principal
+- Superposición → Principal: mostrar la ventana principal, ocultar la superposición
 
-### Overlay Rendering
+### Renderizado de superposición
 
-For transparent backgrounds in overlay mode:
-1. Tauri window configured with `transparent: true`, `decorations: false`
-2. HTML/body backgrounds set to transparent via CSS
-3. Three.js renderer uses `alpha: true` and `setClearColor(0x000000, 0)`
-4. Scene background set to `null` (no skybox)
+Para fondos transparentes en modo superposición:
+1. Ventana Tauri configurada con `transparent: true`, `decorations: false`
+2. Fondos de HTML/body puestos en transparente vía CSS
+3. El renderer de Three.js usa `alpha: true` y `setClearColor(0x000000, 0)`
+4. Fondo de escena puesto en `null` (sin skybox)
 
-**Key file:** `src/routes/overlay/+page.svelte`
+**Archivo clave:** `src/routes/overlay/+page.svelte`
 
-## Technologies
+## Tecnologías
 
-| Category | Technology |
+| Categoría | Tecnología |
 |----------|------------|
 | Framework | SvelteKit 2 |
-| Language | TypeScript |
-| 3D Rendering | Three.js + Threlte |
-| VRM Support | @pixiv/three-vrm |
-| LLM Integration | xsAI SDK (web) / direct fetch (desktop) |
-| Desktop | Tauri v2 |
-| Styling | Tailwind CSS 4 |
-| Database | IndexedDB (Dexie.js) |
+| Lenguaje | TypeScript |
+| Renderizado 3D | Three.js + Threlte |
+| Soporte VRM | @pixiv/three-vrm |
+| Integración LLM | SDK xsAI (web) / fetch directo (escritorio) |
+| Escritorio | Tauri v2 |
+| Estilos | Tailwind CSS 4 |
+| Base de datos | IndexedDB (Dexie.js) |
 | Embeddings | Transformers.js |
-| Build Tool | Vite |
+| Herramienta de build | Vite |

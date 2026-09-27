@@ -27,14 +27,15 @@
 	const isDefault = $derived(
 		cam.fov === CAMERA_DEFAULTS.fov &&
 			cam.zoom === CAMERA_DEFAULTS.zoom &&
-			cam.height === CAMERA_DEFAULTS.height
+			cam.height === CAMERA_DEFAULTS.height &&
+			(cam.panX ?? 0) === CAMERA_DEFAULTS.panX
 	);
 </script>
 
-<div class="camera-panel" role="dialog" aria-label="Camera settings">
+<div class="camera-panel glass-panel" role="dialog" aria-label="Ajustes de cámara">
 	<div class="panel-header">
-		<span class="panel-title">Camera</span>
-		<button class="panel-close" onclick={onclose} aria-label="Close camera settings">
+		<span class="panel-title">Cámara</span>
+		<button class="panel-close" onclick={onclose} aria-label="Cerrar ajustes de cámara">
 			<Icon name="x" size={14} />
 		</button>
 	</div>
@@ -56,7 +57,7 @@
 
 	<label class="control">
 		<span class="control-label">
-			Height
+			Altura
 			<span class="control-value">{cam.height > 0 ? '+' : ''}{(cam.height * 100).toFixed(0)} cm</span>
 		</span>
 		<input
@@ -71,7 +72,22 @@
 
 	<label class="control">
 		<span class="control-label">
-			Field of view
+			Desplazamiento lateral
+			<span class="control-value">{cam.panX > 0 ? '+' : ''}{(cam.panX * 100).toFixed(0)} cm</span>
+		</span>
+		<input
+			type="range"
+			min={CAMERA_LIMITS.panX.min}
+			max={CAMERA_LIMITS.panX.max}
+			step="0.01"
+			value={cam.panX ?? 0}
+			oninput={(e) => displayStore.setCamera({ panX: parseFloat(e.currentTarget.value) }, profile)}
+		/>
+	</label>
+
+	<label class="control">
+		<span class="control-label">
+			Campo de visión
 			<span class="control-value">{cam.fov.toFixed(0)}°</span>
 		</span>
 		<input
@@ -85,12 +101,12 @@
 	</label>
 
 	<button class="reset-btn" onclick={() => displayStore.resetCamera(profile)} disabled={isDefault}>
-		Reset camera
+		Restablecer cámara
 	</button>
 
 	{#if profile === 'main'}
 		<div class="section-divider">
-			<span class="section-label">Background</span>
+			<span class="section-label">Fondo</span>
 		</div>
 
 		<div class="swatch-row">
@@ -109,15 +125,15 @@
 	{/if}
 
 	<div class="section-divider">
-		<span class="section-label">Physics</span>
+		<span class="section-label">Física</span>
 	</div>
 
 	<label class="control">
 		<span class="control-label">
-			Movement intensity
+			Intensidad de movimiento
 			<span class="control-value">
 				{displayStore.physicsIntensity === PHYSICS_INTENSITY_DEFAULT
-					? 'Default'
+					? 'Predeterminada'
 					: `${displayStore.physicsIntensity.toFixed(2)}x`}
 			</span>
 		</span>
@@ -130,8 +146,8 @@
 			oninput={(e) => displayStore.setPhysicsIntensity(parseFloat(e.currentTarget.value))}
 		/>
 		<span class="range-ends" aria-hidden="true">
-			<span>Subtle</span>
-			<span>Lively</span>
+			<span>Sutil</span>
+			<span>Vivo</span>
 		</span>
 	</label>
 </div>
@@ -140,10 +156,7 @@
 	.camera-panel {
 		width: 240px;
 		padding: 1rem;
-		background: var(--bg-primary);
-		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius-xl);
-		box-shadow: var(--shadow-lg);
+		border-radius: var(--radius-lg);
 		display: flex;
 		flex-direction: column;
 		gap: 0.875rem;
@@ -189,7 +202,7 @@
 
 	.panel-close:hover {
 		color: var(--text-primary);
-		background: var(--bg-tertiary);
+		background: var(--chrome-wash);
 	}
 
 	.control {
@@ -217,9 +230,20 @@
 		width: 100%;
 		height: 4px;
 		border-radius: 2px;
-		background: var(--bg-tertiary);
+		/* La LÍNEA del slider: un valor literal, no var() — el track es
+		   pintado por el engine y un token inválido lo deja invisible. */
+		background: rgba(255, 255, 255, 0.28);
+		box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18);
 		outline: none;
 		cursor: pointer;
+	}
+
+	/* Track visible también en Firefox (::-moz-range-track), que no
+	   hereda el background del input. */
+	.control input[type='range']::-moz-range-track {
+		height: 4px;
+		border-radius: 2px;
+		background: rgba(255, 255, 255, 0.28);
 	}
 
 	.control input[type='range']::-webkit-slider-thumb {
@@ -228,7 +252,9 @@
 		width: 16px;
 		height: 16px;
 		border-radius: 50%;
-		background: var(--accent);
+		/* White thumb on glass — the slider knob is light, never ink */
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 		border: none;
 		cursor: pointer;
 		transition: transform 0.15s ease;
@@ -242,7 +268,8 @@
 		width: 16px;
 		height: 16px;
 		border-radius: 50%;
-		background: var(--accent);
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 		border: none;
 		cursor: pointer;
 	}
@@ -252,7 +279,7 @@
 		padding: 0.5rem;
 		border: none;
 		border-radius: var(--radius-md);
-		background: var(--bg-tertiary);
+		background: var(--chrome-wash);
 		color: var(--text-secondary);
 		font-size: 0.75rem;
 		font-weight: 500;
@@ -262,7 +289,7 @@
 
 	.reset-btn:hover:not(:disabled) {
 		color: var(--text-primary);
-		background: color-mix(in srgb, var(--bg-tertiary), var(--text-primary) 8%);
+		background: var(--chrome-wash-strong);
 	}
 
 	.reset-btn:disabled {
@@ -281,7 +308,7 @@
 		content: '';
 		flex: 1;
 		height: 1px;
-		background: var(--border-subtle);
+		background: var(--chrome-border);
 	}
 
 	.section-label {
@@ -309,9 +336,11 @@
 		width: 24px;
 		height: 24px;
 		border-radius: var(--radius-full);
-		border: 2px solid var(--border-subtle);
+		/* White ring that reads on glass — never a dark halo */
+		border: 2px solid rgba(255, 255, 255, 0.28);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
 		cursor: pointer;
-		transition: transform 0.15s ease, border-color 0.15s ease;
+		transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 	}
 
 	.swatch:hover {
@@ -319,6 +348,9 @@
 	}
 
 	.swatch.selected {
-		border-color: var(--accent);
+		border-color: rgba(255, 255, 255, 0.85);
+		box-shadow:
+			0 0 0 2px rgba(255, 255, 255, 0.2),
+			0 1px 4px rgba(0, 0, 0, 0.18);
 	}
 </style>

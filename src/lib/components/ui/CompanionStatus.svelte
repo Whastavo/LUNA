@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { characterStore } from '$lib/stores/character.svelte';
 	import { Icon } from '$lib/components/ui';
-	import { localPath } from '$lib/config/links';
+	import { settingsModal } from '$lib/stores/settings-modal.svelte';
 	import { pop, fadeFast } from '$lib/utils/motion';
 
 	interface Props {
@@ -18,16 +18,16 @@
 
 	// Stats config with colors for the vertical bars
 	const datingStats = $derived([
-		{ key: 'affection', label: 'Love', icon: 'heart', value: affectionPercent, color: 'var(--stat-affection)' },
-		{ key: 'trust', label: 'Trust', icon: 'shield', value: charState.trust, color: 'var(--stat-trust)' },
-		{ key: 'intimacy', label: 'Intimacy', icon: 'sparkles', value: charState.intimacy, color: 'var(--stat-intimacy)' },
-		{ key: 'comfort', label: 'Comfort', icon: 'home', value: charState.comfort, color: 'var(--stat-comfort)' },
-		{ key: 'energy', label: 'Energy', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
-		{ key: 'respect', label: 'Respect', icon: 'award', value: charState.respect, color: 'var(--stat-respect)' }
+		{ key: 'affection', label: 'Amor', icon: 'heart', value: affectionPercent, color: 'var(--stat-affection)' },
+		{ key: 'trust', label: 'Confianza', icon: 'shield', value: charState.trust, color: 'var(--stat-trust)' },
+		{ key: 'intimacy', label: 'Intimidad', icon: 'sparkles', value: charState.intimacy, color: 'var(--stat-intimacy)' },
+		{ key: 'comfort', label: 'Comodidad', icon: 'home', value: charState.comfort, color: 'var(--stat-comfort)' },
+		{ key: 'energy', label: 'Energía', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
+		{ key: 'respect', label: 'Respeto', icon: 'award', value: charState.respect, color: 'var(--stat-respect)' }
 	]);
 
 	const companionStats = $derived([
-		{ key: 'energy', label: 'Energy', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
+		{ key: 'energy', label: 'Energía', icon: 'zap', value: charState.energy, color: 'var(--stat-energy)' },
 		{ key: 'chats', label: 'Chats', icon: 'message-circle', value: Math.min(charState.totalInteractions, 100), color: 'var(--color-success)' }
 	]);
 </script>
@@ -37,7 +37,7 @@
 	<div class="overlay-status-wrapper">
 		{#if isExpanded}
 			<div
-				class="overlay-expanded-panel"
+				class="overlay-expanded-panel glass-panel"
 				transition:pop={{ base: 'translateX(-50%)', y: 10, duration: 220 }}
 				class:high-affection={!isCompanionMode && charState.affection > 500}
 			>
@@ -45,13 +45,14 @@
 					<div class="stat-bars" class:companion-mode={isCompanionMode}>
 						{#each isCompanionMode ? companionStats : datingStats as stat, i}
 							<div class="stat-bar-wrapper" style="--delay: {i}; --bar-color: {stat.color}">
-								<div class="stat-bar-track">
-									<div class="stat-bar-fill" style="height: {stat.value}%"></div>
-								</div>
 								<div class="stat-icon">
 									<Icon name={stat.icon} size={14} />
 								</div>
 								<span class="stat-label">{stat.label}</span>
+								<div class="stat-bar-track">
+									<div class="stat-bar-fill" style="width: {stat.value}%"></div>
+								</div>
+								<span class="stat-value">{Math.round(stat.value)}</span>
 							</div>
 						{/each}
 					</div>
@@ -77,7 +78,7 @@
 						<div class="quick-stats">
 							<div class="quick-stat streak">
 								<Icon name="flame" size={11} />
-								<span>{charState.currentStreak} day streak</span>
+								<span>{charState.currentStreak} días seguidos</span>
 							</div>
 						</div>
 					{/if}
@@ -86,10 +87,10 @@
 		{/if}
 
 		<button
-			class="overlay-status-btn"
+			class="overlay-status-btn glass-chip"
 			onclick={() => isExpanded = !isExpanded}
-			aria-label={isExpanded ? 'Collapse status' : 'Show status'}
-			title={isExpanded ? 'Collapse status' : 'Show status'}
+			aria-label={isExpanded ? 'Contraer estado' : 'Mostrar estado'}
+			title={isExpanded ? 'Contraer estado' : 'Mostrar estado'}
 			style="--mood-color: {moodInfo.color}"
 		>
 			{#key isExpanded}
@@ -106,22 +107,28 @@
 {:else}
 	<!-- Standard mode: full status panel -->
 	<div
-		class="status-container"
+		class="status-container glass-chip"
 		class:expanded={isExpanded}
 		class:high-affection={!isCompanionMode && charState.affection > 500}
 	>
+		<div class="status-title">
+			<span class="title-icon" style="color: {moodInfo.color}"><Icon name="heart" size={16} /></span>
+			<span class="title-label">Estado de conexión</span>
+			<span class="title-mood">{moodInfo.description}</span>
+		</div>
 		{#if isExpanded}
 			<div class="status-details" transition:pop={{ duration: 200, y: 8 }}>
 				<div class="stat-bars" class:companion-mode={isCompanionMode}>
 					{#each isCompanionMode ? companionStats : datingStats as stat, i}
 						<div class="stat-bar-wrapper" style="--delay: {i}; --bar-color: {stat.color}">
-							<div class="stat-bar-track">
-								<div class="stat-bar-fill" style="height: {stat.value}%"></div>
-							</div>
 							<div class="stat-icon">
 								<Icon name={stat.icon} size={14} />
 							</div>
 							<span class="stat-label">{stat.label}</span>
+							<div class="stat-bar-track">
+								<div class="stat-bar-fill" style="width: {stat.value}%"></div>
+							</div>
+							<span class="stat-value">{Math.round(stat.value)}</span>
 						</div>
 					{/each}
 				</div>
@@ -142,10 +149,10 @@
 								<span>{charState.currentStreak}</span>
 							</div>
 						{/if}
-						<a href={localPath('app', '/settings/persona')} class="quick-stat profile-link">
-							<span>Profile</span>
+						<button type="button" class="quick-stat profile-link" onclick={() => settingsModal.show('luna')}>
+							<span>Perfil</span>
 							<Icon name="arrow-right" size={11} />
-						</a>
+						</button>
 					</div>
 				{:else if charState.currentStreak > 1}
 					<div class="quick-stats">
@@ -160,11 +167,11 @@
 
 		<button class="status-toggle" onclick={() => isExpanded = !isExpanded}>
 			<span class="mood-icon" style="color: {moodInfo.color}">
-				<Icon name={moodInfo.icon} size={18} />
+				<Icon name={isExpanded ? 'chevron-down' : 'chevron-up'} size={16} />
 			</span>
-			<span class="mood-label">{moodInfo.description}</span>
-			<span class="chevron" class:rotated={isExpanded}>
-				<Icon name="chevron-up" size={14} />
+			<span class="mood-label">{isExpanded ? 'Ocultar' : 'Ver detalle'}</span>
+			<span class="chevron">
+				<Icon name="arrow-right" size={14} />
 			</span>
 		</button>
 	</div>
@@ -173,23 +180,41 @@
 <style>
 	.status-container {
 		position: fixed;
-		bottom: 6rem;
+		bottom: 10.5rem;
 		left: 50%;
 		transform: translateX(-50%);
 		z-index: 35;
-		background: var(--bg-primary);
-		border-radius: var(--radius-lg);
+		width: min(560px, calc(100vw - 2rem));
+		border-radius: 20px;
 		overflow: hidden;
-		transition: box-shadow 0.2s;
 		display: flex;
 		flex-direction: column;
-		box-shadow: var(--shadow-sm);
+		color: var(--chrome-text);
 	}
 
-	@media (min-width: 641px) {
-		.status-container {
-			bottom: 7.5rem;
-		}
+	.status-title {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.85rem 1.1rem 0.35rem;
+	}
+
+	.title-icon {
+		display: flex;
+	}
+
+	.title-label {
+		font-size: 0.9rem;
+		font-weight: 700;
+		color: var(--chrome-text);
+		text-shadow: 0 1px 2px var(--chrome-text-shadow);
+	}
+
+	.title-mood {
+		margin-left: auto;
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: var(--chrome-text-dim);
 	}
 
 	.status-container.high-affection {
@@ -202,18 +227,13 @@
 		align-items: center;
 		gap: 0.5rem;
 		width: 100%;
-		padding: 0.625rem 0.875rem;
+		padding: 0.55rem 1.1rem 0.7rem;
 		background: transparent;
 		border: none;
-		border-top: 1px solid transparent;
 		cursor: pointer;
-		color: var(--text-primary);
+		color: rgba(255, 255, 255, 0.85);
 		font-family: inherit;
 		transition: background 0.15s;
-	}
-
-	.expanded .status-toggle {
-		border-top: 1px solid var(--border-subtle);
 	}
 
 	.mood-icon {
@@ -222,53 +242,47 @@
 	}
 
 	.mood-label {
-		flex: 1;
-		font-size: 0.8rem;
+		font-size: 0.78rem;
 		font-weight: 500;
-		color: var(--text-secondary);
+		color: var(--chrome-text-dim);
 		text-align: left;
 	}
 
 	.chevron {
 		display: flex;
 		flex-shrink: 0;
-		transition: transform 0.2s ease-out;
-		opacity: 0.4;
-		color: var(--text-tertiary);
-	}
-
-	.chevron.rotated {
-		transform: rotate(180deg);
+		margin-left: auto;
+		opacity: 0.8;
+		color: var(--chrome-text-dim);
 	}
 
 	.status-toggle:hover {
-		background: var(--bg-secondary);
+		background: rgba(255, 255, 255, 0.06);
 	}
 
 	/* Expanded Content */
 	.status-details {
-		padding: 1rem 0.875rem 0.75rem;
+		padding: 0.5rem 1.1rem 0.85rem;
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
 	}
 
-	/* Vertical Stat Bars */
+	/* Horizontal stat bars in a 2-column grid (like the reference layout) */
 	.stat-bars {
-		display: flex;
-		justify-content: center;
-		gap: 1rem;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.65rem 1.5rem;
 	}
 
 	.stat-bars.companion-mode {
-		gap: 1.5rem;
+		grid-template-columns: 1fr;
 	}
 
 	.stat-bar-wrapper {
 		display: flex;
-		flex-direction: column;
 		align-items: center;
-		gap: 0.375rem;
+		gap: 0.5rem;
 		animation: slideUp 0.3s ease-out backwards;
 		animation-delay: calc(var(--delay) * 40ms);
 	}
@@ -284,10 +298,30 @@
 		}
 	}
 
+	.stat-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: 26px;
+		height: 26px;
+		border-radius: var(--radius-full);
+		color: var(--bar-color);
+		background: color-mix(in srgb, var(--bar-color) 18%, transparent);
+	}
+
+	.stat-label {
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: var(--chrome-text);
+		width: 5rem;
+		flex-shrink: 0;
+	}
+
 	.stat-bar-track {
-		width: 20px;
-		height: 70px;
-		background: var(--bg-tertiary);
+		flex: 1;
+		height: 7px;
+		background: var(--chrome-wash-strong);
 		border-radius: var(--radius-full);
 		position: relative;
 		overflow: hidden;
@@ -295,31 +329,28 @@
 
 	.stat-bar-fill {
 		position: absolute;
+		top: 0;
 		bottom: 0;
 		left: 0;
-		right: 0;
 		background: var(--bar-color);
 		border-radius: var(--radius-full);
-		transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+		transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	.stat-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 24px;
-		height: 24px;
-		background: var(--bg-secondary);
-		border-radius: var(--radius-sm);
-		color: var(--bar-color);
-	}
-
-	.stat-label {
-		font-size: 0.55rem;
+	.stat-value {
+		font-size: 0.78rem;
 		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.03em;
-		color: var(--text-tertiary);
+		color: var(--chrome-text);
+		font-variant-numeric: tabular-nums;
+		width: 2rem;
+		text-align: right;
+		flex-shrink: 0;
+	}
+
+	@media (max-width: 560px) {
+		.stat-bars {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	/* Quick Stats */
@@ -336,9 +367,9 @@
 		gap: 0.25rem;
 		font-size: 0.65rem;
 		font-weight: 600;
-		color: var(--text-secondary);
+		color: var(--chrome-text-dim);
 		padding: 0.3rem 0.5rem;
-		background: var(--bg-tertiary);
+		background: var(--chrome-wash);
 		border-radius: var(--radius-full);
 	}
 
@@ -348,15 +379,15 @@
 	}
 
 	.quick-stat.profile-link {
-		color: #fff;
+		color: var(--chrome-text);
 		text-decoration: none;
-		background: var(--accent);
+		background: var(--chrome-wash-strong);
 		cursor: pointer;
 		transition: background 0.15s ease;
 	}
 
 	.quick-stat.profile-link:hover {
-		background: var(--accent-hover);
+		background: var(--chrome-wash);
 	}
 
 	/* Overlay mode: compact circular button */
@@ -376,9 +407,7 @@
 		transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
 		position: relative;
 		overflow: hidden;
-		background: var(--bg-primary);
-		color: var(--text-primary);
-		box-shadow: var(--shadow-md);
+		color: var(--chrome-text);
 	}
 
 	.overlay-status-btn:hover {
@@ -405,9 +434,7 @@
 		bottom: 5.5rem;
 		left: 50%;
 		transform: translateX(-50%);
-		background: var(--bg-primary);
 		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-lg);
 		white-space: nowrap;
 	}
 

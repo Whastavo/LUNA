@@ -154,10 +154,10 @@
 			});
 			if (!res.ok) {
 				const err = await res.json().catch(() => ({ detail: `HTTP ${res.status}` }));
-				profileError = (err as { detail?: string }).detail || `Profile init failed (HTTP ${res.status})`;
+				profileError = (err as { detail?: string }).detail || `Falló la inicialización del perfil (HTTP ${res.status})`;
 			}
 		} catch (err) {
-			profileError = err instanceof Error ? err.message : 'Profile initialization failed';
+			profileError = err instanceof Error ? err.message : 'Falló la inicialización del perfil';
 		}
 	}
 
@@ -183,11 +183,11 @@
 			if (!res.ok) {
 				const err = await res.json().catch(() => ({ detail: `HTTP ${res.status}` }));
 				throw new Error(
-					(err as { detail?: string }).detail || `Profile reset failed (HTTP ${res.status})`
+					(err as { detail?: string }).detail || `Falló el restablecimiento del perfil (HTTP ${res.status})`
 				);
 			}
 		} catch (err) {
-			profileError = err instanceof Error ? err.message : 'Profile reset failed';
+			profileError = err instanceof Error ? err.message : 'Falló el restablecimiento del perfil';
 		} finally {
 			regenerating = false;
 		}
@@ -316,7 +316,7 @@
 
 			await playPreviewAudio(body);
 		} catch (err) {
-			previewError = err instanceof Error ? err.message : 'Preview failed';
+			previewError = err instanceof Error ? err.message : 'Falló la vista previa';
 		} finally {
 			previewLoading = false;
 		}
@@ -417,7 +417,7 @@
 
 			await playPreviewAudio(body);
 		} catch (err) {
-			previewError = err instanceof Error ? err.message : 'Preview failed';
+			previewError = err instanceof Error ? err.message : 'Falló la vista previa';
 		} finally {
 			previewLoading = false;
 		}
@@ -454,7 +454,7 @@
 	async function handleCloneVoice() {
 		cloneError = '';
 		if (!cloneVoiceId.trim() || !cloneRefAudio || !cloneRefText.trim()) {
-			cloneError = 'Please provide a voice name, reference audio, and reference text.';
+			cloneError = 'Introduce un nombre de voz, un audio de referencia y un texto de referencia.';
 			return;
 		}
 		cloneLoading = true;
@@ -481,7 +481,7 @@
 			cloneFileName = '';
 			await fetchClonedVoices();
 		} catch (err) {
-			cloneError = err instanceof Error ? err.message : 'Clone failed';
+			cloneError = err instanceof Error ? err.message : 'Falló la clonación';
 		} finally {
 			cloneLoading = false;
 		}
@@ -540,8 +540,7 @@
 	onVoiceChange: (id: string) => void;
 	onDeleteClone: (cloneId: string) => void;
 })}
-	<div class="omnivoice-field">
-		<label class="omnivoice-label" for={opts.selectId}>Voice</label>
+	<div class="omnivoice-field">			<label class="omnivoice-label" for={opts.selectId}>Voz</label>
 		{#if opts.isClone}
 			<div class="omnivoice-voice-row" style="flex-wrap:wrap;">
 				<select
@@ -552,16 +551,16 @@
 					onchange={(e) => opts.onVoiceChange(e.currentTarget.value)}
 				>
 					{#if clonedVoices.length === 0}
-						<option value="" disabled>No cloned voices yet</option>
+						<option value="" disabled>Aún no hay voces clonadas</option>
 					{/if}
 					{#each clonedVoices as v}
 						<option value={v.id}>{v.name}</option>
 					{/each}
 					{#if opts.voiceId && !clonedVoices.some((v) => v.id === opts.voiceId)}
-						<option value={opts.voiceId}>cloned {opts.voiceId.replace('clone:', '')} (loading)</option>
+						<option value={opts.voiceId}>clonada {opts.voiceId.replace('clone:', '')} (cargando)</option>
 					{/if}
 				</select>
-				<button class="btn btn-sm btn-secondary" onclick={openCloneModal}>Clone New</button>
+				<button class="btn btn-sm btn-secondary" onclick={openCloneModal}>Clonar nueva</button>
 				{#if opts.voiceId}
 					{@const cloneId = opts.voiceId.replace('clone:', '')}
 					<button
@@ -569,7 +568,7 @@
 						onclick={() => opts.onDeleteClone(cloneId)}
 						disabled={cloneDeleting === cloneId}
 					>
-						{#if cloneDeleting === cloneId}...{:else}Delete{/if}
+						{#if cloneDeleting === cloneId}...{:else}Eliminar{/if}
 					</button>
 				{/if}
 			</div>
@@ -595,13 +594,13 @@
 			<span>OmniVoice Proxy</span>
 			<span class="omnivoice-proxy-status">
 				{#if proxyStatus === 'connected'}
-					<span class="omnivoice-dot omnivoice-dot-ok"></span> Connected
+					<span class="omnivoice-dot omnivoice-dot-ok"></span> Conectado
 				{:else if proxyStatus === 'connecting'}
-					<span class="omnivoice-dot omnivoice-dot-warn"></span> Connecting...
+					<span class="omnivoice-dot omnivoice-dot-warn"></span> Conectando...
 				{:else if proxyStatus === 'disconnected'}
-					<span class="omnivoice-dot omnivoice-dot-err"></span> Not reachable
+					<span class="omnivoice-dot omnivoice-dot-err"></span> No accesible
 				{:else}
-					<span class="omnivoice-dot"></span> Checking...
+					<span class="omnivoice-dot"></span> Comprobando...
 				{/if}
 			</span>
 		</label>
@@ -625,18 +624,18 @@
 				profileError = '';
 				previewError = '';
 			}}
-			aria-label="Dismiss error">×</button
+			aria-label="Descartar error">×</button
 		>
 	</div>
 {/if}
 
 <!-- Primary voice card -->
 <div class="omnivoice-card">
-	<div class="omnivoice-card-label">Primary Voice</div>
+	<div class="omnivoice-card-label">Voz principal</div>
 
 	<div class="omnivoice-design-grid-2">
 		<div class="omnivoice-field">
-			<label class="omnivoice-label" for="omnivoice-language">Language</label>
+			<label class="omnivoice-label" for="omnivoice-language">Idioma</label>
 			<select
 				id="omnivoice-language"
 				class="api-key-input"
@@ -662,7 +661,7 @@
 	</div>
 
 	<div class="omnivoice-voice-row">
-		<span class="omnivoice-design-label" style="width:auto;flex-shrink:0;">Mode</span>
+		<span class="omnivoice-design-label" style="width:auto;flex-shrink:0;">Modo</span>
 		<label class="omnivoice-radio">
 			<input
 				type="radio"
@@ -671,7 +670,7 @@
 				checked={!isClone}
 				onchange={switchToSynthetic}
 			/>
-			Synthetic
+			Sintética
 		</label>
 		<label class="omnivoice-radio">
 			<input
@@ -681,29 +680,28 @@
 				checked={isClone}
 				onchange={switchToClone}
 			/>
-			Cloned
+			Clonada
 		</label>
 		<span style="flex:1;"></span>
 		<button class="btn btn-sm btn-secondary" onclick={regenerateProfile} disabled={regenerating || isClone}
-			title={isClone ? 'Profile regeneration is only available for synthetic voices' : ''}>
-			{#if regenerating}
-				<span class="omnivoice-spinner"></span> Regenerating...
+			title={isClone ? 'La regeneración de perfil solo está disponible para voces sintéticas' : ''}>
+			{#if regenerating}					<span class="omnivoice-spinner"></span> Regenerando…
 			{:else}
-				↻ Regenerate
+				↻ Regenerar
 			{/if}
 		</button>
 		<button class="btn btn-sm btn-primary" onclick={handlePreview} disabled={previewLoading}>
 			{#if previewLoading}
-				<span class="omnivoice-spinner"></span> Testing...
+				<span class="omnivoice-spinner"></span> Probando...
 			{:else}
-				▶ Test
+				▶ Probar
 			{/if}
 		</button>
 	</div>
 
 	<div class="omnivoice-design-grid-2">
 		<div class="omnivoice-design-row">
-			<span class="omnivoice-design-label">Speed</span>
+			<span class="omnivoice-design-label">Velocidad</span>
 			<input
 				type="range"
 				min="0.5"
@@ -716,7 +714,7 @@
 			<span class="omnivoice-slider-val">{(settings.speechSettings.speed as number) ?? 1}</span>
 		</div>
 		<div class="omnivoice-design-row">
-			<span class="omnivoice-design-label">Num Step</span>
+			<span class="omnivoice-design-label">Paso numérico</span>
 			<input
 				type="range"
 				min="4"
@@ -732,7 +730,7 @@
 
 	<div class="omnivoice-design-grid-2">
 		<div class="omnivoice-advanced-slider">
-			<span class="omnivoice-advanced-label">Position Temperature</span>
+			<span class="omnivoice-advanced-label">Temperatura de posición</span>
 			<div class="omnivoice-advanced-row">
 				<input
 					type="range"
@@ -750,7 +748,7 @@
 			</div>
 		</div>
 		<div class="omnivoice-advanced-slider">
-			<span class="omnivoice-advanced-label">Class Temperature</span>
+			<span class="omnivoice-advanced-label">Temperatura de clase</span>
 			<div class="omnivoice-advanced-row">
 				<input
 					type="range"
@@ -772,7 +770,7 @@
 
 <!-- Alternative voice card -->
 <div class="omnivoice-card">
-	<div class="omnivoice-card-label">Alternative Voice</div>
+	<div class="omnivoice-card-label">Voz alternativa</div>
 
 	<div class="omnivoice-voice-row">
 		<label class="omnivoice-radio">
@@ -781,7 +779,7 @@
 				checked={altEnabled}
 				onchange={(e) => settings.handleTTSEnableAltLanguageChange(e.currentTarget.checked)}
 			/>
-			Speak foreign words with a second voice
+			Hablar palabras extranjeras con una segunda voz
 		</label>
 		<span style="flex:1;"></span>
 		{#if altEnabled}
@@ -791,9 +789,9 @@
 				disabled={previewLoading}
 			>
 				{#if previewLoading}
-					<span class="omnivoice-spinner"></span> Testing...
+					<span class="omnivoice-spinner"></span> Probando...
 				{:else}
-					▶ Test Alt Voice
+					▶ Probar voz alternativa
 				{/if}
 			</button>
 		{/if}
@@ -802,14 +800,13 @@
 	{#if altEnabled}
 		<div class="omnivoice-design-grid-2">
 			<div class="omnivoice-field">
-				<label class="omnivoice-label" for="omnivoice-alt-language">Language</label>
+				<label class="omnivoice-label" for="omnivoice-alt-language">Idioma</label>
 				<select
 					id="omnivoice-alt-language"
 					class="api-key-input"
 					value={altLanguage}
 					onchange={(e) => handleAltLanguageChange(e.currentTarget.value)}
-				>
-					<option value="" disabled selected={!altLanguage}>Select a language...</option>
+				>								<option value="" disabled selected={!altLanguage}>Selecciona un idioma...</option>
 					{#each languages as lang}
 						{#if lang.code !== activeLanguage}
 							<option value={lang.code}>{lang.name}</option>
@@ -835,13 +832,12 @@
 				type="checkbox"
 				checked={toolCallingEnabled}
 				onchange={(e) => settings.handleTTSEnableToolCallingChange(e.currentTarget.checked)}
-			/>
-			<span>Force language per segment</span>
-			<span class="tooltip" data-tooltip="More reliable; needs LLM tool support">ⓘ</span>
+			/>					<span>Forzar idioma por segmento</span>
+			<span class="tooltip" data-tooltip="Más fiable; requiere soporte de herramientas del LLM">ⓘ</span>
 		</label>
 
 		<div class="omnivoice-voice-row">
-			<span class="omnivoice-design-label" style="width:auto;flex-shrink:0;">Mode</span>
+			<span class="omnivoice-design-label" style="width:auto;flex-shrink:0;">Modo</span>
 			<label class="omnivoice-radio">
 				<input
 					type="radio"
@@ -850,7 +846,7 @@
 					checked={!altIsClone}
 					onchange={switchAltToSynthetic}
 				/>
-				Synthetic
+									Sintética
 			</label>
 			<label class="omnivoice-radio">
 				<input
@@ -859,14 +855,13 @@
 					value="clone"
 					checked={altIsClone}
 					onchange={switchAltToClone}
-				/>
-				Cloned
+				/>Clonada
 			</label>
 		</div>
 
 		<div class="omnivoice-design-grid-2">
 			<div class="omnivoice-design-row">
-				<span class="omnivoice-design-label">Alt Speed</span>
+				<span class="omnivoice-design-label">Velocidad alternativa</span>
 				<input
 					type="range"
 					min="0.5"
@@ -879,7 +874,7 @@
 				<span class="omnivoice-slider-val">{(settings.speechSettings.altSpeed as number) ?? 1}</span>
 			</div>
 			<div class="omnivoice-design-row">
-				<span class="omnivoice-design-label">Alt Num Step</span>
+				<span class="omnivoice-design-label">Paso numérico alternativo</span>
 				<input
 					type="range"
 					min="4"
@@ -895,7 +890,7 @@
 
 		<div class="omnivoice-design-grid-2">
 			<div class="omnivoice-advanced-slider">
-				<span class="omnivoice-advanced-label">Alt Position Temperature</span>
+				<span class="omnivoice-advanced-label">Temperatura de posición alternativa</span>
 				<div class="omnivoice-advanced-row">
 					<input
 						type="range"
@@ -913,7 +908,7 @@
 				</div>
 			</div>
 			<div class="omnivoice-advanced-slider">
-				<span class="omnivoice-advanced-label">Alt Class Temperature</span>
+				<span class="omnivoice-advanced-label">Temperatura de clase alternativa</span>
 				<div class="omnivoice-advanced-row">
 					<input
 						type="range"
@@ -951,14 +946,13 @@
 			aria-labelledby="clone-modal-title"
 			tabindex="-1"
 			onclick={(e) => e.stopPropagation()}
-		>
-			<h3 id="clone-modal-title" class="omnivoice-modal-title">Clone New Voice</h3>
+		>				<h3 id="clone-modal-title" class="omnivoice-modal-title">Clonar nueva voz</h3>
 
 			<div class="omnivoice-modal-field">
-				<label class="omnivoice-modal-label" for="clone-audio">Reference Audio (3–10s)</label>
+				<label class="omnivoice-modal-label" for="clone-audio">Audio de referencia (3–10 s)</label>
 				<div class="omnivoice-file-row">
 					<label class="btn btn-sm btn-secondary" for="clone-audio">
-						{cloneFileName || 'Choose file...'}
+						{cloneFileName || 'Elegir archivo...'}
 					</label>
 					<input
 						type="file"
@@ -977,22 +971,22 @@
 			</div>
 
 			<div class="omnivoice-modal-field">
-				<label class="omnivoice-modal-label" for="clone-name">Voice Name</label>
+				<label class="omnivoice-modal-label" for="clone-name">Nombre de la voz</label>
 				<input
 					type="text"
 					id="clone-name"
 					class="api-key-input"
-					placeholder="e.g. my_voice"
+					placeholder="p. ej. mi_voz"
 					bind:value={cloneVoiceId}
 				/>
 			</div>
 
 			<div class="omnivoice-modal-field">
-				<label class="omnivoice-modal-label" for="clone-text">Reference Text</label>
+				<label class="omnivoice-modal-label" for="clone-text">Texto de referencia</label>
 				<textarea
 					id="clone-text"
 					class="api-key-input omnivoice-clone-textarea"
-					placeholder="Write the sentence you have recorded in the audio file"
+					placeholder="Escribe la frase que has grabado en el archivo de audio"
 					rows="4"
 					bind:value={cloneRefText}
 				></textarea>
@@ -1003,13 +997,13 @@
 			{/if}
 
 			<div class="omnivoice-modal-actions">
-				<button class="btn btn-sm btn-secondary" onclick={closeCloneModal}>Cancel</button>
+				<button class="btn btn-sm btn-secondary" onclick={closeCloneModal}>Cancelar</button>
 				<button
 					class="btn btn-sm btn-primary"
 					onclick={handleCloneVoice}
 					disabled={cloneLoading}
 				>
-					{cloneLoading ? 'Cloning...' : 'Clone Voice'}
+					{cloneLoading ? 'Clonando…' : 'Clonar voz'}
 				</button>
 			</div>
 		</div>

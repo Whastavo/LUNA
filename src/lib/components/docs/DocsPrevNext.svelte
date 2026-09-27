@@ -12,12 +12,12 @@
 	const { prev, next } = $derived(getPrevNext(slug));
 </script>
 
-<nav class="prev-next" aria-label="Page navigation">
+<nav class="prev-next" aria-label="Navegación de página">
 	{#if prev}
 		<a href={localPath('docs', `/${prev.slug}`)} class="nav-link prev">
 			<Icon name="chevron-left" size={16} />
 			<div class="nav-text">
-				<span class="label">Previous</span>
+				<span class="label">Anterior</span>
 				<span class="title">{prev.title}</span>
 			</div>
 		</a>
@@ -28,7 +28,7 @@
 	{#if next}
 		<a href={localPath('docs', `/${next.slug}`)} class="nav-link next">
 			<div class="nav-text">
-				<span class="label">Next</span>
+				<span class="label">Siguiente</span>
 				<span class="title">{next.title}</span>
 			</div>
 			<Icon name="chevron-right" size={16} />

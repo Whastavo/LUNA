@@ -18,12 +18,12 @@ export type PhotoFilterId = 'none' | 'warm' | 'cool' | 'mono' | 'sepia' | 'film'
 // CSS filter strings shared by the live preview and the capture composite so
 // what you see is exactly what you save
 export const PHOTO_FILTERS: Record<PhotoFilterId, { label: string; css: string }> = {
-	none: { label: 'None', css: 'none' },
-	warm: { label: 'Warm', css: 'saturate(1.15) sepia(0.12) brightness(1.03)' },
-	cool: { label: 'Cool', css: 'saturate(1.05) hue-rotate(-10deg) brightness(1.02)' },
+	none: { label: 'Ninguno', css: 'none' },
+	warm: { label: 'Cálido', css: 'saturate(1.15) sepia(0.12) brightness(1.03)' },
+	cool: { label: 'Frío', css: 'saturate(1.05) hue-rotate(-10deg) brightness(1.02)' },
 	mono: { label: 'Mono', css: 'grayscale(1) contrast(1.06)' },
 	sepia: { label: 'Sepia', css: 'sepia(0.55) contrast(0.95)' },
-	film: { label: 'Film', css: 'contrast(1.08) saturate(0.88) sepia(0.08)' }
+	film: { label: 'Película', css: 'contrast(1.08) saturate(0.88) sepia(0.08)' }
 };
 
 export interface PhotoSticker {

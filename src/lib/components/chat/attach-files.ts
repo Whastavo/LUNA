@@ -19,7 +19,7 @@ export function imageMimeFromPath(path: string): string | null {
 
 export function showVisionHint() {
 	chatHintStore.showHint(
-		"This model can't see images. Pick a vision model (GPT-4o, Claude, Gemini, or a local one like llava) in Settings."
+		'Este modelo no puede ver imágenes. Elige un modelo con visión (GPT-4o, Claude, Gemini o uno local como llava) en Ajustes.'
 	);
 }
 
@@ -43,8 +43,8 @@ export async function queueFiles(files: FileList | File[] | null, visionCapable:
 		} catch (e) {
 			chatHintStore.showHint(
 				e instanceof UnsupportedImageError
-					? "That image format isn't supported. Try a JPEG, PNG, GIF or WebP (iPhone HEIC photos won't work)."
-					: "Couldn't read that image. Try a different one."
+					? 'Ese formato de imagen no es compatible. Prueba con JPEG, PNG, GIF o WebP (las fotos HEIC de iPhone no funcionan).'
+					: 'No se pudo leer esa imagen. Prueba con otra.'
 			);
 		}
 	}

@@ -1,156 +1,216 @@
 {
-  "/blog/blog-thumbnail.png": {
-    "src": "/optimized/blog/blog-thumbnail-1536.webp",
-    "srcset": "/optimized/blog/blog-thumbnail-96.webp 96w, /optimized/blog/blog-thumbnail-480.webp 480w, /optimized/blog/blog-thumbnail-960.webp 960w, /optimized/blog/blog-thumbnail-1536.webp 1536w",
-    "width": 1536,
-    "height": 1024
+  "/luna/visuals/gustavo.png": {
+    "src": "/generated/images/gustavo/gustavo-480.webp",
+    "srcset": "/generated/images/gustavo/gustavo-480.webp 480w",
+    "width": 1254,
+    "height": 1254
   },
-  "/blog/dev-log-2026-5-29.png": {
-    "src": "/optimized/blog/dev-log-2026-5-29-1536.webp",
-    "srcset": "/optimized/blog/dev-log-2026-5-29-96.webp 96w, /optimized/blog/dev-log-2026-5-29-480.webp 480w, /optimized/blog/dev-log-2026-5-29-960.webp 960w, /optimized/blog/dev-log-2026-5-29-1536.webp 1536w",
-    "width": 1536,
-    "height": 1024
+  "/luna/visuals/luna-404.png": {
+    "src": "/generated/images/luna-404/luna-404-512.webp",
+    "srcset": "/generated/images/luna-404/luna-404-512.webp 512w",
+    "width": 767,
+    "height": 645
   },
-  "/blog/dev-log-2026-7-3.png": {
-    "src": "/optimized/blog/dev-log-2026-7-3-1536.webp",
-    "srcset": "/optimized/blog/dev-log-2026-7-3-96.webp 96w, /optimized/blog/dev-log-2026-7-3-480.webp 480w, /optimized/blog/dev-log-2026-7-3-960.webp 960w, /optimized/blog/dev-log-2026-7-3-1536.webp 1536w",
-    "width": 1536,
-    "height": 1024
+  "/luna/visuals/luna-avatar.webp": {
+    "src": "/generated/images/luna-avatar/luna-avatar-250.webp",
+    "srcset": "/generated/images/luna-avatar/luna-avatar-250.webp 250w",
+    "width": 250,
+    "height": 250
   },
-  "/blog/dev-log-2026-7-9-backdrop.png": {
-    "src": "/optimized/blog/dev-log-2026-7-9-backdrop-1920.webp",
-    "srcset": "/optimized/blog/dev-log-2026-7-9-backdrop-96.webp 96w, /optimized/blog/dev-log-2026-7-9-backdrop-479.webp 479w, /optimized/blog/dev-log-2026-7-9-backdrop-960.webp 960w, /optimized/blog/dev-log-2026-7-9-backdrop-1920.webp 1920w",
-    "width": 2632,
-    "height": 1472
+  "/luna/visuals/luna-grace.png": {
+    "src": "/generated/images/luna-grace/luna-grace-960.webp",
+    "srcset": "/generated/images/luna-grace/luna-grace-480.webp 480w, /generated/images/luna-grace/luna-grace-960.webp 960w",
+    "width": 1096,
+    "height": 2532
   },
-  "/blog/dev-log-2026-7-9-reminders.png": {
-    "src": "/optimized/blog/dev-log-2026-7-9-reminders-1920.webp",
-    "srcset": "/optimized/blog/dev-log-2026-7-9-reminders-96.webp 96w, /optimized/blog/dev-log-2026-7-9-reminders-479.webp 479w, /optimized/blog/dev-log-2026-7-9-reminders-960.webp 960w, /optimized/blog/dev-log-2026-7-9-reminders-1920.webp 1920w",
-    "width": 2632,
-    "height": 1472
+  "/luna/visuals/luna-hush.png": {
+    "src": "/generated/images/luna-hush/luna-hush-480.webp",
+    "srcset": "/generated/images/luna-hush/luna-hush-480.webp 480w",
+    "width": 707,
+    "height": 629
   },
-  "/blog/dev-log-2026-7-9-sidebar.png": {
-    "src": "/optimized/blog/dev-log-2026-7-9-sidebar-1920.webp",
-    "srcset": "/optimized/blog/dev-log-2026-7-9-sidebar-96.webp 96w, /optimized/blog/dev-log-2026-7-9-sidebar-479.webp 479w, /optimized/blog/dev-log-2026-7-9-sidebar-960.webp 960w, /optimized/blog/dev-log-2026-7-9-sidebar-1920.webp 1920w",
-    "width": 2632,
-    "height": 1472
+  "/luna/visuals/luna-lean.png": {
+    "src": "/generated/images/luna-lean/luna-lean-480.webp",
+    "srcset": "/generated/images/luna-lean/luna-lean-480.webp 480w",
+    "width": 694,
+    "height": 574
   },
-  "/blog/dev-log-2026-7-9.png": {
-    "src": "/optimized/blog/dev-log-2026-7-9-1920.webp",
-    "srcset": "/optimized/blog/dev-log-2026-7-9-96.webp 96w, /optimized/blog/dev-log-2026-7-9-480.webp 480w, /optimized/blog/dev-log-2026-7-9-959.webp 959w, /optimized/blog/dev-log-2026-7-9-1920.webp 1920w",
-    "width": 2388,
-    "height": 1506
-  },
-  "/blog/gaming-gpu.jpg": {
-    "src": "/optimized/blog/gaming-gpu-1200.webp",
-    "srcset": "/optimized/blog/gaming-gpu-96.webp 96w, /optimized/blog/gaming-gpu-480.webp 480w, /optimized/blog/gaming-gpu-960.webp 960w, /optimized/blog/gaming-gpu-1200.webp 1200w",
-    "width": 1200,
-    "height": 800
-  },
-  "/blog/grok-ani.jpg": {
-    "src": "/optimized/blog/grok-ani-1280.webp",
-    "srcset": "/optimized/blog/grok-ani-96.webp 96w, /optimized/blog/grok-ani-480.webp 480w, /optimized/blog/grok-ani-960.webp 960w, /optimized/blog/grok-ani-1280.webp 1280w",
-    "width": 1280,
-    "height": 720
-  },
-  "/blog/moving-to-agpl.jpg": {
-    "src": "/optimized/blog/moving-to-agpl-1536.webp",
-    "srcset": "/optimized/blog/moving-to-agpl-96.webp 96w, /optimized/blog/moving-to-agpl-480.webp 480w, /optimized/blog/moving-to-agpl-960.webp 960w, /optimized/blog/moving-to-agpl-1536.webp 1536w",
-    "width": 1536,
-    "height": 1024
-  },
-  "/blog/project-start-gif.gif": {
-    "src": "/optimized/blog/project-start-gif-animated.webp",
-    "srcset": "",
-    "width": 800,
-    "height": 569,
-    "poster": {
-      "src": "/optimized/blog/project-start-gif-800.webp",
-      "srcset": "/optimized/blog/project-start-gif-96.webp 96w, /optimized/blog/project-start-gif-479.webp 479w, /optimized/blog/project-start-gif-800.webp 800w"
-    }
-  },
-  "/blog/razer-project-ava.jpg": {
-    "src": "/optimized/blog/razer-project-ava-920.webp",
-    "srcset": "/optimized/blog/razer-project-ava-96.webp 96w, /optimized/blog/razer-project-ava-480.webp 480w, /optimized/blog/razer-project-ava-920.webp 920w",
-    "width": 920,
-    "height": 518
-  },
-  "/blog/vrm-models.jpg": {
-    "src": "/optimized/blog/vrm-models-861.webp",
-    "srcset": "/optimized/blog/vrm-models-96.webp 96w, /optimized/blog/vrm-models-480.webp 480w, /optimized/blog/vrm-models-861.webp 861w",
-    "width": 861,
-    "height": 557
-  },
-  "/landing-page/hero-character-1.webp": {
-    "src": "/landing-page/hero-character-1.webp",
-    "srcset": "/optimized/landing-page/hero-character-1-640.webp 640w, /landing-page/hero-character-1.webp 1151w",
-    "width": 1151,
-    "height": 1488
-  },
-  "/landing-page/hero-character-2.webp": {
-    "src": "/landing-page/hero-character-2.webp",
-    "srcset": "/optimized/landing-page/hero-character-2-640.webp 640w, /landing-page/hero-character-2.webp 1055w",
+  "/luna/visuals/luna-portrait.webp": {
+    "src": "/generated/images/luna-portrait/luna-portrait-960.webp",
+    "srcset": "/generated/images/luna-portrait/luna-portrait-480.webp 480w, /generated/images/luna-portrait/luna-portrait-960.webp 960w",
     "width": 1055,
     "height": 1536
   },
-  "/landing-page/hero-character-3.webp": {
-    "src": "/landing-page/hero-character-3.webp",
-    "srcset": "/optimized/landing-page/hero-character-3-640.webp 640w, /landing-page/hero-character-3.webp 1037w",
+  "/luna/visuals/luna-posehero-02.png": {
+    "src": "/generated/images/luna-posehero-02/luna-posehero-02-848.webp",
+    "srcset": "/generated/images/luna-posehero-02/luna-posehero-02-480.webp 480w, /generated/images/luna-posehero-02/luna-posehero-02-848.webp 848w",
+    "width": 848,
+    "height": 696
+  },
+  "/luna/visuals/luna-posehero-03.png": {
+    "src": "/generated/images/luna-posehero-03/luna-posehero-03-848.webp",
+    "srcset": "/generated/images/luna-posehero-03/luna-posehero-03-480.webp 480w, /generated/images/luna-posehero-03/luna-posehero-03-848.webp 848w",
+    "width": 848,
+    "height": 696
+  },
+  "/luna/visuals/luna-posehero-04.png": {
+    "src": "/generated/images/luna-posehero-04/luna-posehero-04-848.webp",
+    "srcset": "/generated/images/luna-posehero-04/luna-posehero-04-480.webp 480w, /generated/images/luna-posehero-04/luna-posehero-04-848.webp 848w",
+    "width": 848,
+    "height": 696
+  },
+  "/luna/visuals/luna-posehero-05.png": {
+    "src": "/generated/images/luna-posehero-05/luna-posehero-05-848.webp",
+    "srcset": "/generated/images/luna-posehero-05/luna-posehero-05-480.webp 480w, /generated/images/luna-posehero-05/luna-posehero-05-848.webp 848w",
+    "width": 848,
+    "height": 696
+  },
+  "/luna/visuals/luna-posehero-06.png": {
+    "src": "/generated/images/luna-posehero-06/luna-posehero-06-848.webp",
+    "srcset": "/generated/images/luna-posehero-06/luna-posehero-06-480.webp 480w, /generated/images/luna-posehero-06/luna-posehero-06-848.webp 848w",
+    "width": 848,
+    "height": 696
+  },
+  "/luna/visuals/luna-posehero-07.png": {
+    "src": "/generated/images/luna-posehero-07/luna-posehero-07-848.webp",
+    "srcset": "/generated/images/luna-posehero-07/luna-posehero-07-480.webp 480w, /generated/images/luna-posehero-07/luna-posehero-07-848.webp 848w",
+    "width": 848,
+    "height": 696
+  },
+  "/luna/visuals/luna-posehero-08.png": {
+    "src": "/generated/images/luna-posehero-08/luna-posehero-08-848.webp",
+    "srcset": "/generated/images/luna-posehero-08/luna-posehero-08-480.webp 480w, /generated/images/luna-posehero-08/luna-posehero-08-848.webp 848w",
+    "width": 848,
+    "height": 696
+  },
+  "/luna/visuals/luna-posehero.png": {
+    "src": "/generated/images/luna-posehero/luna-posehero-848.webp",
+    "srcset": "/generated/images/luna-posehero/luna-posehero-480.webp 480w, /generated/images/luna-posehero/luna-posehero-848.webp 848w",
+    "width": 848,
+    "height": 696
+  },
+  "/luna/visuals/luna-presence.webp": {
+    "src": "/generated/images/luna-presence/luna-presence-960.webp",
+    "srcset": "/generated/images/luna-presence/luna-presence-480.webp 480w, /generated/images/luna-presence/luna-presence-960.webp 960w",
+    "width": 1151,
+    "height": 1488
+  },
+  "/luna/visuals/luna-solea.webp": {
+    "src": "/generated/images/luna-solea/luna-solea-960.webp",
+    "srcset": "/generated/images/luna-solea/luna-solea-480.webp 480w, /generated/images/luna-solea/luna-solea-960.webp 960w",
     "width": 1037,
     "height": 1536
   },
-  "/marketing/ar-dark.webp": {
-    "src": "/marketing/ar-dark.webp",
-    "srcset": "/optimized/marketing/ar-dark-768.webp 768w, /optimized/marketing/ar-dark-1156.webp 1156w",
-    "width": 1156,
-    "height": 867
-  },
-  "/marketing/ar-light.webp": {
-    "src": "/marketing/ar-light.webp",
-    "srcset": "/optimized/marketing/ar-light-768.webp 768w, /optimized/marketing/ar-light-1156.webp 1156w",
-    "width": 1156,
-    "height": 867
-  },
   "/marketing/companion-dark.webp": {
-    "src": "/marketing/companion-dark.webp",
-    "srcset": "/optimized/marketing/companion-dark-768.webp 768w, /optimized/marketing/companion-dark-1440.webp 1440w, /marketing/companion-dark.webp 2880w",
+    "src": "/generated/images/companion-dark/companion-dark-1440.webp",
+    "srcset": "/generated/images/companion-dark/companion-dark-768.webp 768w, /generated/images/companion-dark/companion-dark-1440.webp 1440w",
     "width": 2880,
     "height": 1800
   },
   "/marketing/companion-light.webp": {
-    "src": "/marketing/companion-light.webp",
-    "srcset": "/optimized/marketing/companion-light-768.webp 768w, /optimized/marketing/companion-light-1440.webp 1440w, /marketing/companion-light.webp 2880w",
+    "src": "/generated/images/companion-light/companion-light-1440.webp",
+    "srcset": "/generated/images/companion-light/companion-light-768.webp 768w, /generated/images/companion-light/companion-light-1440.webp 1440w",
     "width": 2880,
     "height": 1800
   },
   "/marketing/desktop-app.webp": {
-    "src": "/marketing/desktop-app.webp",
-    "srcset": "/optimized/marketing/desktop-app-767.webp 767w, /optimized/marketing/desktop-app-1440.webp 1440w, /marketing/desktop-app.webp 1829w",
+    "src": "/generated/images/desktop-app/desktop-app-1440.webp",
+    "srcset": "/generated/images/desktop-app/desktop-app-768.webp 768w, /generated/images/desktop-app/desktop-app-1440.webp 1440w",
     "width": 1829,
     "height": 1168
   },
   "/marketing/memory-dark.webp": {
-    "src": "/marketing/memory-dark.webp",
-    "srcset": "/optimized/marketing/memory-dark-768.webp 768w, /optimized/marketing/memory-dark-1440.webp 1440w, /marketing/memory-dark.webp 2880w",
+    "src": "/generated/images/memory-dark/memory-dark-1440.webp",
+    "srcset": "/generated/images/memory-dark/memory-dark-768.webp 768w, /generated/images/memory-dark/memory-dark-1440.webp 1440w",
     "width": 2880,
     "height": 1800
   },
   "/marketing/memory-light.webp": {
-    "src": "/marketing/memory-light.webp",
-    "srcset": "/optimized/marketing/memory-light-768.webp 768w, /optimized/marketing/memory-light-1440.webp 1440w, /marketing/memory-light.webp 2880w",
+    "src": "/generated/images/memory-light/memory-light-1440.webp",
+    "srcset": "/generated/images/memory-light/memory-light-768.webp 768w, /generated/images/memory-light/memory-light-1440.webp 1440w",
     "width": 2880,
     "height": 1800
   },
   "/marketing/settings-dark.webp": {
-    "src": "/marketing/settings-dark.webp",
-    "srcset": "/optimized/marketing/settings-dark-768.webp 768w, /optimized/marketing/settings-dark-1440.webp 1440w, /marketing/settings-dark.webp 2880w",
+    "src": "/generated/images/settings-dark/settings-dark-1440.webp",
+    "srcset": "/generated/images/settings-dark/settings-dark-768.webp 768w, /generated/images/settings-dark/settings-dark-1440.webp 1440w",
     "width": 2880,
     "height": 1800
   },
   "/marketing/settings-light.webp": {
-    "src": "/marketing/settings-light.webp",
-    "srcset": "/optimized/marketing/settings-light-768.webp 768w, /optimized/marketing/settings-light-1440.webp 1440w, /marketing/settings-light.webp 2880w",
+    "src": "/generated/images/settings-light/settings-light-1440.webp",
+    "srcset": "/generated/images/settings-light/settings-light-768.webp 768w, /generated/images/settings-light/settings-light-1440.webp 1440w",
     "width": 2880,
     "height": 1800
+  },
+  "/blog/blog-thumbnail.png": {
+    "src": "/generated/images/blog-thumbnail/blog-thumbnail-960.webp",
+    "srcset": "/generated/images/blog-thumbnail/blog-thumbnail-96.webp 96w, /generated/images/blog-thumbnail/blog-thumbnail-480.webp 480w, /generated/images/blog-thumbnail/blog-thumbnail-960.webp 960w",
+    "width": 1536,
+    "height": 1024
+  },
+  "/blog/dev-log-2026-5-29.png": {
+    "src": "/generated/images/dev-log-2026-5-29/dev-log-2026-5-29-960.webp",
+    "srcset": "/generated/images/dev-log-2026-5-29/dev-log-2026-5-29-96.webp 96w, /generated/images/dev-log-2026-5-29/dev-log-2026-5-29-480.webp 480w, /generated/images/dev-log-2026-5-29/dev-log-2026-5-29-960.webp 960w",
+    "width": 1536,
+    "height": 1024
+  },
+  "/blog/dev-log-2026-7-3.png": {
+    "src": "/generated/images/dev-log-2026-7-3/dev-log-2026-7-3-960.webp",
+    "srcset": "/generated/images/dev-log-2026-7-3/dev-log-2026-7-3-96.webp 96w, /generated/images/dev-log-2026-7-3/dev-log-2026-7-3-480.webp 480w, /generated/images/dev-log-2026-7-3/dev-log-2026-7-3-960.webp 960w",
+    "width": 1536,
+    "height": 1024
+  },
+  "/blog/dev-log-2026-7-9-backdrop.png": {
+    "src": "/generated/images/dev-log-2026-7-9-backdrop/dev-log-2026-7-9-backdrop-1920.webp",
+    "srcset": "/generated/images/dev-log-2026-7-9-backdrop/dev-log-2026-7-9-backdrop-96.webp 96w, /generated/images/dev-log-2026-7-9-backdrop/dev-log-2026-7-9-backdrop-480.webp 480w, /generated/images/dev-log-2026-7-9-backdrop/dev-log-2026-7-9-backdrop-960.webp 960w, /generated/images/dev-log-2026-7-9-backdrop/dev-log-2026-7-9-backdrop-1920.webp 1920w",
+    "width": 2632,
+    "height": 1472
+  },
+  "/blog/dev-log-2026-7-9-reminders.png": {
+    "src": "/generated/images/dev-log-2026-7-9-reminders/dev-log-2026-7-9-reminders-1920.webp",
+    "srcset": "/generated/images/dev-log-2026-7-9-reminders/dev-log-2026-7-9-reminders-96.webp 96w, /generated/images/dev-log-2026-7-9-reminders/dev-log-2026-7-9-reminders-480.webp 480w, /generated/images/dev-log-2026-7-9-reminders/dev-log-2026-7-9-reminders-960.webp 960w, /generated/images/dev-log-2026-7-9-reminders/dev-log-2026-7-9-reminders-1920.webp 1920w",
+    "width": 2632,
+    "height": 1472
+  },
+  "/blog/dev-log-2026-7-9-sidebar.png": {
+    "src": "/generated/images/dev-log-2026-7-9-sidebar/dev-log-2026-7-9-sidebar-1920.webp",
+    "srcset": "/generated/images/dev-log-2026-7-9-sidebar/dev-log-2026-7-9-sidebar-96.webp 96w, /generated/images/dev-log-2026-7-9-sidebar/dev-log-2026-7-9-sidebar-480.webp 480w, /generated/images/dev-log-2026-7-9-sidebar/dev-log-2026-7-9-sidebar-960.webp 960w, /generated/images/dev-log-2026-7-9-sidebar/dev-log-2026-7-9-sidebar-1920.webp 1920w",
+    "width": 2632,
+    "height": 1472
+  },
+  "/blog/dev-log-2026-7-9.png": {
+    "src": "/generated/images/dev-log-2026-7-9/dev-log-2026-7-9-1920.webp",
+    "srcset": "/generated/images/dev-log-2026-7-9/dev-log-2026-7-9-96.webp 96w, /generated/images/dev-log-2026-7-9/dev-log-2026-7-9-480.webp 480w, /generated/images/dev-log-2026-7-9/dev-log-2026-7-9-960.webp 960w, /generated/images/dev-log-2026-7-9/dev-log-2026-7-9-1920.webp 1920w",
+    "width": 2388,
+    "height": 1506
+  },
+  "/blog/grok-ani.jpg": {
+    "src": "/generated/images/grok-ani/grok-ani-960.webp",
+    "srcset": "/generated/images/grok-ani/grok-ani-96.webp 96w, /generated/images/grok-ani/grok-ani-480.webp 480w, /generated/images/grok-ani/grok-ani-960.webp 960w",
+    "width": 1280,
+    "height": 720
+  },
+  "/blog/project-start-gif.gif": {
+    "src": "/generated/images/project-start-gif/project-start-gif-animated.webp",
+    "srcset": "",
+    "width": 800,
+    "height": 569,
+    "poster": {
+      "src": "/generated/images/project-start-gif/project-start-gif-480.webp",
+      "srcset": "/generated/images/project-start-gif/project-start-gif-96.webp 96w, /generated/images/project-start-gif/project-start-gif-480.webp 480w"
+    }
+  },
+  "/blog/razer-project-ava.jpg": {
+    "src": "/generated/images/razer-project-ava/razer-project-ava-480.webp",
+    "srcset": "/generated/images/razer-project-ava/razer-project-ava-96.webp 96w, /generated/images/razer-project-ava/razer-project-ava-480.webp 480w",
+    "width": 920,
+    "height": 518
+  },
+  "/blog/vrm-models.jpg": {
+    "src": "/generated/images/vrm-models/vrm-models-480.webp",
+    "srcset": "/generated/images/vrm-models/vrm-models-96.webp 96w, /generated/images/vrm-models/vrm-models-480.webp 480w",
+    "width": 861,
+    "height": 557
   }
 }
