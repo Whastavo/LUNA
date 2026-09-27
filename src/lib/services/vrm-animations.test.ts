@@ -16,9 +16,9 @@ test('fetches once and reuses the result for repeat calls', async () => {
 		return fakeAnimation(url);
 	};
 
-	const a = await loadVrmAnimation('/animations/idle.vrma', fetcher);
-	const b = await loadVrmAnimation('/animations/idle.vrma', fetcher);
-	const c = await loadVrmAnimation('/animations/idle.vrma', fetcher);
+	const a = await loadVrmAnimation('/luna/motion/luna-rest.vrma', fetcher);
+	const b = await loadVrmAnimation('/luna/motion/luna-rest.vrma', fetcher);
+	const c = await loadVrmAnimation('/luna/motion/luna-rest.vrma', fetcher);
 
 	assert.equal(calls, 1, 'the idle loop must not refetch the same file');
 	assert.equal(a, b);
@@ -37,9 +37,9 @@ test('concurrent callers share one in-flight request', async () => {
 	};
 
 	const all = Promise.all([
-		loadVrmAnimation('/animations/idle_2.vrma', fetcher),
-		loadVrmAnimation('/animations/idle_2.vrma', fetcher),
-		loadVrmAnimation('/animations/idle_2.vrma', fetcher)
+		loadVrmAnimation('/luna/motion/luna-drift.vrma', fetcher),
+		loadVrmAnimation('/luna/motion/luna-drift.vrma', fetcher),
+		loadVrmAnimation('/luna/motion/luna-drift.vrma', fetcher)
 	]);
 	release(null);
 	const [x, y, z] = await all;
@@ -58,16 +58,16 @@ test('caches per URL, so the five idle files stay distinct', async () => {
 	};
 
 	const urls = [
-		'/animations/idle.vrma',
-		'/animations/idle_2.vrma',
-		'/animations/idle_3.vrma',
-		'/animations/idle_4.vrma',
-		'/animations/idle_5.vrma'
+		'/luna/motion/luna-rest.vrma',
+		'/luna/motion/luna-drift.vrma',
+		'/luna/motion/luna-breathe.vrma',
+		'/luna/motion/luna-sway.vrma',
+		'/luna/motion/luna-flow.vrma'
 	];
 	for (const u of urls) await loadVrmAnimation(u, fetcher);
 	for (const u of urls) await loadVrmAnimation(u, fetcher);
 
-	assert.deepEqual(seen, urls, 'each file fetched exactly once, in order');
+	assert.deepEqual(seen, urls, 'each motion file fetched exactly once, in order');
 });
 
 test('a failed load is evicted so the next call retries', async () => {
@@ -79,9 +79,9 @@ test('a failed load is evicted so the next call retries', async () => {
 		return fakeAnimation(url);
 	};
 
-	await assert.rejects(() => loadVrmAnimation('/animations/idle.vrma', fetcher), /network down/);
+	await assert.rejects(() => loadVrmAnimation('/luna/motion/luna-rest.vrma', fetcher), /network down/);
 	// A transient failure must not poison the cache for the rest of the session.
-	const ok = await loadVrmAnimation('/animations/idle.vrma', fetcher);
+	const ok = await loadVrmAnimation('/luna/motion/luna-rest.vrma', fetcher);
 
 	assert.equal(calls, 2);
 	assert.ok(ok);
@@ -94,7 +94,7 @@ test('a rejected entry does not surface as an unhandled rejection', async () => 
 	};
 
 	// Call without awaiting, the way a fire-and-forget cycle would.
-	const p = loadVrmAnimation('/animations/idle_3.vrma', fetcher);
+	const p = loadVrmAnimation('/luna/motion/luna-breathe.vrma', fetcher);
 	p.catch(() => {});
 	await assert.rejects(() => p, /boom/);
 
@@ -110,9 +110,9 @@ test('clearVrmAnimationCache forces a refetch', async () => {
 		return fakeAnimation(url);
 	};
 
-	await loadVrmAnimation('/animations/idle.vrma', fetcher);
+	await loadVrmAnimation('/luna/motion/luna-rest.vrma', fetcher);
 	clearVrmAnimationCache();
-	await loadVrmAnimation('/animations/idle.vrma', fetcher);
+	await loadVrmAnimation('/luna/motion/luna-rest.vrma', fetcher);
 
 	assert.equal(calls, 2);
 });

@@ -1,67 +1,67 @@
 ---
-title: Memory Graph
-description: Interactive visualization of semantic memory connections
+title: Grafo de memoria
+description: Visualización interactiva de las conexiones de memoria semántica
 ---
 
-# Memory Graph
+# Grafo de memoria
 
-The Memory Graph is an interactive network visualization that shows how your companion's memories are semantically connected.
+El Grafo de memoria es una visualización de red interactiva que muestra cómo los recuerdos de tu compañera están conectados semánticamente.
 
-## Accessing the Memory Graph
+## Acceder al Grafo de memoria
 
-Click the **brain icon** in the top-left corner of the main screen to open the Memory Graph in a full-screen modal.
+Haz clic en el **icono de cerebro** en la esquina superior izquierda de la pantalla principal para abrir el Grafo de memoria en un modal a pantalla completa.
 
-## Understanding the Visualization
+## Entender la visualización
 
-### Nodes (Memories)
+### Nodos (recuerdos)
 
-Each node represents a stored memory (fact) about you, your relationship, or shared experiences.
+Cada nodo representa un recuerdo almacenado (dato) sobre ti, vuestra relación o experiencias compartidas.
 
-**Node Colors:**
-- **Blue** — User facts (your preferences, background, attributes)
-- **Pink** — Relationship facts (dynamics between you and the companion)
-- **Green** — Shared experiences (events you've discussed together)
+**Colores de nodo:**
+- **Azul** — Datos del usuario (tus preferencias, tu historia, tus atributos)
+- **Rosa** — Datos de la relación (dinámicas entre tú y la compañera)
+- **Verde** — Experiencias compartidas (eventos que habéis comentado juntos)
 
-### Connections
+### Conexiones
 
-Lines between nodes indicate **semantic similarity** — memories that are related in meaning are connected. Animated particles flow along connections to visualize these relationships.
+Las líneas entre los nodos indican **similitud semántica** — los recuerdos relacionados por significado están conectados. Partículas animadas fluyen por las conexiones para visualizar estas relaciones.
 
-### Statistics
+### Estadísticas
 
-The bottom-left corner shows total memory count and number of connections in the current view.
+La esquina inferior izquierda muestra el número total de recuerdos y de conexiones en la vista actual.
 
-## Interactions
+## Interacciones
 
-### Selecting a Memory
+### Seleccionar un recuerdo
 
-Click any node to select it:
-- The selected memory and its connections are highlighted
-- Unrelated memories fade
-- A detail panel appears on the right showing the full memory content, importance score, and reference count
+Haz clic en cualquier nodo para seleccionarlo:
+- El recuerdo seleccionado y sus conexiones se resaltan
+- Los recuerdos no relacionados se desvanecen
+- Aparece un panel de detalles a la derecha con el contenido completo del recuerdo, su puntuación de importancia y el número de referencias
 
-### Filtering Categories
+### Filtrar categorías
 
-Use the category toggles in the top-left control panel to show/hide specific memory types. This helps focus on particular aspects of what your companion knows.
+Usa los interruptores de categoría en el panel de control de la esquina superior izquierda para mostrar u ocultar tipos de recuerdo. Esto ayuda a centrarse en aspectos concretos de lo que tu compañera sabe.
 
-### Reset View
+### Restablecer la vista
 
-Click "Reset View" to zoom out and see the full graph, clearing any selection.
+Haz clic en «Restablecer vista» para alejar el zoom y ver el grafo completo, borrando cualquier selección.
 
-## Technical Details
+## Detalles técnicos
 
-The Memory Graph uses **384-dimensional embeddings** (via Transformers.js with the multilingual paraphrase-multilingual-MiniLM-L12-v2 model) to compute semantic relationships between memories. Memories with a **cosine similarity >= 0.5** are connected.
+El Grafo de memoria usa **embeddings de 384 dimensiones** (vía Transformers.js con el modelo multilingual paraphrase-multilingual-MiniLM-L12-v2) para calcular las relaciones semánticas entre recuerdos. Los recuerdos con **similitud coseno >= 0.5** quedan conectados.
 
-**Reference Count** tracks how many times a memory has been retrieved during conversations — higher counts indicate memories that frequently inform responses.
+El **número de referencias** registra cuántas veces se ha recuperado un recuerdo durante las conversaciones — los recuentos altos indican recuerdos que informan las respuestas con frecuencia.
 
-**Importance Score** (0-100) reflects how significant the memory is based on emotional content, personal details, and other heuristics.
+La **puntuación de importancia** (0-100) refleja lo significativo que es el recuerdo según su contenido emocional, detalles personales y otras heurísticas.
 
-### Requirements
+### Requisitos
 
-- Memories must have embeddings to appear in the graph
-- The embedding model is loaded automatically on app startup
-- Existing memories without embeddings are backfilled automatically when the embedding model finishes loading
+- Los recuerdos deben tener embeddings para aparecer en el grafo
+- El modelo de embeddings se carga automáticamente al iniciar la app
+- Los recuerdos existentes sin embeddings se rellenan automáticamente cuando el modelo termina de cargar
 
-## Related
+## Relacionado
 
-- [Companion System](/docs/technology/companion-system) — Full architecture including the three-tier memory system
-- [Architecture Overview](/docs/technology/architecture) — System design and component interactions
+- [Sistema de compañera](/docs/technology/companion-system) — Arquitectura completa incluido el sistema de memoria de tres niveles
+- [Visión de la arquitectura](/docs/technology/architecture) — Diseño del sistema e interacciones entre componentes

@@ -1,29 +1,29 @@
 ---
-title: Introduction
-description: What is Utsuwa and how to get started.
+title: Introducción
+description: Qué es Luna y cómo empezar.
 ---
 
-# Introduction
+# Introducción
 
 ## TL;DR
 
-- An open-source VRM avatar companion app
-- Load a VRM model, connect any LLM provider, and bring your AI companion to life
-- Voice, memory, and a relationship system built in
-- Local-first — your data stays on your device
-- Desktop app with transparent overlay mode for macOS, Windows, and Linux
+- Una app de compañía con avatar VRM centrada en la privacidad
+- Carga un modelo VRM, conecta cualquier proveedor de LLM y da vida a tu compañera IA
+- Voz, memoria y un sistema de relación integrados
+- Local primero — tus datos se quedan en tu dispositivo
+- App de escritorio con modo de superposición transparente para macOS, Windows y Linux
 
-## What is Utsuwa?
+## ¿Qué es Luna?
 
-Most AI companions today are either text-only chat interfaces or locked behind proprietary platforms. You don't own the character and you don't own the data.
+La mayoría de las compañeras IA actuales son interfaces de chat de solo texto o están encerradas detrás de plataformas propietarias. No eres dueño del personaje y no eres dueño de los datos.
 
-Utsuwa takes a different approach. It gives you a 3D avatar that speaks, remembers your conversations, and develops a relationship with you over time. No accounts, no subscriptions. Your data stays on your device.
+Luna adopta un enfoque diferente. Te da un avatar 3D que habla, recuerda tus conversaciones y desarrolla una relación contigo con el tiempo. Sin cuentas, sin suscripciones. Tus datos se quedan en tu dispositivo.
 
-Connect any LLM provider you want — OpenAI, Anthropic, Google, DeepSeek, xAI, any OpenAI-compatible endpoint (OpenRouter, Together, vLLM), or a local model through Ollama or LM Studio. Add voice with ElevenLabs, OpenAI TTS, or a local TTS server. For voice input, use a local Whisper server, Groq, OpenAI, or your browser's built-in speech recognition. Load any VRM model as your companion's body. Everything is modular and swappable — and can run entirely on your own machine.
+Conecta el proveedor de LLM que quieras — OpenAI, Anthropic, Google, DeepSeek, xAI, cualquier endpoint compatible con OpenAI (OpenRouter, Together, vLLM) o un modelo local mediante Ollama o LM Studio. Añade voz con ElevenLabs, OpenAI TTS o un servidor TTS local. Para la entrada de voz, usa un servidor Whisper local, Groq, OpenAI o el reconocimiento de voz integrado de tu navegador. Carga cualquier modelo VRM como cuerpo de tu compañera. Todo es modular e intercambiable — y puede funcionar por completo en tu propia máquina.
 
-"Utsuwa" means "vessel" in Japanese — a container for AI to inhabit visually. The app is the vessel; you choose what goes inside.
+«Luna» significa recipiente en japonés — un contenedor para que una IA habite visualmente. La app es el recipiente; tú eliges qué va dentro.
 
-## Getting Started
+## Cómo empezar
 
 <script>
 import DocsGetStartedCards from '$lib/components/docs/DocsGetStartedCards.svelte';
@@ -31,6 +31,6 @@ import DocsGetStartedCards from '$lib/components/docs/DocsGetStartedCards.svelte
 
 <DocsGetStartedCards />
 
-## Contributing
+## Comunidad
 
-Utsuwa is open source and welcomes contributions. See the [Contributing Guidelines](/docs/community/contributing) for how to get involved.
+Mantente al tanto de las novedades de Luna en el [blog](/blog) y comparte tus comentarios a través de los canales oficiales de Whizzend.

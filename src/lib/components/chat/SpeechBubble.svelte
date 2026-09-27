@@ -70,7 +70,7 @@
 	>
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="speech-bubble" onclick={handleClick}>
+		<div class="speech-bubble glass-chip" onclick={handleClick}>
 			<!-- Keyed so consecutive replies fade in instead of hard-swapping text -->
 			{#key isTyping ? '::typing' : message}
 				<div class="speech-bubble-content" in:fadeFast={{ duration: 180 }}>
@@ -103,9 +103,7 @@
 		min-width: 60px;
 		max-height: 120px;
 		overflow: hidden;
-		background: var(--bg-secondary);
 		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-md);
 		pointer-events: auto;
 		cursor: pointer;
 		transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;

@@ -103,8 +103,8 @@
 	<div class="icon">
 		<Icon name="upload" size={32} strokeWidth={1.5} />
 	</div>
-	<span class="label">Upload VRM</span>
-	<span class="hint">Drag & drop or click to browse</span>
+	<span class="label">Subir VRM</span>
+	<span class="hint">Arrastra y suelta o haz clic para explorar</span>
 </div>
 
 <style>
@@ -148,7 +148,7 @@
 	.uploader:hover .icon,
 	.uploader.dragging .icon {
 		background: var(--accent);
-		color: #fff;
+		color: var(--accent-contrast, #fff);
 	}
 
 	.label {

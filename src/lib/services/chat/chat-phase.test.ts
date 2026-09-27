@@ -4,13 +4,13 @@ import assert from 'node:assert/strict';
 import { phaseLabel } from './chat-phase.ts';
 
 test('maps remembering to its label', () => {
-	assert.equal(phaseLabel('remembering'), 'Remembering...');
+	assert.equal(phaseLabel('remembering'), 'Recordando…');
 });
 
 test('maps seeing to its label', () => {
-	assert.equal(phaseLabel('seeing'), 'Looking at your photo...');
+	assert.equal(phaseLabel('seeing'), 'Mirando tu foto…');
 });
 
 test('maps thinking to its label', () => {
-	assert.equal(phaseLabel('thinking'), 'Thinking...');
+	assert.equal(phaseLabel('thinking'), 'Pensando…');
 });

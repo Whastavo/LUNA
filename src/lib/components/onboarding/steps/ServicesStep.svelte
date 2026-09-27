@@ -13,7 +13,7 @@
 	import { DOCS_URL } from '$lib/config/site';
 	import { isTauri } from '$lib/services/platform';
 
-	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-utsuwa-to-reach-ollama`;
+	const LOCAL_LLM_DOCS_URL = `${DOCS_URL}/guides/local-llm-setup#allowing-luna-to-reach-ollama`;
 
 	// Always open the docs subdomain; on desktop route it to the system browser.
 	function openLocalLlmDocs(e: MouseEvent) {
@@ -130,13 +130,13 @@
 			},
 			onError: (error) => {
 				llmIsLoading = false;
-				llmFetchError = error ?? 'Could not fetch installed models';
+				llmFetchError = error ?? 'No se pudieron obtener los modelos instalados';
 				llmDynamicModels = llmProvider?.isLocal ? [] : null;
 			},
 			onEmpty: () => {
 				llmIsLoading = false;
 				llmFetchError = llmProvider?.isLocal
-					? 'No installed models found. Pull a model, then refresh.'
+					? 'No se encontraron modelos instalados. Descarga un modelo y vuelve a intentarlo.'
 					: null;
 				llmDynamicModels = llmProvider?.isLocal ? [] : null;
 			},
@@ -173,7 +173,7 @@
 			},
 			onError: () => {
 				ttsIsLoading = false;
-				ttsFetchError = 'Using default list';
+				ttsFetchError = 'Usando la lista predeterminada';
 				ttsDynamicModels = null;
 			},
 			onEmpty: () => {
@@ -334,24 +334,24 @@
 
 {#snippet troubleHelp()}
 	<p class="provider-help">
-		Having trouble? Click <a
+		¿Problemas? Haz clic <a
 			href={LOCAL_LLM_DOCS_URL}
 			target="_blank"
 			rel="noopener"
-			onclick={openLocalLlmDocs}>here</a
+			onclick={openLocalLlmDocs}>aquí</a
 		>
 	</p>
 {/snippet}
 
 <div class="ob-step services-step">
 	<div class="ob-head">
-		<h2 class="ob-title">Configure AI services</h2>
-		<p class="ob-subtitle">Set up chat (required), plus speech and voice input (optional).</p>
+		<h2 class="ob-title">Configura los servicios de IA</h2>
+		<p class="ob-subtitle">Configura el chat (obligatorio), más la voz y la entrada por voz (opcional).</p>
 	</div>
 
 	<div class="security-note">
 		<Icon name="lock" size={14} />
-		<span>Your API keys are stored locally in your browser. We never store them on our servers.</span>
+		<span>Tus claves API se guardan localmente en tu navegador. Nunca las almacenamos en nuestros servidores.</span>
 	</div>
 
 	<!-- LLM Section -->
@@ -359,14 +359,14 @@
 		<div class="service-header">
 			<Icon name="brain" size={16} />
 			<span class="service-title">Chat (LLM)</span>
-			<span class="required-badge">Required</span>
+			<span class="required-badge">Obligatorio</span>
 		</div>
 
 		<ProviderDropdown
 			type="llm"
 			value={llmSettings.activeProvider as string}
 			onSelect={handleLLMProviderChange}
-			placeholder="Select LLM provider..."
+			placeholder="Selecciona proveedor de LLM..."
 		/>
 
 		{#if llmProvider?.requiresApiKey || llmProvider?.custom}
@@ -374,7 +374,7 @@
 				type="password"
 				class="api-key-input"
 				class:error={llmFetchError}
-				placeholder={llmProvider?.custom ? 'API Key (optional)' : 'Enter API Key...'}
+				placeholder={llmProvider?.custom ? 'Clave API (opcional)' : 'Introduce la clave API...'}
 				value={settingsStore.getProviderConfig(llmProvider.id).apiKey ?? ''}
 				oninput={(e) => handleLLMApiKeyChange(e.currentTarget.value)}
 				onblur={llmProvider?.custom ? undefined : handleLLMApiKeyBlur}
@@ -396,7 +396,7 @@
 				type="text"
 				class="api-key-input"
 				placeholder={llmProvider.custom
-					? 'https://api.openai.com/v1/ or your endpoint'
+					? 'https://api.openai.com/v1/ o tu endpoint'
 					: llmProvider.defaultBaseUrl || 'http://localhost:11434/v1/'}
 				value={settingsStore.getProviderConfig(llmProvider.id).baseUrl ?? ''}
 				oninput={(e) => handleLLMBaseUrlChange(e.currentTarget.value)}
@@ -405,7 +405,7 @@
 			{#if llmProvider.isLocal}
 				<p class="provider-note">
 					<Icon name="check-circle" size={14} />
-					Local provider, no API key needed
+					Local provider, no necesita clave API
 				</p>
 				{#if !llmFetchError}
 					{@render troubleHelp()}
@@ -419,7 +419,7 @@
 			<input
 				type="text"
 				class="api-key-input"
-				placeholder="Model (e.g. gpt-4o-mini, meta-llama/llama-3-70b)"
+				placeholder="Modelo (p. ej. gpt-4o-mini, meta-llama/llama-3-70b)"
 				value={(llmSettings.activeModel as string) ?? ''}
 				oninput={(e) => handleLLMModelChange(e.currentTarget.value.trim())}
 			/>
@@ -427,25 +427,23 @@
 				<ModelDropdown
 					models={llmModels}
 					value={llmSettings.activeModel as string}
-					onSelect={handleLLMModelChange}
-					placeholder="Pick a fetched model..."
+					onSelect={handleLLMModelChange}						placeholder="Elige un modelo detectado..."
 					isLoading={llmIsLoading}
 					onRefresh={fetchLLMModels}
 					disabled={false}
 				/>
 			{:else}
-				<p class="provider-note">Enter a base URL to fetch available models.</p>
+				<p class="provider-note">Introduce una URL base para obtener los modelos disponibles.</p>
 			{/if}
 		{:else if llmSettings.activeProvider}
 			<ModelDropdown
 				models={llmModels}
 				value={llmSettings.activeModel as string}
-				onSelect={handleLLMModelChange}
-				placeholder="Select model..."
-				isLoading={llmIsLoading}
+				onSelect={handleLLMModelChange}					placeholder="Selecciona un modelo..."
+					isLoading={llmIsLoading}
 				onRefresh={llmHasApiKey ? fetchLLMModels : undefined}
 				disabled={!llmHasApiKey}
-				disabledMessage="Enter API key first"
+				disabledMessage="Introduce primero la clave API"
 			/>
 		{/if}
 
@@ -461,8 +459,8 @@
 	<div class="service-section">
 		<div class="service-header">
 			<Icon name="mic" size={16} />
-			<span class="service-title">Speech (TTS)</span>
-			<span class="optional-badge">Optional</span>
+			<span class="service-title">Voz (TTS)</span>
+			<span class="optional-badge">Opcional</span>
 			<button class="toggle-btn" class:enabled={ttsEnabled} onclick={() => ttsEnabled = !ttsEnabled} aria-label="Toggle TTS">
 				<span class="toggle-track">
 					<span class="toggle-thumb"></span>
@@ -475,16 +473,15 @@
 				type="tts"
 				value={ttsSettings.activeProvider as string}
 				onSelect={handleTTSProviderChange}
-				placeholder="Select TTS provider..."
+				placeholder="Selecciona proveedor de TTS..."
 			/>
 
 			{#if ttsProvider?.requiresApiKey}
 				<input
 					type="password"
 					class="api-key-input"
-					class:error={ttsFetchError}
-					placeholder="Enter API Key..."
-					value={settingsStore.getProviderConfig(ttsProvider.id).apiKey ?? ''}
+					class:error={ttsFetchError}									placeholder="Introduce la clave API..."
+									value={settingsStore.getProviderConfig(ttsProvider.id).apiKey ?? ''}
 					oninput={(e) => handleTTSApiKeyChange(e.currentTarget.value)}
 					onblur={handleTTSApiKeyBlur}
 				/>
@@ -494,12 +491,10 @@
 				<ModelDropdown
 					models={ttsModels}
 					value={ttsSettings.activeModel as string}
-					onSelect={handleTTSModelChange}
-					placeholder="Select model..."
-					isLoading={ttsIsLoading}
+					onSelect={handleTTSModelChange}									placeholder="Selecciona un modelo..."
+									isLoading={ttsIsLoading}
 					onRefresh={ttsHasApiKey ? fetchTTSModels : undefined}
-					disabled={!ttsHasApiKey}
-					disabledMessage="Enter API key first"
+					disabled={!ttsHasApiKey}								disabledMessage="Introduce primero la clave API"
 				/>
 			{/if}
 
@@ -507,8 +502,7 @@
 				<input
 					type="text"
 					class="api-key-input"
-					list="elevenlabs-voices"
-					placeholder="Voice ID"
+					list="elevenlabs-voices"									placeholder="ID de voz"
 					value={ttsSettings.activeVoiceId as string ?? ''}
 					oninput={(e) => handleTTSVoiceChange(e.currentTarget.value)}
 				/>
@@ -522,8 +516,7 @@
 			{#if ttsProvider?.isLocal}
 				<input
 					type="text"
-					class="api-key-input"
-					placeholder="Model/voice name"
+					class="api-key-input"									placeholder="Nombre del modelo/voz"
 					value={ttsSettings.activeModel as string ?? ''}
 					oninput={(e) => handleTTSModelChange(e.currentTarget.value)}
 				/>
@@ -539,11 +532,11 @@
 				/>
 				<p class="provider-note">
 					<Icon name="check-circle" size={14} />
-					Local provider - no API key needed
+					Local provider: no necesita clave API
 				</p>
 			{/if}
 		{:else}
-			<p class="skip-note">Enable to add voice to your companion</p>
+			<p class="skip-note">Actívalo para dar voz a tu compañera</p>
 		{/if}
 	</div>
 
@@ -551,9 +544,9 @@
 	<div class="service-section">
 		<div class="service-header">
 			<Icon name="mic" size={16} />
-			<span class="service-title">Voice Input (STT)</span>
-			<span class="optional-badge">Optional</span>
-			<button class="toggle-btn" class:enabled={sttEnabled} onclick={() => sttEnabled = !sttEnabled} aria-label="Toggle voice input (STT)">
+			<span class="service-title">Entrada de voz (STT)</span>
+			<span class="optional-badge">Opcional</span>
+			<button class="toggle-btn" class:enabled={sttEnabled} onclick={() => sttEnabled = !sttEnabled} aria-label="Alternar entrada de voz (STT)">
 				<span class="toggle-track">
 					<span class="toggle-thumb"></span>
 				</span>
@@ -561,12 +554,11 @@
 		</div>
 
 		{#if sttEnabled}
-			<p class="skip-note">Transcribe your voice with Whisper. A local server is used if set, then Groq, then OpenAI, otherwise your browser's built-in recognition.</p>
+			<p class="skip-note">Transcribe tu voz con Whisper. Se usa un servidor local si está configurado, luego Groq, luego OpenAI; si no, el reconocimiento integrado de tu navegador.</p>
 
 			<input
 				type="text"
-				class="api-key-input"
-				placeholder="Local server URL (http://localhost:8000/v1/)"
+				class="api-key-input"					placeholder="URL del servidor local (http://localhost:8000/v1/)"
 				value={settingsStore.getProviderConfig('local-stt').baseUrl ?? ''}
 				oninput={(e) => {
 					const v = e.currentTarget.value.trim();
@@ -578,16 +570,14 @@
 
 			<input
 				type="text"
-				class="api-key-input"
-				placeholder="Local model (optional, e.g. Systran/faster-whisper-large-v3)"
+				class="api-key-input"					placeholder="Modelo local (opcional, p. ej. Systran/faster-whisper-large-v3)"
 				value={settingsStore.getProviderConfig('local-stt').modelId ?? ''}
 				oninput={(e) => settingsStore.setProviderConfig('local-stt', { modelId: e.currentTarget.value.trim() })}
 			/>
 
 			<input
 				type="password"
-				class="api-key-input"
-				placeholder="Groq API Key (optional)"
+				class="api-key-input"					placeholder="Clave API de Groq (opcional)"
 				value={settingsStore.getProviderConfig('groq-stt').apiKey ?? ''}
 				oninput={(e) => {
 					settingsStore.setProviderConfig('groq-stt', { apiKey: e.currentTarget.value });
@@ -597,8 +587,7 @@
 
 			<input
 				type="password"
-				class="api-key-input"
-				placeholder="OpenAI API Key — Whisper (optional)"
+				class="api-key-input"					placeholder="Clave API de OpenAI — Whisper (opcional)"
 				value={settingsStore.getProviderConfig('openai-stt').apiKey ?? ''}
 				oninput={(e) => {
 					settingsStore.setProviderConfig('openai-stt', { apiKey: e.currentTarget.value });
@@ -606,17 +595,17 @@
 				}}
 			/>
 		{:else}
-			<p class="skip-note">Enable to set up microphone voice input</p>
+			<p class="skip-note">Actívalo para configurar la entrada de voz por micrófono</p>
 		{/if}
 	</div>
 
 	<div class="ob-actions ob-actions--split">
 		<button class="btn btn-secondary" onclick={onBack}>
 			<Icon name="chevron-left" size={16} />
-			Back
+			Atrás
 		</button>
 		<button class="btn btn-primary" onclick={handleNext} disabled={!isLLMConfigured}>
-			Next
+			Siguiente
 			<Icon name="chevron-right" size={16} />
 		</button>
 	</div>

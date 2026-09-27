@@ -21,7 +21,7 @@
 	});
 </script>
 
-<div class="indicator" style="--stat-color: {color}">
+<div class="indicator glass-chip" style="--stat-color: {color}">
 	<Icon name={icon} size={14} />
 	<span class="delta">{delta > 0 ? '+' : ''}{delta}</span>
 </div>
@@ -32,9 +32,7 @@
 		align-items: center;
 		gap: 0.375rem;
 		padding: 0.5rem 0.75rem;
-		background: var(--bg-primary);
 		border-radius: var(--radius-full);
-		box-shadow: var(--shadow-sm);
 		color: var(--stat-color);
 		font-weight: 700;
 		font-size: 0.875rem;

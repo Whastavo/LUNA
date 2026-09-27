@@ -1,38 +1,33 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { VRMAnimationLoaderPlugin, type VRMAnimation } from '@pixiv/three-vrm-animation';
 
-// Animation files are small, fixed, and requested over and over: the idle cycle
-// alone was refetching the same five .vrma files thousands of times a day, which
-// made them roughly half of the app's edge requests. Cache the parsed
-// VRMAnimation per URL. Clips stay uncached because createVRMAnimationClip binds
-// them to a specific VRM, so callers build their own against whichever model is
-// loaded.
+// Los archivos de animación son pequeños, fijos y se piden una y otra vez: el
+// ciclo de idle solo refetchaba los mismos cinco .vrma miles de veces al día
+// (cifrados: .lcx). Se cachea la VRMAnimation parseada por URL. Los clips no
+// se cachean porque createVRMAnimationClip los ata a un VRM específico: cada
+// llamador construye el suyo contra el modelo que tenga cargado.
 //
-// Deliberately not THREE.Cache: that is global, so it would also pin every 15MB
-// .vrm model and every revoked blob: URL in memory for the life of the page.
+// Deliberadamente NO usamos THREE.Cache: es global y también fijaría cada
+// modelo de 15MB en memoria por la vida de la página.
 
 export type VrmAnimationFetcher = (url: string) => Promise<VRMAnimation>;
 
 const cache = new Map<string, Promise<VRMAnimation>>();
 
-function loadFromNetwork(url: string): Promise<VRMAnimation> {
-	return new Promise<VRMAnimation>((resolve, reject) => {
-		const loader = new GLTFLoader();
-		loader.register((parser) => new VRMAnimationLoaderPlugin(parser));
-		loader.load(
-			url,
-			(gltf) => {
-				const anims: VRMAnimation[] | undefined = gltf.userData.vrmAnimations;
-				if (anims && anims.length > 0) {
-					resolve(anims[0]);
-				} else {
-					reject(new Error(`No VRM animation in ${url}`));
-				}
-			},
-			undefined,
-			(error) => reject(error)
-		);
-	});
+async function loadFromNetwork(url: string): Promise<VRMAnimation> {
+	// Import dinámico: el descifrado (y su dependencia $app/environment) solo
+	// se materializa en cliente; los tests Node inyectan su propio fetcher y
+	// nunca tocan esta ruta.
+	const { fetchProtectedAsset } = await import('./asset-guard');
+	const data = await fetchProtectedAsset(url);
+	const loader = new GLTFLoader();
+	loader.register((parser) => new VRMAnimationLoaderPlugin(parser));
+	const gltf = (await loader.parseAsync(data, '')) as {
+		userData: { vrmAnimations?: VRMAnimation[] };
+	};
+	const anims = gltf.userData.vrmAnimations;
+	if (anims && anims.length > 0) return anims[0];
+	throw new Error(`Sin animación VRM en ${url}`);
 }
 
 /**

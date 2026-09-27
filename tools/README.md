@@ -1,6 +1,6 @@
 # Tools
 
-This directory contains optional helpers and integrations that are not part of the main Utsuwa application, but make self-hosting easier.
+This directory contains optional helpers and integrations that are not part of the main Luna application, but make self-hosting easier.
 
 ## Contents
 

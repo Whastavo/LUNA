@@ -16,7 +16,7 @@ import { getMemoryBudget } from '../types/memory.ts';
 
 function makeState(overrides: Partial<CharacterState> = {}): CharacterState {
 	return {
-		name: 'Utsuwa',
+		name: 'Luna',
 		systemPrompt: 'Warm, playful, a little teasing.',
 		extensions: {},
 		mood: { primary: 'content', intensity: 60, causes: ['good morning chat'] },
@@ -51,7 +51,7 @@ function makeContext(overrides: Partial<PromptContext> = {}): PromptContext {
 	return {
 		persona: {
 			id: 'default',
-			name: 'Utsuwa',
+			name: 'Luna',
 			systemPrompt: 'Warm, playful, a little teasing.',
 			extensions: {}
 		},

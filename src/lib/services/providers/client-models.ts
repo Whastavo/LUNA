@@ -64,11 +64,11 @@ export async function fetchModelsDirect(
 			case 'openai':
 			case 'deepseek':
 			case 'xai': {
-				if (!apiKey) throw new Error('API key required');
+				if (!apiKey) throw new Error('Se requiere clave API');
 				const res = await fetch(`${cleanBaseUrl}/models`, {
 					headers: { Authorization: `Bearer ${apiKey}` }
 				});
-				if (!res.ok) throw new Error(`Failed to fetch models: ${res.statusText}`);
+				if (!res.ok) throw new Error(`No se pudieron obtener los modelos: ${res.statusText}`);
 				const data = await res.json();
 				models = data.data.map((m: { id: string }) => ({
 					id: m.id,
@@ -86,7 +86,7 @@ export async function fetchModelsDirect(
 				// lives at /api/tags rather than /v1/models.
 				if (looksLikeOllama(cleanBaseUrl)) {
 					const res = await fetch(`${cleanBaseUrl}/api/tags`, { headers });
-					if (!res.ok) throw new Error(`Failed to fetch models: ${res.statusText}`);
+					if (!res.ok) throw new Error(`No se pudieron obtener los modelos: ${res.statusText}`);
 					const data = await res.json();
 					models = (data.models || []).map((m: { name: string }) => ({
 						id: m.name,
@@ -95,7 +95,7 @@ export async function fetchModelsDirect(
 				} else {
 					const normalizedUrl = ensureOpenAIPath(cleanBaseUrl);
 					const res = await fetch(`${normalizedUrl}/models`, { headers });
-					if (!res.ok) throw new Error(`Failed to fetch models: ${res.statusText}`);
+					if (!res.ok) throw new Error(`No se pudieron obtener los modelos: ${res.statusText}`);
 					const data = await res.json();
 					models = (data.data || []).map((m: { id: string }) => ({
 						id: m.id,
@@ -105,11 +105,11 @@ export async function fetchModelsDirect(
 				break;
 			}
 			case 'anthropic': {
-				if (!apiKey) throw new Error('API key required');
+				if (!apiKey) throw new Error('Se requiere clave API');
 				const res = await fetch(`${cleanBaseUrl}/models`, {
 					headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' }
 				});
-				if (!res.ok) throw new Error(`Failed to fetch models: ${res.statusText}`);
+				if (!res.ok) throw new Error(`No se pudieron obtener los modelos: ${res.statusText}`);
 				const data = await res.json();
 				models = data.data.map((m: { id: string }) => ({
 					id: m.id,
@@ -119,7 +119,7 @@ export async function fetchModelsDirect(
 			}
 			case 'ollama': {
 				const res = await fetch(`${cleanBaseUrl}/api/tags`);
-				if (!res.ok) throw new Error(`Failed to fetch models: ${res.statusText}`);
+				if (!res.ok) throw new Error(`No se pudieron obtener los modelos: ${res.statusText}`);
 				const data = await res.json();
 				models = (data.models || []).map((m: { name: string }) => ({
 					id: m.name,
@@ -129,17 +129,17 @@ export async function fetchModelsDirect(
 			}
 			case 'lmstudio': {
 				const res = await fetch(`${cleanBaseUrl}/models`);
-				if (!res.ok) throw new Error(`Failed to fetch models: ${res.statusText}`);
+				if (!res.ok) throw new Error(`No se pudieron obtener los modelos: ${res.statusText}`);
 				const data = await res.json();
 				models = data.data.map((m: { id: string }) => ({ id: m.id, name: m.id }));
 				break;
 			}
 			case 'google': {
-				if (!apiKey) throw new Error('API key required');
+				if (!apiKey) throw new Error('Se requiere clave API');
 				const res = await fetch(`${cleanBaseUrl}/models`, {
 					headers: { 'x-goog-api-key': apiKey }
 				});
-				if (!res.ok) throw new Error(`Failed to fetch models: ${res.statusText}`);
+				if (!res.ok) throw new Error(`No se pudieron obtener los modelos: ${res.statusText}`);
 				const data = await res.json();
 				models = (data.models || []).map(
 					(m: { name: string; displayName?: string }) => ({
@@ -150,11 +150,11 @@ export async function fetchModelsDirect(
 				break;
 			}
 			case 'elevenlabs': {
-				if (!apiKey) throw new Error('API key required');
+				if (!apiKey) throw new Error('Se requiere clave API');
 				const res = await fetch(`${cleanBaseUrl}/models`, {
 					headers: { 'xi-api-key': apiKey }
 				});
-				if (!res.ok) throw new Error(`Failed to fetch models: ${res.statusText}`);
+				if (!res.ok) throw new Error(`No se pudieron obtener los modelos: ${res.statusText}`);
 				const data = await res.json();
 				models = data
 					.filter((m: { can_do_text_to_speech?: boolean }) => m.can_do_text_to_speech)
@@ -165,11 +165,11 @@ export async function fetchModelsDirect(
 				break;
 			}
 			case 'openai-tts': {
-				if (!apiKey) throw new Error('API key required');
+				if (!apiKey) throw new Error('Se requiere clave API');
 				const res = await fetch(`${cleanBaseUrl}/models`, {
 					headers: { Authorization: `Bearer ${apiKey}` }
 				});
-				if (!res.ok) throw new Error(`Failed to fetch models: ${res.statusText}`);
+				if (!res.ok) throw new Error(`No se pudieron obtener los modelos: ${res.statusText}`);
 				const data = await res.json();
 				models = data.data
 					.filter((m: { id: string }) => m.id.includes('tts'))

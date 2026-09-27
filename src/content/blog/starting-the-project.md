@@ -1,69 +1,67 @@
 ---
-title: Starting the Project
-description: Why I started building Utsuwa, an open-source VRM avatar companion as an alternative to closed platforms.
+title: Empezando el proyecto
+description: Por qué empecé a construir Luna, una compañera con avatar VRM que respeta tu privacidad frente a las plataformas cerradas.
 date: '2026-01-24'
 image: /blog/project-start-gif.gif
 tag: DevLog
 ---
 
-# Starting the Project
+# Empezando el proyecto
 
-We've opened Pandora's box. AI is out there forever whether we like it or not. That's not inherently a bad thing, but like every powerful technology before it, the first wave is dominated by closed platforms extracting as much from users as possible. Your conversations, your data, your characters, locked behind subscriptions and terms of service you never read.
+Hemos abierto la caja de Pandora. La IA ya está ahí fuera para siempre, nos guste o no. Eso no es malo en sí mismo, pero como toda tecnología poderosa anterior, la primera ola está dominada por plataformas cerradas que extraen todo lo posible de los usuarios. Tus conversaciones, tus datos, tus personajes, encerrados tras suscripciones y términos de servicio que nunca lees.
 
-It's taken projects like this to start pushing things in a different direction. To give control back to the user. To prove you can have an AI companion that respects your privacy, runs on your terms, and doesn't phone home to some corporate server every time you talk to it.
+Han hecho falta proyectos como este para empezar a empujar las cosas en otra dirección. Devolver el control al usuario. Demostrar que puedes tener una compañera de IA que respeta tu privacidad, funciona en tus términos y no llama a ningún servidor corporativo cada vez que hablas con ella.
 
-That's the idea behind Utsuwa. The name means "vessel" in Japanese. A container for AI to inhabit visually. You bring the model, the voice, and the LLM provider. The app is just the shell. Everything runs locally, everything is yours.
+Esa es la idea detrás de Luna. Un recipiente para que la IA habite visualmente. Tú traes el modelo, la voz y el proveedor de LLM. La app es solo la carcasa. Todo se ejecuta localmente, todo es tuyo.
 
-## The inspiration (and the problem)
+## La inspiración (y el problema)
 
-Two products really got me thinking about this space.
+Dos productos me hicieron pensar de verdad en este espacio.
 
 <img
-  src="/optimized/blog/grok-ani-1280.webp"
-  srcset="/optimized/blog/grok-ani-96.webp 96w, /optimized/blog/grok-ani-480.webp 480w, /optimized/blog/grok-ani-960.webp 960w, /optimized/blog/grok-ani-1280.webp 1280w"
+  src="/blog/grok-ani.jpg"
   sizes="(max-width: 768px) calc(100vw - 40px), 736px"
   width="1280" height="720"
-  alt="Grok&#x27;s Ani companion"
+  alt="La compañera Ani de Grok"
   loading="lazy" decoding="async"
 />
 
-The first is **Ani**, xAI's companion for Grok. When it launched in mid-2025 it went absolutely viral. Millions of impressions in the first 48 hours. The 3D avatar, the voice, the affection system that evolves as you interact with it. It proved there's a massive appetite for this kind of experience. People genuinely want AI companions that feel alive.
+El primero es **Ani**, la compañera de xAI para Grok. Cuando se lanzó a mediados de 2025 se hizo viral por completo. Millones de impresiones en las primeras 48 horas. El avatar 3D, la voz, el sistema de afecto que evoluciona a medida que interactúas. Demostró que hay un apetito enorme por este tipo de experiencias. La gente quiere de verdad compañeras de IA que se sientan vivas.
 
-The catch? It's locked behind a $30/month SuperGrok subscription. Your conversations live on xAI's servers. The characters, the avatars, the personality system, all of it is proprietary. You're renting the experience. If xAI decides to change Ani's personality, remove a feature, or shut it down tomorrow, you have zero say in it. They've already had to disable features due to controversy around content moderation. When you don't own the platform, you're always at the mercy of whoever does.
+¿La contrapartida? Está encerrada tras una suscripción a SuperGrok de 30 $/mes. Tus conversaciones viven en los servidores de xAI. Los personajes, los avatares, el sistema de personalidad, todo es propietario. Estás alquilando la experiencia. Si xAI decide cambiar la personalidad de Ani, quitar una función o cerrarla mañana, no tienes nada que decir al respecto. Ya han tenido que desactivar funciones por la polémica en torno a la moderación de contenidos. Cuando no eres dueño de la plataforma, siempre estás a merced de quien lo sea.
 
 <img
-  src="/optimized/blog/razer-project-ava-920.webp"
-  srcset="/optimized/blog/razer-project-ava-96.webp 96w, /optimized/blog/razer-project-ava-480.webp 480w, /optimized/blog/razer-project-ava-920.webp 920w"
+  src="/blog/razer-project-ava.jpg"
   sizes="(max-width: 768px) calc(100vw - 40px), 736px"
   width="920" height="518"
-  alt="Razer&#x27;s Project Ava"
+  alt="Project Ava de Razer"
   loading="lazy" decoding="async"
 />
 
-The second is **Project Ava** from Razer, unveiled at CES 2026. A holographic AI companion that sits on your desk in a physical cylinder. Anime avatars, voice interaction, screen awareness. The hardware concept is genuinely cool. A 5.5" 3D hologram with dual microphones and a camera that can see your screen.
+El segundo es **Project Ava** de Razer, presentado en el CES 2026. Una compañera de IA holográfica que se posa en tu escritorio dentro de un cilindro físico. Avatares anime, interacción por voz, conciencia de pantalla. El concepto de hardware es genuinamente genial. Un holograma 3D de 5,5" con micrófonos duales y una cámara que puede ver tu pantalla.
 
-But then you look at the details. It runs on Grok's engine, so you're right back in xAI's ecosystem. It's a proprietary hardware device with proprietary software. Expected to cost somewhere in Razer's premium peripheral range (we're probably talking $200+), and it hasn't even shipped yet. You're buying into a closed system where the hardware vendor and the AI provider both control your experience. If either company pivots, you're left with an expensive paperweight.
+Pero luego miras los detalles. Funciona con el motor de Grok, así que vuelves de lleno al ecosistema de xAI. Es un dispositivo de hardware propietario con software propietario. Se espera que cueste algo dentro de la gama de periféricos premium de Razer (probablemente hablamos de más de 200 $) y ni siquiera se ha enviado todavía. Estás comprando un sistema cerrado donde el fabricante de hardware y el proveedor de IA controlan ambos tu experiencia. Si cualquiera de las dos compañías gira, te queda un pisapapeles caro.
 
-Both of these products validated the idea that people want AI companions. But they also showed exactly what happens when that experience is built on closed platforms. The user is always the product, never the owner.
+Ambos productos validaron la idea de que la gente quiere compañeras de IA. Pero también mostraron exactamente qué pasa cuando esa experiencia se construye sobre plataformas cerradas. El usuario siempre es el producto, nunca el dueño.
 
-## What I'm building
+## Lo que estoy construyendo
 
-The core loop is straightforward: you load a VRM model, connect an LLM provider, optionally add TTS, and you get a companion that talks back with lip-synced audio and facial expressions.
+El bucle central es directo: cargas un modelo VRM, conectas un proveedor de LLM, opcionalmente añades TTS, y obtienes una compañera que responde con audio sincronizado con los labios y expresiones faciales.
 
-Under the hood there's more going on. A memory system that tracks conversation context, a relationship model that evolves over time, and an event engine that drives dynamic interactions. But the surface-level experience should feel simple.
+Por debajo hay más cosas en marcha. Un sistema de memoria que rastrea el contexto de la conversación, un modelo de relación que evoluciona con el tiempo y un motor de eventos que impulsa interacciones dinámicas. Pero la experiencia superficial debería sentirse simple.
 
-The difference from Ani or Project Ava is that everything here is open source and runs on your machine. You pick the avatar. You pick the AI. You own the conversation history. If you don't like something, you can change it. If the project disappeared tomorrow, you'd still have everything.
+La diferencia con Ani o Project Ava es que todo aquí se ejecuta en tu máquina. Tú eliges el avatar. Tú eliges la IA. Tú eres dueño del historial de conversación. Si no te gusta algo, puedes cambiarlo. Si el proyecto desapareciera mañana, seguirías teniendo todo.
 
-## Technical choices
+## Decisiones técnicas
 
-SvelteKit was the obvious pick for the frontend. Svelte 5's runes make reactive state management clean, and SvelteKit gives us both the web app and the docs site from one codebase. Three.js handles the 3D rendering with VRM support through `@pixiv/three-vrm`.
+SvelteKit fue la elección obvia para el frontend. Las runes de Svelte 5 hacen que la gestión de estado reactivo sea limpia, y SvelteKit nos da tanto la app web como el sitio de documentación desde una sola base de código. Three.js se encarga del renderizado 3D con soporte VRM a través de `@pixiv/three-vrm`.
 
-For the LLM layer, I'm using Vercel's AI SDK. It abstracts away provider differences so swapping between a cloud API and a local Ollama instance is just a config change. The architecture is intentionally provider-agnostic. The companion's personality, memory, and conversation context all get assembled into a system prompt at runtime, and the app doesn't care what's on the other end.
+Para la capa de LLM, uso el AI SDK de Vercel. Abstrae las diferencias entre proveedores, así que cambiar entre una API en la nube y una instancia local de Ollama es solo un cambio de configuración. La arquitectura es intencionalmente agnóstica al proveedor. La personalidad, la memoria y el contexto de conversación de la compañera se ensamblan en un system prompt en tiempo de ejecución, y a la app no le importa qué hay al otro lado.
 
-Storage is all client-side. IndexedDB through Dexie.js. No accounts, no servers storing your data. Everything stays on your device.
+El almacenamiento es todo del lado del cliente. IndexedDB a través de Dexie.js. Sin cuentas, sin servidores que guarden tus datos. Todo se queda en tu dispositivo.
 
-## What's next
+## Qué sigue
 
-The immediate focus is getting the core web experience solid: chat, voice, expressions, and memory all working reliably. After that, I'm looking at a desktop app via Tauri for features that need deeper OS integration, things like transparent overlays and local model support.
+El foco inmediato es hacer que la experiencia web central sea sólida: chat, voz, expresiones y memoria funcionando de forma fiable. Después, estoy mirando una app de escritorio vía Tauri para funciones que necesitan una integración más profunda con el sistema operativo, cosas como overlays transparentes y soporte de modelos locales.
 
-More updates to come as things take shape.
+Más actualizaciones a medida que las cosas tomen forma.

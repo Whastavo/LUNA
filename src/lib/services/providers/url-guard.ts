@@ -90,15 +90,15 @@ export function assertSafeProviderUrl(rawUrl: string, allowPrivate = false): URL
 	try {
 		url = new URL(rawUrl);
 	} catch {
-		throw new Error('Invalid provider URL');
+		throw new Error('URL del proveedor no válida');
 	}
 
 	if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-		throw new Error('Provider URL must use http or https');
+		throw new Error('La URL del proveedor debe usar http o https');
 	}
 
 	if (!allowPrivate && isPrivateHost(url.hostname)) {
-		throw new Error('Provider URL host is not allowed');
+		throw new Error('El host de la URL del proveedor no está permitido');
 	}
 
 	return url;

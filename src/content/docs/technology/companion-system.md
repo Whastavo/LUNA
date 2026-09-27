@@ -1,49 +1,49 @@
 ---
-title: Companion System
-description: Architecture documentation for Utsuwa's companion relationship and character state system.
+title: Sistema de compañera
+description: Documentación de arquitectura del sistema de relación y estado de personaje de Luna.
 ---
 
-# Companion System Architecture
+# Arquitectura del Sistema de compañera
 
-## Overview
+## Visión general
 
-The Companion System is the core engine that manages relationship state, character emotions, memory, and event progression. The key design principle: **the app is the game master** — it controls emotions, mood, relationship state, and the LLM is purely a dialogue generator that can suggest state changes via JSON.
+El Sistema de compañera es el motor central que gestiona el estado de relación, las emociones del personaje, la memoria y la progresión de eventos. El principio de diseño clave: **la app es la directora del juego** — ella controla las emociones, el ánimo, el estado de relación, y el LLM es puramente un generador de diálogo que puede sugerir cambios de estado vía JSON.
 
-## Design Principles
+## Principios de diseño
 
-1. **App-Controlled State** — All character state is managed by the application. The LLM doesn't have internal state.
-2. **Hybrid Updates** — App heuristics calculate baseline state changes; the LLM can override mood and suggest additional changes via JSON.
-3. **Graceful Degradation** — If the LLM fails to output valid JSON, the system works using heuristics alone.
-4. **Multi-Axis Relationships** — Instead of a single affection score, relationships are tracked across 5 dimensions.
-5. **Event-Driven Progression** — Milestone events trigger at specific relationship thresholds.
-6. **Single Companion** — One unified character state combining persona metadata and stats.
-7. **Dual Mode Operation** — Users can choose between Companion Mode (simple assistant) and Dating Sim Mode (full relationship mechanics).
+1. **Estado controlado por la app** — Todo el estado del personaje lo gestiona la aplicación. El LLM no tiene estado interno.
+2. **Actualizaciones híbridas** — Las heurísticas de la app calculan cambios de estado base; el LLM puede anular el ánimo y sugerir cambios adicionales vía JSON.
+3. **Degradación elegante** — Si el LLM falla al emitir JSON válido, el sistema funciona usando solo heurísticas.
+4. **Relaciones multi-eje** — En vez de una única puntuación de afecto, las relaciones se siguen en 5 dimensiones.
+5. **Progresión por eventos** — Los eventos de hito se disparan en umbrales de relación concretos.
+6. **Compañera única** — Un estado de personaje unificado que combina metadatos de persona y estadísticas.
+7. **Operación en doble modo** — Los usuarios pueden elegir entre Modo compañía (asistente simple) y Modo simulador de citas (mecánicas de relación completas).
 
-## App Modes
+## Modos de la app
 
-Utsuwa supports two distinct modes:
+Luna soporta dos modos distintos:
 
-### Companion Mode
+### Modo compañía
 
-- Simple AI assistant experience without relationship mechanics
-- Relationship stage is locked to "Companion"
-- No stat progression — affection, trust, intimacy, etc. remain static
-- Dating sim stats are preserved; switching back recalculates the stage
+- Experiencia de asistente de IA simple sin mecánicas de relación
+- La etapa de relación queda fijada en «Compañía»
+- Sin progresión de estadísticas — afecto, confianza, intimidad, etc. permanecen estáticos
+- Las estadísticas del simulador de citas se conservan; volver activa el recálculo de la etapa
 
-### Dating Sim Mode (Default)
+### Modo simulador de citas (predeterminado)
 
-- Full relationship mechanics enabled
-- Progress through 8 relationship stages (Stranger to Soulmate)
-- Stats change based on conversations and interactions
-- Events trigger at milestones
+- Mecánicas de relación completas activadas
+- Progresión a través de 8 etapas de relación (Desconocida a Alma gemela)
+- Las estadísticas cambian según las conversaciones e interacciones
+- Los eventos se disparan en los hitos
 
-When switching from Dating Sim to Companion Mode, the current relationship stage is saved to `savedDatingSimStage`. Switching back recalculates the relationship stage from current stats.
+Al cambiar de Simulador de citas a Modo compañía, la etapa de relación actual se guarda en `savedDatingSimStage`. Al volver, se recalcula la etapa de relación a partir de las estadísticas actuales.
 
-## Data Models
+## Modelos de datos
 
-### Character State
+### Estado del personaje
 
-The central data structure tracking all relationship and character data. A unified record combining persona metadata with character stats.
+La estructura de datos central que sigue todos los datos de relación y personaje. Un registro unificado que combina metadatos de persona con estadísticas de personaje.
 
 ```typescript
 interface CharacterState {
@@ -76,9 +76,9 @@ interface CharacterState {
 }
 ```
 
-### Mood State
+### Estado de ánimo
 
-Tracks current emotional state with causality — the system remembers *why* the companion feels a certain way.
+Sigue el estado emocional actual con causalidad — el sistema recuerda *por qué* la compañera se siente de cierta manera.
 
 ```typescript
 interface MoodState {
@@ -95,9 +95,9 @@ type Emotion =
   | 'flustered' | 'neutral';
 ```
 
-### Relationship Stages
+### Etapas de relación
 
-Nine stages total — one special Companion Mode stage (not part of progression) plus eight Dating Sim progression stages (Stranger through Soulmate).
+Nueve etapas en total — una etapa especial de Modo compañía (no parte de la progresión) más ocho etapas de progresión del Simulador de citas (Desconocida hasta Alma gemela).
 
 ```typescript
 type RelationshipStage =
@@ -112,48 +112,48 @@ type RelationshipStage =
   | 'soulmate';
 ```
 
-### Stage Requirements (Dating Sim Mode)
+### Requisitos de etapa (Modo simulador de citas)
 
-| Stage | Affection | Trust | Intimacy | Comfort | Respect | Days Known | Interactions | Required Events |
+| Etapa | Afecto | Confianza | Intimidad | Comodidad | Respeto | Días conocidos | Interacciones | Eventos requeridos |
 |-------|-----------|-------|----------|---------|---------|------------|--------------|-----------------|
-| Stranger | 0 | 0 | - | - | - | - | - | - |
-| Acquaintance | 50 | 20 | - | - | - | - | 3 | - |
-| Friend | 150 | 50 | - | - | - | 3 | 10 | - |
-| Close Friend | 300 | 70 | - | 50 | - | 7 | 25 | - |
-| Romantic Interest | 450 | 75 | 30 | - | - | 10 | - | first_deep_conversation, shared_vulnerability |
-| Dating | 600 | 85 | 50 | - | - | 14 | - | confession_accepted |
-| Committed | 800 | 95 | 75 | 80 | - | 30 | - | commitment_accepted |
-| Soulmate | 950 | 100 | 90 | 95 | 90 | 60 | - | deep_bond_moment |
+| Desconocida | 0 | 0 | - | - | - | - | - | - |
+| Aliada | 50 | 20 | - | - | - | - | 3 | - |
+| Amiga | 150 | 50 | - | - | - | 3 | 10 | - |
+| Amiga cercana | 300 | 70 | - | 50 | - | 7 | 25 | - |
+| Interés romántico | 450 | 75 | 30 | - | - | 10 | - | first_deep_conversation, shared_vulnerability |
+| Citas | 600 | 85 | 50 | - | - | 14 | - | confession_accepted |
+| Comprometida | 800 | 95 | 75 | 80 | - | 30 | - | commitment_accepted |
+| Alma gemela | 950 | 100 | 90 | 95 | 90 | 60 | - | deep_bond_moment |
 
-`confession_accepted` and `commitment_accepted` are choice outcome markers, not event ids: only the accept choice of the confession or commitment talk grants them. Deferring either talk leaves the stage locked, and a repeatable follow-up event (`confession_revisit` / `commitment_revisit`) resurfaces the question later so the door stays open.
+`confession_accepted` y `commitment_accepted` son marcadores de resultado de elección, no IDs de eventos: solo la elección de aceptar de la confesión o de la conversación de compromiso los otorga. Aplazar cualquiera de las dos conversaciones deja la etapa bloqueada, y un evento repetible de seguimiento (`confession_revisit` / `commitment_revisit`) vuelve a plantear la pregunta más tarde para que la puerta siga abierta.
 
-## Memory System
+## Sistema de memoria
 
-### Three-Tier Memory
+### Memoria de tres niveles
 
-1. **Working Memory** (in-memory) — Last 20 conversation turns, current session context
-2. **Facts** (IndexedDB) — Extracted knowledge about the user, indexed with vector embeddings
-3. **Sessions** (IndexedDB) — Summaries of past conversations
+1. **Memoria de trabajo** (en memoria) — Los últimos 20 turnos de conversación, contexto de la sesión actual
+2. **Datos** (IndexedDB) — Conocimiento extraído sobre el usuario, indexado con embeddings vectoriales
+3. **Sesiones** (IndexedDB) — Resúmenes de conversaciones pasadas
 
-### Semantic Memory Search
+### Búsqueda de memoria semántica
 
-Facts are indexed using vector embeddings for semantic similarity search. Instead of keyword matching, the system finds facts by meaning — "outdoor activities" can retrieve memories about hiking even without shared words.
+Los datos se indexan usando embeddings vectoriales para la búsqueda por similitud semántica. En lugar de coincidencia por palabras clave, el sistema encuentra datos por significado — «actividades al aire libre» puede recuperar recuerdos sobre senderismo incluso sin palabras compartidas.
 
-**How it works:**
-- Uses Transformers.js with the multilingual `paraphrase-multilingual-MiniLM-L12-v2` model (runs locally; works across languages, not just English)
-- Embeddings are 384-dimensional vectors stored alongside facts in IndexedDB
-- On query, the user message is embedded and compared using cosine similarity
-- Results ranked by blending semantic similarity (70%) with importance score (30%), minimum similarity 0.3
-- Triggered memories (keyword-based re-search) use a different blend: 60% similarity / 40% importance, minimum similarity 0.5
-- Falls back to keyword search if the embedding model fails to load
+**Cómo funciona:**
+- Usa Transformers.js con el modelo multilingüe `paraphrase-multilingual-MiniLM-L12-v2` (corre localmente; funciona entre idiomas, no solo inglés)
+- Los embeddings son vectores de 384 dimensiones guardados junto a los datos en IndexedDB
+- En una consulta, el mensaje del usuario se incrusta y se compara usando similitud coseno
+- Los resultados se ordenan mezclando similitud semántica (70%) con puntuación de importancia (30%), similitud mínima 0.3
+- Los recuerdos disparados (re-búsqueda por palabra clave) usan otra mezcla: 60% similitud / 40% importancia, similitud mínima 0.5
+- Recurre a la búsqueda por palabras clave si el modelo de embeddings falla al cargar
 
-**Performance:**
-- Model loads in 2-5 seconds (cached after first load)
-- Embedding generation: 10-50ms per fact
-- Similarity search: under 10ms even with thousands of facts
-- Storage: ~1.5KB per fact for embeddings
+**Rendimiento:**
+- El modelo carga en 2-5 segundos (en caché tras la primera carga)
+- Generación de embeddings: 10-50ms por dato
+- Búsqueda por similitud: menos de 10ms incluso con miles de datos
+- Almacenamiento: ~1.5KB por dato para los embeddings
 
-### Fact Structure
+### Estructura de dato
 
 ```typescript
 interface Fact {
@@ -171,66 +171,66 @@ interface Fact {
 }
 ```
 
-### Memory Sources
+### Fuentes de memoria
 
-Facts are captured from two sources:
+Los datos se capturan de dos fuentes:
 
-1. **LLM Observations** — The LLM can output a `new_memory` field in its JSON response with insights about the user. These are automatically saved.
-2. **Pattern Extraction** — Regex patterns extract facts from user messages (e.g., "My name is...", "I work at...", "I like...").
+1. **Observaciones del LLM** — El LLM puede emitir un campo `new_memory` en su respuesta JSON con conclusiones sobre el usuario. Estas se guardan automáticamente.
+2. **Extracción de patrones** — Patrones de regex extraen datos de los mensajes del usuario (p. ej. «Mi nombre es…», «Trabajo en…», «Me gusta…»).
 
-### Memory Retrieval
+### Recuperación de memoria
 
-When building prompts, the system retrieves:
-- Recent turns from working memory
-- Relevant facts by semantic similarity search (falls back to keyword search)
-- Triggered memories (high-importance facts semantically related to conversation)
-- Recent session summaries (if returning after absence)
+Al construir los prompts, el sistema recupera:
+- Turnos recientes de la memoria de trabajo
+- Datos relevantes por búsqueda de similitud semántica (recurre a búsqueda por palabras clave)
+- Recuerdos disparados (datos de alta importancia semánticamente relacionados con la conversación)
+- Resúmenes de sesiones recientes (si vuelve tras una ausencia)
 
-## Showing Her Images (Multimodal)
+## Mostrarle imágenes (multimodal)
 
-Users can "show" their companion an image the way you'd show a friend something on your phone: via the camera button in the chat bar, or by dragging a photo onto it. It is framed as *showing her something*, not "attaching a file."
+Los usuarios pueden «mostrar» a su compañera una imagen igual que le mostrarías algo a un amigo en tu teléfono: vía el botón de cámara en la barra de chat, o arrastrando una foto sobre ella. Se plantea como *mostrarle algo*, no como «adjuntar un archivo».
 
-### How it works
+### Cómo funciona
 
-- **Vision gating**: The camera affordance is only active when the selected model can actually see. `canShowImages()` combines a provider-level `supportsVision` flag (OpenAI, Anthropic, Google, xAI) with a model-name heuristic (`modelSupportsVision`) for local providers (Ollama / LM Studio), where capability depends on the installed model (LLaVA, gemma3:4b, qwen2.5-vl, ...). Text-only models get a gentle prompt to switch, not a silent failure.
-- **Format handling**: Picked images are normalized before send. Oversized images are downscaled (longest edge clamped) and re-encoded to JPEG; decodable-but-unsupported formats (e.g. HEIC on Safari) are converted to JPEG; formats the browser cannot decode and the vision APIs will not accept (e.g. HEIC on Chrome) are rejected with a clear message. Supported wire formats are JPEG, PNG, GIF, and WebP.
-- **Provider wire formats**: The same in-memory image is serialized per provider (OpenAI-style `image_url` data URLs, or Anthropic-style base64 `source` blocks) by `toOpenAIContent` / `toAnthropicContent`.
-- **Memory + the board**: A shown image can become a "photo memory" — the companion may leave a note about what she saw — and kept photos are stored locally (blob + thumbnail) and surfaced on a scrapbook-style **photoboard**.
+- **Filtro de visión**: El botón de cámara solo está activo cuando el modelo seleccionado realmente puede ver. `canShowImages()` combina una marca de `supportsVision` a nivel de proveedor (OpenAI, Anthropic, Google, xAI) con una heurística de nombre de modelo (`modelSupportsVision`) para proveedores locales (Ollama / LM Studio), donde la capacidad depende del modelo instalado (LLaVA, gemma3:4b, qwen2.5-vl…). Los modelos de solo texto reciben una invitación amable a cambiar, no un fallo silencioso.
+- **Gestión de formatos**: Las imágenes elegidas se normalizan antes de enviar. Las imágenes demasiado grandes se reducen (el borde más largo se acota) y se re-codifican a JPEG; los formatos decodificables pero no soportados (p. ej. HEIC en Safari) se convierten a JPEG; los formatos que el navegador no puede decodificar y las APIs de visión no aceptarán (p. ej. HEIC en Chrome) se rechazan con un mensaje claro. Los formatos de envío soportados son JPEG, PNG, GIF y WebP.
+- **Formatos de envío por proveedor**: La misma imagen en memoria se serializa por proveedor (URLs de datos `image_url` estilo OpenAI, o bloques base64 `source` estilo Anthropic) por `toOpenAIContent` / `toAnthropicContent`.
+- **Memoria y el tablero**: Una imagen mostrada puede convertirse en un «recuerdo de foto» — la compañera puede dejar una nota sobre lo que vio — y las fotos guardadas se almacenan localmente (blob + miniatura) y se muestran en un **tablero de fotos** estilo álbum de recortes.
 
-### Privacy
+### Privacidad
 
-Images stay on your device. Only vision-capable models receive them, and only for the single inference where you show them. When a cloud provider is selected, a one-time disclosure tells the user their photo is sent to that provider to be seen; with a local provider it notes the image never leaves the machine. Kept photos can be deleted from the board at any time.
+Las imágenes se quedan en tu dispositivo. Solo las reciben los modelos con visión, y solo para la única inferencia en la que las muestras. Cuando se selecciona un proveedor en la nube, un aviso de una sola vez informa al usuario de que su foto se envía a ese proveedor para ser vista; con un proveedor local indica que la imagen nunca sale de la máquina. Las fotos guardadas pueden borrarse del tablero en cualquier momento.
 
-## Time-Based Recovery and Decay
+## Recuperación y decaimiento basados en el tiempo
 
-When the app loads, it calculates hours since the last interaction and applies recovery or decay.
+Cuando la app carga, calcula las horas desde la última interacción y aplica recuperación o decaimiento.
 
-### Energy Recovery
+### Recuperación de energía
 
-- **Full recovery** — 6+ hours away restores energy to 100
-- **Partial recovery** — Ratio-based (hours / 6), minimum 1 energy per session
+- **Recuperación completa** — 6+ horas de ausencia restauran la energía a 100
+- **Recuperación parcial** — Basada en proporción (horas / 6), mínimo 1 energía por sesión
 
-### Affection Decay
+### Decaimiento de afecto
 
-- **Threshold** — 48+ hours away
-- **Rate** — 1-5% per session based on days away
-- **Cap** — Maximum 50 affection lost per session
+- **Umbral** — 48+ horas de ausencia
+- **Tasa** — 1-5% por sesión según los días de ausencia
+- **Tope** — Máximo 50 de afecto perdido por sesión
 
-### Trust Decay
+### Decaimiento de confianza
 
-- **Threshold** — 7+ days away
-- **Rate** — 2 trust per week away
-- **Cap** — Maximum 10 trust lost per session
+- **Umbral** — 7+ días de ausencia
+- **Tasa** — 2 de confianza por semana de ausencia
+- **Tope** — Máximo 10 de confianza perdido por sesión
 
-### Mood Shift
+### Cambio de ánimo
 
-- **Threshold** — 3+ days away
-- **Effect** — Mood shifts to melancholy
-- **Intensity** — Increases 5 per day away (max 30)
+- **Umbral** — 3+ días de ausencia
+- **Efecto** — El ánimo cambia a melancolía
+- **Intensidad** — Aumenta 5 por día de ausencia (máx. 30)
 
-## Event System
+## Sistema de eventos
 
-### Event Definition
+### Definición de evento
 
 ```typescript
 interface EventDefinition {
@@ -249,33 +249,33 @@ interface EventDefinition {
 }
 ```
 
-### Condition Types
+### Tipos de condición
 
-| Condition | Description |
+| Condición | Descripción |
 |-----------|-------------|
-| min_affection | Minimum affection level |
-| min_trust | Minimum trust level |
-| min_intimacy | Minimum intimacy level |
-| min_comfort | Minimum comfort level |
-| min_respect | Minimum respect level |
-| max_energy | Maximum energy (for tired events) |
-| relationship_stage | Exact stage match |
-| relationship_stage_min | Minimum stage |
-| days_known | Minimum days known |
-| total_interactions | Minimum chat count |
-| event_completed | Prerequisite event |
-| event_not_completed | Event not yet triggered |
-| time_of_day | morning / afternoon / evening / night |
-| day_of_week | 0-6 (Sunday-Saturday) |
-| random_chance | Probability (0-1) |
-| keyword_mentioned | Word in message |
-| mood_is | Specific mood |
-| mood_intensity_min | Minimum intensity |
-| consecutive_days | Minimum streak |
-| hours_since_last_interaction_min | Time away minimum |
-| hours_since_last_interaction_max | Time away maximum |
+| min_affection | Nivel mínimo de afecto |
+| min_trust | Nivel mínimo de confianza |
+| min_intimacy | Nivel mínimo de intimidad |
+| min_comfort | Nivel mínimo de comodidad |
+| min_respect | Nivel mínimo de respeto |
+| max_energy | Energía máxima (para eventos de cansancio) |
+| relationship_stage | Coincidencia exacta de etapa |
+| relationship_stage_min | Etapa mínima |
+| days_known | Días conocidos mínimos |
+| total_interactions | Recuento mínimo de chats |
+| event_completed | Evento prerequisito |
+| event_not_completed | Evento aún no disparado |
+| time_of_day | mañana / tarde / noche / madrugada |
+| day_of_week | 0-6 (domingo-sábado) |
+| random_chance | Probabilidad (0-1) |
+| keyword_mentioned | Palabra en el mensaje |
+| mood_is | Ánimo concreto |
+| mood_intensity_min | Intensidad mínima |
+| consecutive_days | Racha mínima |
+| hours_since_last_interaction_min | Ausencia mínima |
+| hours_since_last_interaction_max | Ausencia máxima |
 
-### Scene Structure
+### Estructura de escena
 
 ```typescript
 interface Scene {
@@ -298,54 +298,54 @@ interface SceneChoice {
 }
 ```
 
-### Event Categories
+### Categorías de eventos
 
-Events are organized by type (`milestone`, `random`, `scheduled`, `conditional`, `anniversary`), and grouped into four files:
+Los eventos se organizan por tipo (`milestone`, `random`, `scheduled`, `conditional`, `anniversary`), y se agrupan en cuatro archivos:
 
-1. **Milestone Events** — First meeting, anniversaries, deep conversations, streak achievements
-2. **Random Events** — Questions, compliments, memories, teases
-3. **Romantic Events** — Confession, dates, commitment ceremonies
-4. **Time-Based Events** — Morning greetings, late night chats, weekend vibes
+1. **Eventos de hito** — Primera cita, aniversarios, conversaciones profundas, logros de racha
+2. **Eventos aleatorios** — Preguntas, cumplidos, recuerdos, bromas
+3. **Eventos románticos** — Confesión, citas, ceremonias de compromiso
+4. **Eventos basados en el tiempo** — Saludos matutinos, chats nocturnos, ambiente de fin de semana
 
-## Prompt Architecture
+## Arquitectura de prompts
 
-The system prompt is built from up to 7 layers:
+El prompt de sistema se construye con hasta 7 capas:
 
-1. **System** — Rules, output format, current time
-2. **Character** — Name, personality, background, speech patterns
-3. **Current State** — Mood, energy, relationship stage and stats, days known
-4. **Memory** — Recent conversation turns, relevant facts, session context
-5. **Being Shown** *(optional)* — Present only when the user shows an image: frames the photo as something she is being shown in the moment, not a file attachment
-6. **Event** *(optional)* — Present only for system events such as a fired reminder: the trigger text arrives in an `<event>` block instead of a user turn
-7. **Instructions** — Stage-specific behavior guidance, JSON output format
+1. **Sistema** — Reglas, formato de salida, hora actual
+2. **Personaje** — Nombre, personalidad, historia, patrones de habla
+3. **Estado actual** — Ánimo, energía, etapa de relación y estadísticas, días conocidos
+4. **Memoria** — Turnos de conversación recientes, datos relevantes, contexto de sesión
+5. **Mostrando** *(opcional)* — Presente solo cuando el usuario muestra una imagen: enmarca la foto como algo que se le está mostrando en el momento, no un archivo adjunto
+6. **Evento** *(opcional)* — Presente solo para eventos de sistema como un recordatorio disparado: el texto del disparo llega en un bloque `<event>` en vez de un turno de usuario
+7. **Instrucciones** — Guía de comportamiento específica de etapa, formato de salida JSON
 
-### Turn Progress Hooks
+### Ganchos de progreso de turno
 
-The send loop (`companion-chat.ts`) reports progress to whichever surface hosts it (main app or desktop overlay) through a small hooks interface. Beyond the typing flag and the final reply, an optional `setPhase` hook narrates what the turn is actually doing: `remembering` while memory retrieval builds the prompt, then `seeing` (image turns) or `thinking` once the model call starts. The UI renders these as a shimmer label in the speech bubble and chat window instead of anonymous typing dots. The phases are driven by the real pipeline stages, never simulated.
+El bucle de envío (`companion-chat.ts`) reporta progreso a la superficie que lo aloja (app principal o superposición de escritorio) a través de una pequeña interfaz de ganchos. Además del indicador de escritura y la respuesta final, un gancho opcional `setPhase` narra lo que el turno está haciendo realmente: `remembering` mientras la recuperación de memoria construye el prompt, luego `seeing` (turnos con imagen) o `thinking` cuando empieza la llamada al modelo. La UI renderiza esto como una etiqueta shimmer en la burbuja de diálogo y la ventana de chat en vez de puntos de escritura anónimos. Las fases las impulsan las etapas reales del pipeline, nunca simuladas.
 
-### System Events and Reminders
+### Eventos de sistema y recordatorios
 
-Not every turn starts with the user. The companion can schedule reminders and timers, either by emitting a `[reminder:5min]content[/reminder]` tag in her reply or from natural phrasing like "remind me in 10 minutes" via a client-side fallback. Reminders persist in the `reminders` table, fire from a poll loop that survives reloads, and timers missed while the app was closed surface on the next launch.
+No todo turno empieza con el usuario. La compañera puede programar recordatorios y temporizadores, ya sea emitiendo una etiqueta `[reminder:5min]contenido[/reminder]` en su respuesta o desde frases naturales como «recuérdame en 10 minutos» vía un respaldo del lado del cliente. Los recordatorios persisten en la tabla `reminders`, se disparan desde un bucle de sondeo que sobrevive a recargas, y los temporizadores perdidos mientras la app estaba cerrada aparecen en el siguiente arranque.
 
-A fired reminder is delivered as a **system event**: the trigger text enters the prompt through the `<event>` layer instead of a fake user message, and the turn deliberately skips everything that would pretend the user spoke. Sentiment heuristics, baseline stat updates, streak and interaction counting, fact extraction, and event checks are all bypassed; her reply is still parsed, spoken through TTS, and can chain further reminders. Machine-generated turns can never advance the relationship or reset the away-time clock.
+Un recordatorio disparado se entrega como **evento de sistema**: el texto del disparo entra al prompt por la capa `<event>` en vez de un mensaje de usuario falso, y el turno deliberadamente se salta todo lo que fingiría que el usuario habló. Las heurísticas de sentimiento, las actualizaciones de estadísticas base, el conteo de rachas e interacciones, la extracción de datos y las comprobaciones de eventos se omiten todas; su respuesta se sigue analizando, hablando por TTS, y puede encadenar más recordatorios. Los turnos generados por máquina nunca pueden avanzar la relación ni reiniciar el reloj de ausencia.
 
-### Context Window and Memory Budget
+### Ventana de contexto y presupuesto de memoria
 
-The LLM settings expose a **Context Window** slider that tells Utsuwa how many tokens the selected model can process. This value is used in three places:
+Los ajustes del LLM exponen un deslizador de **Ventana de contexto** que indica a Luna cuántos tokens puede procesar el modelo seleccionado. Este valor se usa en tres sitios:
 
-1. **Memory retrieval** — `retrieveRelevantContext` asks working memory for up to the budgeted number of recent turns. Without a context window configured it falls back to 10 turns; with a large window configured it retrieves up to 20, so the larger budget is actually used.
+1. **Recuperación de memoria** — `retrieveRelevantContext` pide a la memoria de trabajo hasta el número presupuestado de turnos recientes. Sin ventana de contexto configurada recurre a 10 turnos; con una ventana grande configurada recupera hasta 20, así que el presupuesto mayor realmente se usa.
 
-2. **Memory injection** — The prompt builder injects only the budgeted number of recent conversation turns and relevant facts. Small local models (1K–4K tokens) receive a minimal memory layer so the system prompt itself does not overflow the window. Larger models receive more turns and facts up to a reasonable ceiling.
+2. **Inyección de memoria** — El constructor de prompts inyecta solo el número presupuestado de turnos de conversación recientes y datos relevantes. Los modelos locales pequeños (1K–4K tokens) reciben una capa de memoria mínima para que el propio prompt de sistema no desborde la ventana. Los modelos más grandes reciben más turnos y datos hasta un techo razonable.
 
-3. **History truncation** — Before a request is sent, the assembled messages are trimmed so the system prompt plus conversation history plus a small reserve for the model's response fit inside the configured window. Truncation always keeps the system prompt and the user's newest message; older history is dropped first.
+3. **Truncado del historial** — Antes de enviar una petición, los mensajes ensamblados se recortan para que el prompt de sistema más el historial de conversación más una pequeña reserva para la respuesta del modelo quepan dentro de la ventana configurada. El truncado siempre conserva el prompt de sistema y el mensaje más nuevo del usuario; el historial más viejo se descarta primero.
 
-The reserve and scaling are intentionally conservative. If the system prompt alone is larger than the window, Utsuwa still keeps the newest user message and lets the provider handle the overflow rather than silently dropping the user's current turn.
+La reserva y el escalado son deliberadamente conservadores. Si el propio prompt de sistema es mayor que la ventana, Luna aún conserva el mensaje de usuario más nuevo y deja que el proveedor gestione el desbordamiento en vez de descartar silenciosamente el turno actual del usuario.
 
-### LLM Output Format
+### Formato de salida del LLM
 
-The companion uses a **two-path state extraction** model, so it stays reliable across everything from GPT-4o down to a 4B local model:
+La compañera usa un modelo de **extracción de estado de dos caminos**, así que se mantiene fiable desde GPT-4o hasta un modelo local de 4B:
 
-1. **Inline fast path** — The model replies in character, then ends with a JSON block of state updates. Capable models do this every turn, so nothing extra is needed.
+1. **Camino rápido en línea** — El modelo responde en personaje y termina con un bloque JSON de actualizaciones de estado. Los modelos capaces hacen esto en cada turno, así que no se necesita nada extra.
 
    ```json
    {
@@ -361,94 +361,94 @@ The companion uses a **two-path state extraction** model, so it stays reliable a
    }
    ```
 
-2. **Decoupled extraction fallback** — Smaller and roleplay-tuned models often skip or mangle that block. When the inline JSON is missing, a second non-streaming call re-derives the state from the exchange, constrained to JSON (`response_format: json_object` for OpenAI-compatible providers; a dedicated system prompt on Anthropic's `/messages`). It returns the same shape including the relationship deltas, so memory and relationship movement land even when the model ignores the format. Capable models never trigger it — the inline block is already valid — so there's no extra call on the fast path.
+2. **Respaldo de extracción desacoplado** — Los modelos más pequeños y afinados para roleplay a menudo omiten o estropean ese bloque. Cuando falta el JSON en línea, una segunda llamada sin streaming re-deriva el estado del intercambio, restringida a JSON (`response_format: json_object` para proveedores compatibles con OpenAI; un prompt de sistema dedicado en `/messages` de Anthropic). Devuelve la misma forma incluidos los deltas de relación, así que la memoria y el movimiento de la relación aterrizan incluso cuando el modelo ignora el formato. Los modelos capaces nunca lo disparan — el bloque en línea ya es válido — así que no hay llamada extra en el camino rápido.
 
-Both modes write memories: **Companion Mode** also emits `new_memory` (only mood/energy and memory apply there — relationship deltas are ignored), while **Dating Sim Mode** uses the full set.
+Ambos modos escriben recuerdos: el **Modo compañía** también emite `new_memory` (allí solo aplican ánimo/energía y memoria — los deltas de relación se ignoran), mientras que el **Modo simulador de citas** usa el conjunto completo.
 
-### Response Parsing & Robustness
+### Análisis de respuestas y robustez
 
-`response-parser.ts` normalizes model output defensively before it's applied — this is what makes small and local models usable:
+`response-parser.ts` normaliza la salida del modelo a la defensiva antes de aplicarla — esto es lo que hace utilizables a los modelos pequeños y locales:
 
-- **Reasoning traces stripped** — `<think>...</think>` (and a lone `</think>`) from R1-style models are removed before parsing or display, so the scratchpad never leaks into the chat bubble or gets mistaken for the state block.
-- **Tolerant JSON** — trailing commas, `//` and `/* */` comments, and bare (unfenced) JSON are accepted; the parser also pulls the state object out of surrounding prose via a balanced-brace scan.
-- **Leaked stop tokens cut** — `</s>`, `<|im_end|>`, `<|eot_id|>`, `<end_of_turn>` and stray template tokens are stripped, and runaway output after an end-of-turn marker is dropped.
-- **Hallucinated turns cut** — when a model keeps writing as the user or a narrator (e.g. `Name: "a third-person note"`), that trailing fake turn is removed from the dialogue.
-- **Emotion normalization** — free-form and compound emotions (`"grateful|cared-for"`, `"excitement"`, `"nervous"`) are mapped to the canonical set; genuinely unknown ones are dropped rather than guessed.
+- **Trazas de razonamiento eliminadas** — `<think>...</think>` (y un `</think>` suelto) de modelos estilo R1 se eliminan antes del análisis o la visualización, para que el borrador nunca se filtre a la burbuja de chat ni se confunda con el bloque de estado.
+- **JSON tolerante** — se aceptan comas finales, comentarios `//` y `/* */`, y JSON desnudo (sin vallar); el analizador también extrae el objeto de estado de la prosa que lo rodea mediante un escaneo de llaves balanceadas.
+- **Tokens de parada filtrados eliminados** — `</s>`, `<|im_end|>`, `<|eot_id|>`, `<end_of_turn>` y tokens de plantilla sueltos se eliminan, y la salida desbocada tras un marcador de fin de turno se descarta.
+- **Turnos alucinados eliminados** — cuando un modelo sigue escribiendo como el usuario o un narrador (p. ej. `Nombre: «una nota en tercera persona»`), ese falso turno final se elimina del diálogo.
+- **Normalización de emociones** — las emociones libres y compuestas (`"grateful|cared-for"`, `"excitement"`, `"nervous"`) se mapean al conjunto canónico; las genuinamente desconocidas se descartan en vez de adivinarlas.
 
-All deltas are clamped and emotions whitelisted, so a malformed or exaggerated update can't corrupt saved state.
+Todos los deltas se acotan y las emociones están en lista blanca, así que una actualización malformada o exagerada no puede corromper el estado guardado.
 
-## Heuristics Engine
+## Motor de heurísticas
 
-### Message Analysis
+### Análisis de mensajes
 
-Each user message is analyzed for:
-- **Sentiment** — Positive/negative based on keyword matching
-- **Topic Depth** — Shallow, moderate, or deep
-- **Emotional Content** — Presence of emotional language
-- **Questions** — Whether the message asks something
+Cada mensaje de usuario se analiza en busca de:
+- **Sentimiento** — Positivo/negativo según coincidencia de palabras clave
+- **Profundidad del tema** — Superficial, moderado o profundo
+- **Contenido emocional** — Presencia de lenguaje emocional
+- **Preguntas** — Si el mensaje pregunta algo
 
-### Baseline Calculations
+### Cálculos base
 
-| Factor | Effect |
+| Factor | Efecto |
 |--------|--------|
-| Positive sentiment | +2 affection, +1 comfort |
-| Negative sentiment | -1 affection, -1 comfort |
-| Deep topic | +2 affection, +2 intimacy, +1 trust, -2 energy |
-| Moderate topic | +1 affection, +1 intimacy, -1 energy |
-| Shallow topic | -1 comfort |
-| Emotional content | +2 intimacy, +1 trust, +1 affection |
-| Questions asked | +1 respect, +1 trust |
-| Non-linear affection | Fast early (1.5x), normal middle, slow late (0.7x) |
-| Randomness | +/-20% variance on affection and trust deltas |
+| Sentimiento positivo | +2 afecto, +1 comodidad |
+| Sentimiento negativo | -1 afecto, -1 comodidad |
+| Tema profundo | +2 afecto, +2 intimidad, +1 confianza, -2 energía |
+| Tema moderado | +1 afecto, +1 intimidad, -1 energía |
+| Tema superficial | -1 comodidad |
+| Contenido emocional | +2 intimidad, +1 confianza, +1 afecto |
+| Preguntas hechas | +1 respeto, +1 confianza |
+| Afecto no lineal | Rápido al principio (1.5x), normal en medio, lento al final (0.7x) |
+| Aleatoriedad | Varianza de ±20% en los deltas de afecto y confianza |
 
-### State Merging
+### Fusión de estado
 
-When the LLM provides JSON suggestions:
-1. LLM mood change overrides baseline mood entirely
-2. LLM affection delta is capped at ±2x the baseline magnitude (minimum cap of ±5)
-3. LLM trust delta is capped at ±2x the baseline magnitude (minimum cap of ±3)
-4. LLM intimacy/comfort/respect deltas are clamped to [-3, 5]
-5. Energy delta always comes from heuristics (LLM cannot change energy)
-6. Memory and event suggestions pass through unchanged
+Cuando el LLM proporciona sugerencias JSON:
+1. El cambio de ánimo del LLM anula completamente el ánimo base
+2. El delta de afecto del LLM se acota a ±2x la magnitud base (tope mínimo de ±5)
+3. El delta de confianza del LLM se acota a ±2x la magnitud base (tope mínimo de ±3)
+4. Los deltas de intimidad/comodidad/respeto del LLM se acotan a [-3, 5]
+5. El delta de energía siempre viene de las heurísticas (el LLM no puede cambiar la energía)
+6. Las sugerencias de memoria y eventos pasan sin cambios
 
-## Interaction Flow
+## Flujo de interacción
 
 ```
-User sends message
+El usuario envía un mensaje
     |
-[App] Calculate baseline state updates (heuristics)
+[App] Calcula actualizaciones de estado base (heurísticas)
     |
-[App] Retrieve relevant memories
+[App] Recupera recuerdos relevantes
     |
-[App] Build prompt with context
+[App] Construye el prompt con contexto
     |
-[LLM] Generate response
+[LLM] Genera la respuesta
     |
-[App] Parse response + JSON
+[App] Analiza respuesta + JSON
     |
-[App] Merge LLM suggestions with baseline
+[App] Fusiona sugerencias del LLM con la base
     |
-[App] Apply state updates
+[App] Aplica actualizaciones de estado
     |
-[App] Check stage transitions
+[App] Comprueba transiciones de etapa
     |
-[App] Check event triggers
+[App] Comprueba disparadores de eventos
     |
-[App] If event triggered, present scene
+[App] Si se disparó un evento, presenta la escena
     |
-[App] Save state to IndexedDB
+[App] Guarda el estado en IndexedDB
     |
-[UI] Display response + trigger animation
+[UI] Muestra la respuesta + dispara la animación
 ```
 
-## Storage
+## Almacenamiento
 
-All data is stored client-side on the user's device using IndexedDB via Dexie.js.
+Todos los datos se guardan del lado del cliente en el dispositivo del usuario usando IndexedDB vía Dexie.js.
 
-### Database Schema
+### Esquema de la base de datos
 
 ```typescript
-const db = new Dexie('utsuwa-db');
+const db = new Dexie('luna-db');
 
 // v2: Single character model (migrated from v1 multi-persona)
 db.version(2).stores({
@@ -482,9 +482,9 @@ db.version(6).stores({
 });
 ```
 
-### Data Export/Import
+### Exportación/importación de datos
 
-Users can export all data as a JSON save file. Vector embeddings are stripped from exports (they're regenerated on import).
+Los usuarios pueden exportar todos los datos como un archivo de guardado JSON. Los embeddings vectoriales se eliminan de las exportaciones (se regeneran al importar).
 
 ```typescript
 interface SaveFile {

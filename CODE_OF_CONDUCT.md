@@ -1,33 +1,50 @@
-# Code of Conduct
+# Código de conducta
 
-## Our Standards
+## Nuestros estándares
 
-We are committed to providing a welcoming and inclusive environment for everyone. We expect all participants to:
+Estamos comprometidos a proporcionar un entorno acogedor e inclusivo para todos. Esperamos que todos los participantes:
 
-- Be respectful and considerate in all interactions
-- Welcome newcomers and help them learn
-- Accept constructive feedback gracefully
-- Focus on what is best for the community
-- Show empathy towards others
+### Comportamientos positivos
 
-## Unacceptable Behavior
+- Usar lenguaje acogedor e inclusivo
+- Respetar diferentes puntos de vista y experiencias
+- Aceptar la crítica constructiva con gracia
+- Enfocarse en lo que es mejor para la comunidad
+- Mostrar empatía hacia otros miembros de la comunidad
 
-The following behaviors are not tolerated:
+### Comportamientos no aceptables
 
-- Trolling, insulting, or derogatory comments
-- Personal or political attacks
-- Public or private harassment
-- Publishing others' private information without permission
-- Other conduct which could reasonably be considered inappropriate
+- Uso de lenguaje o imágenes sexuales y atención o avances sexuales de cualquier tipo
+- Comentarios provocadores, insultantes o despectivos, y ataques personales o políticos
+- Acoso público o privado
+- Publicar información privada de otros, como direcciones físicas o de email, sin su permiso explícito
+- Otras conductas que podrían ser razonablemente consideradas inapropiadas en un entorno profesional
 
-## Enforcement
+## Nuestros responsables de aplicación
 
-Project maintainers are responsible for clarifying and enforcing standards of acceptable behavior. They may take appropriate action in response to any behavior that violates this code of conduct.
+Los responsables de aplicación del código de conducta pueden ser contactados mediante el email [conducta@luna.ai](mailto:conducta@luna.ai).
 
-## Reporting
+Todos los miembros de la comunidad son responsables de aplicar estos estándares. Si alguien no cumple con el código de conducta, los responsables de aplicación pueden tomar las acciones que consideren apropiadas, incluyendo la advertencia temporal o permanente de la comunidad.
 
-If you experience or witness unacceptable behavior, please report it by opening an issue or contacting the maintainers directly.
+## Alcance
 
-## Attribution
+Este código de conducta aplica en todos los espacios de la comunidad, incluyendo:
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/).
+- Repositorios de GitHub
+- Issues y pull requests
+- Discord, si existe
+- Cualquier otro espacio de comunicación de la comunidad
+
+También aplica cuando un individuo representa oficialmente a la comunidad en espacios públicos.
+
+## Aplicación
+
+Los casos de abuso, acoso u otro comportamiento inaceptable pueden ser reportados contactando a los responsables de aplicación en [conducta@luna.ai](mailto:conducta@luna.ai).
+
+Todas las quejas serán revisadas e investigadas de manera rápida y justa.
+
+Los responsables de aplicación tienen la obligación de mantener la confidencialidad del reportante.
+
+## Referencias
+
+Este código de conducta está adaptado del [Contributor Covenant](https://www.contributor-covenant.org), versión 2.1.

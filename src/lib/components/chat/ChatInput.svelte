@@ -16,6 +16,9 @@
 		overlay?: boolean;
 		/** Flat row inside the chat window instead of the floating pill. */
 		docked?: boolean;
+		/** Naked input inside a host surface (the expandable command bar):
+		 *  no own glass, full height; pending chips float above the surface. */
+		embedded?: boolean;
 	}
 
 	let {
@@ -23,7 +26,8 @@
 		disabled = false,
 		visionCapable = true,
 		overlay = false,
-		docked = false
+		docked = false,
+		embedded = false
 	}: Props = $props();
 
 	let textareaRef = $state<HTMLTextAreaElement | null>(null);
@@ -93,16 +97,16 @@
 	}
 </script>
 
-<div class="chat-input" class:docked>
+<div class="chat-input" class:docked class:embedded>
 	{#if chatDraftStore.pending.length > 0}
 		<div class="pending-row" out:fadeFast={{ duration: 150 }}>
 			{#each chatDraftStore.pending as p (p.image.id)}
 				<div class="pending-chip" in:pop={{ duration: 200, y: 6, scale: 0.9 }} out:fadeFast={{ duration: 120 }}>
-					<img src={p.url} alt="To show her" />
+					<img src={p.url} alt="Para mostrarle" />
 					<button
 						type="button"
 						class="remove-chip"
-						aria-label="Remove image"
+						aria-label="Quitar imagen"
 						onclick={() => chatDraftStore.removePending(p.image.id)}
 					>
 						<Icon name="x" size={12} />
@@ -123,14 +127,14 @@
 			/>
 		{/if}
 		<div
-			class="input-wrapper"
+			class="input-wrapper glass-chip"
 			class:recording={isListening}
 			class:transcribing={isTranscribing}
 			class:focused={hasContent}
 		>
 			{#if isTranscribing}
-				<div class="transcribing-label">Transcribing...</div>
-				<button type="button" class="mic-btn recording" disabled aria-label="Transcribing">
+				<div class="transcribing-label">Transcribiendo…</div>
+				<button type="button" class="mic-btn recording" disabled aria-label="Transcribiendo">
 					<Icon name="loader" size={20} />
 				</button>
 			{:else if isListening}
@@ -138,10 +142,9 @@
 				<button
 					type="button"
 					class="mic-btn recording"
-					onclick={() => sttStore.stopListening()}
-					aria-label="Stop recording"
-					title="Stop recording"
-				>
+					onclick={() => sttStore.stopListening()}							aria-label="Detener grabación"
+							title="Detener grabación"
+					>
 					<Icon name="stop" size={16} />
 				</button>
 			{:else}
@@ -151,8 +154,8 @@
 						class="mic-btn"
 						class:vision-off={!visionCapable}
 						onclick={openPicker}
-						aria-label="Attach an image"
-						title={visionCapable ? 'Attach an image' : 'This model cannot see images'}
+						aria-label="Adjuntar una imagen"
+						title={visionCapable ? 'Adjuntar una imagen' : 'Este modelo no puede ver imágenes'}
 					>
 						<Icon name="paperclip" size={20} />
 					</button>
@@ -164,20 +167,34 @@
 					bind:this={textareaRef}
 					bind:value={chatDraftStore.draft}
 					onkeydown={handleKeydown}
-					placeholder="Type a message..."
+					placeholder="Escríbele a Luna…"
 					rows="1"
 					wrap="off"
 					{disabled}
 				></textarea>
-				<button
-					type="button"
-					class="mic-btn"
-					onclick={handleMicClick}
-					aria-label="Voice input"
-					title="Voice input"
-				>
-					<Icon name="mic" size={20} />
-				</button>
+				{#if embedded}
+					<!-- Primary action: voice while empty, send the moment there is
+					     content (text or pending images) — one button, no layout swap -->
+					<button
+						type="button"
+						class="mic-btn primary"
+						onclick={() => (hasContent ? doSend() : handleMicClick())}
+						aria-label={hasContent ? 'Enviar' : 'Entrada de voz'}
+						title={hasContent ? 'Enviar' : 'Entrada de voz'}
+					>
+						<Icon name={hasContent ? 'send' : 'mic'} size={20} />
+					</button>
+				{:else}
+					<button
+						type="button"
+						class="mic-btn"
+						onclick={handleMicClick}
+						aria-label="Entrada de voz"
+						title="Entrada de voz"
+					>
+						<Icon name="mic" size={20} />
+					</button>
+				{/if}
 			{/if}
 		</div>
 	</form>
@@ -268,36 +285,31 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: var(--bg-secondary);
-		border: 1px solid var(--border-subtle);
-		backdrop-filter: blur(20px);
-		-webkit-backdrop-filter: blur(20px);
 		border-radius: var(--radius-full);
 		padding: 0.5rem;
 		/* 44px buttons + 0.5rem padding either side: the pill's original stature */
 		height: 60px;
-		box-shadow: var(--shadow-md);
 		transition: box-shadow 0.2s;
+		color: var(--chrome-text);
 	}
 
 	.input-wrapper:focus-within,
 	.input-wrapper.focused {
-		box-shadow: 0 0 0 3px var(--accent-muted), var(--shadow-glow);
+		box-shadow: 0 0 0 3px var(--chrome-wash-strong), var(--shadow-glow);
 	}
 
 	.input-wrapper.recording {
-		box-shadow: 0 0 0 3px var(--accent-muted), var(--shadow-glow);
+		box-shadow: 0 0 0 3px var(--chrome-wash-strong), var(--shadow-glow);
 	}
 
 	.input-wrapper.transcribing {
-		box-shadow: 0 0 0 3px var(--accent-muted), var(--shadow-md);
-	}
-
-	/* Docked: flat compact row that reads as part of the chat window and
-	   keeps shrinking gracefully as the window narrows */
+		box-shadow: 0 0 0 3px var(--chrome-wash-strong), var(--shadow-md);
+	}	/* Docked: flat compact row that reads as part of the chat window and
+   keeps shrinking gracefully as the window narrows */
 	.docked .input-wrapper {
-		border-radius: var(--radius-md);
+		background: var(--chrome-wash);
 		border: none;
+		border-radius: var(--radius-md);
 		box-shadow: none;
 		height: 42px;
 		min-width: 0;
@@ -311,7 +323,7 @@
 	.docked .input-wrapper.focused,
 	.docked .input-wrapper.recording,
 	.docked .input-wrapper.transcribing {
-		box-shadow: inset 0 0 0 2px var(--accent-muted);
+		box-shadow: inset 0 0 0 2px var(--chrome-wash-strong);
 	}
 
 	.docked .pending-row {
@@ -321,7 +333,11 @@
 
 	.transcribing-label {
 		flex: 1;
-		padding: 0.625rem 0.5rem;
+		/* Misma caja que el textarea: sin saltos al entrar/salir del estado */
+		display: flex;
+		align-items: center;
+		align-self: stretch;
+		padding: 0 0.5rem;
 		font-size: 0.9rem;
 		color: var(--text-tertiary);
 		font-style: italic;
@@ -333,7 +349,7 @@
 		padding: 0.625rem 0.5rem;
 		border: none;
 		background: transparent;
-		color: var(--text-primary);
+		color: var(--chrome-text);
 		font-size: 1rem;
 		resize: none;
 		outline: none;
@@ -357,6 +373,78 @@
 	}
 
 	textarea::placeholder {
+		color: var(--chrome-text-dim);
+	}
+
+	/* Docked inside the chat window: revert to the theme surface */
+	.docked .input-wrapper {
+		color: var(--text-primary);
+	}
+
+	/* Embedded in the expandable surface: the input sits on its OWN subtle
+	   surface (wash + rim) so the field reads clearly on top of the host's
+	   glass — the clip, placeholder and buttons never dissolve into it. */
+	.embedded {
+		position: relative;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.embedded .chat-form {
+		display: flex;
+		align-items: center;
+	}
+
+	.embedded .input-wrapper {
+		background: transparent;
+		border: none;
+		box-shadow: none;
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+		height: 100%;
+		gap: 0.25rem;
+		padding: 0.25rem 0.25rem 0.25rem 0;
+	}
+
+	.embedded .input-wrapper:focus-within,
+	.embedded .input-wrapper.focused,
+	.embedded .input-wrapper.recording,
+	.embedded .input-wrapper.transcribing {
+		box-shadow: none;
+	}
+
+	/* Compacto: menos aire entre clip y texto, placeholder alineado con
+	   los botones — el composer se lee como UNA fila, no como campos sueltos */
+	.embedded textarea {
+		font-size: 15px;
+		padding: 0.25rem 0.3rem;
+	}
+
+	.embedded textarea {
+		font-size: 15.5px;
+		padding: 0.25rem 0.25rem;
+	}
+
+	.embedded textarea::placeholder {
+		color: rgba(255, 255, 255, 0.72);
+	}
+
+	.embedded .pending-row {
+		position: absolute;
+		bottom: calc(100% + 10px);
+		left: 0;
+		right: 0;
+		margin: 0;
+		padding: 0;
+		z-index: 5;
+	}
+
+	.docked textarea {
+		color: var(--text-primary);
+	}
+
+	.docked textarea::placeholder {
 		color: var(--text-tertiary);
 	}
 
@@ -378,7 +466,13 @@
 		flex-shrink: 0;
 		position: relative;
 		background: transparent;
-		color: var(--text-tertiary);
+		/* Actionable icons read brighter than the placeholder text */
+		color: var(--chrome-text);
+	}
+
+	/* Docked inside the chat window: back to theme colors */
+	.docked .mic-btn {
+		color: var(--text-primary);
 	}
 
 	.docked .mic-btn {
@@ -392,8 +486,8 @@
 	}
 
 	.mic-btn:hover:not(:disabled) {
-		color: var(--text-primary);
-		background: var(--bg-tertiary);
+		color: var(--chrome-text);
+		background: var(--chrome-wash);
 	}
 
 	.mic-btn:active:not(:disabled) {
@@ -401,17 +495,20 @@
 	}
 
 	.mic-btn.vision-off {
-		opacity: 0.45;
+		/* Muted but legible: 0.6 over chrome-text keeps the icon readable
+		   in both themes while still reading as unavailable */
+		opacity: 0.6;
 	}
 
 	.mic-btn.recording {
-		background: var(--accent);
-		color: #fff;
+		background: var(--chrome-wash-strong);
+		color: var(--chrome-text);
 		animation: recording-pulse 1.6s ease-in-out infinite;
 	}
 
 	.mic-btn.recording:hover {
-		background: var(--accent-hover);
+		background: var(--chrome-wash-strong);
+		color: var(--chrome-text);
 	}
 
 	.mic-btn.recording:disabled {
@@ -420,9 +517,22 @@
 		animation: none;
 	}
 
+	/* Filled primary circle: mic when empty, send arrow with content */
+	.mic-btn.primary {
+		background: var(--accent);
+		color: var(--accent-contrast, #fff);
+		box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+	}
+
+	.mic-btn.primary:hover:not(:disabled) {
+		background: var(--accent);
+		color: var(--accent-contrast, #fff);
+		filter: brightness(1.08);
+	}
+
 	@keyframes recording-pulse {
 		0%, 100% {
-			box-shadow: 0 0 0 0 var(--accent-muted);
+			box-shadow: 0 0 0 0 var(--chrome-wash-strong);
 		}
 		50% {
 			box-shadow: 0 0 0 6px transparent;

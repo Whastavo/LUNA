@@ -12,11 +12,36 @@ import {
 import { checkAllEvents, checkEvent, eventsApi } from '$lib/engine/events';
 import { allEvents, relationshipStrainEvent } from '$lib/data/events';
 import { extractStateUpdates } from './client-chat';
+import { isLocalLLMProvider } from '$lib/services/providers/local-endpoints';
+import { isTauri } from '$lib/services/platform';
 import { extractReminderTags } from '$lib/utils/reminders';
 import { reminderStore } from '$lib/stores/reminders.svelte';
 import { ensureSession } from '$lib/engine/memory';
 import type { LLMProvider } from '$lib/types';
 import type { EventDefinition } from '$lib/types/events';
+
+async function extractStateUpdatesViaServer(options: {
+	provider: LLMProvider;
+	model: string;
+	apiKey?: string;
+	baseURL?: string;
+	system: string;
+	userMessage: string;
+	reply: string;
+}): Promise<string | null> {
+	try {
+		const res = await fetch('/api/extract', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(options)
+		});
+		if (!res.ok) return null;
+		const data = (await res.json()) as { text?: string | null };
+		return data.text ?? null;
+	} catch {
+		return null;
+	}
+}
 
 export interface CompanionTurnInput {
 	userMessage: string;
@@ -88,9 +113,12 @@ export async function processCompanionTurn(input: CompanionTurnInput): Promise<C
 	}
 
 	// Decoupled fallback: the model skipped the inline JSON, so ask a dedicated
-	// forced-JSON call to extract mood + memory from the exchange.
+	// forced-JSON call to extract mood + memory from the exchange. On the web
+	// app with cloud providers the call goes through the server route — the
+	// browser can't reach those APIs directly (CORS), which used to kill the
+	// fallback silently (0.19.0). Desktop and local providers call direct.
 	if (!llmUpdates) {
-		const extracted = await extractStateUpdates({
+		const extractionOptions = {
 			provider: llm.provider as LLMProvider,
 			model: llm.model,
 			apiKey: llm.apiKey,
@@ -98,7 +126,11 @@ export async function processCompanionTurn(input: CompanionTurnInput): Promise<C
 			system: buildExtractionSystemPrompt(llm.hasImages),
 			userMessage,
 			reply: dialogue
-		});
+		};
+		const extracted =
+			!isTauri() && !isLocalLLMProvider(extractionOptions.provider)
+				? await extractStateUpdatesViaServer(extractionOptions)
+				: await extractStateUpdates(extractionOptions);
 		if (extracted) {
 			// parseResponse handles both bare JSON (OpenAI json_object) and a
 			// model-added ```json fence (Anthropic). Don't re-wrap.

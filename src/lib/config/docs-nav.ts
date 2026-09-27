@@ -11,38 +11,35 @@ export interface DocsNavSection {
 
 export const docsNav: DocsNavSection[] = [
 	{
-		title: 'Overview',
+		title: 'Visión general',
 		icon: 'book',
-		items: [{ title: 'Introduction', slug: 'overview/introduction' }]
+		items: [{ title: 'Introducción', slug: 'overview/introduction' }]
 	},
 	{
-		title: 'Guides',
+		title: 'Guías',
 		icon: 'compass',
 		items: [
-			{ title: 'Web Guide', slug: 'guides/web-guide' },
-			{ title: 'Desktop Guide', slug: 'guides/desktop-guide' },
-			{ title: 'Local LLM Setup', slug: 'guides/local-llm-setup' },
-			{ title: 'Local TTS Setup', slug: 'guides/local-tts-setup' },
-			{ title: 'OmniVoice Setup', slug: 'guides/omnivoice' },
-			{ title: 'Local STT Setup', slug: 'guides/local-stt-setup' },
-			{ title: 'Troubleshooting', slug: 'guides/troubleshooting' }
+			{ title: 'Guía web', slug: 'guides/web-guide' },
+			{ title: 'Guía de escritorio', slug: 'guides/desktop-guide' },
+			{ title: 'Configurar LLM local', slug: 'guides/local-llm-setup' },
+			{ title: 'Configurar TTS local', slug: 'guides/local-tts-setup' },
+			{ title: 'Configurar OmniVoice', slug: 'guides/omnivoice' },
+			{ title: 'Configurar STT local', slug: 'guides/local-stt-setup' },
+			{ title: 'Solución de problemas', slug: 'guides/troubleshooting' }
 		]
 	},
 	{
-		title: 'Technology',
+		title: 'Tecnología',
 		icon: 'code',
 		items: [
-			{ title: 'Architecture Overview', slug: 'technology/architecture' },
-			{ title: 'Companion System', slug: 'technology/companion-system' },
-			{ title: 'Memory Graph', slug: 'technology/memory-graph' }
+			{ title: 'Visión de la arquitectura', slug: 'technology/architecture' },
+			{ title: 'Sistema de compañera', slug: 'technology/companion-system' },
+			{ title: 'Grafo de memoria', slug: 'technology/memory-graph' }
 		]
 	},
 	{
-		title: 'Community',
+		title: 'Comunidad',
 		icon: 'users',
-		items: [
-			{ title: 'Resources', slug: 'community/resources' },
-			{ title: 'Contributing', slug: 'community/contributing' }
-		]
+		items: [{ title: 'Recursos', slug: 'community/resources' }]
 	}
 ];

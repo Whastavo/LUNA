@@ -41,7 +41,9 @@ export const darkVars: Record<string, string> = {
 	'--docs-accent': 'var(--accent)',
 	'--docs-accent-light': 'var(--accent)',
 	'--docs-accent-hover': 'var(--accent-hover)',
-	'--docs-logo-filter': 'none',
+	// Site dark mode must not depend on the SVG's OS media query — force the
+	// glyph white the same way the light theme forces it black.
+	'--docs-logo-filter': 'brightness(0) invert(1)',
 	'--docs-glow': 'var(--accent-muted)',
 	'--docs-glow-strong': 'var(--accent-muted)',
 	'--docs-inner-highlight': 'transparent',

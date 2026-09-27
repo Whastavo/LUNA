@@ -11,12 +11,12 @@ export interface StatChangeEvent {
 
 // Stat configuration for colors and icons (uses CSS variables from theme)
 const STAT_CONFIG: Record<string, { color: string; icon: string; label: string }> = {
-	affection: { color: 'var(--ctp-pink)', icon: 'heart', label: 'Affection' },
-	trust: { color: 'var(--ctp-green)', icon: 'shield', label: 'Trust' },
-	intimacy: { color: 'var(--ctp-pink)', icon: 'sparkles', label: 'Intimacy' },
-	comfort: { color: 'var(--ctp-mauve)', icon: 'cloud', label: 'Comfort' },
-	respect: { color: 'var(--ctp-peach)', icon: 'star', label: 'Respect' },
-	energy: { color: 'var(--ctp-blue)', icon: 'zap', label: 'Energy' }
+	affection: { color: 'var(--ctp-pink)', icon: 'heart', label: 'Afecto' },
+	trust: { color: 'var(--ctp-green)', icon: 'shield', label: 'Confianza' },
+	intimacy: { color: 'var(--ctp-pink)', icon: 'sparkles', label: 'Intimidad' },
+	comfort: { color: 'var(--ctp-mauve)', icon: 'cloud', label: 'Comodidad' },
+	respect: { color: 'var(--ctp-peach)', icon: 'star', label: 'Respeto' },
+	energy: { color: 'var(--ctp-blue)', icon: 'zap', label: 'Energía' }
 };
 
 // Queue of active stat change indicators

@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import type { ModuleDefinition, ModuleState, ModuleMetadata, ModuleWithState } from '$lib/types/module';
 
-const STORAGE_PREFIX = 'utsuwa-module-';
+const STORAGE_PREFIX = 'luna-module-';
 
 function createModulesStore() {
 	let registry = $state<Map<string, ModuleDefinition>>(new Map());
@@ -197,9 +197,36 @@ function createModulesStore() {
 		return moduleStates.get(moduleId)?.configured ?? false;
 	}
 
-	// Check if module is enabled
+	// Check if module is enabled.
+	// AUTO-RECUPERACIÓN: la bandera `enabled` vive en localStorage y es la ÚNICA
+	// cosa que separa "listo para chatear" de un bloqueo total. Si se pierde
+	// (datos del sitio limpiados, otro origen/puerto, escritura corrupta) pero
+	// el módulo sigue CONFIGURADO (proveedor + modelo en settingsStore/localStorage),
+	// el chat no debe quedar prohibido: se re-habilita sola y persiste el
+	// estado recuperado. Los módulos esenciales (consciousness) ni siquiera
+	// exigen configuración — su sola presencia cuenta como habilitado.
 	function isModuleEnabled(moduleId: string): boolean {
-		return moduleStates.get(moduleId)?.enabled ?? false;
+		const state = moduleStates.get(moduleId);
+		if (state?.enabled) return true;
+
+		const definition = registry.get(moduleId);
+		if (!definition) return false;
+
+		// Módulos esenciales: la app no funciona sin ellos, jamás bloquean.
+		if (definition.metadata.category === 'essential') {
+			return true;
+		}
+
+		// Módulos no esenciales ya configurados: la configuración sobrevive en
+		// el storage; la bandera perdida se recupera en lugar de bloquear.
+		if (state?.configured) {
+			moduleStates.set(moduleId, { ...state, enabled: true });
+			moduleStates = new Map(moduleStates);
+			saveModuleState(moduleId);
+			return true;
+		}
+
+		return false;
 	}
 
 	return {

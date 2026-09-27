@@ -30,9 +30,10 @@ test('companion chat preserves native speech across direct and hosted state bloc
 		setError: (value: string | null) => { chatStore.error = value; }
 	};
 	const fixtures = {
+		mcpStore: { servers: [], tools: [], hasActiveTools: false, ensureTools: async () => {} },
 		chatStore,
 		characterStore: { state: createDefaultCharacterState(), isReady: false },
-		personaStore: { activeCard: { id: 'test', name: 'Utsuwa', systemPrompt: 'Friendly', extensions: {} } },
+		personaStore: { activeCard: { id: 'test', name: 'Luna', systemPrompt: 'Friendly', extensions: {} } },
 		settingsStore: { getProviderConfig: () => ({ apiKey: 'test-key', baseUrl: 'https://provider.invalid/v1/' }) },
 		modulesStore: {
 			isModuleEnabled: () => true,
@@ -59,19 +60,21 @@ test('companion chat preserves native speech across direct and hosted state bloc
 		}
 	};
 	const globals = globalThis as unknown as Record<string, unknown>;
-	globals.__utsuwaChatIntegration = fixtures;
+	globals.__lunaChatIntegration = fixtures;
 	const replacements: Record<string, string> = {
 		'$env/dynamic/private': 'export const env = {};',
+		'$env/dynamic/public': 'export const env = {};',
 		'src/lib/engine/memory': `export const retrieveRelevantContext = async () => ({ recentTurns: [], relevantFacts: [], triggeredMemories: [], recentSessions: [] });
 			export const getWorkingMemory = () => ({}); export const ensureSession = async () => null;`,
 		'src/lib/services/storage/keepsakes': 'export const keepImage = async () => {};',
-		'src/lib/services/platform': 'export const isTauri = () => globalThis.__utsuwaChatIntegration.isTauri();',
-		'src/lib/services/chat/companion-turn': 'export const processCompanionTurn = (...args) => globalThis.__utsuwaChatIntegration.processCompanionTurn(...args);'
+		'src/lib/stores/chat-draft.svelte': 'export const chatDraftStore = { draft: \'\', pending: [], addPending: () => {}, removePending: () => {}, takeAll: () => ({ text: \'\', images: [] }) };',
+		'src/lib/services/platform': 'export const isTauri = () => globalThis.__lunaChatIntegration.isTauri();',
+		'src/lib/services/chat/companion-turn': 'export const processCompanionTurn = (...args) => globalThis.__lunaChatIntegration.processCompanionTurn(...args);'
 	};
 	for (const [path, name] of Object.entries({
 		chat: 'chatStore', character: 'characterStore', persona: 'personaStore', settings: 'settingsStore',
-		modules: 'modulesStore', vrm: 'vrmStore', reminders: 'reminderStore', tts: 'ttsStore'
-	})) replacements[`src/lib/stores/${path}.svelte`] = `export const ${name} = globalThis.__utsuwaChatIntegration.${name};`;
+		modules: 'modulesStore', vrm: 'vrmStore', reminders: 'reminderStore', tts: 'ttsStore', mcp: 'mcpStore'
+	})) replacements[`src/lib/stores/${path}.svelte`] = `export const ${name} = globalThis.__lunaChatIntegration.${name};`;
 	const server = await createServer({
 		root, configFile: false, server: { middlewareMode: true }, appType: 'custom',
 		resolve: { alias: [
@@ -153,6 +156,6 @@ test('companion chat preserves native speech across direct and hosted state bloc
 	} finally {
 		buffer?.reset();
 		await server.close();
-		delete globals.__utsuwaChatIntegration;
+		delete globals.__lunaChatIntegration;
 	}
 });

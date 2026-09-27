@@ -29,4 +29,4 @@ Allow: /
 User-agent: Bytespider
 Allow: /
 
-Sitemap: https://utsuwa.ai/sitemap.xml
+Sitemap: https://luna.ai/sitemap.xml

@@ -31,5 +31,5 @@ export function getIconName(): string {
 }
 
 export function getLabel(): string {
-	return _theme === 'light' ? 'Light' : _theme === 'dark' ? 'Dark' : 'System';
+	return _theme === 'light' ? 'Claro' : _theme === 'dark' ? 'Oscuro' : 'Sistema';
 }

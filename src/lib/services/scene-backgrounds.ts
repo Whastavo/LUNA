@@ -5,9 +5,62 @@
 // sees behind her is exactly what a photo bakes.
 
 export interface SceneBackground {
-	type: 'default' | 'transparent' | 'solid' | 'gradient' | 'pattern';
-	// solid: CSS color; gradient: "colorA,colorB" top to bottom; pattern: tile id
+	type: 'default' | 'transparent' | 'solid' | 'gradient' | 'pattern' | 'image';
+	// solid: CSS color; gradient: "colorA,colorB" top to bottom; pattern: tile id;
+	// image: asset path
 	value?: string;
+}
+
+// Image-backed backgrounds share one decoded Image per src, reused by both the
+// live preview (CSS layer) and capture compositing (canvas drawImage).
+const imageCache = new Map<string, Promise<HTMLImageElement>>();
+const loadedImages = new Map<string, HTMLImageElement>();
+
+export function getSceneImage(src: string): Promise<HTMLImageElement> {
+	const loaded = loadedImages.get(src);
+	if (loaded) return Promise.resolve(loaded);
+	let cached = imageCache.get(src);
+	if (!cached) {
+		cached = new Promise((resolve, reject) => {
+			const img = new Image();
+			img.onload = () => {
+				loadedImages.set(src, img);
+				resolve(img);
+			};
+			img.onerror = () => reject(new Error(`Scene background failed to load: ${src}`));
+			img.src = src;
+		});
+		cached.catch(() => imageCache.delete(src));
+		imageCache.set(src, cached);
+	}
+	return cached;
+}
+
+// Synchronous lookup for already-decoded images; capture compositing uses it
+// after awaiting getSceneImage so the background always makes it into the blob.
+export function getLoadedSceneImage(src: string): HTMLImageElement | null {
+	return loadedImages.get(src) ?? null;
+}
+
+// Draw an image background covering the target box (object-fit: cover).
+function drawCover(
+	ctx: CanvasRenderingContext2D,
+	img: HTMLImageElement,
+	width: number,
+	height: number
+): void {
+	const imgRatio = img.naturalWidth / img.naturalHeight || 1;
+	const boxRatio = width / height || 1;
+	let drawWidth: number;
+	let drawHeight: number;
+	if (imgRatio > boxRatio) {
+		drawHeight = height;
+		drawWidth = height * imgRatio;
+	} else {
+		drawWidth = width;
+		drawHeight = width / imgRatio;
+	}
+	ctx.drawImage(img, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
 }
 
 export interface BackgroundPreset {
@@ -140,31 +193,37 @@ function getPatternTile(id: string): HTMLCanvasElement | null {
 // --- Presets -----------------------------------------------------------------
 
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
-	{ id: 'default', label: 'Default', bg: { type: 'default' }, swatch: 'var(--bg-tertiary)' },
+	{ id: 'default', label: 'Predeterminado', bg: { type: 'default' }, swatch: 'var(--bg-tertiary)' },
+	{
+		id: 'luna-room',
+		label: 'Habitación de Luna',
+		bg: { type: 'image', value: '/luna/scenes/luna-room.avif' },
+		swatch: 'url(/luna/scenes/luna-room.avif) center / cover'
+	},
 	{
 		id: 'transparent',
-		label: 'Clear',
+		label: 'Transparente',
 		bg: { type: 'transparent' },
 		swatch: 'repeating-conic-gradient(#d9d9d9 0% 25%, #ffffff 0% 50%) 0 0 / 10px 10px',
 		photoOnly: true
 	},
-	{ id: 'white', label: 'White', bg: { type: 'solid', value: '#ffffff' }, swatch: '#ffffff' },
-	{ id: 'black', label: 'Black', bg: { type: 'solid', value: '#0b0b0d' }, swatch: '#0b0b0d' },
+	{ id: 'white', label: 'Blanco', bg: { type: 'solid', value: '#ffffff' }, swatch: '#ffffff' },
+	{ id: 'black', label: 'Negro', bg: { type: 'solid', value: '#0b0b0d' }, swatch: '#0b0b0d' },
 	{
 		id: 'mist',
-		label: 'Mist',
+		label: 'Niebla',
 		bg: { type: 'gradient', value: '#dfe9f3,#ffffff' },
 		swatch: 'linear-gradient(180deg, #dfe9f3, #ffffff)'
 	},
 	{
 		id: 'blossom',
-		label: 'Blossom',
+		label: 'Flor de cerezo',
 		bg: { type: 'gradient', value: '#fbd3e0,#fde8d7' },
 		swatch: 'linear-gradient(180deg, #fbd3e0, #fde8d7)'
 	},
 	{
 		id: 'lagoon',
-		label: 'Lagoon',
+		label: 'Laguna',
 		bg: { type: 'gradient', value: '#c2e9fb,#e0f7e9' },
 		swatch: 'linear-gradient(180deg, #c2e9fb, #e0f7e9)'
 	},
@@ -176,21 +235,21 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
 	},
 	{
 		id: 'peach',
-		label: 'Peach',
+		label: 'Melocotón',
 		bg: { type: 'gradient', value: '#ffecd2,#fcc5b1' },
 		swatch: 'linear-gradient(180deg, #ffecd2, #fcc5b1)'
 	},
 	{
 		id: 'lavender',
-		label: 'Lavender',
+		label: 'Lavanda',
 		bg: { type: 'gradient', value: '#e8d5ff,#cfe4ff' },
 		swatch: 'linear-gradient(180deg, #e8d5ff, #cfe4ff)'
 	},
-	{ id: 'dots', label: 'Dots', bg: { type: 'pattern', value: 'dots' }, swatch: '' },
-	{ id: 'hearts', label: 'Hearts', bg: { type: 'pattern', value: 'hearts' }, swatch: '' },
-	{ id: 'sparkles', label: 'Sparkles', bg: { type: 'pattern', value: 'sparkles' }, swatch: '' },
-	{ id: 'stripes', label: 'Stripes', bg: { type: 'pattern', value: 'stripes' }, swatch: '' },
-	{ id: 'gingham', label: 'Gingham', bg: { type: 'pattern', value: 'gingham' }, swatch: '' }
+	{ id: 'dots', label: 'Lunares', bg: { type: 'pattern', value: 'dots' }, swatch: '' },
+	{ id: 'hearts', label: 'Corazones', bg: { type: 'pattern', value: 'hearts' }, swatch: '' },
+	{ id: 'sparkles', label: 'Destellos', bg: { type: 'pattern', value: 'sparkles' }, swatch: '' },
+	{ id: 'stripes', label: 'Rayas', bg: { type: 'pattern', value: 'stripes' }, swatch: '' },
+	{ id: 'gingham', label: 'Vichy', bg: { type: 'pattern', value: 'gingham' }, swatch: '' }
 ];
 
 // Pattern swatches show the real tile; resolved lazily in the browser
@@ -202,6 +261,19 @@ export function presetSwatch(preset: BackgroundPreset): string {
 	return preset.swatch;
 }
 
+// The default scene for daily use: Luna's room image.
+export const DEFAULT_SCENE_BACKGROUND: SceneBackground = {
+	type: 'image',
+	value: '/luna/scenes/luna-room.avif'
+};
+
+// Warm the default scene's decode as the app boots so a persisted image
+// background paints on the first frames instead of after a visible wait
+// (browser only — no-op during SSR).
+if (typeof window !== 'undefined' && DEFAULT_SCENE_BACKGROUND.value) {
+	void getSceneImage(DEFAULT_SCENE_BACKGROUND.value).catch(() => {});
+}
+
 // CSS for the live preview layer behind the transparent GL canvas
 export function backgroundToCss(bg: SceneBackground): string | undefined {
 	if (bg.type === 'solid' && bg.value) return bg.value;
@@ -209,6 +281,9 @@ export function backgroundToCss(bg: SceneBackground): string | undefined {
 	if (bg.type === 'pattern' && bg.value) {
 		const tile = getPatternTile(bg.value);
 		if (tile) return `url(${tile.toDataURL()}) repeat 0 0 / ${TILE_SIZE}px ${TILE_SIZE}px`;
+	}
+	if (bg.type === 'image' && bg.value) {
+		return `url(${bg.value}) center / cover no-repeat`;
 	}
 	if (bg.type === 'transparent') {
 		return 'repeating-conic-gradient(#d4d4d4 0% 25%, #f5f5f5 0% 50%) 0 0 / 22px 22px';
@@ -245,6 +320,9 @@ export function drawSceneBackground(
 		ctx.fillStyle = pattern;
 		ctx.fillRect(0, 0, width / pixelScale, height / pixelScale);
 		ctx.restore();
+	} else if (bg.type === 'image' && bg.value) {
+		const img = getLoadedSceneImage(bg.value);
+		if (img) drawCover(ctx, img, width, height);
 	}
 	// 'default' captures the opaque scene as-is; 'transparent' leaves alpha alone
 }
@@ -257,6 +335,8 @@ export function sanitizeSceneBackground(raw: unknown): SceneBackground {
 			return { type: 'gradient', value: bg.value };
 		if (bg.type === 'pattern' && typeof bg.value === 'string' && TILE_PAINTERS[bg.value])
 			return { type: 'pattern', value: bg.value };
+		if (bg.type === 'image' && typeof bg.value === 'string' && bg.value.startsWith('/luna/scenes/'))
+			return { type: 'image', value: bg.value };
 	}
 	return { type: 'default' };
 }

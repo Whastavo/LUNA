@@ -22,3 +22,22 @@ export function sanitizeProviderError(message: string, baseURL?: string): string
 	if (message.length > MAX_ERROR_LENGTH) return `${message.slice(0, MAX_ERROR_LENGTH)}…`;
 	return message;
 }
+
+/** xsai surfaces provider failures as `Remote sent 401 response: {"error":
+ *  {"message": "..."}}`. Unwrap that envelope so the user sees the
+ *  provider's own message instead of transport noise (0.19.2 fix). */
+export function unwrapRemoteError(message: string): string {
+	const match = message.match(/^Remote sent \d+ response:\s*([\s\S]+)$/);
+	if (!match) return message;
+	try {
+		const parsed = JSON.parse(match[1]) as {
+			error?: { message?: string } | string;
+			message?: string;
+		};
+		if (typeof parsed.error === 'string') return parsed.error;
+		const inner = parsed.error?.message ?? parsed.message;
+		return inner ?? message;
+	} catch {
+		return message;
+	}
+}

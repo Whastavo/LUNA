@@ -67,9 +67,9 @@ async function fetchProviderModelsUncached(
 		return { models: data.models };
 	} catch (error) {
 		if (error instanceof Error && error.name === 'AbortError') {
-			return { models: [], error: 'Request timed out' };
+			return { models: [], error: 'La solicitud ha expirado' };
 		}
-		const message = error instanceof Error ? error.message : 'Failed to fetch models';
+		const message = error instanceof Error ? error.message : 'No se pudieron obtener los modelos';
 		return { models: [], error: message };
 	} finally {
 		clearTimeout(timeout);

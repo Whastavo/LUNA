@@ -17,7 +17,7 @@
 		contextSize,
 		onChange,
 		id = 'llm-context-size-toggle',
-		note = 'When enabled, memory injection and chat history are scaled to fit the selected model\'s context window.'
+		note = 'Cuando está habilitado, la inyección de memoria y el historial de chat se escalan para ajustarse a la ventana de contexto del modelo seleccionado.'
 	}: Props = $props();
 
 	const enabled = $derived(contextSize !== undefined && contextSize > 0);
@@ -34,11 +34,11 @@
 
 <div class="context-size-row">
 	<label class="context-size-label" for={id}>
-		Context Window
+		Ventana de contexto
 		{#if enabled}
 			<span class="context-size-value">{formatContextSize(snapContextSize(contextSize as number))}</span>
 		{:else}
-			<span class="context-size-value">Default</span>
+			<span class="context-size-value">Predeterminado</span>
 		{/if}
 	</label>
 	<button
@@ -46,7 +46,7 @@
 		class="context-size-toggle"
 		class:enabled
 		onclick={handleToggle}
-		aria-label="Toggle context window scaling"
+		aria-label="Alternar escalado de la ventana de contexto"
 	>
 		<span class="toggle-track">
 			<span class="toggle-thumb"></span>
@@ -112,13 +112,13 @@
 		display: block;
 		width: 100%;
 		height: 100%;
-		background: var(--bg-tertiary);
+		background: var(--chrome-wash-strong);
 		border-radius: var(--radius-full);
 		transition: background 0.2s ease;
 	}
 
 	.context-size-toggle.enabled .toggle-track {
-		background: var(--accent);
+		background: var(--chrome-wash-strong);
 	}
 
 	.context-size-toggle .toggle-thumb {
