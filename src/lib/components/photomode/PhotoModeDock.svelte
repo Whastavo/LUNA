@@ -13,15 +13,14 @@
 	import { keepImage } from '$lib/services/storage/keepsakes';
 	import { saveToDownloads } from '$lib/utils/save-to-downloads';
 	import { BACKGROUND_PRESETS, presetSwatch } from '$lib/services/scene-backgrounds';
-	import { expressionLabel } from '$lib/services/expressions';
 
 	type Tab = 'pose' | 'face' | 'scene' | 'camera' | 'sticker';
 	const TABS: Array<{ id: Tab; label: string }> = [
-		{ id: 'camera', label: 'Cámara' },
+		{ id: 'camera', label: 'Camera' },
 		{ id: 'pose', label: 'Pose' },
-		{ id: 'face', label: 'Cara' },
-		{ id: 'scene', label: 'Escena' },
-		{ id: 'sticker', label: 'Pegatina' }
+		{ id: 'face', label: 'Face' },
+		{ id: 'scene', label: 'Scene' },
+		{ id: 'sticker', label: 'Sticker' }
 	];
 
 	let tab = $state<Tab>('camera');
@@ -47,21 +46,21 @@
 	// photo terms is the room. Patterns and pastels included.
 	const BACKGROUNDS = BACKGROUND_PRESETS.map((preset) => ({
 		id: preset.id,
-		label: preset.id === 'default' ? 'Habitación' : preset.label,
+		label: preset.id === 'default' ? 'Room' : preset.label,
 		bg: (preset.bg.type === 'default' ? { type: 'room' } : preset.bg) as PhotoBackground,
 		swatch: presetSwatch(preset)
 	}));
 
 	const FRAMES: Array<{ id: PhotoFrameId; label: string }> = [
-		{ id: 'none', label: 'Ninguno' },
+		{ id: 'none', label: 'None' },
 		{ id: 'polaroid', label: 'Polaroid' },
-		{ id: 'film', label: 'Película' }
+		{ id: 'film', label: 'Film' }
 	];
 
 	const FILTER_IDS = Object.keys(PHOTO_FILTERS) as PhotoFilterId[];
 
 	const STICKERS: Array<{ id: string; label: string; src: string }> = [
-		{ id: 'luna-logo', label: 'Logo de Luna', src: '/brand-assets/logo.svg' }
+		{ id: 'utsuwa-logo', label: 'Utsuwa logo', src: '/brand-assets/logo.svg' }
 	];
 
 	const activeBackgroundId = $derived(
@@ -113,14 +112,14 @@
 
 			await keepImage(crypto.randomUUID(), blob, {
 				mimeType: 'image/png',
-				note: 'Modo foto',
+				note: 'Photo mode',
 				kind: 'photo'
 			});
 
 			// Both platforms put the file where users expect downloads to land:
 			// the browser via a download, the desktop app by writing directly to
 			// the Downloads folder. The keepsake-store copy is kept either way.
-			const filename = `luna-photo-${Date.now()}.png`;
+			const filename = `utsuwa-photo-${Date.now()}.png`;
 			try {
 				await saveToDownloads(filename, blob);
 			} catch (e) {
@@ -149,20 +148,20 @@
 {/if}
 
 {#if collapsed}
-	<button class="panel-pill glass-chip" onclick={() => (collapsed = false)} aria-label="Abrir controles de foto">
+	<button class="panel-pill" onclick={() => (collapsed = false)} aria-label="Open photo controls">
 		<Icon name="camera" size={16} />
 	</button>
 {:else}
-	<div class="photo-panel glass-panel" role="toolbar" aria-label="Modo foto">
+	<div class="photo-panel" role="toolbar" aria-label="Photo mode">
 		<div class="panel-header">
-			<span class="panel-title">Modo foto</span>
+			<span class="panel-title">Photo Mode</span>
 			{#if savedTick}
-				<span class="saved-tick">Guardada</span>
+				<span class="saved-tick">Saved</span>
 			{/if}
-			<button class="header-btn" onclick={() => (collapsed = true)} aria-label="Contraer panel">
+			<button class="header-btn" onclick={() => (collapsed = true)} aria-label="Collapse panel">
 				<Icon name="chevron-up" size={14} />
 			</button>
-			<button class="header-btn" onclick={() => photomodeStore.exit()} aria-label="Salir del modo foto">
+			<button class="header-btn" onclick={() => photomodeStore.exit()} aria-label="Exit photo mode">
 				<Icon name="x" size={14} />
 			</button>
 		</div>
@@ -206,21 +205,22 @@
 					<button
 						class="chip"
 						class:selected={photomodeStore.selectedExpression === null}
-						onclick={() => photomodeStore.setExpression(null)}						>
-							Ánimo
-						</button>
+						onclick={() => photomodeStore.setExpression(null)}
+					>
+						Mood
+					</button>
 					{#each expressions as name (name)}
 						<button
 							class="chip chip-cap"
 							class:selected={photomodeStore.selectedExpression === name}
 							onclick={() => photomodeStore.setExpression(name)}
 						>
-							{expressionLabel(name)}
+							{name}
 						</button>
 					{/each}
 				</div>
 			{:else if tab === 'scene'}
-				<span class="mini-label">Fondo</span>
+				<span class="mini-label">Background</span>
 				<div class="chip-wrap">
 					{#each BACKGROUNDS as bg (bg.id)}
 						<button
@@ -228,12 +228,12 @@
 							class:selected={activeBackgroundId === bg.id}
 							style:background={bg.swatch}
 							title={bg.label}
-							aria-label={`Fondo: ${bg.label}`}
+							aria-label={`Background: ${bg.label}`}
 							onclick={() => photomodeStore.setBackground(bg.bg)}
 						></button>
 					{/each}
 				</div>
-				<span class="mini-label">Filtro</span>
+				<span class="mini-label">Filter</span>
 				<div class="chip-wrap">
 					{#each FILTER_IDS as id (id)}
 						<button
@@ -245,7 +245,7 @@
 						</button>
 					{/each}
 				</div>
-				<span class="mini-label">Marco</span>
+				<span class="mini-label">Frame</span>
 				<div class="chip-wrap">
 					{#each FRAMES as frame (frame.id)}
 						<button
@@ -258,7 +258,7 @@
 					{/each}
 				</div>
 				<label class="toggle-row">
-					<span>Viñeta</span>
+					<span>Vignette</span>
 					<input
 						class="switch-input"
 						type="checkbox"
@@ -269,8 +269,8 @@
 				</label>
 			{:else if tab === 'camera'}
 				<span class="mini-label">
-					Lente
-					<span class="mini-value">{(photomodeStore.photoFov ?? displayStore.camera.fov).toFixed(0)} °</span>
+					Lens
+					<span class="mini-value">{(photomodeStore.photoFov ?? displayStore.camera.fov).toFixed(0)} deg</span>
 				</span>
 				<input
 					class="slider"
@@ -280,10 +280,10 @@
 					step="1"
 					value={photomodeStore.photoFov ?? displayStore.camera.fov}
 					oninput={(e) => photomodeStore.setPhotoFov(parseFloat(e.currentTarget.value))}
-					aria-label="Campo de visión"
+					aria-label="Field of view"
 				/>
 				<label class="toggle-row">
-					<span>Mirar a la cámara</span>
+					<span>Look at camera</span>
 					<input
 						class="switch-input"
 						type="checkbox"
@@ -293,7 +293,7 @@
 					<span class="switch" aria-hidden="true"><span class="switch-thumb"></span></span>
 				</label>
 				<label class="toggle-row">
-					<span>Cuadrícula de tercios</span>
+					<span>Thirds grid</span>
 					<input
 						class="switch-input"
 						type="checkbox"
@@ -302,7 +302,7 @@
 					/>
 					<span class="switch" aria-hidden="true"><span class="switch-thumb"></span></span>
 				</label>
-				<button class="panel-btn" onclick={resetFraming}>Restablecer encuadre</button>
+				<button class="panel-btn" onclick={resetFraming}>Reset framing</button>
 			{:else if tab === 'sticker'}
 				<div class="chip-wrap">
 					{#each STICKERS as sticker (sticker.id)}
@@ -312,23 +312,23 @@
 					{/each}
 				</div>
 				{#if photomodeStore.stickers.length > 0}
-					<span class="mini-label">En la toma</span>
+					<span class="mini-label">On the shot</span>
 					{#each photomodeStore.stickers as active, i (active.id)}
 						<div class="sticker-row">
 							<img class="sticker-thumb" src={active.src} alt="" />
-							<span class="sticker-name">Pegatina {i + 1}</span>
+							<span class="sticker-name">Sticker {i + 1}</span>
 							<button
 								class="header-btn"
-								aria-label="Quitar pegatina"
+								aria-label="Remove sticker"
 								onclick={() => photomodeStore.removeSticker(active.id)}
 							>
 								<Icon name="x" size={13} />
 							</button>
 						</div>
 					{/each}
-					<span class="hint">Arrastra para mover. Rueda para redimensionar. Doble clic también quita.</span>
+					<span class="hint">Drag to move. Scroll to resize. Double-click also removes.</span>
 				{:else}
-					<span class="hint">Añade una pegatina y arrástrala a cualquier parte de la toma.</span>
+					<span class="hint">Add a sticker, then drag it anywhere on the shot.</span>
 				{/if}
 			{/if}
 		</div>
@@ -338,14 +338,14 @@
 				class="panel-btn timer"
 				class:selected={timerOn}
 				onclick={() => (timerOn = !timerOn)}
-				title="Temporizador de 3 segundos"
+				title="3 second self-timer"
 			>
 				3s
 			</button>
-			<button class="panel-btn" onclick={() => takePhoto(1)} disabled={capturing}>Foto</button>
+			<button class="panel-btn" onclick={() => takePhoto(1)} disabled={capturing}>Snap</button>
 			<button class="panel-btn primary" onclick={() => takePhoto(2)} disabled={capturing}>
 				<Icon name="camera" size={14} />
-				{capturing ? (countdown > 0 ? String(countdown) : '...') : 'Capturar'}
+				{capturing ? (countdown > 0 ? String(countdown) : '...') : 'Capture'}
 			</button>
 		</div>
 	</div>
@@ -405,9 +405,14 @@
 		justify-content: center;
 		width: 44px;
 		height: 44px;
+		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-full);
+		background: color-mix(in srgb, var(--bg-primary), transparent 8%);
+		backdrop-filter: blur(14px);
+		-webkit-backdrop-filter: blur(14px);
 		color: var(--text-secondary);
 		cursor: pointer;
+		box-shadow: var(--shadow-md);
 	}
 
 	.panel-pill:hover {
@@ -422,7 +427,12 @@
 		width: 272px;
 		max-height: calc(100vh - 2rem);
 		padding: 0.75rem;
-		border-radius: var(--radius-lg);
+		background: color-mix(in srgb, var(--bg-primary), transparent 8%);
+		backdrop-filter: blur(14px);
+		-webkit-backdrop-filter: blur(14px);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-xl);
+		box-shadow: var(--shadow-lg);
 		display: flex;
 		flex-direction: column;
 		gap: 0.6rem;
@@ -474,14 +484,14 @@
 
 	.header-btn:hover {
 		color: var(--text-primary);
-		background: var(--chrome-wash);
+		background: var(--bg-tertiary);
 	}
 
 	.tab-strip {
 		display: flex;
 		gap: 0.125rem;
 		padding: 0.125rem;
-		background: var(--chrome-wash);
+		background: var(--bg-tertiary);
 		border-radius: var(--radius-md);
 	}
 
@@ -503,9 +513,9 @@
 	}
 
 	.tab.active {
-		background: var(--chrome-wash-strong);
-		color: var(--chrome-text);
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+		background: var(--bg-primary);
+		color: var(--text-primary);
+		box-shadow: var(--shadow-xs);
 	}
 
 	.tab-content {
@@ -539,8 +549,9 @@
 
 	.chip {
 		padding: 0.28rem 0.6rem;
+		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-full);
-		background: var(--chrome-wash);
+		background: var(--bg-secondary);
 		color: var(--text-secondary);
 		font-size: 0.7rem;
 		font-weight: 500;
@@ -557,15 +568,16 @@
 	}
 
 	.chip.selected {
-		background: var(--chrome-wash-strong);
-		color: var(--chrome-text);
+		background: var(--accent);
+		border-color: var(--accent);
+		color: white;
 	}
 
 	.swatch {
 		width: 26px;
 		height: 26px;
 		border-radius: var(--radius-full);
-		border: 2px solid rgba(255, 255, 255, 0.28);
+		border: 2px solid var(--border-subtle);
 		cursor: pointer;
 		transition: transform 0.15s ease, border-color 0.15s ease;
 	}
@@ -584,7 +596,7 @@
 		width: 100%;
 		height: 4px;
 		border-radius: 2px;
-		background: var(--chrome-wash-strong);
+		background: var(--bg-tertiary);
 		outline: none;
 		cursor: pointer;
 	}
@@ -595,9 +607,7 @@
 		width: 15px;
 		height: 15px;
 		border-radius: 50%;
-		/* White thumb on glass — the knob is light, never ink (matches CameraSettingsPanel) */
-		background: rgba(255, 255, 255, 0.92);
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+		background: var(--accent);
 		border: none;
 		cursor: pointer;
 	}
@@ -606,8 +616,7 @@
 		width: 15px;
 		height: 15px;
 		border-radius: 50%;
-		background: rgba(255, 255, 255, 0.92);
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+		background: var(--accent);
 		border: none;
 		cursor: pointer;
 	}
@@ -635,7 +644,8 @@
 		width: 34px;
 		height: 20px;
 		border-radius: var(--radius-full);
-		background: var(--chrome-wash-strong);
+		background: var(--bg-tertiary);
+		border: 1px solid var(--border-subtle);
 		transition: background 0.18s ease, border-color 0.18s ease;
 		flex-shrink: 0;
 	}
@@ -653,8 +663,8 @@
 	}
 
 	.switch-input:checked + .switch {
-		background: var(--chrome-surface-active);
-		border-color: var(--chrome-border);
+		background: var(--accent);
+		border-color: var(--accent);
 	}
 
 	.switch-input:checked + .switch .switch-thumb {
@@ -663,7 +673,7 @@
 	}
 
 	.switch-input:focus-visible + .switch {
-		outline: 2px solid var(--chrome-text-dim);
+		outline: 2px solid var(--accent);
 		outline-offset: 2px;
 	}
 
@@ -678,8 +688,9 @@
 		align-items: center;
 		gap: 0.5rem;
 		padding: 0.25rem 0.375rem;
+		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-md);
-		background: var(--chrome-wash);
+		background: var(--bg-secondary);
 	}
 
 	.sticker-thumb {
@@ -708,7 +719,7 @@
 		padding: 0.45rem 0.5rem;
 		border: none;
 		border-radius: var(--radius-md);
-		background: var(--chrome-wash);
+		background: var(--bg-tertiary);
 		color: var(--text-secondary);
 		font-size: 0.72rem;
 		font-weight: 500;
@@ -726,19 +737,17 @@
 
 	.panel-btn.selected {
 		background: var(--accent);
-		color: var(--accent-contrast, #fff);
+		color: white;
 	}
 
 	.panel-btn.primary {
-		/* Primary action inside glass = brighter glass, never solid white */
-		background: var(--chrome-wash-strong);
-		color: var(--chrome-text);
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+		background: var(--accent);
+		color: white;
 		flex: 1.4;
 	}
 
 	.panel-btn.primary:hover:not(:disabled) {
-		background: var(--chrome-wash);
+		filter: brightness(1.06);
 	}
 
 	.panel-btn:disabled {

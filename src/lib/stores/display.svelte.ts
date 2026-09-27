@@ -9,7 +9,6 @@ import {
 	DEFAULT_WAIT_TONE_ENABLED,
 	DEFAULT_TEXT_REVEAL_SPEED,
 	DEFAULT_CHAT_BAR_ALIGNMENT,
-	DEFAULT_SCREEN_WAKE_LOCK,
 	REVEAL_SPEED_MS,
 	type CameraSettings,
 	type CameraProfile,
@@ -26,11 +25,10 @@ import {
 } from './display-store-logic';
 import {
 	sanitizeSceneBackground,
-	DEFAULT_SCENE_BACKGROUND,
 	type SceneBackground
 } from '../services/scene-backgrounds.ts';
 
-const STORAGE_KEY = 'luna-display';
+const STORAGE_KEY = 'utsuwa-display';
 
 export type { CameraSettings, CameraProfile, ChatDisplayMode, SidebarPosition, TextRevealSpeed, ChatBarAlignment };
 export {
@@ -42,7 +40,6 @@ export {
 	DEFAULT_WAIT_TONE_ENABLED,
 	DEFAULT_TEXT_REVEAL_SPEED,
 	DEFAULT_CHAT_BAR_ALIGNMENT,
-	DEFAULT_SCREEN_WAKE_LOCK,
 	REVEAL_SPEED_MS
 };
 
@@ -54,7 +51,7 @@ function createDisplayStore() {
 	// One physics intensity for both surfaces: it's a model-feel setting, not framing
 	let physicsIntensity = $state(PHYSICS_INTENSITY_DEFAULT);
 	// Persistent backdrop for the regular scene ('default' = the theme backdrop)
-	let sceneBackground = $state<SceneBackground>({ ...DEFAULT_SCENE_BACKGROUND });
+	let sceneBackground = $state<SceneBackground>({ type: 'default' });
 
 	// Chat display mode and sidebar docking
 	let chatDisplayMode = $state<ChatDisplayMode>(DEFAULT_CHAT_DISPLAY_MODE);
@@ -67,18 +64,11 @@ function createDisplayStore() {
 	let textRevealSpeed = $state<TextRevealSpeed>(DEFAULT_TEXT_REVEAL_SPEED);
 	// Where the floating bar sits along the bottom edge
 	let chatBarAlignment = $state<ChatBarAlignment>(DEFAULT_CHAT_BAR_ALIGNMENT);
-	// Keep the screen awake while the app is visible (utsuwa 0.15.0)
-	let screenWakeLock = $state(DEFAULT_SCREEN_WAKE_LOCK);
 	// Session-only counter; the chat window clears its saved rect when it changes
 	let chatWindowResetToken = $state(0);
 
 	if (browser) {
 		const saved = localStorage.getItem(STORAGE_KEY);
-		// One-time migration: 'right' was the old default for the chat window
-		// anchor — installs carrying it never chose it. They move to 'center'
-		// (the new default) once; a deliberate pick persists untouched.
-		const SIDEBAR_MIGRATION_KEY = 'luna-sidebar-center-migrated';
-		const needsSidebarMigration = saved !== null && !localStorage.getItem(SIDEBAR_MIGRATION_KEY);
 		if (saved) {
 			const parsed = parseDisplaySettings(saved);
 			camera = parsed.camera;
@@ -86,15 +76,11 @@ function createDisplayStore() {
 			physicsIntensity = parsed.physicsIntensity;
 			sceneBackground = parsed.sceneBackground;
 			chatDisplayMode = parsed.chatDisplayMode;
-			sidebarPosition = needsSidebarMigration && parsed.sidebarPosition === 'right' ? 'center' : parsed.sidebarPosition;
-			typingIndicatorDelayMs = parsed.typingIndicatorDelayMs;				waitToneEnabled = parsed.waitToneEnabled;
-				textRevealSpeed = parsed.textRevealSpeed;
-				chatBarAlignment = parsed.chatBarAlignment;
-				screenWakeLock = parsed.screenWakeLock;
-			if (needsSidebarMigration) {
-				localStorage.setItem(SIDEBAR_MIGRATION_KEY, '1');
-				save();
-			}
+			sidebarPosition = parsed.sidebarPosition;
+			typingIndicatorDelayMs = parsed.typingIndicatorDelayMs;
+			waitToneEnabled = parsed.waitToneEnabled;
+			textRevealSpeed = parsed.textRevealSpeed;
+			chatBarAlignment = parsed.chatBarAlignment;
 		}
 	}
 
@@ -112,8 +98,7 @@ function createDisplayStore() {
 					typingIndicatorDelayMs,
 					waitToneEnabled,
 					textRevealSpeed,
-					chatBarAlignment,
-					screenWakeLock
+					chatBarAlignment
 				})
 			);
 		}
@@ -199,11 +184,6 @@ function createDisplayStore() {
 		save();
 	}
 
-	function setScreenWakeLock(enabled: boolean) {
-		screenWakeLock = enabled;
-		save();
-	}
-
 	return {
 		get camera() {
 			return camera;
@@ -235,9 +215,6 @@ function createDisplayStore() {
 		get chatBarAlignment() {
 			return chatBarAlignment;
 		},
-		get screenWakeLock() {
-			return screenWakeLock;
-		},
 		get chatWindowResetToken() {
 			return chatWindowResetToken;
 		},
@@ -250,7 +227,6 @@ function createDisplayStore() {
 		resetChatDisplay,
 		setTypingIndicatorDelayMs,
 		setWaitToneEnabled,
-		setScreenWakeLock,
 		setTextRevealSpeed,
 		setChatBarAlignment,
 		requestChatWindowReset

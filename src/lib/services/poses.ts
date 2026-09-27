@@ -2,9 +2,8 @@ import { type VRMAnimation } from '@pixiv/three-vrm-animation';
 import { loadVrmAnimation } from './vrm-animations.ts';
 
 // Pose catalog for photo mode. Poses ship as .vrma files listed in
-// /static/luna/poses/manifest.json (Luna's motion library), so adding one is a
-// data change: drop the file, add an entry. Caching lives in vrm-animations,
-// shared with the idle loop.
+// /static/poses/manifest.json, so adding one is a data change: drop the file,
+// add an entry. Caching lives in vrm-animations, shared with the idle loop.
 
 export interface PoseEntry {
 	id: string;
@@ -20,7 +19,7 @@ let manifestPromise: Promise<PoseEntry[]> | null = null;
 
 export function loadPoseManifest(): Promise<PoseEntry[]> {
 	if (!manifestPromise) {
-		manifestPromise = fetch('/luna/poses/manifest.json')
+		manifestPromise = fetch('/poses/manifest.json')
 			.then((res) => {
 				if (!res.ok) throw new Error(`Pose manifest: ${res.status}`);
 				return res.json();

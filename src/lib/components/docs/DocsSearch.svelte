@@ -105,9 +105,9 @@
 		close();
 		// Strip .html extension - Pagefind indexes HTML files but SvelteKit uses clean URLs
 		const cleanUrl = url.replace(/\.html$/, '');
-		// Pagefind indexes the built /documentacion/... paths; map them to the
-		// host-aware path so search results land on clean subdomain URLs.
-		const docsPath = cleanUrl.replace(/^\/(?:docs|documentacion)(?=\/|$)/, '');
+		// Pagefind indexes the built /docs/... paths; map them to the host-aware
+		// path so search results land on clean subdomain URLs.
+		const docsPath = cleanUrl.replace(/^\/docs(?=\/|$)/, '');
 		goto(localPath('docs', docsPath));
 	}
 
@@ -145,7 +145,7 @@
 			bind:this={inputEl}
 			{id}
 			type="text"
-			placeholder="Buscar en la documentación…"
+			placeholder="Search docs..."
 			value={query}
 			oninput={handleInput}
 			onfocus={handleFocus}
@@ -161,9 +161,9 @@
 	{#if showDropdown}
 		<div class="search-dropdown">
 			{#if isDev && !pagefind}
-				<div class="search-message">Búsqueda disponible en la build de producción</div>
+				<div class="search-message">Search available in production build</div>
 			{:else if results.length === 0 && query.trim()}
-				<div class="search-message">Sin resultados para "{query}"</div>
+				<div class="search-message">No results for "{query}"</div>
 			{:else}
 				<ul class="search-results">
 					{#each results as result, i}

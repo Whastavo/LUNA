@@ -22,11 +22,6 @@ Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Derivados del Asset Optimizer (regenerables desde assets-src/ + caché)
-/static/generated/
-/static/luna/forms/*.lcx
-/assets-src/**/.DS_Store
-
 # Drizzle
 /drizzle
 
@@ -41,8 +36,3 @@ src/routes/(shots)/
 
 # Internal working notes, never tracked
 docs/superpowers/
-.freebuff/
-
-# Assets legibles del producto (los VRM/VRMA SIN cifrar). Nunca se commitean
-# ni despliegan: en static/luna/ viven sus versiones .lcx cifradas.
-/assets-private/

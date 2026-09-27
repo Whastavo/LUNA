@@ -28,13 +28,13 @@
 	<div class="recording-container">
 		<div class="listening-pill">
 			<span class="listening-dot"></span>
-			<span class="listening-text">Escuchando</span>
+			<span class="listening-text">Listening</span>
 		</div>
 		<button
 			class="floating-mic-btn recording"
 			onclick={handleClick}
-			aria-label="Detener grabación"
-			title="Detener grabación"
+			aria-label="Stop recording"
+			title="Stop recording"
 		>
 			<span class="icon-inner">
 				<Icon name="stop" size={18} />
@@ -45,12 +45,12 @@
 {:else if isTranscribing}
 	<div class="recording-container">
 		<div class="listening-pill transcribing-pill">
-			<span class="listening-text">Transcribiendo…</span>
+			<span class="listening-text">Transcribing...</span>
 		</div>
 		<button
 			class="floating-mic-btn transcribing"
 			disabled
-			aria-label="Transcribiendo"
+			aria-label="Transcribing"
 		>
 			<span class="icon-inner">
 				<Icon name="loader" size={20} />
@@ -60,8 +60,9 @@
 {:else}
 	<button
 		class="floating-mic-btn"
-		onclick={handleClick}			aria-label="Entrada de voz rápida"
-			title="Entrada de voz rápida"
+		onclick={handleClick}
+		aria-label="Quick voice input"
+		title="Quick voice input"
 	>
 		<span class="icon-inner">
 			<Icon name="mic" size={20} />
@@ -96,7 +97,7 @@
 	.floating-mic-btn:focus-visible {
 		outline: none;
 		color: var(--text-primary);
-		box-shadow: 0 0 0 3px color-mix(in srgb, var(--text-primary) 18%, transparent);
+		box-shadow: 0 0 0 3px var(--accent-muted);
 	}
 
 	.floating-mic-btn:active:not(:disabled) {
@@ -105,14 +106,14 @@
 	}
 
 	.floating-mic-btn.recording {
-		background: var(--bg-secondary);
-		color: var(--text-primary);
-		box-shadow: var(--shadow-md);
+		background: var(--accent);
+		color: #fff;
+		box-shadow: var(--shadow-glow);
 	}
 
 	.floating-mic-btn.recording:hover {
-		background: color-mix(in srgb, var(--bg-tertiary), var(--text-primary) 8%);
-		color: var(--text-primary);
+		background: var(--accent-hover);
+		color: #fff;
 	}
 
 	.floating-mic-btn.transcribing {
@@ -141,7 +142,7 @@
 		position: absolute;
 		inset: -4px;
 		border-radius: 50%;
-		border: 2px solid var(--text-secondary);
+		border: 2px solid var(--accent);
 		opacity: 0.4;
 		pointer-events: none;
 		animation: pulse-ring-anim 1.5s ease-out infinite;
@@ -190,7 +191,7 @@
 		width: 6px;
 		height: 6px;
 		border-radius: 50%;
-		background: var(--text-secondary);
+		background: var(--accent);
 		animation: dot-blink 1.2s ease-in-out infinite;
 	}
 

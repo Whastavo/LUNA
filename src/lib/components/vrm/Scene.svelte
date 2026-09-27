@@ -1,8 +1,8 @@
 <script lang="ts">
 	// Minimal viewer scene: one white directional light, flat backdrop,
 	// grid + axes helpers, free orbit controls. No post-processing.
-	import { applyChatFraming, type ChatFrame } from './chat-framing';
 	import { T, useThrelte, useTask } from '@threlte/core';
+	import { useXR } from '@threlte/xr';
 	import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 	import {
 		ShaderMaterial,
@@ -15,11 +15,11 @@
 		Group
 	} from 'three';
 	import type { VRM } from '@pixiv/three-vrm';
+	import ArPlacement from './ArPlacement.svelte';
 	import VrmModel from './VrmModel.svelte';
 	import OverlayRaycastHandler from '$lib/components/overlay/OverlayRaycastHandler.svelte';
 	import { vrmStore } from '$lib/stores/vrm.svelte';
 	import { displayStore } from '$lib/stores/display.svelte';
-	import { CAMERA_LIMITS } from '$lib/stores/display-types';
 	import { photomodeStore, type CaptureOptions } from '$lib/stores/photomode.svelte';
 	import { bucketTouchZone } from '$lib/services/photo-touch';
 	import {
@@ -62,15 +62,14 @@
 		centered?: boolean;
 		locked?: boolean;
 		overlay?: boolean;
-		/** Chat dock framing (0.15.0): re-frames the character into the uncovered area. */
-		framing?: ChatFrame;
 	}
 
-	let { centered = false, locked = false, overlay = false, framing }: Props = $props();
+	let { centered = false, locked = false, overlay = false }: Props = $props();
 
 	const modelUrl = $derived(vrmStore.modelUrl);
 
-	const { camera, renderer, scene, size } = useThrelte();
+	const { camera, renderer, scene } = useThrelte();
+	const { isPresenting } = useXR();
 	let controls: OrbitControls | null = null;
 	let modelRoot = $state<Group | undefined>();
 
@@ -159,9 +158,7 @@
 		function onPointerDown(e: PointerEvent) {
 			// The overlay window has its own pointer/click-through handling, and
 			// XR sessions own their input
-			if (overlay || !renderer || !camera.current) return;
-			// Grabbing hand while dragging (grab is set when controls attach)
-			if (!locked) renderer.domElement.style.cursor = 'grabbing';
+			if (overlay || renderer?.xr.isPresenting || !renderer || !camera.current) return;
 			const vrm = vrmStore.vrm;
 			if (!vrm) return;
 			const rect = renderer.domElement.getBoundingClientRect();
@@ -184,7 +181,6 @@
 		}
 
 		function onPointerUp(e: PointerEvent) {
-			if (!locked && renderer) renderer.domElement.style.cursor = 'grab';
 			if (!tapCandidate) return;
 			const moved = Math.hypot(e.clientX - tapCandidate.x, e.clientY - tapCandidate.y);
 			const elapsed = performance.now() - tapCandidate.at;
@@ -214,6 +210,21 @@
 			canvas?.removeEventListener('pointerdown', onPointerDown);
 			canvas?.removeEventListener('pointerup', onPointerUp);
 		};
+	});
+
+	// Photo mode is a plain-screen feature: entering it during an AR/XR
+	// session ends the session first, so the shot always composes against the
+	// regular scene and never AR passthrough. The existing isPresenting effect
+	// then re-enables the orbit controls and re-applies the framing.
+	$effect(() => {
+		if (photomodeStore.active && $isPresenting) {
+			renderer?.xr
+				.getSession()
+				?.end()
+				.catch(() => {
+					// Session may already be winding down; nothing to do
+				});
+		}
 	});
 
 	// Any custom backdrop (photo override, or the persistent scene background)
@@ -270,16 +281,6 @@
 	// Overlay windows frame very differently, so they keep their own profile
 	const camSettings = $derived(overlay ? displayStore.overlayCamera : displayStore.camera);
 
-	// Chat dock framing (0.15.0): the scene fills the viewport while the
-	// character stays framed beside/above the chat panel — the same camera
-	// view renders beyond that area, behind the translucent panel. Overlay
-	// and photo mode own their framing, so they skip it.
-	$effect(() => {
-		const cam = camera.current;
-		if (!(cam instanceof PerspectiveCamera)) return;
-		applyChatFraming(cam, $size, overlay || photomodeStore.active ? undefined : framing);
-	});
-
 	function computeFit(vrm: VRM): { center: number; halfSpan: number } {
 		vrm.scene.updateWorldMatrix(true, true);
 		const box = new Box3().setFromObject(vrm.scene);
@@ -302,15 +303,9 @@
 		return { center: (top + thighY) / 2, halfSpan: (top - thighY) / 2 };
 	}
 
-	// The BASE fitted camera distance (zoom 1×, before the settings slider
-	// scales it) from the last applyCamera() call. The single source of truth
-	// for the zoom clamp: computed ONCE per reframe here, read every frame by
-	// the useTask below — no parallel math anywhere.
-	let baseFittedDistance = 2.2;
-
 	function applyCamera() {
 		// The XR session owns the camera while presenting
-		if (!renderer) return;
+		if (renderer?.xr.isPresenting) return;
 		const cam = camera.current;
 		if (!(cam instanceof PerspectiveCamera)) return;
 
@@ -319,39 +314,27 @@
 		cam.updateProjectionMatrix();
 
 		const vrm = vrmStore.vrm;
-		// Sin modelo: fit de respaldo SANO (¡NUNCA NaN! applyCamera corre al
-		// montar, antes de la carga — un NaN aquí envenena position/target de
-		// la cámara y deja el canvas vacío). El primer fit real llega al
-		// cargar el modelo y siempre se aplica sobre este.
 		const fit = vrm ? computeFit(vrm) : { center: 1.0, halfSpan: 0.55 };
-
 		const distance = fit.halfSpan / Math.tan((s.fov * Math.PI) / 360) / s.zoom;
 		const targetY = fit.center + s.height;
-		baseFittedDistance = distance * s.zoom; // zoom-1× equivalent (absolute scale)
 
-		// Horizontal pan slides the camera AND the look-at target together, so
-		// the character stays framed while the view shifts sideways (0.15.0).
-		const panX = s.panX ?? 0;
-		cam.position.set(panX, targetY, distance);
+		cam.position.set(0, targetY, distance);
 		if (controls) {
-			controls.target.set(panX, targetY, 0);
+			controls.target.set(0, targetY, 0);
 			controls.update();
 		} else {
-			cam.lookAt(panX, targetY, 0);
+			cam.lookAt(0, targetY, 0);
 		}
 	}
 
 	// Re-frame when the model or the camera settings change. In photo mode the
 	// user owns the framing, so FOV changes only adjust the lens in place
-	// instead of snapping the camera back to the fitted position. El hueco de
-	// descarga (vrm=null entre formas) TAMPOCO reencuadra: metía el fit por
-	// defecto — el salto visible de cámara al seleccionar.
+	// instead of snapping the camera back to the fitted position.
 	$effect(() => {
-		const vrm = vrmStore.vrm;
+		void vrmStore.vrm;
 		void camSettings.fov;
 		void camSettings.zoom;
 		void camSettings.height;
-		void camSettings.panX;
 		if (photomodeStore.active) {
 			const cam = camera.current;
 			if (cam instanceof PerspectiveCamera) {
@@ -360,7 +343,6 @@
 			}
 			return;
 		}
-		if (!vrm) return;
 		applyCamera();
 	});
 
@@ -384,14 +366,14 @@
 			controls.minPolarAngle = 0.05;
 			controls.maxPolarAngle = Math.PI * 0.6;
 			return () => {
-					if (!controls) return;
-					controls.enableDamping = false;
-					controls.minDistance = 0;
-					controls.maxDistance = Infinity;
-					controls.minPolarAngle = 0;
-					controls.maxPolarAngle = Math.PI;
-					applyCamera();
-				};
+				if (!controls) return;
+				controls.enableDamping = false;
+				controls.minDistance = 0;
+				controls.maxDistance = Infinity;
+				controls.minPolarAngle = 0;
+				controls.maxPolarAngle = Math.PI;
+				applyCamera();
+			};
 		}
 	});
 
@@ -402,67 +384,24 @@
 		if (camera.current && renderer) {
 			controls = new OrbitControls(camera.current, renderer.domElement);
 			controls.screenSpacePanning = true;
-			// Drag-to-rotate gets the landing's grabby hands cursor.
-			renderer.domElement.style.cursor = 'grab';
 			applyCamera();
 
 			return () => {
 				controls?.dispose();
-				renderer.domElement.style.cursor = '';
 			};
 		}
 	});
 
-	// Orbit controls enabled always (no XR sessions anymore): re-apply the
-	// fitted framing whenever they re-attach
+	// Orbit controls fight the XR camera; disable them while presenting and
+	// re-apply the fitted framing when the session ends
 	$effect(() => {
 		if (!controls) return;
-		controls.enabled = true;
-		applyCamera();
+		controls.enabled = !$isPresenting;
+		if (!$isPresenting) applyCamera();
 	});
 
 	useTask(() => {
-		if (!controls?.enabled) return;
-		// Zoom clamp EVERY frame: OrbitControls' damped wheel zoom keeps moving
-		// the camera for several frames after the last wheel event, so limits
-		// armed only at reframe time get ridden through by bursts (the
-		// giant-shoulder bug). Re-arming each frame from the stored base
-		// distance lets damping glide TO the limit and stop exactly there.
-		// One rule, the user's rule: the wheel shares the settings slider's
-		// ABSOLUTE scale — base fitted framing (1×) × CAMERA_LIMITS (0.5×–2.5×).
-		// Slider at 2× + wheel at 1.2× = 2.4× total, inside the same bracket.
-		// Photo mode's wider profile sets its own clamps and is left alone.
-		if (!photomodeStore.active) {
-			controls.minDistance = baseFittedDistance / CAMERA_LIMITS.zoom.max;
-			controls.maxDistance = baseFittedDistance / CAMERA_LIMITS.zoom.min;
-		}
-		controls.update();
-	});
-
-	// Gaze follow — the landing's recipe, verbatim: body-YAW on the container
-	// group, lerped 0.08/frame. The comment there says it best: "at scene
-	// level so it never fights the VRMA bone animation" — that is exactly
-	// why the head-bone version read robotic here (the idle mixer overwrites
-	// head rotation every frame, so a bone slerp fights it and stutters).
-	// Scene-level yaw composes cleanly with everything.
-	const gazeLook = { x: 0 };
-	const gazeYaw = { current: 0 };
-	$effect(() => {
-		if (overlay) return;
-		const onMove = (e: PointerEvent) => {
-			gazeLook.x = (e.clientX / window.innerWidth) * 2 - 1;
-		};
-		window.addEventListener('pointermove', onMove, { passive: true });
-		return () => window.removeEventListener('pointermove', onMove);
-	});
-	useTask(() => {
-		if (!modelRoot || overlay) return;
-		// The model root sits inside version rotation handled in VrmModel
-		// (v0 faces 180°); this group is ABOVE the model, so its yaw is
-		// version-agnostic: swing toward the pointer, clamped to a glance.
-		const target = gazeLook.x * 0.22;
-		gazeYaw.current += (target - gazeYaw.current) * 0.08;
-		modelRoot.rotation.y = gazeYaw.current;
+		if (controls?.enabled) controls.update();
 	});
 </script>
 
@@ -474,12 +413,12 @@
 	<OverlayRaycastHandler />
 {/if}
 
-<!-- Backdrop + floor (hidden in overlay mode and photo
+<!-- Backdrop + floor (hidden in overlay mode, AR passthrough, and photo
      backgrounds, which render through a transparent canvas + composite) -->
-{#if !overlay && !photoTransparent}
+{#if !overlay && !$isPresenting && !photoTransparent}
 	<T.Color attach="background" args={[backgroundColor]} />
 {/if}
-{#if !overlay && !(photomodeStore.active && photomodeStore.background.type !== 'room')}
+{#if !overlay && !$isPresenting && !(photomodeStore.active && photomodeStore.background.type !== 'room')}
 	<!-- The floor disc stays over the persistent scene background so she keeps
 	     her grounding in daily use; photo overrides hide it for clean shots -->
 	<T.Mesh rotation.x={-Math.PI / 2} position.y={0}>
@@ -492,9 +431,13 @@
      intensity 1 the classic three-vrm viewers were tuned against. -->
 <T.DirectionalLight intensity={Math.PI} position={[1, 1, 1]} />
 
-<!-- VRM Model -->
+<!-- VRM Model, wrapped so AR placement can move/scale it without remounting -->
 <T.Group bind:ref={modelRoot}>
 	{#if modelUrl}
 		<VrmModel url={modelUrl} />
 	{/if}
 </T.Group>
+
+{#if $isPresenting && modelRoot}
+	<ArPlacement root={modelRoot} />
+{/if}

@@ -51,15 +51,14 @@ test('returns defaults for JSON array', () => {
 
 test('parses valid settings object', () => {
 	const result = parseDisplaySettings({
-		camera: { fov: 45, zoom: 1.5, height: 0.1, panX: 0.3 },
+		camera: { fov: 45, zoom: 1.5, height: 0.1 },
 		overlayCamera: { fov: 30, zoom: 0.8, height: -0.1 },
 		physicsIntensity: 0.75,
 		chatDisplayMode: 'sidebar',
 		sidebarPosition: 'left'
 	});
-	assert.deepEqual(result.camera, { fov: 45, zoom: 1.5, height: 0.1, panX: 0.3 });
-	// Missing panX falls back to the default (settings saved before the pan).
-	assert.deepEqual(result.overlayCamera, { fov: 30, zoom: 0.8, height: -0.1, panX: 0 });
+	assert.deepEqual(result.camera, { fov: 45, zoom: 1.5, height: 0.1 });
+	assert.deepEqual(result.overlayCamera, { fov: 30, zoom: 0.8, height: -0.1 });
 	assert.equal(result.physicsIntensity, 0.75);
 	assert.equal(result.chatDisplayMode, 'sidebar');
 	assert.equal(result.sidebarPosition, 'left');
@@ -114,9 +113,9 @@ test('migrates legacy cameraDistance setting', () => {
 
 test('uses main camera for overlay camera when overlay camera is missing', () => {
 	const result = parseDisplaySettings({
-		camera: { fov: 45, zoom: 1.5, height: 0.1, panX: 0.2 }
+		camera: { fov: 45, zoom: 1.5, height: 0.1 }
 	});
-	assert.deepEqual(result.overlayCamera, { fov: 45, zoom: 1.5, height: 0.1, panX: 0.2 });
+	assert.deepEqual(result.overlayCamera, { fov: 45, zoom: 1.5, height: 0.1 });
 });
 
 test('returns defaults for undefined input', () => {
@@ -134,8 +133,7 @@ test('sanitizeCamera isolates and clamps camera values independently', () => {
 	assert.deepEqual(sanitized, {
 		fov: CAMERA_LIMITS.fov.max,
 		zoom: CAMERA_LIMITS.zoom.min,
-		height: CAMERA_LIMITS.height.max,
-		panX: CAMERA_DEFAULTS.panX
+		height: CAMERA_LIMITS.height.max
 	});
 	// Original object must not be mutated
 	assert.deepEqual(raw, { fov: 999, zoom: -10, height: 2 });
@@ -146,14 +144,6 @@ test('sanitizeCamera fills missing values from defaults', () => {
 	assert.equal(sanitized.fov, CAMERA_DEFAULTS.fov);
 	assert.equal(sanitized.zoom, 2.0);
 	assert.equal(sanitized.height, CAMERA_DEFAULTS.height);
-	assert.equal(sanitized.panX, CAMERA_DEFAULTS.panX);
-});
-
-test('sanitizeCamera clamps panX to its limits (utsuwa 0.15.0)', () => {
-	const clamped = sanitizeCamera({ panX: 99 });
-	assert.equal(clamped.panX, CAMERA_LIMITS.panX.max);
-	const negative = sanitizeCamera({ panX: -99 });
-	assert.equal(negative.panX, CAMERA_LIMITS.panX.min);
 });
 
 test('defaults waitToneEnabled to false when missing', () => {

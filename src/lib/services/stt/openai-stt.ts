@@ -74,7 +74,7 @@ class OpenAiSttService {
 	async startListening(callbacks: SpeechRecognitionCallbacks): Promise<boolean> {
 		if (this.listening) return true;
 		if (!this.config) {
-			callbacks.onError('El texto-a-voz no está configurado. Configúralo en Ajustes > Persona.');
+			callbacks.onError('Speech-to-text is not configured. Set it up in Settings > Persona.');
 			return false;
 		}
 
@@ -84,15 +84,16 @@ class OpenAiSttService {
 		try {
 			this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 		} catch (err) {
-			if (err instanceof DOMException) {					const messages: Record<string, string> = {
-						NotAllowedError: 'Acceso al micrófono denegado. Revisa los permisos del sistema.',
-						NotFoundError: 'No se encontró micrófono. Conecta un micrófono.',
-						NotReadableError: 'El micrófono está ocupado o lo usa otra aplicación.',
-						OverconstrainedError: 'El micrófono no cumple los requisitos.'
-					};
-					callbacks.onError(messages[err.name] || `Error de micrófono: ${err.message}`);
-				} else {
-					callbacks.onError('No se pudo acceder al micrófono');
+			if (err instanceof DOMException) {
+				const messages: Record<string, string> = {
+					NotAllowedError: 'Microphone access denied. Check system permissions.',
+					NotFoundError: 'No microphone found. Please connect a microphone.',
+					NotReadableError: 'Microphone is busy or in use by another app.',
+					OverconstrainedError: 'Microphone does not meet requirements.'
+				};
+				callbacks.onError(messages[err.name] || `Microphone error: ${err.message}`);
+			} else {
+				callbacks.onError('Failed to access microphone');
 			}
 			return false;
 		}
@@ -101,7 +102,7 @@ class OpenAiSttService {
 		this.stream.getTracks().forEach((track) => {
 			track.onended = () => {
 				if (this.listening) {
-					this.callbacks?.onError('Micrófono desconectado');
+					this.callbacks?.onError('Microphone disconnected');
 					this.cleanup();
 					this.listening = false;
 					this.callbacks?.onEnd();
@@ -123,7 +124,8 @@ class OpenAiSttService {
 			this.mediaRecorder = mimeType
 				? new MediaRecorder(this.stream, { mimeType })
 				: new MediaRecorder(this.stream);
-		} catch {				callbacks.onError('La grabación de audio no es compatible con esta plataforma');
+		} catch {
+			callbacks.onError('Audio recording not supported on this platform');
 			this.releaseStream();
 			return false;
 		}
@@ -245,10 +247,11 @@ class OpenAiSttService {
 				this.callbacks?.onEnd();
 				return;
 			}
-			// A thrown fetch means the server was unreachable/blocked (vs. an HTTP			// error, handled above), so prefer the connection hint when we have one.
+			// A thrown fetch means the server was unreachable/blocked (vs. an HTTP
+			// error, handled above), so prefer the connection hint when we have one.
 			const msg =
-					this.config.connectionHint ||
-					(err instanceof Error ? err.message : `No se pudo conectar con ${this.config.label}`);
+				this.config.connectionHint ||
+				(err instanceof Error ? err.message : `Failed to reach ${this.config.label}`);
 			this.callbacks?.onError(msg);
 		} finally {
 			this.abortController = null;

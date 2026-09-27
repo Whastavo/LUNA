@@ -12,21 +12,10 @@ import {
 	sanitizeProviderError
 } from '$lib/services/providers/provider-errors';
 import { type MessageContent, toOpenAIContent, toAnthropicContent } from './content';
-import { emitToolCalls, type ToolCallBuffer } from './tool-call-buffers';
-
-interface OpenAiToolCallShape {
-	id: string;
-	type: 'function';
-	function: { name: string; arguments: string };
-}
 
 interface ChatMessage {
-	role: 'system' | 'user' | 'assistant' | 'tool';
+	role: 'system' | 'user' | 'assistant';
 	content: MessageContent;
-	/** Assistant tool calls (MCP loop feedback rounds). */
-	tool_calls?: OpenAiToolCallShape[];
-	/** Tool-role results reference the call they answer. */
-	tool_call_id?: string;
 }
 
 interface ChatOptions {
@@ -58,7 +47,7 @@ export async function streamChatDirect(
 	onChunk: (text: string) => void,
 	onError: (error: string) => void,
 	onDone: () => void,
-	onToolCall?: (name: string, args: Record<string, unknown>, id?: string) => void
+	onToolCall?: (name: string, args: Record<string, unknown>) => void
 ): Promise<void> {
 	const { messages, provider, model, apiKey, baseURL, systemPrompt } = options;
 
@@ -115,9 +104,7 @@ export async function streamChatDirect(
 					model,
 					messages: messagesWithSystem.map((m) => ({
 						role: m.role,
-						content: toOpenAIContent(m.content),
-						...(m.role === 'assistant' && m.tool_calls?.length ? { tool_calls: m.tool_calls } : {}),
-						...(m.role === 'tool' && m.tool_call_id ? { tool_call_id: m.tool_call_id } : {})
+						content: toOpenAIContent(m.content)
 					})),
 					stream: true,
 					...(options.temperature !== undefined && { temperature: options.temperature }),
@@ -170,10 +157,8 @@ export async function streamChatDirect(
 
 		// Collect tool-call deltas across chunks (OpenAI-compatible only).
 		// Each delta contains one index/fragment; we aggregate by index and
-		// emit every call once the stream ends (see emitToolCalls: an empty
-		// argument string is a valid `{}`, and the provider call id rides
-		// along for the OpenAI tool-role feedback messages).
-		const toolCallBuffers: Map<number, ToolCallBuffer> = new Map();
+		// fire the callback when the function name + arguments are complete.
+		const toolCallBuffers: Map<number, { name: string; args: string }> = new Map();
 
 		while (true) {
 			const { done, value } = await reader.read();
@@ -192,10 +177,18 @@ export async function streamChatDirect(
 		buffer += decoder.decode();
 		processStreamLine(buffer, onChunk, onToolCall, toolCallBuffers);
 
-		// Fire onToolCall for each collected tool call after the stream ends.
-		// emitToolCalls keeps no-arg calls (a valid `{}`) and skips only
-		// malformed argument JSON.
-		emitToolCalls(toolCallBuffers, onToolCall);
+		// Fire onToolCall for each collected tool call after the stream ends
+		if (onToolCall && toolCallBuffers.size > 0) {
+			for (const [, buf] of toolCallBuffers) {
+				if (buf.name && buf.args) {
+					try {
+						onToolCall(buf.name, JSON.parse(buf.args));
+					} catch {
+						// Skip malformed tool call arguments
+					}
+				}
+			}
+		}
 
 		onDone();
 	} catch (err) {
@@ -210,8 +203,8 @@ export async function streamChatDirect(
 function processStreamLine(
 	line: string,
 	onChunk: (text: string) => void,
-	onToolCall?: (name: string, args: Record<string, unknown>, id?: string) => void,
-	toolCallBuffers?: Map<number, ToolCallBuffer>
+	onToolCall?: (name: string, args: Record<string, unknown>) => void,
+	toolCallBuffers?: Map<number, { name: string; args: string }>
 ): void {
 	const trimmed = line.trim();
 	if (!trimmed || trimmed === 'data: [DONE]') return;
@@ -228,14 +221,13 @@ function processStreamLine(
 		if (json.choices?.[0]?.delta?.tool_calls && onToolCall && toolCallBuffers) {
 			for (const tc of json.choices[0].delta.tool_calls) {
 				const index = tc.index ?? 0;
-			if (!toolCallBuffers.has(index)) {
-				toolCallBuffers.set(index, { id: '', name: '', args: '' });
-			}
+				if (!toolCallBuffers.has(index)) {
+					toolCallBuffers.set(index, { name: '', args: '' });
+				}
 				const buf = toolCallBuffers.get(index)!;
-				if (tc.id) buf.id = tc.id;
 				if (tc.function?.name) buf.name += tc.function.name;
 				if (tc.function?.arguments) buf.args += tc.function.arguments;
-				// Calls are emitted once the stream ends (see emitToolCalls)
+				// Fire when the stop reason signals completion (stream end)
 			}
 		}
 		// Anthropic format

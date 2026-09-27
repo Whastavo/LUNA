@@ -1,8 +1,0 @@
-[
-	{ "id": "luna-present", "name": "Presentar", "file": "/luna/motion/luna-present.vrma", "hold": 0.5 },
-	{ "id": "luna-wave", "name": "Saludar", "file": "/luna/motion/luna-wave.vrma", "hold": 0.55 },
-	{ "id": "luna-peace", "name": "Paz", "file": "/luna/motion/luna-peace.vrma", "hold": 0.5 },
-	{ "id": "luna-point", "name": "Señalar", "file": "/luna/motion/luna-point.vrma", "hold": 0.5 },
-	{ "id": "luna-rest", "name": "Reposo", "file": "/luna/motion/luna-breathe.vrma", "hold": 0.3 },
-	{ "id": "luna-sway", "name": "Balanceo", "file": "/luna/motion/luna-flow.vrma", "hold": 0.6 }
-]

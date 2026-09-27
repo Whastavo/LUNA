@@ -47,19 +47,19 @@
 			{#key status}
 				<div class="banner-body-inner" in:fadeFast={{ duration: 200 }}>
 					{#if status === 'available'}
-						<span class="banner-title">Actualización disponible</span>
-						<span class="banner-sub">Luna {updaterStore.availableVersion} está lista para instalar</span>
+						<span class="banner-title">Update available</span>
+						<span class="banner-sub">Utsuwa {updaterStore.availableVersion} is ready to install</span>
 					{:else if status === 'downloading'}
-						<span class="banner-title">Descargando actualización…</span>
+						<span class="banner-title">Downloading update…</span>
 						<div class="progress-track">
 							<div class="progress-fill" style="width: {updaterStore.progress}%"></div>
 						</div>
 					{:else if status === 'ready'}
-						<span class="banner-title">Actualización instalada</span>
-						<span class="banner-sub">Reiniciando…</span>
+						<span class="banner-title">Update installed</span>
+						<span class="banner-sub">Restarting…</span>
 					{:else if status === 'error'}
-						<span class="banner-title">Error al actualizar</span>
-						<span class="banner-sub">{updaterStore.errorMessage ?? 'Inténtalo de nuevo más tarde.'}</span>
+						<span class="banner-title">Update failed</span>
+						<span class="banner-sub">{updaterStore.errorMessage ?? 'Please try again later.'}</span>
 					{/if}
 				</div>
 			{/key}
@@ -67,16 +67,16 @@
 
 		{#if status === 'available'}
 			<div class="banner-actions">
-				<button class="btn btn-ghost" onclick={() => updaterStore.dismiss()}>Más tarde</button>
+				<button class="btn btn-ghost" onclick={() => updaterStore.dismiss()}>Later</button>
 				<button class="btn btn-primary" onclick={() => updaterStore.install()}>
-					<span>Instalar y reiniciar</span>
+					<span>Install &amp; Restart</span>
 				</button>
 			</div>
 		{:else if status === 'error'}
 			<div class="banner-actions">
-				<button class="btn btn-ghost" onclick={() => updaterStore.dismiss()}>Descartar</button>
+				<button class="btn btn-ghost" onclick={() => updaterStore.dismiss()}>Dismiss</button>
 				<button class="btn btn-primary" onclick={() => updaterStore.install()}>
-					<span>Reintentar</span>
+					<span>Retry</span>
 				</button>
 			</div>
 		{/if}

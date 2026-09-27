@@ -37,11 +37,11 @@
 			// The browser shows its own download UI; the desktop app writes silently,
 			// so tell the user where the file went.
 			if (savedToDownloads) {
-				exportMessage = { kind: 'success', text: `Guardado en tu carpeta de Descargas como ${filename}` };
+				exportMessage = { kind: 'success', text: `Saved to your Downloads folder as ${filename}` };
 			}
 		} catch (e) {
 			console.error('Export failed:', e);
-			exportMessage = { kind: 'error', text: `Error al exportar: ${e instanceof Error ? e.message : String(e)}` };
+			exportMessage = { kind: 'error', text: `Export failed: ${e instanceof Error ? e.message : String(e)}` };
 		} finally {
 			isExporting = false;
 		}
@@ -64,13 +64,15 @@
 				const json = JSON.parse(e.target?.result as string);
 				const validated = validateSaveFile(json);
 
-				if (!validated) {								importError = 'Formato de archivo de guardado no válido';
+				if (!validated) {
+					importError = 'Invalid save file format';
 					importFile = null;
 					return;
 				}
 
 				importPreview = getSaveFilePreview(validated);
-			} catch {								importError = 'No se pudo analizar el archivo JSON';
+			} catch {
+				importError = 'Failed to parse JSON file';
 				importFile = null;
 			}
 		};
@@ -90,13 +92,13 @@
 					try {
 						const json = JSON.parse(e.target?.result as string);
 						const validated = validateSaveFile(json);
-						if (!validated) reject(new Error('Archivo de guardado no válido'));
+						if (!validated) reject(new Error('Invalid save file'));
 						else resolve(validated);
 					} catch {
-						reject(new Error('No se pudo analizar el archivo'));
+						reject(new Error('Failed to parse file'));
 					}
 				};
-				reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
+				reader.onerror = () => reject(new Error('Failed to read file'));
 				reader.readAsText(importFile!);
 			});
 
@@ -110,7 +112,7 @@
 				window.location.reload();
 			}, 1500);
 		} catch (e) {
-			importError = e instanceof Error ? e.message : 'Error al importar';
+			importError = e instanceof Error ? e.message : 'Import failed';
 		} finally {
 			isImporting = false;
 		}
@@ -146,18 +148,21 @@
 	}
 
 	function formatDate(date: Date): string {
-		const d = new Date(date);
-		const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-		const pad = (n: number) => String(n).padStart(2, '0');
-		return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}, ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())} UTC`;
+		return date.toLocaleDateString(undefined, {
+			year: 'numeric',
+			month: 'short',
+			day: 'numeric',
+			hour: '2-digit',
+			minute: '2-digit'
+		});
 	}
 </script>
 
 <div class="data-management">
-	<h2 class="section-title">Gestión de datos</h2>
+	<h2 class="section-title">Data Management</h2>
 	<p class="section-description">
-		Exporta tus datos como archivo de guardado o importa un guardado anterior. Todos los datos se
-		guardan localmente en tu navegador.
+		Export your data as a save file or import a previous save. All data is stored locally in your
+		browser.
 	</p>
 
 	<div class="actions">
@@ -165,19 +170,20 @@
 		<div class="action-card">
 			<div class="action-header">
 				<Icon name="download" size={20} />
-				<h3>Exportar guardado</h3>
+				<h3>Export Save</h3>
 			</div>
 			<p class="action-description">
-				Descarga todos tus datos como archivo JSON. Incluye estados del personaje, recuerdos,
-				historial de conversación e hitos.
+				Download all your data as a JSON file. Includes character states, memories, conversation
+				history, and milestones.
 			</p>
 			<Button onclick={handleExport} disabled={isExporting}>
-				{#snippet children()}						{#if isExporting}
-							Exportando…
-						{:else}
-							<Icon name="download" size={16} />
-							Descargar archivo de guardado
-						{/if}
+				{#snippet children()}
+					{#if isExporting}
+						Exporting...
+					{:else}
+						<Icon name="download" size={16} />
+						Download Save File
+					{/if}
 				{/snippet}
 			</Button>
 			{#if exportMessage}
@@ -195,9 +201,9 @@
 		<div class="action-card">
 			<div class="action-header">
 				<Icon name="upload" size={20} />
-				<h3>Importar guardado</h3>
+				<h3>Import Save</h3>
 			</div>
-			<p class="action-description">Restaura datos de un archivo de guardado exportado anteriormente.</p>
+			<p class="action-description">Restore data from a previously exported save file.</p>
 
 			<input
 				type="file"
@@ -215,12 +221,13 @@
 			{/if}
 
 			{#if importSuccess}
-				<div class="success-message" transition:pop={{ duration: 200, y: 6 }}>						<Icon name="check" size={16} />
-						Se importaron {importSuccess.imported} registros
-						{#if importSuccess.skipped > 0}
-							(omitidos {importSuccess.skipped})
-						{/if}
-						- Recargando…
+				<div class="success-message" transition:pop={{ duration: 200, y: 6 }}>
+					<Icon name="check" size={16} />
+					Imported {importSuccess.imported} records
+					{#if importSuccess.skipped > 0}
+						(skipped {importSuccess.skipped})
+					{/if}
+					- Reloading...
 				</div>
 			{/if}
 
@@ -228,21 +235,21 @@
 				<div class="import-preview" transition:slideOpen>
 					<div class="preview-header">
 						<Icon name="file" size={16} />
-						<span>Vista previa del archivo</span>
+						<span>Save File Preview</span>
 					</div>
 					<div class="preview-details">
 						<div class="preview-row">
-							<span class="label">Exportado:</span>
+							<span class="label">Exported:</span>
 							<span class="value">{formatDate(importPreview.exportedAt)}</span>
 						</div>
 						<div class="preview-row">
-							<span class="label">Personaje:</span>
-							<span class="value">{importPreview.characterName || 'Desconocido'}</span>
+							<span class="label">Character:</span>
+							<span class="value">{importPreview.characterName || 'Unknown'}</span>
 						</div>
 						<div class="preview-row">
-							<span class="label">Registros:</span>
+							<span class="label">Records:</span>
 							<span class="value">
-								{importPreview.counts.facts} datos, {importPreview.counts.conversationTurns} mensajes
+								{importPreview.counts.facts} facts, {importPreview.counts.conversationTurns} messages
 							</span>
 						</div>
 					</div>
@@ -250,27 +257,27 @@
 					<div class="import-mode">
 						<label class="mode-option">
 							<input type="radio" bind:group={importMode} value="replace" />
-							<span class="mode-label">Reemplazar</span>
-							<span class="mode-description">Borra los datos existentes e importa</span>
+							<span class="mode-label">Replace</span>
+							<span class="mode-description">Clear existing data and import</span>
 						</label>
 						<label class="mode-option">
 							<input type="radio" bind:group={importMode} value="merge" />
-							<span class="mode-label">Combinar</span>
-							<span class="mode-description">Añade a los datos existentes (omite duplicados)</span>
+							<span class="mode-label">Merge</span>
+							<span class="mode-description">Add to existing data (skip duplicates)</span>
 						</label>
 					</div>
 
 					<div class="import-actions">
 						<Button variant="secondary" onclick={cancelImport}>
-							{#snippet children()}Cancelar{/snippet}
+							{#snippet children()}Cancel{/snippet}
 						</Button>
 						<Button onclick={handleImport} disabled={isImporting}>
 							{#snippet children()}
 								{#if isImporting}
-									Importando…
+									Importing...
 								{:else}
 									<Icon name="upload" size={16} />
-									Importar
+									Import
 								{/if}
 							{/snippet}
 						</Button>
@@ -283,27 +290,27 @@
 		<div class="action-card danger">
 			<div class="action-header">
 				<Icon name="trash" size={20} />
-				<h3>Borrar todos los datos</h3>
+				<h3>Clear All Data</h3>
 			</div>
 			<p class="action-description">
-				Elimina permanentemente todos los datos guardados. Esto no se puede deshacer. Considera exportar primero.
+				Permanently delete all saved data. This cannot be undone. Consider exporting first.
 			</p>
 
 			{#if showClearConfirm}
 				<div class="confirm-message" transition:pop={{ duration: 200, y: 6 }}>
 					<Icon name="warning" size={16} />
-					¿Estás seguro? Esto eliminará todos tus datos permanentemente.
+					Are you sure? This will delete all your data permanently.
 				</div>
 				<div class="confirm-actions">
 					<Button variant="secondary" onclick={() => (showClearConfirm = false)}>
-						{#snippet children()}Cancelar{/snippet}
+						{#snippet children()}Cancel{/snippet}
 					</Button>
 					<Button variant="danger" onclick={handleClear} disabled={isClearing}>
 						{#snippet children()}
 							{#if isClearing}
-								Borrando…
+								Clearing...
 							{:else}
-								Sí, borrar todo
+								Yes, Delete Everything
 							{/if}
 						{/snippet}
 					</Button>
@@ -312,7 +319,7 @@
 				<Button variant="danger" onclick={handleClear}>
 					{#snippet children()}
 						<Icon name="trash" size={16} />
-						Borrar todos los datos
+						Clear All Data
 					{/snippet}
 				</Button>
 			{/if}

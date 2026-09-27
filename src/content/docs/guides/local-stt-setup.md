@@ -1,84 +1,84 @@
 ---
-title: Configurar STT local
-description: Ejecuta voz-a-texto por completo en tu máquina con un servidor Whisper compatible con OpenAI (Speaches, faster-whisper-server, whisper.cpp).
+title: Local STT Setup
+description: Run speech-to-text entirely on your machine with an OpenAI-compatible Whisper server (Speaches, faster-whisper-server, whisper.cpp).
 ---
 
-# Configurar STT local
+# Local STT Setup
 
-Si ya ejecutas LLMs locales con Ollama o LM Studio y una voz local con TTS local, también puedes transcribir tu voz localmente. El audio se procesa en tu máquina, así que nada sale del dispositivo y no hay claves de API ni costes por minuto.
+If you already run local LLMs with Ollama or LM Studio and a local voice with Local TTS, you can transcribe your voice locally too. The audio is processed on your machine, so nothing leaves the device and there are no API keys or per-minute costs.
 
-Luna habla con cualquier servidor que exponga el endpoint de OpenAI `/v1/audio/transcriptions`. Graba desde tu micrófono, envía el clip a ese endpoint y usa el texto devuelto como tu mensaje.
+Utsuwa talks to any server that exposes the OpenAI `/v1/audio/transcriptions` endpoint. It records from your microphone, sends the clip to that endpoint, and uses the returned text as your message.
 
-## Speaches (recomendado)
+## Speaches (recommended)
 
-[Speaches](https://github.com/speaches-ai/speaches) (antes faster-whisper-server) sirve transcripción Whisper mediante la API de OpenAI y funciona bien en CPU.
+[Speaches](https://github.com/speaches-ai/speaches) (formerly faster-whisper-server) serves Whisper transcription through the OpenAI API and runs well on CPU.
 
-### Instalación
+### Installation
 
-El camino más rápido es Docker:
+The quickest path is Docker:
 
 ```bash
 docker run -p 8000:8000 ghcr.io/speaches-ai/speaches:latest-cpu
 ```
 
-Si tienes una GPU NVIDIA, usa la imagen CUDA en su lugar. Consulta el README del proyecto para instalaciones sin Docker.
+If you have an NVIDIA GPU, use the CUDA image instead. See the project README for non-Docker installs.
 
-Esto sirve la API en `http://localhost:8000/v1`.
+This serves the API at `http://localhost:8000/v1`.
 
-### Conectar con Luna
+### Connecting to Utsuwa
 
-1. Abre **Ajustes** (icono de engranaje)
-2. Ve a la pestaña **Personaje**
-3. Abre **Servicios de IA** y desplázate hasta **Entrada de voz (STT)**
-4. Bajo **Servidor local**, introduce la URL base — déjala como `http://localhost:8000/v1/` salvo que hayas cambiado el puerto
-5. Pon el campo **Modelo** con un modelo que exponga tu servidor (p. ej. `Systran/faster-whisper-large-v3`)
-6. Pulsa el botón del micrófono en la barra de chat y habla
+1. Open **Settings** (gear icon)
+2. Navigate to the **Character** tab
+3. Open **AI Services** and scroll to **Voice Input (STT)**
+4. Under **Local server**, enter the base URL — leave it as `http://localhost:8000/v1/` unless you changed the port
+5. Set the **Model** field to a model your server exposes (e.g. `Systran/faster-whisper-large-v3`)
+6. Click the microphone button in the chat bar and speak
 
-Un servidor local configurado tiene prioridad automáticamente sobre Groq, OpenAI y la Web Speech API del navegador — no hay interruptor separado.
+A configured local server takes priority over Groq, OpenAI, and the browser's Web Speech API automatically — there's no separate toggle.
 
-### Modelos
+### Models
 
-Speaches usa IDs de modelos de Hugging Face como `Systran/faster-whisper-large-v3` (mejor calidad) o `Systran/faster-whisper-medium` (más rápido). El servidor descarga el modelo en el primer uso. Comprueba los modelos que tiene tu servidor con `curl http://localhost:8000/v1/models`.
+Speaches uses Hugging Face model IDs such as `Systran/faster-whisper-large-v3` (best quality) or `Systran/faster-whisper-medium` (faster). The server downloads the model on first use. Check the models your server has with `curl http://localhost:8000/v1/models`.
 
-## faster-whisper-server y whisper.cpp
+## faster-whisper-server and whisper.cpp
 
-Cualquier servidor de transcripción compatible con OpenAI funciona. [whisper.cpp](https://github.com/ggerganov/whisper.cpp) incluye un servidor (`whisper-server`) que expone el mismo endpoint — apunta la URL base de STT local de Luna hacia él y usa el nombre de modelo que sirva. Las instalaciones antiguas de [faster-whisper-server](https://github.com/fedirz/faster-whisper-server) se comportan como Speaches.
+Any OpenAI-compatible transcription server works. [whisper.cpp](https://github.com/ggerganov/whisper.cpp) ships a server (`whisper-server`) that exposes the same endpoint — point Utsuwa's Local STT base URL at it and use the model name it serves. Older [faster-whisper-server](https://github.com/fedirz/faster-whisper-server) installs behave like Speaches.
 
-## URL base personalizada
+## Custom Base URL
 
-¿Ejecutas el servidor en otra máquina o puerto? Introduce la URL completa en el campo de URL base de STT local. Luna la normaliza para que termine en `/v1`, así que `http://localhost:8000`, `http://localhost:8000/v1` y `http://localhost:8000/v1/` funcionan todos. Ejemplos:
+Running the server on a different machine or port? Enter the full URL in the Local STT base URL field. Utsuwa normalizes it to end in `/v1`, so `http://localhost:8000`, `http://localhost:8000/v1`, and `http://localhost:8000/v1/` all work. Examples:
 
-- Puerto personalizado: `http://localhost:9000/v1/`
-- Máquina remota: `http://192.168.1.50:8000/v1/` (solo app de escritorio, ver abajo)
+- Custom port: `http://localhost:9000/v1/`
+- Remote machine: `http://192.168.1.50:8000/v1/` (desktop app only, see below)
 
-## App de escritorio vs sitio web alojado
+## Desktop app vs hosted website
 
-El STT local funciona mejor en la **app de escritorio**, donde no necesita configuración extra. La app de escritorio habla con tu servidor local directamente, sin restricciones de origen de navegador, contenido mixto ni red local.
+Local STT works best in the **desktop app**, where it needs no extra setup. The desktop app talks to your local server directly, with no browser origin, mixed-content, or local-network restrictions.
 
-En el **sitio web alojado** (`https://app.luna.ai`) aún puede funcionar, pero como una página HTTPS pública está alcanzando un servidor en tu propia máquina, el navegador añade algunas reglas:
+On the **hosted website** (`https://app.utsuwa.ai`) it can still work, but because a public HTTPS page is reaching a server on your own machine, the browser adds a few rules:
 
-- **Solo la misma máquina.** El servidor tiene que estar en `localhost` / `127.0.0.1`. Un servidor en otra máquina por `http://` simple queda bloqueado por el navegador como contenido mixto. (`localhost` está exento, que es la única razón por la que el caso local funciona.) Por eso la URL base de máquina remota de arriba funciona en la app de escritorio pero no en el sitio alojado.
-- **El servidor debe permitir el origen del sitio.** Tu servidor STT necesita enviar cabeceras CORS que permitan `https://app.luna.ai`. Un servidor reforzado o tras proxy puede necesitar añadir el origen explícitamente. (En ese caso, el origen de la app de escritorio es `tauri://localhost` en macOS y `http://tauri.localhost` en Windows y Linux.)
-- **Tu navegador puede pedir permiso.** Versiones recientes de Chrome tratan un sitio público alcanzando `localhost` como una petición de red local y puede pedirte permitirla. Permítelo si te lo pide.
+- **Same machine only.** The server has to be on `localhost` / `127.0.0.1`. A server on another machine over plain `http://` is blocked by the browser as mixed content. (`localhost` is exempt, which is the only reason the local case works.) The remote-machine base URL above therefore works in the desktop app but not on the hosted site.
+- **The server must allow the site's origin.** Your STT server needs to send CORS headers permitting `https://app.utsuwa.ai`. A hardened or proxied server may need the origin added explicitly. (In that case the desktop app's origin is `tauri://localhost` on macOS and `http://tauri.localhost` on Windows and Linux.)
+- **Your browser may ask permission.** Recent versions of Chrome treat a public site reaching `localhost` as a local-network request and may prompt you to allow it. Allow it if asked.
 
-Con un servidor por defecto, nada de esto aplica a la app de escritorio. El único caso que requiere atención es un servidor que hayas reforzado para restringir orígenes, que necesitaría permitir el origen de escritorio de arriba. Es el mismo conjunto de reglas que siguen los LLM locales y el TTS local en el sitio alojado.
+With a default server, none of this applies to the desktop app. The only case that needs attention is a server you've hardened to restrict origins, which would need the desktop origin above allowed. This is the same set of rules local LLMs and Local TTS follow on the hosted site.
 
-## Solución de problemas
+## Troubleshooting
 
-### «No se pudo conectar con un servidor STT local»
+### "Could not reach a local STT server"
 
-El servidor no está en ejecución o no se puede alcanzar en la URL base. Confirma que está arriba:
+The server isn't running or isn't reachable at the base URL. Confirm it's up:
 
 ```bash
 curl http://localhost:8000/v1/models
 ```
 
-Si eso devuelve datos pero Luna aún no puede alcanzarlo desde un navegador, es casi seguro un bloqueo de origen o de red local. En el sitio alojado, el servidor tiene que permitir el origen `https://app.luna.ai`, y tu navegador puede pedir permiso para acceder a dispositivos de la red local. Consulta [App de escritorio vs sitio web alojado](#app-de-escritorio-vs-sitio-web-alojado). Nada de esto aplica a la **app de escritorio**, que es la forma más fluida de usar STT local.
+If that returns data but Utsuwa still can't reach it from a browser, it's almost certainly an origin or local-network block. On the hosted site the server has to allow the `https://app.utsuwa.ai` origin, and your browser may prompt to allow access to local-network devices. See [Desktop app vs hosted website](#desktop-app-vs-hosted-website). None of this applies to the **desktop app**, which is the smoothest way to run local STT.
 
-### 400 o 404 del servidor
+### 400 or 404 from the server
 
-El nombre del modelo no es válido para ese servidor. Comprueba los modelos disponibles con `curl http://localhost:8000/v1/models` y pon el campo Modelo con uno de ellos.
+The model name isn't valid for that server. Check the available models with `curl http://localhost:8000/v1/models` and set the Model field to one of them.
 
-### Sin transcripción después de hablar
+### No transcription after speaking
 
-Asegúrate de que tu micrófono está permitido para el sitio (aviso de permisos del navegador) y de que el campo Modelo está configurado. Observa el botón del micrófono — muestra un estado de transcripción después de dejar de hablar mientras el servidor procesa el clip.
+Make sure your microphone is allowed for the site (browser permission prompt), and that the Model field is set. Watch the microphone button — it shows a transcribing state after you stop speaking while the server processes the clip.

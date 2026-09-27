@@ -20,8 +20,6 @@
 		onSend: (content: string, images?: PreparedImage[]) => void;
 		disabled?: boolean;
 		visionCapable?: boolean;
-		/** Notifies the current panel rect — the scene reads it for chat framing (0.15.0). */
-		onRectChange?: (r: PanelRect | null) => void;
 	}
 
 	let {
@@ -31,8 +29,7 @@
 		phase = 'thinking',
 		onSend,
 		disabled = false,
-		visionCapable = true,
-		onRectChange
+		visionCapable = true
 	}: Props = $props();
 
 	const moodInfo = $derived(characterStore.moodInfo);
@@ -44,7 +41,7 @@
 	// The panel floats: drag it by the header, resize it from any edge. Its
 	// rect persists so it comes back where you left it. Until the user drags,
 	// it anchors to the docked side from settings.
-	const GEOMETRY_KEY = 'luna-chat-panel';
+	const GEOMETRY_KEY = 'utsuwa-chat-panel';
 	const DEFAULT_WIDTH = 460;
 	const DEFAULT_HEIGHT_VH = 0.72;
 	const MIN_WIDTH = 260;
@@ -62,22 +59,17 @@
 	function defaultRect(): PanelRect {
 		const vw = window.innerWidth;
 		const vh = window.innerHeight;
-		const anchor = displayStore.sidebarPosition;
 		// Mobile: dock low in the viewport so her face stays visible above the
 		// chat, hugging the snap side with a slim margin
 		if (vw <= 640) {
 			const w = Math.max(MIN_WIDTH, Math.round(vw * 0.7));
 			const h = Math.round(vh * 0.42);
-			const x =
-				anchor === 'left' ? MARGIN : anchor === 'right' ? vw - w - MARGIN : (vw - w) / 2;
+			const x = displayStore.sidebarPosition === 'left' ? MARGIN : vw - w - MARGIN;
 			return { x, y: vh - h - MARGIN * 2, w, h };
 		}
 		const w = DEFAULT_WIDTH;
 		const h = Math.round(vh * DEFAULT_HEIGHT_VH);
-		// Desktop: 'center' (the default) floats the panel mid-screen — an
-		// edge-docked default read as broken layout. 'left'/'right' dock.
-		const x =
-			anchor === 'left' ? MARGIN : anchor === 'right' ? vw - w - MARGIN : (vw - w) / 2;
+		const x = displayStore.sidebarPosition === 'left' ? MARGIN : vw - w - MARGIN;
 		return { x, y: TOP_OFFSET, w, h };
 	}
 
@@ -123,12 +115,6 @@
 			localStorage.removeItem(GEOMETRY_KEY);
 			rect = defaultRect();
 		}
-	});
-
-	// Chat framing (0.15.0): publish the panel rect so the scene can keep the
-	// character framed in the uncovered viewport area.
-	$effect(() => {
-		onRectChange?.(rect);
 	});
 
 	function persistRect() {
@@ -272,7 +258,7 @@
 
 	function handleClearHistory() {
 		if (!browser) return;
-		if (confirm('¿Eliminar todos los mensajes de este chat?')) {
+		if (confirm('Delete all messages in this chat?')) {
 			chatStore.clearMessages();
 		}
 	}
@@ -281,7 +267,7 @@
 <svelte:window onresize={handleViewportResize} />
 
 <div
-	class="chat-window glass-panel"
+	class="chat-window"
 	class:open
 	style:left={rect ? `${rect.x}px` : undefined}
 	style:top={rect ? `${rect.y}px` : undefined}
@@ -308,29 +294,29 @@
 			<Icon name={moodInfo.icon} size={16} />
 		</span>
 		<span class="window-title">Chat</span>
-		<button class="dock-btn" onclick={() => snapTo('left')} aria-label="Anclar al borde izquierdo" title="Anclar a la izquierda">
+		<button class="dock-btn" onclick={() => snapTo('left')} aria-label="Snap to left edge" title="Snap left">
 			<Icon name="chevron-left" size={16} />
 		</button>
-		<button class="dock-btn" onclick={() => snapTo('right')} aria-label="Anclar al borde derecho" title="Anclar a la derecha">
+		<button class="dock-btn" onclick={() => snapTo('right')} aria-label="Snap to right edge" title="Snap right">
 			<Icon name="chevron-right" size={16} />
 		</button>
 		<button
 			class="clear-btn"
 			onclick={handleClearHistory}
-			aria-label="Limpiar historial de chat"
-			title="Limpiar historial de chat"
+			aria-label="Clear chat history"
+			title="Clear chat history"
 			disabled={visibleMessages.length === 0}
 		>
 			<Icon name="trash" size={14} />
 		</button>
-		<button class="close-btn" onclick={onClose} aria-label="Cerrar chat" title="Cerrar chat">
+		<button class="close-btn" onclick={onClose} aria-label="Close chat" title="Close chat">
 			<Icon name="x" size={16} />
 		</button>
 	</div>
 
 	<div class="messages" bind:this={messagesEl}>
 		{#if visibleMessages.length === 0 && !isTyping}
-			<p class="empty-hint">Aún no hay mensajes.</p>
+			<p class="empty-hint">No messages yet.</p>
 		{:else}
 			{#each visibleMessages as msg (msg.id)}
 				{@const isLastAssistant = msg.id === lastAssistantId}
@@ -368,7 +354,7 @@
 	{#if open && chatDraftStore.dropActive}
 		<div class="drop-overlay">
 			<Icon name="camera" size={22} />
-			<span>Suelta una foto para mostrársela</span>
+			<span>Drop a photo to show her</span>
 		</div>
 	{/if}
 </div>
@@ -378,8 +364,12 @@
 		position: fixed;
 		display: flex;
 		flex-direction: column;
-		/* Material comes from .glass-panel — the shared recipe */
+		background: color-mix(in srgb, var(--bg-primary), transparent 6%);
+		backdrop-filter: blur(14px);
+		-webkit-backdrop-filter: blur(14px);
+		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-xl);
+		box-shadow: var(--shadow-lg);
 		z-index: 45;
 		pointer-events: none;
 		opacity: 0;
@@ -442,7 +432,7 @@
 		align-items: center;
 		gap: 0.25rem;
 		padding: 0.5rem 0.625rem;
-		border-bottom: 1px solid var(--chrome-border);
+		border-bottom: 1px solid var(--border-subtle);
 		flex-shrink: 0;
 		cursor: grab;
 		user-select: none;
@@ -488,7 +478,7 @@
 	.dock-btn:hover,
 	.clear-btn:hover:not(:disabled),
 	.close-btn:hover {
-		background: var(--chrome-wash);
+		background: var(--bg-tertiary);
 		color: var(--text-primary);
 	}
 
@@ -534,12 +524,12 @@
 
 	.user .bubble {
 		background: var(--accent);
-		color: var(--accent-contrast, white);
+		color: white;
 		border-bottom-right-radius: var(--radius-sm);
 	}
 
 	.assistant .bubble {
-		background: color-mix(in srgb, var(--bg-primary) 72%, transparent);
+		background: var(--bg-secondary);
 		color: var(--text-primary);
 		border: 1px solid var(--border-subtle);
 		border-bottom-left-radius: var(--radius-sm);
@@ -599,8 +589,8 @@
 	.input-dock {
 		flex-shrink: 0;
 		padding: 0.5rem 0.625rem;
-		border-top: 1px solid var(--chrome-border);
-		background: transparent;
+		border-top: 1px solid var(--border-subtle);
+		background: var(--bg-secondary);
 	}
 
 	/* Drag-to-show target while the window owns the input */

@@ -7,16 +7,16 @@
 <div class="service-group">
 	<div class="service-header">
 		<Icon name="mic" size={14} />
-		<span>Entrada de voz (STT)</span>
+		<span>Voice Input (STT)</span>
 	</div>
-	<p class="stt-hint">Entrada de voz de mayor calidad mediante Whisper. Se usa un servidor local si está configurado; después Groq, después OpenAI y, por último, el reconocimiento integrado del navegador. Obligatorio en escritorio (que no tiene reconocimiento integrado).</p>
+	<p class="stt-hint">Higher quality voice input via Whisper. A local server is used if configured, then Groq, then OpenAI, then the browser's built-in recognition. Required on desktop (which has no built-in recognition).</p>
 
-	<span class="stt-sublabel">Clave de API de Groq</span>
+	<span class="stt-sublabel">Groq API Key</span>
 	<div class="api-key-row">
 		<input
 			type="password"
 			class="api-key-input"
-			placeholder="Clave de API de Groq"
+			placeholder="Groq API Key"
 			value={settingsStore.getProviderConfig('groq-stt').apiKey ?? ''}
 			oninput={(e) => {
 				const v = e.currentTarget.value;
@@ -27,12 +27,12 @@
 		/>
 	</div>
 
-	<span class="stt-sublabel">Clave de API de OpenAI (Whisper)</span>
+	<span class="stt-sublabel">OpenAI API Key (Whisper)</span>
 	<div class="api-key-row">
 		<input
 			type="password"
 			class="api-key-input"
-			placeholder="Clave de API de OpenAI"
+			placeholder="OpenAI API Key"
 			value={settingsStore.getProviderConfig('openai-stt').apiKey ?? ''}
 			oninput={(e) => {
 				const v = e.currentTarget.value;
@@ -43,7 +43,7 @@
 		/>
 	</div>
 
-	<span class="stt-sublabel">Servidor local (Speaches, faster-whisper-server, whisper.cpp)</span>
+	<span class="stt-sublabel">Local server (Speaches, faster-whisper-server, whisper.cpp)</span>
 	<div class="api-key-row">
 		<input
 			type="text"
@@ -62,7 +62,7 @@
 		<input
 			type="text"
 			class="api-key-input"
-			placeholder="Modelo (p. ej. Systran/faster-whisper-large-v3)"
+			placeholder="Model (e.g. Systran/faster-whisper-large-v3)"
 			value={settingsStore.getProviderConfig('local-stt').modelId ?? ''}
 			oninput={(e) => {
 				settingsStore.setProviderConfig('local-stt', { modelId: e.currentTarget.value.trim() });

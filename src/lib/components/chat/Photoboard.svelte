@@ -70,15 +70,10 @@
 		if (selectedFullUrl && !selected?.isBlobUrl) URL.revokeObjectURL(selectedFullUrl);
 	});
 
-	const MONTHS_UTC = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'] as const;
-	const MONTHS_SHORT_UTC = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'] as const;
-	const WEEKDAYS_UTC = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'] as const;
-
 	function groupLabel(ms: number): string {
 		const week = 7 * 24 * 60 * 60 * 1000;
-		if (Date.now() - ms < week) return 'Esta semana';
-		const d = new Date(ms);
-		return `${MONTHS_UTC[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+		if (Date.now() - ms < week) return 'This week';
+		return new Date(ms).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 	}
 
 	const sections = $derived.by(() => {
@@ -94,12 +89,15 @@
 	});
 
 	function shortDate(ms: number): string {
-		const d = new Date(ms);
-		return `${d.getUTCDate()} ${MONTHS_SHORT_UTC[d.getUTCMonth()]}`;
+		return new Date(ms).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 	}
 	function fullDate(ms: number): string {
-		const d = new Date(ms);
-		return `${WEEKDAYS_UTC[d.getUTCDay()]}, ${d.getUTCDate()} de ${MONTHS_UTC[d.getUTCMonth()]} de ${d.getUTCFullYear()}`;
+		return new Date(ms).toLocaleDateString('en-US', {
+			weekday: 'long',
+			month: 'long',
+			day: 'numeric',
+			year: 'numeric'
+		});
 	}
 
 	async function openLightbox(item: Item) {
@@ -141,26 +139,26 @@
 	onkeydown={handleKeydown}
 	role="dialog"
 	aria-modal="true"
-	aria-label="Tablero de fotos"
+	aria-label="Photoboard"
 	tabindex="-1"
 >
-	<div class="board glass-panel">
+	<div class="board">
 		<div class="board-header">
 			<h2>
-				Cosas que le has mostrado{#if items.length}<span class="count">{items.length}</span>{/if}
+				Things you've shown her{#if items.length}<span class="count">{items.length}</span>{/if}
 			</h2>
-			<button class="close-btn" onclick={onClose} aria-label="Cerrar">
+			<button class="close-btn" onclick={onClose} aria-label="Close">
 				<Icon name="x" size={16} />
 			</button>
 		</div>
 
 		{#if loading}
-			<div class="board-empty"><span>Cargando…</span></div>
+			<div class="board-empty"><span>Loading…</span></div>
 		{:else if items.length === 0}
 			<div class="board-empty">
 				<Icon name="camera" size={40} />
-				<p>Nada en el tablero todavía.</p>
-				<span>Enséñale una foto y la guardará aquí.</span>
+				<p>Nothing on the board yet.</p>
+				<span>Show her a photo and she'll keep it here.</span>
 			</div>
 		{:else}
 			<div class="board-wall">
@@ -169,11 +167,11 @@
 					<div class="section-photos">
 						{#each section.items as item, i (item.id)}
 							<div class="photo-card" style="--rot: {ROTATIONS[i % ROTATIONS.length]}deg">
-								<button class="photo-btn" onclick={() => openLightbox(item)} aria-label="Ver foto">
+								<button class="photo-btn" onclick={() => openLightbox(item)} aria-label="View photo">
 									<img src={item.url} alt="" loading="lazy" />
 								</button>
 								<div class="caption">{shortDate(item.createdAt)}</div>
-								<button class="forget-btn" aria-label="Olvidar esto" onclick={() => forget(item.id)}>
+								<button class="forget-btn" aria-label="Forget this" onclick={() => forget(item.id)}>
 									<Icon name="x" size={12} />
 								</button>
 							</div>
@@ -198,13 +196,13 @@
 		onkeydown={handleKeydown}
 		role="dialog"
 		aria-modal="true"
-		aria-label="Foto"
+		aria-label="Photo"
 		tabindex="-1"
 	>
-		<button class="lb-close" onclick={closeLightbox} aria-label="Cerrar">
+		<button class="lb-close" onclick={closeLightbox} aria-label="Close">
 			<Icon name="x" size={18} />
 		</button>
-		<button class="flip-card" class:flipped onclick={() => (flipped = !flipped)} aria-label="Voltear foto">
+		<button class="flip-card" class:flipped onclick={() => (flipped = !flipped)} aria-label="Flip photo">
 			<div class="flip-inner">
 				<div class="flip-front">
 					{#if selectedFullUrl}<img src={selectedFullUrl} alt="" />{/if}
@@ -215,13 +213,13 @@
 						{#if selected.note}
 							<p class="back-note">“{selected.note}”</p>
 						{:else}
-							<p class="back-empty">Todavía no ha dicho mucho sobre esta…</p>
+							<p class="back-empty">She hasn't said much about this one… yet.</p>
 						{/if}
 					</div>
 				</div>
 			</div>
 		</button>
-		<div class="lb-hint">Haz clic en la foto para voltearla</div>
+		<div class="lb-hint">Click the photo to flip it over</div>
 	</div>
 {/if}
 
@@ -256,9 +254,8 @@
 		display: flex;
 		flex-direction: column;
 		border-radius: var(--radius-xl);
-		box-shadow:
-			inset 0 1px 0 rgba(255, 255, 255, 0.18),
-			0 24px 56px rgba(0, 0, 0, 0.28);
+		background: var(--bg-primary);
+		box-shadow: var(--shadow-xl);
 		overflow: hidden;
 		animation: pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 	}
@@ -279,7 +276,7 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 1rem 1.25rem;
-		border-bottom: 1px solid var(--chrome-border);
+		border-bottom: 1px solid var(--border-subtle);
 	}
 
 	.board-header h2 {
@@ -309,7 +306,7 @@
 		height: 30px;
 		border: none;
 		border-radius: var(--radius-full);
-		background: var(--chrome-wash);
+		background: var(--bg-tertiary);
 		color: var(--text-secondary);
 		cursor: pointer;
 		transition: color 0.15s, background 0.15s;
@@ -317,7 +314,7 @@
 
 	.close-btn:hover {
 		color: var(--text-primary);
-		background: var(--chrome-wash-strong);
+		background: color-mix(in srgb, var(--bg-tertiary), var(--text-primary) 8%);
 	}
 
 	.board-wall {

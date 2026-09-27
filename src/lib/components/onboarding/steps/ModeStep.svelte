@@ -14,8 +14,8 @@
 
 <div class="ob-step">
 	<div class="ob-head">
-		<h2 class="ob-title">Elige tu modo</h2>
-		<p class="ob-subtitle">Puedes cambiarlo en cualquier momento en los ajustes.</p>
+		<h2 class="ob-title">Choose your mode</h2>
+		<p class="ob-subtitle">You can change this anytime in settings.</p>
 	</div>
 
 	<div class="mode-list">
@@ -29,8 +29,8 @@
 				{#if mode === 'dating_sim'}<Icon name="check" size={12} />{/if}
 			</span>
 			<span class="opt-text">
-				<span class="opt-title">Simulador de citas</span>
-				<span class="opt-desc">Una relación que crece con el tiempo: ánimos, eventos y ocho etapas.</span>
+				<span class="opt-title">Dating sim</span>
+				<span class="opt-desc">A relationship that grows over time — moods, events, and eight stages.</span>
 			</span>
 		</button>
 
@@ -44,8 +44,8 @@
 				{#if mode === 'companion'}<Icon name="check" size={12} />{/if}
 			</span>
 			<span class="opt-text">
-				<span class="opt-title">Compañera</span>
-				<span class="opt-desc">Una asistente amistosa para conversar y ayudarte en el día a día.</span>
+				<span class="opt-title">Companion</span>
+				<span class="opt-desc">A friendly assistant for conversation and everyday help.</span>
 			</span>
 		</button>
 	</div>
@@ -53,10 +53,10 @@
 	<div class="ob-actions ob-actions--split">
 		<button class="btn btn-secondary" onclick={onBack}>
 			<Icon name="chevron-left" size={16} />
-			Atrás
+			Back
 		</button>
 		<button class="btn btn-primary" onclick={onNext}>
-			Terminar configuración
+			Finish setup
 			<Icon name="chevron-right" size={16} />
 		</button>
 	</div>

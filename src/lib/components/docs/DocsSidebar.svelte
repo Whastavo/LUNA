@@ -4,6 +4,7 @@
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { docsNav } from '$lib/config/docs-nav';
 	import { cycleTheme, getIconName, getLabel } from '$lib/config/docs-theme-toggle.svelte';
+	import { GITHUB_REPO } from '$lib/config/site';
 
 	interface Props {
 		mobileOpen?: boolean;
@@ -37,6 +38,9 @@
 			<Icon name={iconName} size={14} />
 			<span>{label}</span>
 		</button>
+		<a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="footer-btn" title="GitHub">
+			<Icon name="github" size={14} />
+		</a>
 	</div>
 </aside>
 

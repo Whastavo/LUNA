@@ -1,100 +1,100 @@
 ---
-title: Solución de problemas
-description: Problemas comunes y soluciones para Luna.
+title: Troubleshooting
+description: Common issues and solutions for Utsuwa.
 ---
 
-# Solución de problemas
+# Troubleshooting
 
-Esta guía cubre los problemas comunes que puedes encontrar al usar Luna y cómo resolverlos.
+This guide covers common issues you might encounter when using Utsuwa and how to resolve them.
 
-## Problemas de versión de Node.js
+## Node.js Version Issues
 
-### Error «Unsupported engine»
+### "Unsupported engine" error
 
-Luna requiere Node.js 22 o superior. Si ves un error como:
+Utsuwa requires Node.js 22 or higher. If you see an error like:
 
 ```bash
 npm error engine Unsupported engine
 npm error notsup Required: {"node":">=22.0.0"}
 ```
 
-Necesitas actualizar tu versión de Node.js. Si usas nvm:
+You need to update your Node.js version. If you're using nvm:
 
 ```bash
 nvm install 22
 nvm use 22
 ```
 
-O con el `.nvmrc` del proyecto:
+Or with the project's `.nvmrc`:
 
 ```bash
 nvm use
 ```
 
-### Comprobar tu versión de Node
+### Checking your Node version
 
 ```bash
 node --version
 ```
 
-Debería mostrar `v22.0.0` o superior.
+Should output `v22.0.0` or higher.
 
-## Configuración de claves de API
+## API Key Configuration
 
-### Error «Clave de API no válida»
+### "Invalid API key" error
 
-Esto suele significar que tu clave de API es incorrecta o ha expirado. Revisa:
+This usually means your API key is incorrect or expired. Double-check:
 
-1. Que la clave esté bien introducida (sin espacios extra)
-2. Que la clave no haya sido revocada
-3. Que uses la clave correcta para el proveedor (clave de OpenAI para OpenAI, etc.)
+1. The key is entered correctly (no extra spaces)
+2. The key hasn't been revoked
+3. You're using the right key for the provider (OpenAI key for OpenAI, etc.)
 
-### La clave de API no se guarda
+### API key not being saved
 
-Todas las claves de API se guardan localmente en tu dispositivo. Si las claves no persisten:
+All API keys are stored locally on your device. If keys aren't persisting:
 
-1. Comprueba si estás en modo privado/incógnito (solo web — el incógnito puede limpiar el almacenamiento al cerrar)
-2. Borra los datos del sitio y vuelve a introducir la clave
-3. En la app de escritorio, prueba a reiniciar la aplicación
+1. Check if you're in private/incognito mode (web only — incognito can clear storage on close)
+2. Clear site data and re-enter the key
+3. On the desktop app, try restarting the application
 
-### Límites de peticiones
+### Rate limiting
 
-Si recibes errores de límite de peticiones, puede que necesites:
+If you're getting rate limit errors, you may need to:
 
-1. Esperar unos minutos antes de reintentar
-2. Revisar el panel de uso de tu proveedor de API
-3. Ampliar tu plan de API si hace falta
+1. Wait a few minutes before retrying
+2. Check your API provider's usage dashboard
+3. Upgrade your API plan if needed
 
-## Problemas del modelo VRM
+## VRM Model Issues
 
-### El modelo no carga
+### Model not loading
 
-Si tu modelo VRM no carga:
+If your VRM model won't load:
 
-1. **Revisa el tamaño del archivo** - Los modelos grandes (>50MB) pueden tardar más en cargar
-2. **Verifica el formato** - Asegúrate de que es un archivo `.vrm` válido
-3. **Prueba otro modelo** - Testa con un VRM distinto para aislar el problema
-4. **Revisa la consola** - Abre DevTools (F12 en navegador o app de escritorio) y busca errores
+1. **Check file size** - Large models (>50MB) may take longer to load
+2. **Verify the format** - Ensure it's a valid `.vrm` file
+3. **Try another model** - Test with a different VRM to isolate the issue
+4. **Check the console** - Open DevTools (F12 in browser or desktop app) and look for errors
 
-### El modelo se muestra incorrectamente
+### Model displays incorrectly
 
-Si el modelo aparece distorsionado o mal:
+If the model appears distorted or wrong:
 
-1. **Versión de VRM** - Algunos modelos VRM 0.x antiguos pueden tener problemas de compatibilidad
-2. **Estructura de huesos** - Los modelos necesitan configuraciones de huesos estándar de VRM
-3. **Materiales** - Algunos shaders personalizados pueden no renderizarse correctamente
+1. **VRM version** - Some older VRM 0.x models may have compatibility issues
+2. **Bone structure** - Models need standard VRM bone configurations
+3. **Materials** - Some custom shaders may not render correctly
 
-### Las animaciones no se reproducen
+### Animations not playing
 
-Si la animación de reposo o las expresiones no funcionan:
+If the idle animation or expressions aren't working:
 
-1. **Espera la carga** - Las animaciones cargan después del modelo
-2. **Revisa el soporte de VRMA** - Asegúrate de que tu modelo soporta animaciones VRM
-3. **Recarga la página** - A veces un refresco arregla problemas de animación
+1. **Wait for load** - Animations load after the model
+2. **Check VRMA support** - Ensure your model supports VRM animations
+3. **Refresh the page** - Sometimes a reload fixes animation issues
 
-### La página local carga pero la escena o los controles se quedan colgados
+### Local dev page loads but the scene or controls are stuck
 
-Si estás desarrollando localmente y la página `/app` renderiza pero el modelo nunca aparece, los controles no responden, o la consola muestra `Outdated Optimize Dep` o imports dinámicos fallidos, limpia las cachés locales de Vite y reinicia el servidor de desarrollo:
+If you are developing locally and the `/app` page renders but the model never appears, controls do not respond, or the console shows `Outdated Optimize Dep` or failed dynamic imports, clear Vite's local caches and restart the dev server:
 
 ```bash
 rm -rf node_modules/.vite .svelte-kit
@@ -102,177 +102,177 @@ pnpm exec svelte-kit sync
 pnpm exec vite dev --force --host localhost --port 5173
 ```
 
-Tras recargar la página, completa o descarta el modal de configuración inicial antes de probar los controles de Ajustes, Información o estadísticas. El modal de configuración se coloca deliberadamente sobre la escena hasta que la configuración termina.
+After the page reloads, complete or dismiss the first-run onboarding modal before testing the Settings, Info, or stats controls. The onboarding modal intentionally sits above the scene until setup is finished.
 
-## Problemas de texto-a-voz
+## Text-to-Speech Issues
 
-### Sin salida de audio
+### No audio output
 
-Si el TTS no produce sonido:
+If TTS isn't producing sound:
 
-1. **Revisa el audio** - Asegúrate de que la pestaña no está silenciada (web) o de que el audio del sistema está activado (escritorio)
-2. **Verifica los permisos** - Tu navegador o SO puede necesitar conceder permiso de reproducción automática de audio
-3. **Revisa la clave de API** - Verifica que tu clave de API de ElevenLabs u OpenAI TTS es válida
-4. **Revisa el estado del proveedor** - El proveedor de TTS puede estar teniendo problemas
+1. **Check audio** - Make sure the tab isn't muted (web) or system audio is enabled (desktop)
+2. **Verify permissions** - Your browser or OS may need to grant audio autoplay permission
+3. **Check API key** - Verify your ElevenLabs or OpenAI TTS API key is valid
+4. **Check provider status** - The TTS provider may be experiencing issues
 
-### El lip-sync no funciona
+### Lip-sync not working
 
-Si la boca del avatar no se mueve:
+If the avatar's mouth isn't moving:
 
-1. **El audio es necesario** - El lip-sync solo funciona cuando se reproduce audio del TTS
-2. **Nivel de volumen** - Un audio muy bajo puede no activar el lip-sync
-3. **Soporte del navegador** - La Web Audio API debe estar soportada
+1. **Audio is required** - Lip-sync only works when TTS audio plays
+2. **Volume level** - Very quiet audio may not trigger lip-sync
+3. **Browser support** - Web Audio API must be supported
 
-### La voz suena mal
+### Voice sounds wrong
 
-1. **Revisa los ajustes de voz** - ElevenLabs y OpenAI TTS tienen voces disponibles distintas
-2. **ID de voz personalizado** - Si usas una voz personalizada de ElevenLabs, verifica que el ID de voz es correcto
+1. **Check voice settings** - ElevenLabs and OpenAI TTS have different available voices
+2. **Custom voice ID** - If using ElevenLabs custom voice, verify the voice ID is correct
 
-### El TTS local no habla
+### Local TTS not speaking
 
-Si seleccionaste **TTS local** pero no oyes nada:
+If you selected **Local TTS** but hear nothing:
 
-1. **Servidor en marcha** - Confirma que tu servidor TTS está arriba, p. ej. `curl http://localhost:8880/v1/audio/voices`
-2. **Voz configurada** - El campo de voz debe contener un nombre que tu servidor conozca (p. ej. `af_bella` para Kokoro)
-3. **URL base** - Debe apuntar al `/v1` del servidor; Luna normaliza la barra final por ti
-4. **App de escritorio** - Solo necesita el servidor en marcha en `localhost`; no se requiere configuración de origen ni CORS
-5. **Sitio alojado** (`https://app.luna.ai`) - El servidor debe estar en `localhost` (uno en otra máquina queda bloqueado como contenido mixto), debe permitir el origen `app.luna.ai` (Kokoro-FastAPI lo hace por defecto), y tu navegador puede pedir permiso para acceder a la red local. Permítelo si te lo pide
+1. **Server running** - Confirm your TTS server is up, e.g. `curl http://localhost:8880/v1/audio/voices`
+2. **Voice is set** - The voice field must hold a name your server knows (e.g. `af_bella` for Kokoro)
+3. **Base URL** - It should point at the server's `/v1`; Utsuwa normalizes the trailing slash for you
+4. **Desktop app** - Just needs the server running on `localhost`; no origin or CORS setup is required
+5. **Hosted site** (`https://app.utsuwa.ai`) - The server must be on `localhost` (one on another machine is blocked as mixed content), must allow the `app.utsuwa.ai` origin (Kokoro-FastAPI does by default), and your browser may prompt to allow local-network access. Allow it if asked
 
-Consulta [Configurar TTS local](/docs/guides/local-tts-setup#app-de-escritorio-vs-sitio-web-alojado) para los detalles de sitio alojado vs escritorio.
+See [Local TTS Setup](/docs/guides/local-tts-setup#desktop-app-vs-hosted-website) for the hosted vs desktop details.
 
-## Problemas de entrada de voz
+## Voice Input Issues
 
-### El botón del micrófono no responde (escritorio)
+### Mic button not responding (desktop)
 
-La app de escritorio usa el webview de Tauri, que no soporta la Web Speech API del navegador. Configura un servidor Whisper local o Groq para la entrada de voz en escritorio:
+The desktop app uses Tauri's webview, which does not support the browser's Web Speech API. Configure a local Whisper server or Groq for voice input on desktop:
 
-1. Ve a **Ajustes > Personaje**
-2. Bajo **Entrada de voz (STT)**, apunta el STT local a la URL base de tu servidor Whisper (por defecto `http://localhost:8000/v1/`) o introduce tu clave de API de Groq
+1. Go to **Settings > Character**
+2. Under **Voice Input (STT)**, either point Local STT at your Whisper server's base URL (default `http://localhost:8000/v1/`) or enter your Groq API key
 
-### El botón del micrófono no responde (web)
+### Mic button not responding (web)
 
-Si el botón del micrófono muestra un error en el navegador:
+If the mic button shows an error in the browser:
 
-1. **Revisa el soporte del navegador** - La Web Speech API funciona en Chrome, Edge y Safari. Firefox tiene soporte limitado.
-2. **Permite el acceso al micrófono** - Tu navegador puede estar bloqueando el permiso del micrófono.
-3. **Usa un servidor Whisper local o Groq** - Para mejor calidad o un soporte de navegadores más amplio, configura el STT local (un servidor Whisper auto-alojado compatible con OpenAI) o añade una clave de API de Groq en **Ajustes > Personaje** bajo Entrada de voz (STT). Un servidor local configurado tiene la máxima prioridad, luego Groq, luego OpenAI, luego la Web Speech API.
+1. **Check browser support** - Web Speech API works in Chrome, Edge, and Safari. Firefox has limited support.
+2. **Allow microphone access** - Your browser may be blocking the microphone permission.
+3. **Use a local Whisper server or Groq** - For better quality or broader browser support, configure Local STT (a self-hosted OpenAI-compatible Whisper server) or add a Groq API key in **Settings > Character** under Voice Input (STT). A configured local server takes top priority, then Groq, then OpenAI, then Web Speech API.
 
-### «Acceso al micrófono denegado»
+### "Microphone access denied"
 
-Tu navegador o SO está bloqueando el acceso al micrófono:
+Your browser or OS is blocking microphone access:
 
-1. **Permisos del navegador** - Pulsa el icono del candado en la barra de direcciones y permite el acceso al micrófono
-2. **Permisos del sistema** - En macOS, ve a Ajustes del Sistema > Privacidad y seguridad > Micrófono y activa el acceso para tu navegador o para Luna
+1. **Browser permissions** - Click the lock icon in the address bar and allow microphone access
+2. **System permissions** - On macOS, go to System Settings > Privacy & Security > Microphone and enable access for your browser or Utsuwa
 
-## App de escritorio
+## Desktop App
 
-### La app no abre
+### App won't open
 
-La app de escritorio está en beta y actualmente **sin firmar**, así que tu SO avisa la primera vez que la abres. Es lo esperado, no una descarga corrupta.
+The desktop app is in beta and currently **unsigned**, so your OS warns you the first time you open it. This is expected, not a broken download.
 
-1. **macOS** - Clic derecho en la app → **Abrir** → **Abrir**, o ejecuta `xattr -dr com.apple.quarantine /Applications/Luna.app` una vez
-2. **Windows** - En el aviso de SmartScreen, pulsa **Más información** → **Ejecutar de todos modos**
-3. **Linux** - Da al AppImage el bit de ejecución: `chmod +x Luna.AppImage`
+1. **macOS** - Right-click the app → **Open** → **Open**, or run `xattr -dr com.apple.quarantine /Applications/Utsuwa.app` once
+2. **Windows** - On the SmartScreen prompt, click **More info** → **Run anyway**
+3. **Linux** - Give the AppImage the executable bit: `chmod +x Utsuwa.AppImage`
 
-Consulta la [Guía de escritorio](/docs/guides/desktop-guide) para el recorrido completo de instalación.
+See the [Desktop Guide](/docs/guides/desktop-guide) for the full install walkthrough.
 
-### El LLM o TTS local no conecta (escritorio)
+### Local LLM or TTS won't connect (desktop)
 
-En la app de escritorio, la mayoría de los proveedores locales solo necesitan que el servidor esté en marcha. La única excepción es **Ollama en Windows y Linux**: el origen de la app de escritorio es `http://tauri.localhost`, que Ollama no permite por defecto, así que rechaza cada petición con un `403`. macOS funciona de fábrica, y LM Studio y los servidores locales comunes de TTS/STT (Kokoro-FastAPI, openedai-speech) permiten todos los orígenes por defecto.
+On the desktop app, most local providers need only that the server is running. The one exception is **Ollama on Windows and Linux**: the desktop app's origin is `http://tauri.localhost`, which Ollama does not allow by default, so it rejects every request with a `403`. macOS is fine out of the box, and LM Studio and the common local TTS/STT servers (Kokoro-FastAPI, openedai-speech) allow all origins by default.
 
-1. **Ollama (macOS)** - Arráncalo con `ollama serve` y descarga un modelo (`ollama pull <modelo>`)
-2. **Ollama (Windows/Linux)** - Lo mismo, más permitir el origen de la app: `setx OLLAMA_ORIGINS "http://tauri.localhost"` en Windows (y luego reinicia Ollama desde la bandeja), o `OLLAMA_ORIGINS=http://tauri.localhost ollama serve` en Linux. Pasos completos: [Configurar LLM local](/docs/guides/local-llm-setup#permitir-que-luna-llegue-a-ollama)
-3. **LM Studio** - Carga un modelo y pulsa Start Server
-4. **TTS local** - Arranca tu servidor TTS (p. ej. Kokoro-FastAPI en `http://localhost:8880`)
-5. **URL base** - Confirma que el puerto en **Ajustes > Personaje** coincide con el puerto que usa tu servidor
+1. **Ollama (macOS)** - Start it with `ollama serve` and pull a model (`ollama pull <model>`)
+2. **Ollama (Windows/Linux)** - Same, plus allow the app's origin: `setx OLLAMA_ORIGINS "http://tauri.localhost"` on Windows (then restart Ollama from the tray), or `OLLAMA_ORIGINS=http://tauri.localhost ollama serve` on Linux. Full steps: [Local LLM Setup](/docs/guides/local-llm-setup#allowing-utsuwa-to-reach-ollama)
+3. **LM Studio** - Load a model and click Start Server
+4. **Local TTS** - Start your TTS server (e.g. Kokoro-FastAPI on `http://localhost:8880`)
+5. **Base URL** - Confirm the port in **Settings > Character** matches the port your server is using
 
-### Sin sonido (escritorio)
+### No sound (desktop)
 
-1. **Audio del sistema** - Revisa el volumen de tu SO y que Luna no esté silenciada en el mezclador del sistema
-2. **TTS configurado** - Confirma que hay un proveedor de TTS configurado y una voz seleccionada (ver Problemas de texto-a-voz arriba)
-3. **Micrófono/entrada de voz** - El webview de escritorio no tiene Web Speech API, así que el micrófono necesita una clave de Groq u OpenAI; ver [El botón del micrófono no responde (escritorio)](#el-botón-del-micrófono-no-responde-escritorio)
+1. **System audio** - Check your OS volume and that Utsuwa isn't muted in the system mixer
+2. **TTS configured** - Confirm a TTS provider is set up and a voice is selected (see Text-to-Speech Issues above)
+3. **Microphone/voice input** - The desktop webview has no Web Speech API, so the mic needs a Groq or OpenAI key; see [Mic button not responding (desktop)](#mic-button-not-responding-desktop)
 
-### Las actualizaciones no se instalan
+### Updates not installing
 
-Las actualizaciones automáticas funcionan para el `.dmg` de macOS, el `.exe` de Windows y el `.AppImage` de Linux. Si instalaste vía `.deb` o `.rpm`, actualiza con tu gestor de paquetes en su lugar. Reiniciar la app vuelve a buscar actualizaciones.
+Auto-updates work for the macOS `.dmg`, Windows `.exe`, and Linux `.AppImage`. If you installed via `.deb` or `.rpm`, update through your package manager instead. Restarting the app re-checks for an update.
 
-## Memoria y rendimiento
+## Memory & Performance
 
-### La app va lenta
+### App running slowly
 
-Los problemas de rendimiento pueden venir de:
+Performance issues can stem from:
 
-1. **Modelo de memoria semántica** - El modelo de embeddings (~23MB) carga en el primer uso
-2. **Historial de conversación grande** - Las sesiones largas acumulan datos
-3. **Tamaño del modelo VRM** - Los modelos complejos usan más recursos de GPU
+1. **Semantic memory model** - The embedding model (~23MB) loads on first use
+2. **Large conversation history** - Long sessions accumulate data
+3. **VRM model size** - Complex models use more GPU resources
 
-Soluciones:
+Solutions:
 
-1. Dale tiempo al modelo de embeddings para cargar al principio
-2. Limpia las sesiones antiguas en Ajustes > Datos
-3. Usa modelos VRM más simples si el rendimiento es un problema
+1. Give the embedding model time to load initially
+2. Clear old sessions in Settings > Data
+3. Use simpler VRM models if performance is an issue
 
-### Errores de almacenamiento
+### Storage errors
 
-Si ves errores de IndexedDB o de almacenamiento:
+If you see IndexedDB or storage errors:
 
-1. **Revisa el espacio disponible** - El almacenamiento de tu dispositivo puede estar lleno
-2. **Borra los datos del sitio** - Reinicia el almacenamiento de la app (web: borra los datos del sitio, escritorio: reinstala)
-3. **Desactiva el modo privado** - Algunas funciones de almacenamiento no funcionan en incógnito (solo web)
+1. **Check available space** - Storage on your device may be full
+2. **Clear site data** - Reset the app's storage (web: clear site data, desktop: reinstall)
+3. **Disable private mode** - Some storage features don't work in incognito (web only)
 
-### El uso de memoria es alto
+### Memory usage is high
 
-La app usa memoria para:
+The app uses memory for:
 
-1. El renderizado 3D de Three.js
-2. La geometría y texturas del modelo VRM
-3. El historial de conversación
-4. El modelo de embeddings para búsqueda semántica
+1. Three.js 3D rendering
+2. VRM model geometry and textures
+3. Conversation history
+4. Embedding model for semantic search
 
-Si la memoria es una preocupación, refresca la página periódicamente para limpiar los datos acumulados.
+If memory is a concern, refresh the page periodically to clear accumulated data.
 
-## Errores comunes
+## Common Errors
 
-### Errores «Failed to fetch»
+### "Failed to fetch" errors
 
-Suelen indicar problemas de red:
+These usually indicate network problems:
 
-1. **Revisa la conexión a internet**
-2. **Verifica el endpoint de API** - Algunos proveedores pueden estar caídos
-3. **Problemas de CORS** - Si auto-alojas, revisa la configuración de CORS
-4. **Cortafuegos/proxy** - Las redes corporativas pueden bloquear llamadas de API
+1. **Check internet connection**
+2. **Verify API endpoint** - Some providers may be down
+3. **CORS issues** - If self-hosting, check CORS configuration
+4. **Firewall/proxy** - Corporate networks may block API calls
 
-Para LLMs locales, el navegador se conecta directamente a tu servidor local:
+For local LLMs, the browser connects directly to your local server:
 
-1. **Ollama en marcha** - Arráncalo con `ollama serve`
-2. **LM Studio en marcha** - Carga un modelo y pulsa Start Server
-3. **URL base correcta** - Usa `http://localhost:11434` para Ollama o `http://localhost:1234/v1` para LM Studio
-4. **Origen de Ollama (CORS)** - Ollama rechaza los orígenes que no permite con un `403` en `/api/tags`. En el **sitio web alojado** (la app corre en `app.luna.ai`) permite ese origen: `OLLAMA_ORIGINS=https://app.luna.ai ollama serve` (para una vista previa de Vercel usa el origen exacto de la barra de direcciones). En la **app de escritorio de Windows o Linux** permite `OLLAMA_ORIGINS=http://tauri.localhost`; la app de escritorio de macOS no necesita nada. Pasos completos por plataforma: [Configurar LLM local](/docs/guides/local-llm-setup#permitir-que-luna-llegue-a-ollama). Contexto: [FAQ de orígenes web adicionales de Ollama](https://docs.ollama.com/faq#how-can-i-allow-additional-web-origins-to-access-ollama).
-5. **Modelo instalado** - Si ves `model not found`, ejecuta `ollama list`, descarga o carga un modelo, actualiza el desplegable y selecciona un modelo instalado
+1. **Ollama running** - Start it with `ollama serve`
+2. **LM Studio running** - Load a model and click Start Server
+3. **Correct base URL** - Use `http://localhost:11434` for Ollama or `http://localhost:1234/v1` for LM Studio
+4. **Ollama origin (CORS)** - Ollama rejects origins it doesn't allow with a `403` on `/api/tags`. On the **hosted website** (the app runs at `app.utsuwa.ai`) allow that origin: `OLLAMA_ORIGINS=https://app.utsuwa.ai ollama serve` (for a Vercel preview use the exact origin from the address bar). On the **Windows or Linux desktop app** allow `OLLAMA_ORIGINS=http://tauri.localhost`; the macOS desktop app needs nothing. Full per-platform steps: [Local LLM Setup](/docs/guides/local-llm-setup#allowing-utsuwa-to-reach-ollama). Background: Ollama's [additional web origins FAQ](https://docs.ollama.com/faq#how-can-i-allow-additional-web-origins-to-access-ollama).
+5. **Installed model** - If you see `model not found`, run `ollama list`, pull or load a model, refresh the dropdown, and select an installed model
 
-### «Página no encontrada» tras el despliegue
+### "Page not found" after deployment
 
-Si las rutas funcionan localmente pero no en producción:
+If routes work locally but not in production:
 
-1. **Revisa los ajustes del adaptador** - Asegúrate de que el adaptador de SvelteKit está bien configurado
-2. **Verifica la salida de build** - Revisa los registros de despliegue
-3. **Sensibilidad a mayúsculas** - Algunos hosts distinguen mayúsculas en las rutas de archivos
+1. **Check adapter settings** - Ensure the SvelteKit adapter is configured correctly
+2. **Verify build output** - Check the deployment logs
+3. **Case sensitivity** - Some hosts are case-sensitive for file paths
 
-### La consola muestra «Cannot read property of undefined»
+### Console shows "Cannot read property of undefined"
 
-Esto suele significar que algo cargó fuera de orden:
+This often means something loaded out of order:
 
-1. **Refresca la página**
-2. **Limpia la caché** - Refresco fuerte (Ctrl+Shift+R) en web, o reinicia la app de escritorio
-3. **Busca actualizaciones** - Trae el código más reciente si auto-alojas, o reinicia la app de escritorio
+1. **Refresh the page**
+2. **Clear cache** - Hard refresh (Ctrl+Shift+R) on web, or restart the desktop app
+3. **Check for updates** - Pull latest code if self-hosting, or restart the desktop app
 
-## Más ayuda
+## Getting More Help
 
-Si tu problema no está cubierto aquí:
+If your issue isn't covered here:
 
-1. Revisa los [GitHub Issues](https://github.com/JuiceBoxxGames/luna/issues) por problemas similares
-2. Abre un issue nuevo con:
-   - Versión de la app (web o escritorio) y navegador si es web
-   - Pasos para reproducirlo
-   - Cualquier error de consola
-   - Capturas de pantalla si son relevantes
+1. Check the [GitHub Issues](https://github.com/JuiceBoxxGames/utsuwa/issues) for similar problems
+2. Open a new issue with:
+   - App version (web or desktop) and browser if web
+   - Steps to reproduce
+   - Any console errors
+   - Screenshots if relevant

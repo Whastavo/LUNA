@@ -1,9 +1,9 @@
 import { page } from '$app/state';
 
 /**
- * Host-aware link builder for the subdomain split (docs.luna.ai, app.luna.ai).
+ * Host-aware link builder for the subdomain split (docs.utsuwa.ai, app.utsuwa.ai).
  *
- * - On the real luna.ai (apex or any subdomain): links resolve to the right
+ * - On the real utsuwa.ai (apex or any subdomain): links resolve to the right
  *   subdomain via absolute URLs. Same-origin links stay client-side (SPA) nav,
  *   cross-subdomain links do a normal full navigation.
  * - In local dev (localhost) and on *.vercel.app preview deploys: everything
@@ -14,14 +14,7 @@ import { page } from '$app/state';
  */
 
 type Section = 'docs' | 'app';
-const APEX = 'luna.ai';
-
-// Path prefix per section on path-based hosts (localhost + web deploy).
-// Routes live in Spanish; the subdomain split (docs.luna.ai) stays untouched.
-const SECTION_PATH: Record<Section, string> = {
-	docs: '/documentacion',
-	app: '/app'
-};
+const APEX = 'utsuwa.ai';
 
 function hostname(): string {
 	return page.url?.hostname ?? '';
@@ -41,7 +34,7 @@ function norm(path: string): string {
 /** Link to a page inside a section (docs or app). */
 export function sectionUrl(section: Section, path = ''): string {
 	const clean = norm(path);
-	return usesSubdomains() ? `https://${section}.${APEX}${clean}` : `${SECTION_PATH[section]}${clean}`;
+	return usesSubdomains() ? `https://${section}.${APEX}${clean}` : `/${section}${clean}`;
 }
 
 /** Link to a page on the main marketing site (the apex domain). */
@@ -59,10 +52,10 @@ export function mainUrl(path = ''): string {
 export function localPath(section: Section, path = ''): string {
 	const clean = norm(path);
 	const onThisSubdomain = usesSubdomains() && hostname().startsWith(`${section}.`);
-	return onThisSubdomain ? clean || '/' : `${SECTION_PATH[section]}${clean}`;
+	return onThisSubdomain ? clean || '/' : `/${section}${clean}`;
 }
 
 /** Whether the current page belongs to a section (subdomain or path-prefixed). */
 export function isSection(section: Section): boolean {
-	return hostname().startsWith(`${section}.`) || (page.url?.pathname ?? '').startsWith(SECTION_PATH[section]);
+	return hostname().startsWith(`${section}.`) || (page.url?.pathname ?? '').startsWith(`/${section}`);
 }

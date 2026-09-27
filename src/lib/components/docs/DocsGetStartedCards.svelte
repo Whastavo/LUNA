@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '$lib/components/ui/Icon.svelte';
+	import { GITHUB_RELEASES } from '$lib/config/site';
 	import { localPath, sectionUrl } from '$lib/config/links';
 </script>
 
@@ -10,14 +11,14 @@
 		</div>
 		<h3 class="card-title">Web</h3>
 		<p class="card-desc">
-			Sin instalación. Funciona por completo en tu navegador — en escritorio y móvil.
+			No installation required. Runs entirely in your browser — works on desktop and mobile.
 		</p>
 		<div class="card-actions">
 			<a href={sectionUrl('app')} class="card-btn primary">
-				<span>Abrir la app</span>
+				<span>Open App</span>
 				<Icon name="arrow-right" size={14} />
 			</a>
-			<a href={localPath('docs', '/guides/web-guide')} class="card-link">¿Cómo se usa?</a>
+			<a href={localPath('docs', '/guides/web-guide')} class="card-link">How to use?</a>
 		</div>
 	</div>
 
@@ -27,14 +28,14 @@
 		</div>
 		<h3 class="card-title">Desktop</h3>
 		<p class="card-desc">
-			App de escritorio con modo de superposición transparente para macOS, Windows y Linux.
+			Desktop app with transparent overlay mode for macOS, Windows, and Linux.
 		</p>
 		<div class="card-actions">
-			<a href="/descargar" class="card-btn primary">
-				<span>Descargar</span>
+			<a href={GITHUB_RELEASES} target="_blank" rel="noopener noreferrer" class="card-btn primary">
+				<span>Download</span>
 				<Icon name="download" size={14} />
 			</a>
-			<a href={localPath('docs', '/guides/desktop-guide')} class="card-link">Guía de instalación</a>
+			<a href={localPath('docs', '/guides/desktop-guide')} class="card-link">Setup guide</a>
 		</div>
 	</div>
 </div>
@@ -117,7 +118,7 @@
 
 	.card-btn.primary {
 		background: var(--accent);
-		color: var(--accent-contrast, #fff);
+		color: #fff;
 		border: 1px solid transparent;
 		box-shadow: var(--shadow-sm);
 	}

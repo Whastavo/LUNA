@@ -36,14 +36,6 @@ export function isLocalLLMProvider(providerId: string): boolean {
 	return LOCAL_LLM_PROVIDERS.has(providerId);
 }
 
-/** Custom OpenAI-compatible endpoints (aggregators, routers, self-hosted
- *  gateways) carry arbitrary models — vision capability is sniffed from the
- *  model id the same way local providers get it (0.19.2 fix: the paperclip
- *  was permanently disabled for these even with a Gemini behind them). */
-export function isOpenAICompatibleProvider(providerId: string): boolean {
-	return providerId === 'openai-compatible';
-}
-
 export function isLocalTTSProvider(providerId: string): boolean {
 	return LOCAL_TTS_PROVIDERS.has(providerId);
 }

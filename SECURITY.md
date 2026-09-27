@@ -1,57 +1,48 @@
-# Política de seguridad
+# Security Policy
 
-## Reportar una vulnerabilidad
+## Reporting a Vulnerability
 
-Si descubres una vulnerabilidad de seguridad en Luna, por favor repórtala abriendo un issue de GitHub o contactando al mantenedor directamente.
+If you discover a security vulnerability in Utsuwa, please report it by opening a GitHub issue or contacting the maintainer directly.
 
-## Alcance
+Please include:
+- A description of the vulnerability
+- Steps to reproduce
+- Potential impact
+- Any suggested fixes (if applicable)
 
-Esta política aplica a:
+## Security Considerations
 
-- La app web alojada en `luna.ai` y sus subdominios
-- La app de escritorio publicada en GitHub Releases
-- El código fuente en este repositorio
+### API Key Storage
 
-## Qué reportar
+Utsuwa stores API keys for LLM and TTS providers locally on your device. This means:
 
-Por favor reporta:
+- Keys are stored locally on your device only
+- Keys are not sent to any server other than the respective API providers
+- Keys persist until you remove them in Settings or clear the app's data
 
-- Vulnerabilidades de inyección (XSS, CSRF, inyección de SQL/NoSQL)
-- Problemas de autenticación o autorización
-- Divulgación de información sensible
-- Vulnerabilidades de dependencias de terceros
-- Cualquier problema que pueda comprometer la privacidad de los usuarios
+**Recommendations:**
+- Use Utsuwa on trusted devices only
+- Consider using API keys with usage limits when possible
+- Remove API keys in Settings if using a shared device
 
-## Cómo reportar
+### Client-Side Application
 
-1. **No** abras un issue público para vulnerabilidades de seguridad
-2. Envía un email a [seguridad@luna.ai](mailto:seguridad@luna.ai) con:
-   - Una descripción clara de la vulnerabilidad
-   - Pasos para reproducirla
-   - Impacto potencial
-   - Cualquier corrección sugerida
-3. O abre un issue privado en GitHub si lo prefieres
+Utsuwa stores all your data locally on your device. When self-hosting, chat and model-fetching requests are proxied through SvelteKit server-side API routes before reaching the provider. No data is stored server-side — the server acts only as a pass-through. When using the hosted version at utsuwa.ai, these requests pass through the deployment server in the same way.
 
-## Respuesta
+### Third-Party Services
 
-- Confirmaremos recepción en 48 horas
-- Proporcionaremos un plan de acción en 7 días
-- Trabajaremos contigo para resolver la vulnerabilidad antes de hacerla pública
-- Agradeceremos tu contribución en las notas de la versión (a menos que prefieras mantener el anonimato)
+When you configure API keys, Utsuwa communicates directly with:
+- LLM providers (OpenAI, Anthropic, Google, etc.)
+- TTS providers (ElevenLabs, OpenAI, etc.)
 
-## Cifrado de datos
+Please review the privacy policies and terms of service of any providers you choose to use.
 
-Luna almacena datos localmente en tu dispositivo usando IndexedDB. Los datos nunca se envían a nuestros servidores excepto cuando:
+## Supported Versions
 
-- Usas un proveedor de IA en la nube (tus mensajes van directamente a ese proveedor)
-- Usas la app web (las peticiones pueden retransmitirse a través de nuestros servidores)
+| Version | Supported          |
+| ------- | ------------------ |
+| 0.x.x   | :white_check_mark: |
 
-Las claves API se almacenan localmente y nunca se envían a nuestros servidores.
+## Updates
 
-## Actualizaciones de seguridad
-
-Las actualizaciones de seguridad se publican en GitHub Releases y se anuncian en el blog. La app de escritorio recibe actualizaciones automáticas.
-
-## Agradecimientos
-
-Agradecemos a los investigadores de seguridad que reportan vulnerabilidades de manera responsable.
+Security updates will be released as needed. Watch the repository for notifications about important updates.

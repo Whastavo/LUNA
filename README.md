@@ -1,389 +1,405 @@
 > [!WARNING]
-> Luna y Whizzend no han acuñado, lanzado, respaldado ni autorizado ninguna criptomoneda, token, moneda, NFT o proyecto de blockchain. Nunca lo haremos. Si ves cripto asociada con Luna, es una estafa.
+> Utsuwa and Juice Boxx Games have not minted, launched, endorsed, or authorized any cryptocurrency, token, coin, NFT, or blockchain project. We never will. If you see crypto associated with Utsuwa or The Lab, it is a scam. This repository is the only authentic Utsuwa project repository.
 
 <p align="center">
-  <img alt="Luna, la compañera de IA que puedes ver y con la que hablar" src="static/brand-assets/banner-light.avif" width="100%">
+  <img alt="Utsuwa, an open-source AI companion you can see and talk to" src="static/brand-assets/banner-light.avif" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://luna.ai">Sitio web</a>
+  <a href="https://utsuwa.ai">Website</a>
   ·
-  <a href="https://app.luna.ai">Pruébala en tu navegador</a>
+  <a href="https://app.utsuwa.ai">Try it in your browser</a>
   ·
-  <a href="https://docs.luna.ai">Documentación</a>
+  <a href="https://docs.utsuwa.ai">Docs</a>
   ·
-  <a href="https://luna.ai/blog">Blog</a>
+  <a href="https://utsuwa.ai/blog">Blog</a>
+  ·
+  <a href="https://github.com/JuiceBoxxGames/utsuwa/releases">Releases</a>
 </p>
 
 <p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg" alt="License: AGPL-3.0"></a>
+  <a href="https://github.com/JuiceBoxxGames/utsuwa/releases"><img src="https://img.shields.io/github/v/release/JuiceBoxxGames/utsuwa?label=Release&color=00b2ff" alt="Latest release"></a>
   <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-22+-green.svg" alt="Node.js 22+"></a>
-  <a href="https://luna.ai/download"><img src="https://img.shields.io/badge/Descargar-luna.ai-00b2ff" alt="Descargar Luna"></a>
+  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome"></a>
 </p>
 
 <p align="center">
-  <a href="https://luna.ai/download">
-    <img alt="Descargar Luna para escritorio" src="static/brand-assets/download-buttons/macos-light.avif" width="31%">
+  <a href="https://github.com/JuiceBoxxGames/utsuwa/releases/latest">
+    <img alt="Download for macOS" src="static/brand-assets/download-buttons/macos-light.avif" width="31%">
   </a>
-  <a href="https://luna.ai/download">
-    <img alt="Descargar Luna para Windows" src="static/brand-assets/download-buttons/windows-light.avif" width="31%">
+  <a href="https://github.com/JuiceBoxxGames/utsuwa/releases/latest">
+    <img alt="Download for Windows" src="static/brand-assets/download-buttons/windows-light.avif" width="31%">
   </a>
-  <a href="https://luna.ai/download">
-    <img alt="Descargar Luna para Linux" src="static/brand-assets/download-buttons/linux-light.avif" width="31%">
+  <a href="https://github.com/JuiceBoxxGames/utsuwa/releases/latest">
+    <img alt="Download for Linux" src="static/brand-assets/download-buttons/linux-light.avif" width="31%">
   </a>
 </p>
 
 <p align="center">
-  <sub>Las versiones beta están sin firmar, así que tu SO te advertirá al abrirla por primera vez (<a href="#descargar-la-app-de-escritorio">notas de instalación</a>). ¿Prefieres cero instalación? <a href="https://app.luna.ai">Ejecútala en tu navegador</a>.</sub>
+  <sub>Beta builds are unsigned, so your OS will warn on first launch (<a href="#download-the-desktop-app">install notes</a>). Prefer zero install? <a href="https://app.utsuwa.ai">Run it in your browser</a>.</sub>
 </p>
 
 ---
 
-**Luna es la compañera de IA de Whizzend, con avatares VRM 3D.** Una plataforma donde puedes tener una compañera virtual que aprende y crece contigo, con mecánicas opcionales inspiradas en los juegos [dating sim](https://en.wikipedia.org/wiki/Dating_sim) japoneses. Luna se enfoca en la privacidad: tus datos se almacenan localmente y nunca salen de tu dispositivo.
+**Utsuwa is an open-source AI companion with 3D VRM avatars.** A platform where you can have a virtual companion that learns and grows with you, bundled with optional mechanics inspired by Japanese [dating sim](https://en.wikipedia.org/wiki/Dating_sim) games. Utsuwa is privacy-focused: your data is stored locally and never leaves your device.
 
-"Luna" significa "compañera" en japonés. Un recipiente para que la IA habite visualmente.
+"Utsuwa" means "vessel" in Japanese. A container for AI to inhabit visually.
 
 <p align="center">
-  <img alt="La app Luna: una compañera VRM 3D con chat, estado de ánimo y voz" src="static/marketing/companion-light.webp" width="100%">
+  <img alt="The Utsuwa app: a 3D VRM companion with chat, mood, and voice" src="static/marketing/companion-light.webp" width="100%">
 </p>
 
-## Funcionalidades
+## Features
 
-- **Visor de modelos VRM**: Carga y muestra modelos de avatar VRM 3D con controles orbitales, encuadre automático por modelo y ajustes de cámara en vivo (zoom, altura, campo de visión)
-- **Herramientas de desarrollo**: Prueba expresiones faciles y animaciones VRM, o sube un archivo `.vrm` temporal para una vista previa no persistente que se revierte al salir de la página
-- **Modo AR**: En dispositivos con WebXR (Chrome Android, navegadores de visores), coloca a tu compañera en tu suelo real, arrástrala y pellizca para redimensionarla
-- **Modo foto**: Ponla en pose desde una biblioteca de poses, fija su expresión, elige un fondo, añade filtro de color, viñeta o marco, coloca pegatinas arrastrables en la toma y captura en alta resolución con una captura rápida o temporizador. El seguimiento de cabeza mantiene sus ojos en tu cámara mientras sostiene la pose
-- **Reacciones al tacto**: Tócala y reacciona con una expresión y una onda física por su pelo y ropa. Las reacciones dependen de dónde tocas y de lo cerca que estáis
-- **Fondos de escena**: Cambia el fondo tras ella por degradados pastel o patrones monos (lunares, corazones, destellos, rayas, vichy) desde el panel de Controles; tu elección persiste
-- **Intensidad física**: Un slider de Movimiento de Sutil a Vivo escala cuánto su pelo y ropa responden al movimiento, respetando la configuración de cada modelo
-- **UI centrada en el modelo**: Modelo 3D a pantalla completa con controles de overlay no intrusivos
-- **Burbujas de discurso 3D**: Las respuestas del chat aparecen como burbujas que siguen la cabeza del modelo en espacio 3D, reveladas palabra por palabra a velocidad configurable
-- **Ventana de chat**: Ventana flotante estilo mensajería con el historial completo de conversación y la entrada anclada dentro; arrástrala a cualquier parte, rediménsionala desde cualquier borde, ancla a la izquierda o derecha. Los modos de pantalla (Inmersivo, Ventana de chat, Ambos, Desactivado) están en Ajustes > Pantalla
-- **Estado de pensamiento**: Una etiqueta de brillo narra lo que ella está haciendo de verdad (Recordando, Mirando tu foto, Pensando), con un retraso configurable y un pitido suave opcional
-- **Interfaz de chat**: Barra de entrada flotante (izquierda, centro o derecha) con respuestas en streaming
-- **Entrada de voz**: Voz a texto mediante un servidor Whisper local (Speaches, faster-whisper-server, whisper.cpp), Groq (Whisper) o la Web Speech API del navegador, con visualización de audio en tiempo real
-- **Mostrarle fotos**: Muestra una imagen a tu compañera mediante el botón de adjuntar (clip) en la barra de chat o arrastrando. Los modelos con visión (GPT-4o, Claude, Gemini o locales como LLaVA) la ven de verdad y pueden recordar el momento, y las fotos guardadas viven en un tablero de recortes. Las imágenes se quedan en tu dispositivo y solo llegan a modelos con visión
-- **Integración LLM**: Soporte para 8 proveedores LLM: OpenAI, Anthropic, Google, xAI, DeepSeek, Ollama, LM Studio y cualquier endpoint compatible con OpenAI (OpenRouter, Together, vLLM, ...)
-- **Descubrimiento de modelos locales**: Ollama y LM Studio descubren modelos locales instalados directamente desde tu dispositivo
-- **Texto a voz**: Soporte para ElevenLabs y OpenAI TTS, voces locales mediante cualquier servidor compatible con OpenAI (Kokoro-FastAPI, openedai-speech) y OmniVoice local. OmniVoice en streaming: el habla empieza mientras el modelo aún escribe, y las palabras extranjeras pueden hablarse por palabra en su propio idioma y voz. Con OmniVoice + Voz alternativa, el modelo controla su respuesta hablada mediante llamadas a herramientas nativas `speak_segment` / `pause_segment` / `gesture_segment` (cuando las llamadas a herramientas están habilitadas); si no, se usa la sintaxis documentada `speak()` / `pause()` / `gesture()` en línea
-- **Opción totalmente local**: Ejecuta toda la pila sin conexión — LLM local (Ollama/LM Studio), TTS local y Whisper STT local — para que nada salga de tu dispositivo
-- **Sincronización labial**: Animación de boca impulsada por audio sincronizada con la reproducción TTS
-- **Animaciones**: Animaciones de reposo y habla basadas en VRMA con parpadeo automático
-- **Personalización del personaje**: Personaliza el nombre, la personalidad y el system prompt de tu compañera
-- **Tareas y temporizadores**: Tu compañera puede programar recordatorios para sí misma, por ejemplo para volver a contactarte más tarde. Los temporizadores activados y perdidos aparecen en el desplegable de recordatorios (icono de campana). Los recordatorios persisten entre recargas del navegador y se mantienen sincronizados entre la app principal y el overlay de escritorio
-- **Sistema de compañera**: Seguimiento de relación multi-eje con ánimo, eventos y memoria semántica
-- **Memoria semántica**: Búsqueda de memoria potenciada por IA local usando Transformers.js — encuentra recuerdos por significado, no solo por palabras clave
-- **Grafo de memoria**: Visualización interactiva que muestra cómo los recuerdos se conectan semánticamente
-- **Exportación/importación de datos**: Descarga tus datos como archivo de guardado, restaura en cualquier momento
-- **Temas**: Soporte de modo claro y oscuro con detección de preferencia del sistema
-- **App de escritorio** *(beta)*: App de escritorio nativa para macOS, Windows y Linux con modo overlay transparente, para que tu compañera flote en tu escritorio
+- **VRM Model Viewer**: Load and display VRM 3D avatar models with orbit controls, automatic camera framing per model, and live camera settings (zoom, height, field of view)
+- **Developer Tools**: Test VRM facial expressions and animations, or upload a temporary `.vrm` file for a non-persistent preview that reverts when you leave the page
+- **AR Mode**: On WebXR-capable devices (Android Chrome, headset browsers), place your companion on your real floor, drag her around, and pinch to resize
+- **Photo Mode**: Pose her from a pose library, set her expression, pick a background, add a color filter, vignette, or frame, drop draggable stickers on the shot, and capture in high resolution with a quick snap or self-timer. Head tracking keeps her eyes on your camera while she holds the pose
+- **Touch Reactions**: Tap her and she reacts with an expression and a physics ripple through hair and clothes. Reactions depend on where you tap and how close the two of you are
+- **Scene Backgrounds**: Swap the backdrop behind her for pastel gradients or cute patterns (dots, hearts, sparkles, stripes, gingham) right from the Controls panel; your pick persists
+- **Physics Intensity**: A Movement slider from Subtle to Lively scales how much her hair and outfit respond to motion, respecting each model's own rig tuning
+- **Model-Centric UI**: Full-screen 3D model with unobtrusive overlay controls
+- **3D Speech Bubbles**: Chat responses appear as bubbles that track the model's head in 3D space, revealed word by word at a configurable speed
+- **Chat Window**: Optional messenger-style floating window with the full conversation history and the input docked inside; drag it anywhere, resize from any edge, snap it left or right. Display modes (Immersive, Chat window, Both, Off) live in Settings > Display
+- **Thinking Status**: A shimmer label narrates what she is actually doing (Remembering, Looking at your photo, Thinking), with a configurable delay and an optional soft audio ping
+- **Chat Interface**: Floating input bar (left, center, or right aligned) with streaming responses
+- **Voice Input**: Speech-to-text via a local Whisper server (Speaches, faster-whisper-server, whisper.cpp), Groq (Whisper), or the browser's Web Speech API, with real-time audio visualization
+- **Show Her Photos**: Show your companion an image via the attach (paperclip) button in the chat bar or drag-and-drop. Vision-capable models (GPT-4o, Claude, Gemini, or local ones like LLaVA) actually see it and can remember the moment, and kept photos live on a scrapbook-style board. Images stay on your device and only ever reach vision-capable models
+- **LLM Integration**: Support for 8 LLM providers: OpenAI, Anthropic, Google, xAI, DeepSeek, Ollama, LM Studio, and any OpenAI-compatible endpoint (OpenRouter, Together, vLLM, ...)
+- **Local Model Discovery**: Ollama and LM Studio discover installed local models directly from your device
+- **Text-to-Speech**: Support for ElevenLabs and OpenAI TTS, local voices via any OpenAI-compatible server (Kokoro-FastAPI, openedai-speech), and local OmniVoice. OmniVoice streams: speech starts while the model is still writing, and foreign words can be spoken per word in their own language and voice. With OmniVoice + Alternative Voice, the model controls its spoken reply via native `speak_segment` / `pause_segment` / `gesture_segment` tool calls (when tool calling is enabled); otherwise the documented inline `speak()` / `pause()` / `gesture()` syntax is used
+- **Fully Local Option**: Run the whole stack offline — local LLM (Ollama/LM Studio), local TTS, and local Whisper STT — so nothing leaves your device
+- **Lip-sync**: Audio-driven mouth animation synced to TTS playback
+- **Animations**: VRMA-based idle and talking animations with automatic blinking
+- **Character Customization**: Customize your companion's name, personality, and system prompt
+- **Avatar Tasks & Timers**: Your companion can schedule reminders for itself, e.g. to check back with you later. Fired and missed timers appear in the reminder dropdown (bell icon) so you can see what happened and dismiss them. Reminders persist across browser reloads and stay in sync between the main app and the desktop overlay
+- **Companion System**: Multi-axis relationship tracking with mood, events, and semantic memory
+- **Semantic Memory**: Local AI-powered memory search using Transformers.js - finds memories by meaning, not just keywords
+- **Memory Graph**: Interactive visualization showing how memories connect semantically
+- **Data Export/Import**: Download your data as a save file, restore anytime
+- **Theming**: Light and dark mode support with system preference detection
+- **Desktop App** *(beta)*: Native desktop app for macOS, Windows, and Linux with transparent overlay mode, so your companion floats on your desktop
 
-### Almacenamiento local primero
+### Local-First Storage
 
-Todos tus datos se almacenan localmente en tu dispositivo usando IndexedDB:
-- No se requiere configuración de base de datos
-- Funciona sin conexión después de la carga inicial
-- Exporta/importa archivos de guardado para respaldar o transferir tus datos
-- Ajustes > Datos para gestionar tus archivos de guardado
+All your data is stored locally on your device using IndexedDB:
+- No database setup required
+- Works offline after initial load
+- Export/import save files to back up or transfer your data
+- Settings > Data to manage your save files
 
-### Sistema de compañera
+### Companion System
 
-Construye una relación significativa con tu compañera de IA mediante un sistema de progresión inspirado en dating sim:
+Build a meaningful relationship with your AI companion through a dating sim-inspired progression system:
 
-- **Relaciones multi-eje**: Seguimiento de afecto, confianza, intimidad, comodidad y respeto por separado
-- **8 etapas de relación**: Progresa de Desconocida → Conocida → Amiga → Amiga cercana → Interés romántico → Salindo → Comprometida → Alma gemela
-- **Ánimo dinámico**: Emociones en tiempo real con seguimiento de causalidad (recuerda *por qué* se siente de cierta manera)
-- **Eventos de novela visual**: Momentos hito, escenas románticas y opciones que importan — con diálogos personalizados y ramificaciones
-- **Memoria semántica**: Los hechos se indexan con embeddings vectoriales para recuperación basada en significado — "actividades al aire libre" encuentra recuerdos sobre senderismo. Se ejecuta localmente usando Transformers.js, sin llamadas a API
-- **Progresión natural**: Sistema híbrido que combina heurísticas de la app + sugerencias de LLM para un crecimiento de creíble
-- **Consciente del tiempo**: Tu compañera se da cuenta cuando has estado ausente y reacciona en consecuencia
-- **Tareas programadas**: La compañera puede configurar temporizadores/recordatorios para sí misma. Los temporizadores que saltaron mientras la app estaba cerrada se marcan como perdidos y se muestran en el desplegable de recordatorios para que los revises y descartes. La lista sobrevive a recargas del navegador y se mantiene sincronizada entre la app principal y las ventanas de overlay
+- **Multi-axis Relationships**: Track affection, trust, intimacy, comfort, and respect separately
+- **8 Relationship Stages**: Progress from Stranger → Acquaintance → Friend → Close Friend → Romantic Interest → Dating → Committed → Soulmate
+- **Dynamic Mood**: Real-time emotions with causality tracking (she remembers *why* she feels a certain way)
+- **Visual Novel Events**: Milestone moments, romantic scenes, and choices that matter - with custom dialogue and branching responses
+- **Semantic Memory**: Facts are indexed with vector embeddings for meaning-based retrieval - "outdoor activities" finds memories about hiking. Runs locally using Transformers.js, no API calls
+- **Natural Progression**: Hybrid system combining app heuristics + LLM suggestions for believable relationship growth
+- **Time-Aware**: Your companion notices when you've been away and reacts accordingly
+- **Scheduled Tasks**: The companion can set timers/reminders for itself. Timers that fired while the app was closed are marked as missed and shown in the reminder dropdown for you to review and dismiss. The list survives a browser reload and is kept in sync across the main app and overlay windows
 
-Consulta la [Arquitectura del sistema de compañera](https://docs.luna.ai/technology/companion-system) para más detalles.
+See the [Companion System Architecture](https://docs.utsuwa.ai/technology/companion-system) for full details.
 
-### App de escritorio (Beta)
+### Desktop Application (Beta)
 
-Una app de escritorio nativa construida con Tauri que incluye todas las funcionalidades web más:
+A native desktop app built with Tauri that includes all web features plus:
 
-- **Modo overlay**: Tu compañera flota en tu escritorio con fondo transparente
-- **Siempre visible**: El overlay se mantiene visible sobre todas las demás ventanas
-- **Posicionamiento arrastrable**: Haz clic y arrastra el personaje para reposicionarla en cualquier parte de la pantalla, o bloquea su posición
-- **Overlay redimensionable**: Pasa el cursor para revelar un marco suave y arrastra la pestaña de la esquina para redimensionar; tu tamaño se recuerda
-- **Cámara de overlay**: Un perfil de cámara separado (zoom, altura, FOV) ajustado independientemente de la app principal
-- **Chat flotante: Entrada de chat expandible que aparece al hacer clic en el icono de chat, con respuestas en una burbuja anclada legible
-- **Cambio de ventana**: Cambia sin problemas entre la app completa y el modo overlay
-- **Atajos de teclado global**: Push-to-talk, alternar overlay y enfocar chat con atajos de teclado
+- **Overlay Mode**: Your companion floats on your desktop with a transparent background
+- **Always-on-Top**: The overlay stays visible over all other windows
+- **Draggable Positioning**: Click and drag the character to reposition anywhere on screen, or lock her in place
+- **Resizable Overlay**: Hover to reveal a soft frame and drag the corner tab to resize; your size is remembered
+- **Overlay Camera**: A separate camera profile (zoom, height, FOV) tuned independently from the main app
+- **Floating Chat**: Expandable chat input that appears when you click the chat icon, with replies in a readable docked bubble
+- **Window Switching**: Seamlessly switch between the full app and overlay mode
+- **Global Hotkeys**: Push-to-talk, toggle overlay, and focus chat with keyboard shortcuts
 
-La app de escritorio usa la misma base de código que la versión web, y tus archivos de guardado son compatibles entre ambas.
+The desktop app uses the same codebase as the web version, and your save files are compatible between both.
 
-## Proveedores soportados
+## Supported Providers
 
-### Proveedores LLM (8)
+### LLM Providers (8)
 
-Luna soporta LLM populares en la nube y locales. Para endpoints que hablan la API de OpenAI (OpenRouter, Together, vLLM, LiteLLM, etc.), usa el proveedor **Compatible con OpenAI**:
-- Establece la **URL base** a la raíz del endpoint (p. ej. `https://api.openai.com/v1/`).
-- La **Clave API** es opcional; déjala vacía para servidores locales sin clave.
-- Introduce un modelo manualmente u obtén los modelos disponibles después de proporcionar una URL base.
-- Los **Parámetros avanzados** (temperatura, top-p, tokens máximos, penalizaciones de presencia/frecuencia) se pasan al endpoint cuando se establecen.
+Utsuwa supports popular cloud and local LLMs. For endpoints that speak the OpenAI API (OpenRouter, Together, vLLM, LiteLLM, etc.), use the **OpenAI-Compatible** provider:
+- Set the **Base URL** to the endpoint root (e.g. `https://api.openai.com/v1/`).
+- **API Key** is optional; leave it empty for keyless local servers.
+- Enter a model manually or fetch available models after providing a base URL.
+- **Advanced Parameters** (temperature, top-p, max tokens, presence/frequency penalties) are passed to the endpoint when set.
 
-| Categoría | Proveedores |
-|-----------|-------------|
-| **Nube** | OpenAI, Anthropic, Google Gemini, DeepSeek, xAI (Grok) |
+| Category | Providers |
+|----------|-----------|
+| **Cloud** | OpenAI, Anthropic, Google Gemini, DeepSeek, xAI (Grok) |
 | **Local** | Ollama, LM Studio |
-| **Compatible con OpenAI** | OpenRouter, Together, vLLM, LiteLLM, etc. |
+| **OpenAI-Compatible** | OpenRouter, Together, vLLM, LiteLLM, etc. |
 
-#### Ventana de contexto y presupuesto de memoria
+#### Context Window and Memory Budget
 
-El ajuste de **Ventana de contexto** está disponible para cada proveedor LLM. Cuando está habilitado, le indica a Luna cuántos tokens puede procesar el modelo seleccionado. La app entonces:
+The **Context Window** setting is available for every LLM provider. When enabled, it tells Utsuwa how many tokens the selected model can process. The app then:
 
-- Recupera el número correspondiente de turnos de conversación recientes de la memoria de trabajo.
-- Escala la cantidad de memoria inyectada (turnos de conversación recientes y hechos relevantes) para ajustarse al tamaño de la ventana.
-- Trunca el historial de chat más antiguo antes de enviar, manteniendo siempre el system prompt y el mensaje más reciente del usuario.
+- Retrieves the matching number of recent conversation turns from working memory.
+- Scales the amount of injected memory (recent conversation turns and relevant facts) to match the window size.
+- Truncates older chat history before sending, always keeping the system prompt and the user's newest message.
 
-Si el ajuste se deja desactivado, Luna mantiene los valores históricos por defecto (10 turnos recuperados, 6 turnos inyectados, 5 hechos) y no trunca el historial. Esto es útil cuando quieres que el proveedor gestione su propio contexto.
+If the setting is left off, Utsuwa keeps the historical defaults (10 retrieved turns, 6 injected turns, 5 facts) and does not truncate history. This is useful when you want the provider to handle its own context management.
 
-### Proveedores TTS (4)
+### TTS Providers (4)
 
-| Categoría | Proveedores |
-|-----------|-------------|
-| **Nube** | ElevenLabs, OpenAI TTS |
-| **Local** | TTS local (Kokoro-FastAPI, openedai-speech, cualquier servidor compatible con OpenAI), OmniVoice |
+| Category | Providers |
+|----------|-----------|
+| **Cloud** | ElevenLabs, OpenAI TTS |
+| **Local** | Local TTS (Kokoro-FastAPI, openedai-speech, any OpenAI-compatible server), OmniVoice |
 
-OmniVoice es una opción de texto a voz completamente local que se ejecuta en tu propia GPU o CPU. Soporta tanto voces sintéticas integradas como clonaciones de voz personalizadas, cubre muchos idiomas y puede cambiar entre dos voces **por palabra**: cuando estás aprendiendo un idioma, las palabras y frases extranjeras se hablan en su propio idioma y dialecto (con una segunda voz opcional), mientras que la explicación circundante se mantiene en la voz principal. El habla empieza mientras el modelo aún escribe — las frases completas se sintetizan en cuanto llegan. Consulta la [Configuración de OmniVoice](https://docs.luna.ai/docs/guides/omnivoice) para instrucciones de instalación.
+OmniVoice is a fully local text-to-speech option that runs on your own GPU or CPU. It supports both built-in synthetic voices and custom voice clones, covers many languages, and can switch between two voices **per word**: when you are learning a language, foreign words and phrases are spoken in their own language and dialect (with an optional second voice), while the surrounding explanation stays in the primary voice. Speech starts while the model is still writing — complete sentences are synthesised as soon as they arrive. See [OmniVoice Setup](https://docs.utsuwa.ai/docs/guides/omnivoice) for installation instructions.
 
-Con OmniVoice y la **Voz alternativa** habilitada, la capa de habla exige llamadas a herramientas nativas: el modelo entrega su respuesta hablada como llamadas a herramientas `speak_segment` (más `pause_segment` para pausas silenciosas y `gesture_segment` para gestos pequeños). Estas llamadas llegan completas, por lo que no pueden dividirse por límites de chunks de streaming. Las llamadas a herramientas están **habilitadas por defecto** y pueden desactivarse en los ajustes de voz; cuando se desactivan (o el proveedor no las soporta), el modelo usa la sintaxis en línea `speak()` / `pause()` / `gesture()` — esa ruta en línea sigue siendo el fallback documentado y su output se sanitiza defensivamente.
+With OmniVoice and **Alternative Voice** enabled, the speech layer mandates native tool calling: the model delivers its spoken reply as `speak_segment` tool calls (plus `pause_segment` for silent pauses and `gesture_segment` for small gestures). These calls arrive whole, so they cannot be broken up by streaming chunk boundaries. Tool calling is **on by default** and can be disabled in the speech settings; when it is disabled (or the provider does not support it), the model uses the inline `speak()` / `pause()` / `gesture()` syntax instead — that inline path remains the documented fallback and its output is sanitised defensively.
 
-El cambio de idioma tiene dos capas. El modelo declara el idioma por segmento mediante `speak_segment`; el orquestador de voz luego valida y divide cada segmento contra el par de idiomas de la sesión usando el detector de idioma embebido ([eld](https://www.npmjs.com/package/eld)), que está restringido exactamente al idioma principal y al alternativo. Las frases mixtas se subdividen además en carreras de idiomas (ancladas en artículos, palabras funcionales, diacríticos y terminaciones de infinitivo) para que cada mitad mantenga su propia voz. Cada idioma secundario que ofrece el proxy puede seleccionarse, pero las tablas de señales están completas para alemán, inglés y español en todas las direcciones de par; otros idiomas recurren a la detección por segmento completo.
+Language switching has two layers. The model declares the language per segment via `speak_segment`; the speech orchestrator then validates and splits every segment against the session's language pair using the embedded language detector ([eld](https://www.npmjs.com/package/eld)), which is restricted to exactly the primary and the alternative language. Mixed sentences are additionally carved into language runs (anchored on articles, function words, diacritics and infinitive endings) so both halves keep their own voice. Every secondary language the proxy offers can be selected, but the signal tables are fleshed out for German, English and Spanish in every pair direction; other languages fall back to whole-segment detection only.
 
-### Proveedores STT (4)
+### STT Providers (4)
 
-| Categoría | Proveedores |
-|-----------|-------------|
-| **Local** | STT local (Speaches, faster-whisper-server, whisper.cpp, cualquier servidor compatible con OpenAI `/v1/audio/transcriptions`) |
-| **Nube** | Groq (Whisper), OpenAI (Whisper) |
-| **Navegador** | Web Speech API (no requiere clave API) |
+| Category | Providers |
+|----------|-----------|
+| **Local** | Local STT (Speaches, faster-whisper-server, whisper.cpp, any OpenAI-compatible `/v1/audio/transcriptions` server) |
+| **Cloud** | Groq (Whisper), OpenAI (Whisper) |
+| **Browser** | Web Speech API (no API key required) |
 
-La entrada de voz se accede mediante el botón de micrófono en la barra de chat. La selección es automática por prioridad: un servidor Whisper local configurado tiene preferencia, luego Groq, luego OpenAI, luego la Web Speech API del navegador. Un servidor local o una clave en la nube funciona en cualquier plataforma incluyendo escritorio; la Web Speech API funciona sin clave API en Chrome, Edge y Safari. Consulta la [Configuración de STT local](https://docs.luna.ai/docs/guides/local-stt-setup) para ejecutar un servidor Whisper local.
+Voice input is accessed via the microphone button in the chat bar. Selection is automatic by priority: a configured local Whisper server wins, then Groq, then OpenAI, then the browser's Web Speech API. A local server or a cloud key works on any platform including desktop; Web Speech API works without an API key in Chrome, Edge, and Safari. See [Local STT Setup](https://docs.utsuwa.ai/docs/guides/local-stt-setup) to run a local Whisper server.
 
-## Primeros pasos
+## Getting Started
 
 > [!NOTE]
-> Luna está en sus primeras etapas de desarrollo. Si estás usando la app, **guarda tus datos con frecuencia**. Las primeras versiones pueden no tener estados de guardado compatibles con versiones anteriores y podrían requerir reformateo manual.
+> Utsuwa is in its very early development stages. If you're using the app, **save your data often**. Early versions may not have backwards-compatible save states and could require manual reformatting.
 
-### Pruébala online
+### Try it Online
 
-Usa Luna directamente en **[app.luna.ai](https://app.luna.ai)**. No se requiere instalación.
+Use Utsuwa directly at **[app.utsuwa.ai](https://app.utsuwa.ai)**. No installation required.
 
-### Descargar la app de escritorio
+### Download the Desktop App
 
-Las versiones de escritorio nativas (con modo overlay transparente) están disponibles para las tres plataformas en [luna.ai/download](https://luna.ai/download):
+Native desktop builds (with transparent overlay mode) are available for all three platforms on the [GitHub Releases](https://github.com/JuiceBoxxGames/utsuwa/releases) page:
 
-| Plataforma | Descarga |
-|------------|----------|
+| Platform | Download |
+|----------|----------|
 | **macOS** | `.dmg` (universal: Apple Silicon + Intel) |
-| **Windows** | `.exe` instalador |
-| **Linux** | `.AppImage`, `.deb` o `.rpm` |
+| **Windows** | `.exe` installer |
+| **Linux** | `.AppImage`, `.deb`, or `.rpm` |
 
 > [!NOTE]
-> La app de escritorio está en beta y actualmente **sin firmar**, así que tu SO te advertirá la primera vez que la abras.
-> - **macOS:** clic derecho en la app → **Abrir** → **Abrir** (o ejecuta `xattr -dr com.apple.quarantine /Applications/Luna.app`).
-> - **Windows:** en el aviso de SmartScreen, haz clic en **Más información** → **Ejecutar de todos modos**.
+> The desktop app is in beta and currently **unsigned**, so your OS will warn you the first time you open it.
+> - **macOS:** right-click the app → **Open** → **Open** (or run `xattr -dr com.apple.quarantine /Applications/Utsuwa.app`).
+> - **Windows:** on the SmartScreen prompt, click **More info** → **Run anyway**.
 
-### Autoalojamiento
+### Self-Hosting
 
-Si prefieres ejecutar Luna localmente:
+If you prefer to run Utsuwa locally or host your own instance:
 
-#### Requisitos previos
+#### Prerequisites
 
 - Node.js 22+
-- pnpm (recomendado) o npm
-- Un navegador moderno (Chrome, Firefox, Safari, Edge) para la versión web
+- pnpm (recommended) or npm
+- A modern browser (Chrome, Firefox, Safari, Edge) for the web version
 
-#### Instalación
+#### Installation
 
 ```bash
-# Clonar el repositorio
-git clone <tu-despliegue-de-luna>.git
-cd luna
+# Clone the repository
+git clone https://github.com/JuiceBoxxGames/utsuwa.git
+cd utsuwa
 
-# Instalar dependencias
+# Install dependencies
 pnpm install
 
-# Iniciar servidor de desarrollo
+# Start development server
 pnpm dev
 ```
 
-La app estará disponible en `http://localhost:5173`
+The app will be available at `http://localhost:5173`
 
-#### Ejecutar la app de escritorio (Beta)
+#### Running the Desktop App (Beta)
 
-Para ejecutar la app de escritorio desde el código fuente, necesitarás la [cadena de herramientas de Rust](https://rustup.rs/) además de los requisitos previos web:
+To run the desktop app from source, you'll need the [Rust toolchain](https://rustup.rs/) in addition to the web prerequisites:
 
 ```bash
-# Instalar Rust (si no está instalado)
+# Install Rust (if not already installed)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-# Ejecutar la app de escritorio
+# Run the desktop app
 pnpm tauri dev
 ```
 
-#### Configuración
+#### Configuration
 
-1. Haz clic en **Ajustes** (icono de engranaje) en la barra lateral
-2. Navega a **Ajustes > Modelo LLM** para configurar tu proveedor de chat:
-   - Habilita Chat (LLM)
-   - Selecciona un proveedor en la nube e introduce tu clave API
-   - O selecciona un servidor local como Ollama o LM Studio y elige un modelo instalado del desplegable de modelos detectados
-   - Opcional: habilita la **Ventana de contexto** para escalar la inyección de memoria y el truncado de historial al límite de tokens de tu modelo
-3. Configura el texto a voz en **Ajustes > TTS** (opcional):
-   - Selecciona un proveedor TTS
-   - Introduce tu clave API
-   - Configura los ajustes de voz
-    - Para **OmniVoice**, diseña una voz sintética (género, edad, tono, acento), previsualízala, regenera el perfil persistente o clona una nueva voz desde una muestra de audio corta. Opcionalmente habilita la **Voz alternativa** para que las palabras extranjeras se hablen en su propio idioma con una segunda voz. Los cambios de idioma los declara el modelo por segmento y luego se validan por frase e incluso en mitad de frase por el detector embebido (frases citadas en español/inglés, acentos, patrones de palabras característicos), para que cada parte mantenga su propia voz
-4. Configura la entrada de voz en **Ajustes > STT** (opcional):
-   - Introduce tu clave API de Groq u OpenAI, o establece la URL de un servidor Whisper local
+1. Click the **Settings** (gear icon) in the sidebar
+2. Navigate to **Settings > LLM Model** to configure your chat provider:
+   - Enable Chat (LLM)
+   - Select a cloud provider and enter your API key
+   - Or select a local server like Ollama or LM Studio and choose an installed model from the discovered model dropdown
+   - Optional: enable **Context Window** to scale memory injection and history truncation to your model's token limit
+3. Configure text-to-speech in **Settings > TTS** (optional):
+   - Select a TTS provider
+   - Enter your API key
+   - Configure voice settings
+    - For **OmniVoice**, design a synthetic voice (gender, age, pitch, accent), preview it, regenerate the persistent profile, or clone a new voice from a short audio sample. Optionally enable the **Alternative Voice** so foreign words are spoken in their own language with a second voice. Language switches are model-declared per segment and then validated per sentence and even mid-sentence by the embedded detector (quoted Spanish/English phrases, accents, characteristic word patterns), so each part keeps its own voice
+4. Configure voice input in **Settings > STT** (optional):
+   - Enter your Groq or OpenAI API key, or set a local Whisper server URL
 
-Todas las claves API se almacenan localmente en tu dispositivo y nunca se envían a ningún servidor excepto a los respectivos proveedores de API.
+All API keys are stored locally on your device and are never sent to any server except the respective API providers.
 
-#### Cargar un modelo VRM
+#### Loading a VRM Model
 
-1. Ve a **Ajustes > Personaje** y encuentra la galería de **Avatar**
-2. Elige uno de los modelos incluidos, o haz clic en **Añadir personalizado** para subir tu propio archivo `.vrm`
+1. Go to **Settings > Character** and find the **Avatar** gallery
+2. Pick one of the bundled models, or click **Add Custom** to upload your own `.vrm` file
 
-#### Gestión de datos
+#### Data Management
 
-Los datos de tu compañera se almacenan localmente en tu dispositivo. Para respaldar o transferir tus datos:
+Your companion data is stored locally on your device. To back up or transfer your data:
 
-1. Ve a **Ajustes > Datos**
-2. Haz clic en **Exportar guardado** para descargar un archivo JSON con todos tus datos
-3. Para restaurar, haz clic en **Importar guardado** y selecciona tu archivo de guardado
-4. Elige **Reemplazar** (limpiar y restaurar) o **Combinar** (añadir a los existentes)
+1. Go to **Settings > Data**
+2. Click **Export Save** to download a JSON file with all your data
+3. To restore, click **Import Save** and select your save file
+4. Choose **Replace** (wipe and restore) or **Merge** (add to existing)
 
-## Estructura del proyecto
+## Project Structure
 
 ```
-luna/
+utsuwa/
 ├── src/
 │   ├── lib/
-│   │   ├── ai/             # Parseo de respuestas LLM y construcción de prompts
-│   │   ├── assets/         # Recursos estáticos
-│   │   ├── components/     # Componentes Svelte
-│   │   ├── config/         # Configuración de la app y documentación
-│   │   ├── data/           # Definiciones de eventos y datos estáticos
-│   │   ├── db/             # Base de datos IndexedDB (Dexie)
-│   │   ├── engine/         # Motor de compañera (estado, memoria, eventos)
-│   │   ├── services/       # Servicios LLM, TTS, STT, almacenamiento
-│   │   ├── stores/         # Stores de Svelte 5 (gestión de estado)
-│   │   ├── styles/         # CSS compartido (prose, etc.)
-│   │   ├── types/          # Tipos TypeScript
-│   │   └── utils/          # Funciones de utilidad
+│   │   ├── ai/             # LLM response parsing and prompt building
+│   │   ├── assets/         # Static assets
+│   │   ├── components/     # Svelte components
+│   │   ├── config/         # App and docs configuration
+│   │   ├── data/           # Event definitions and static data
+│   │   ├── db/             # IndexedDB database (Dexie)
+│   │   ├── engine/         # Companion engine (state, memory, events)
+│   │   ├── services/       # LLM, TTS, STT, storage services
+│   │   ├── stores/         # Svelte 5 stores (state management)
+│   │   ├── styles/         # Shared CSS (prose, etc.)
+│   │   ├── types/          # TypeScript types
+│   │   └── utils/          # Utility functions
 │   ├── content/
-│   │   ├── blog/           # Contenido markdown de posts del blog
-│   │   └── docs/           # Contenido markdown del sitio de documentación
+│   │   ├── blog/           # Blog post markdown content
+│   │   └── docs/           # Documentation site markdown content
 │   └── routes/
-│       ├── app/            # Rutas de la aplicación principal
-│       ├── api/            # Rutas API
-│       ├── blog/           # Rutas del blog
-│       ├── docs/           # Rutas del sitio de documentación
-│       └── overlay/        # Ruta del overlay de escritorio
-├── src-tauri/               # App de escritorio Tauri (Rust)
-├── static/                  # Assets servidos (faces, forms, motion, scenes, blog, fonts…)
-│   └── generated/          # Derivados del Asset Optimizer (ignorado por git, regenerable)
-├── assets-src/              # Maestros que NO se despliegan (marketing, visuals) — fuente del optimizador
-├── tools/                   # Helpers opcionales e integraciones autoalojadas
-│   └── omnivoice/          # Proxy local OmniVoice TTS
+│       ├── app/            # Main application routes
+│       ├── api/            # API routes
+│       ├── blog/           # Blog routes
+│       ├── docs/           # Documentation site routes
+│       └── overlay/        # Desktop overlay route
+├── src-tauri/               # Tauri desktop app (Rust)
+├── static/
+│   └── models/             # Place default VRM models here
+├── tools/                   # Optional helpers and self-hosted integrations
+│   └── omnivoice/          # Local OmniVoice TTS proxy
 └── package.json
 ```
 
 ## Scripts
 
 ```bash
-pnpm dev          # Iniciar servidor de desarrollo web
-pnpm test         # Ejecutar suite de tests (node --test)
-pnpm build        # Construir app web para producción
-pnpm preview      # Previsualizar build de producción
-pnpm lint         # Verificar tipos del proyecto (svelte-check)
-pnpm check        # Igual que lint (alias)
-pnpm check:watch  # Verificar tipos en modo observación
-pnpm assets:optimize  # Regenerar variantes optimizadas a mano (ya corre solo en dev/build; maestros en assets-src/ y static/, derivados en static/generated/<tipo>/<asset>/)
-pnpm tauri dev    # Ejecutar app de escritorio en modo desarrollo
-pnpm tauri build  # Construir instalador de app de escritorio
+pnpm dev          # Start web development server
+pnpm test         # Run the test suite (node --test)
+pnpm build        # Build web app for production
+pnpm preview      # Preview production build
+pnpm lint         # Type-check the project (svelte-check)
+pnpm check        # Same as lint (alias)
+pnpm check:watch  # Type-check in watch mode
+pnpm tauri dev    # Run the desktop app in development mode
+pnpm tauri build  # Build desktop app installer
 ```
 
-## Hoja de ruta
+## Roadmap
 
-### Completado
+### Completed
 
-- [x] Carga y visualización de modelos VRM con controles orbitales
-- [x] Burbujas de discurso 3D que siguen la posición de la cabeza del modelo
-- [x] Soporte multi-proveedor LLM (8 proveedores)
-- [x] Soporte multi-proveedor TTS (4 proveedores)
-- [x] Sincronización labial impulsada por audio
-- [x] Animaciones basadas en VRMA (reposo, habla, parpadeo)
-- [x] Sistema de compañera con relaciones multi-eje
-- [x] Progresión de relación de 8 etapas (Desconocida → Alma gemela)
-- [x] Sistema de eventos de novela visual con opciones
-- [x] Sistema de memoria semántica con embeddings locales (Transformers.js)
-- [x] Decaimiento y recuperación de ánimo y relación basados en tiempo
-- [x] Almacenamiento local primero con IndexedDB con exportación/importación
-- [x] Sistema de temas con modos claro/oscuro
-- [x] Entrada de voz mediante servidor Whisper local, Groq, OpenAI (Whisper) y Web Speech API
-- [x] App de escritorio con modo overlay transparente (macOS, Windows y Linux)
-- [x] Builds de escritorio multiplataforma vía CI (macOS, Windows, Linux)
-- [x] Actualizaciones automáticas dentro de la app para la app de escritorio
-- [x] Mostrar imágenes de la compañera (visión multimodal) con tablero de fotos de recuerdos
-- [x] Endpoint LLM compatible con OpenAI personalizado (OpenRouter, Together, Mistral, vLLM, LiteLLM, ...)
-- [x] Modo AR en dispositivos con WebXR
-- [x] Ajustes de cámara en vivo (zoom, altura, campo de visión) con perfiles por overlay
-- [x] Control de ventana de contexto con escalado de memoria y truncado de historial
-- [x] Recordatorios y temporizadores con desplegable de alarmas, consciente multi-ventana
-- [x] Modo foto: poses, expresiones, fondos, filtros, marcos, pegatinas, seguimiento de cabeza, captura en alta resolución
-- [x] Reacciones al tacto por etapa de relación
-- [x] Fondos de escena persistentes (degradados y patrones pastel)
-- [x] Slider de intensidad de física de spring bones
-- [x] OmniVoice TTS local — Soporte de proxy OmniVoice autoalojado para texto a voz local
+- [x] VRM model loading and display with orbit controls
+- [x] 3D speech bubbles tracking model head position
+- [x] Multi-provider LLM support (8 providers)
+- [x] Multi-provider TTS support (4 providers)
+- [x] Audio-driven lip-sync
+- [x] VRMA-based animations (idle, talking, blinking)
+- [x] Companion system with multi-axis relationships
+- [x] 8-stage relationship progression (Stranger → Soulmate)
+- [x] Visual novel event system with choices
+- [x] Semantic memory system with local embeddings (Transformers.js)
+- [x] Time-based mood and relationship decay/recovery
+- [x] Local-first IndexedDB storage with export/import
+- [x] Theme system with light/dark modes
+- [x] Voice input via local Whisper server, Groq, OpenAI (Whisper), and Web Speech API
+- [x] Desktop application with transparent overlay mode (macOS, Windows, and Linux)
+- [x] Cross-platform desktop builds via CI (macOS, Windows, Linux)
+- [x] In-app auto-updates for the desktop app
+- [x] Show companion images (multimodal vision) with a keepsake photo board
+- [x] Custom OpenAI-compatible LLM endpoint (OpenRouter, Together, Mistral, vLLM, LiteLLM, ...)
+- [x] AR mode on WebXR-capable devices
+- [x] Live camera settings (zoom, height, field of view) with per-overlay profiles
+- [x] Context window control with memory scaling and history truncation
+- [x] Reminders and timers with an alarm dropdown, multi-window aware
+- [x] Photo mode: poses, expressions, backgrounds, filters, frames, stickers, head tracking, high-res capture
+- [x] Relationship-staged touch reactions
+- [x] Persistent scene backgrounds (pastel gradients and patterns)
+- [x] Spring-bone physics intensity slider
+- [x] OmniVoice Local TTS - Self-hosted OmniVoice proxy support for local text-to-speech
 
-### En progreso / Planeado
+### In Progress / Planned
 
-- [ ] **Subida de archivos y vídeo** — Añadir soporte para adjuntar archivos y vídeos para flujos de trabajo LLM multimodal y proveedores que pueden usar contexto más rico o herramientas conscientes de la web (el soporte de imágenes ya está disponible)
-- [ ] **Soporte Live2D** — Alternativa a VRM para avatares 2D animados
-- [ ] **Modo de voz sin manos** — Conversación dúplex completa: habla de forma natural y ella responde, sin push-to-talk, con detección de actividad de voz
-- [ ] **Llamadas a herramientas MCP** — Soporte del Protocolo de Contexto de Modelo para que tu compañera pueda ir más allá del chat: buscar noticias en la web, obtener datos en vivo o preguntarte sobre vocabulario de español, a través de servidores MCP que ejecutes tú mismo
-- [ ] **Diseño de chat flexible** — Elige entre la barra de chat flotante, una barra lateral de conversación completa, o ambas a la vez
+- [ ] **File and Video Uploads** - Add support for attaching files and videos for multimodal LLM workflows and providers that can use richer context or web-aware tools (image support has shipped)
+- [ ] **Live2D Support** - Alternative to VRM for 2D animated avatars
+- [ ] **Hands-Free Voice Mode** - Full duplex conversation: speak naturally and she answers, no push-to-talk, with voice activity detection
+- [ ] **MCP Tool Calling** - Model Context Protocol support so your companion can reach beyond the chat: search the web for news, pull live data, or quiz you on Spanish vocabulary, through MCP servers you run yourself
+- [ ] **Flexible Chat Layout** - Choose between the floating chat bar, a full conversation sidebar, or both at once
 
-## Seguridad
+## Contributing
 
-Para información sobre consideraciones de seguridad y cómo reportar vulnerabilidades, por favor consulta nuestra [Política de seguridad](SECURITY.md).
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on how to submit pull requests, report issues, and contribute to the project.
 
-## Agradecimientos
+## Security
 
-Luna se construye sobre los hombros de estos excelentes proyectos:
+For information about security considerations and how to report vulnerabilities, please see our [Security Policy](SECURITY.md).
 
-### Inspiración
+## Acknowledgments
 
-- **[Airi](https://github.com/moeru-ai/airi)** — Una hermosa compañera de IA con soporte de avatar VRM.
-- **[Amica](https://github.com/semperai/amica)** — Compañera de IA con soporte VRM y expresiones emocionales.
-- **[Riko Project](https://github.com/rayenfeng/riko_project)** de [JustRyan](https://www.youtube.com/@JustRayen) — Proyecto de waifu IA que muestra interacciones con avatares VRM.
+Utsuwa is built on the shoulders of these excellent projects:
 
-### Tecnologías principales
+### Inspiration
 
-- **[@pixiv/three-vrm](https://github.com/pixiv/three-vrm)** — Carga y renderizado de modelos VRM para Three.js
-- **[xsAI](https://github.com/moeru-ai/xsai)** — `@xsai/stream-text` transmite respuestas de LLM en la nube en el despliegue web alojado
-- **[Three.js](https://github.com/mrdoob/three.js)** — Motor de gráficos 3D
-- **[Threlte](https://github.com/threlte/threlte)** — Componentes Svelte para Three.js
-- **[SvelteKit](https://github.com/sveltejs/kit)** — Framework de aplicación web
-- **[Tauri](https://github.com/tauri-apps/tauri)** — Framework de aplicación de escritorio
-- **[Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)** — Framework CSS utility-first
-- **[Transformers.js](https://github.com/xenova/transformers.js)** — ML en navegador para embeddings de memoria semántica
+- **[Airi](https://github.com/moeru-ai/airi)** - The original inspiration for this project. A beautiful AI companion with VRM avatar support.
+- **[Amica](https://github.com/semperai/amica)** - Open-source AI companion with VRM support and emotional expressions.
+- **[Riko Project](https://github.com/rayenfeng/riko_project)** by [JustRyan](https://www.youtube.com/@JustRayen) - AI waifu project showcasing VRM avatar interactions.
 
-### UI y datos
+### Core Technologies
 
-- **[bits-ui](https://github.com/huntabyte/bits-ui)** — Componentes UI headless para Svelte
-- **[Dexie.js](https://github.com/dexie/Dexie.js)** — Wrapper de IndexedDB para almacenamiento local
-- **[force-graph](https://github.com/vasturiano/force-graph)** — Visualización de grafos dirigidos por fuerza para el grafo de memoria
-- **[simple-icons](https://github.com/simple-icons/simple-icons)** — Iconos SVG para logos de proveedores
+- **[@pixiv/three-vrm](https://github.com/pixiv/three-vrm)** - VRM model loading and rendering for Three.js
+- **[xsAI](https://github.com/moeru-ai/xsai)** - `@xsai/stream-text` streams cloud LLM responses on the hosted web deployment
+- **[Three.js](https://github.com/mrdoob/three.js)** - 3D graphics engine
+- **[Threlte](https://github.com/threlte/threlte)** - Svelte components for Three.js
+- **[SvelteKit](https://github.com/sveltejs/kit)** - Web application framework
+- **[Tauri](https://github.com/tauri-apps/tauri)** - Desktop application framework
+- **[Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)** - Utility-first CSS framework
+- **[Transformers.js](https://github.com/xenova/transformers.js)** - In-browser ML for semantic memory embeddings
 
-## Licencia
+### UI & Data
 
-Luna es un producto propietario de Whizzend.
+- **[bits-ui](https://github.com/huntabyte/bits-ui)** - Headless UI components for Svelte
+- **[Dexie.js](https://github.com/dexie/Dexie.js)** - IndexedDB wrapper for local storage
+- **[force-graph](https://github.com/vasturiano/force-graph)** - Force-directed graph visualization for memory graph
+- **[simple-icons](https://github.com/simple-icons/simple-icons)** - SVG icons for provider logos
 
+## License
 
+Utsuwa is licensed under the [GNU AGPL-3.0-or-later](LICENSE). In plain terms: you can use, modify, self-host, and redistribute it freely, and if you offer a modified version to others, including over a network, you share your changes under the same license.
+
+Releases up to and including 0.12.0 were published under the MIT License and remain so. Code contributed under MIT is carried forward with its attribution intact.
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=JuiceBoxxGames%2Futsuwa&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=JuiceBoxxGames/utsuwa&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=JuiceBoxxGames/utsuwa&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=JuiceBoxxGames/utsuwa&type=date&legend=top-left" />
+ </picture>
+</a>

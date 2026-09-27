@@ -159,31 +159,13 @@ export function createDefaultMood(): MoodState {
 
 // Default system prompt for new characters
 export const DEFAULT_SYSTEM_PROMPT =
-	'Eres una asistente de IA amigable llamada Luna. Te comunicas a través de un avatar VRM y puedes expresar emociones mediante expresiones faciales y gestos. Sé servicial, conversadora y agradable.';
-
-/**
- * Aviso: esto es una cadena legada. El prompt por defecto era inglés antes
- * de la traducción; se normaliza al español al cargar el personaje.
- */
-export const LEGACY_ENGLISH_DEFAULT_PROMPTS = [
-	'You are a friendly AI assistant named Luna. You communicate through a VRM avatar and can express emotions through facial expressions and gestures. Be helpful, conversational, and engaging.',
-	'You are a friendly AI assistant named Luna.',
-	'You are a friendly AI assistant displayed as a VRM avatar named Luna. Keep responses conversational and relatively concise.'
-] as const;
-
-/** Devuelve el prompt en español si el prompt guardado coincide con un aviso en inglés antiguo. */
-export function normalizeSystemPrompt(prompt: string | null | undefined): string {
-	if (prompt && LEGACY_ENGLISH_DEFAULT_PROMPTS.includes(prompt as never)) {
-		return DEFAULT_SYSTEM_PROMPT;
-	}
-	return prompt ?? DEFAULT_SYSTEM_PROMPT;
-}
+	'You are a friendly AI assistant named Utsuwa. You communicate through a VRM avatar and can express emotions through facial expressions and gestures. Be helpful, conversational, and engaging.';
 
 export function createDefaultCharacterState(): Omit<CharacterState, 'id'> {
 	const now = new Date();
 	return {
 		// Persona fields
-		name: 'Luna',
+		name: 'Utsuwa',
 		systemPrompt: DEFAULT_SYSTEM_PROMPT,
 		extensions: {},
 
@@ -222,56 +204,56 @@ export interface RelationshipStageInfo {
 
 export const RELATIONSHIP_STAGE_INFO: Record<RelationshipStage, RelationshipStageInfo> = {
 	companion: {
-		name: 'Compañera',
-		description: 'Tu asistente de IA servicial',
+		name: 'Companion',
+		description: 'Your helpful AI assistant',
 		color: 'var(--ctp-blue)',
 		icon: 'sparkles'
 	},
 	stranger: {
-		name: 'Desconocida',
-		description: 'Acabáis de conoceros. Ella es educada pero reservada.',
+		name: 'Stranger',
+		description: 'You just met. She is polite but guarded.',
 		color: '#9ca0b0', // overlay0
 		icon: '👤'
 	},
 	acquaintance: {
-		name: 'Conocida',
-		description: 'Está empezando a coger confianza contigo.',
+		name: 'Acquaintance',
+		description: 'She is starting to warm up to you.',
 		color: '#1e66f5', // blue
 		icon: '👋'
 	},
 	friend: {
-		name: 'Amiga',
-		description: 'Se siente a gusto contigo y disfruta de tu compañía.',
+		name: 'Friend',
+		description: 'She is comfortable around you and enjoys your company.',
 		color: '#40a02b', // green
 		icon: '😊'
 	},
 	close_friend: {
-		name: 'Amiga cercana',
-		description: 'Confía profundamente en ti y comparte sus pensamientos con libertad.',
+		name: 'Close Friend',
+		description: 'She trusts you deeply and shares her thoughts freely.',
 		color: '#8839ef', // mauve
 		icon: '💜'
 	},
 	romantic_interest: {
-		name: 'Interés romántico',
-		description: 'Hay algo más entre vosotros...',
+		name: 'Romantic Interest',
+		description: 'There is something more between you...',
 		color: '#ea76cb', // pink
 		icon: '💕'
 	},
 	dating: {
-		name: 'Salindo',
-		description: 'Ya estáis juntos. Ella es abiertamente afectuosa.',
+		name: 'Dating',
+		description: 'You are together now. She is openly affectionate.',
 		color: '#dd7878', // flamingo
 		icon: '💑'
 	},
 	committed: {
-		name: 'Comprometida',
-		description: 'Compromiso y amor profundos. Pareja en todo.',
+		name: 'Committed',
+		description: 'Deep commitment and love. Partners in everything.',
 		color: '#d20f39', // red
 		icon: '💖'
 	},
 	soulmate: {
-		name: 'Alma gemela',
-		description: 'Un vínculo profundo e inquebrantable. Verdaderas almas gemelas.',
+		name: 'Soulmate',
+		description: 'Profound, unshakeable bond. True partners.',
 		color: '#e64553', // maroon
 		icon: '💞'
 	}
@@ -286,16 +268,16 @@ export interface MoodInfo {
 }
 
 export const MOOD_INFO: Record<Emotion, MoodInfo> = {
-	happy: { name: 'Feliz', description: '¡Se siente bien!', color: 'var(--ctp-yellow)', icon: 'smile' },
-	sad: { name: 'Triste', description: 'Se siente mal...', color: 'var(--ctp-blue)', icon: 'sad' },
-	excited: { name: 'Emocionada', description: '¡Qué emoción!', color: 'var(--ctp-peach)', icon: 'sparkles' },
-	anxious: { name: 'Ansiosa', description: 'Un poco preocupada...', color: 'var(--ctp-mauve)', icon: 'alert-circle' },
-	content: { name: 'Satisfecha', description: 'En paz consigo misma', color: 'var(--ctp-green)', icon: 'sun' },
-	frustrated: { name: 'Frustrada', description: 'Uf...', color: 'var(--ctp-red)', icon: 'frown' },
-	curious: { name: 'Curiosa', description: 'Hmm, interesante...', color: 'var(--ctp-sky)', icon: 'circle-help' },
-	affectionate: { name: 'Cariñosa', description: 'Sintiéndose cerca de ti', color: 'var(--ctp-pink)', icon: 'heart' },
-	playful: { name: 'Juguetona', description: 'De humor juguetón~', color: 'var(--ctp-teal)', icon: 'smile' },
-	melancholy: { name: 'Melancólica', description: 'Reflexionando...', color: 'var(--ctp-overlay0)', icon: 'meh' },
-	flustered: { name: 'Sonrojada', description: '¿Q-qué?!', color: 'var(--ctp-red)', icon: 'zap' },
-	neutral: { name: 'Neutral', description: 'Normal y corriente', color: 'var(--ctp-subtext0)', icon: 'minus' }
+	happy: { name: 'Happy', description: 'Feeling good!', color: 'var(--ctp-yellow)', icon: 'smile' },
+	sad: { name: 'Sad', description: 'Feeling down...', color: 'var(--ctp-blue)', icon: 'sad' },
+	excited: { name: 'Excited', description: 'So excited!', color: 'var(--ctp-peach)', icon: 'sparkles' },
+	anxious: { name: 'Anxious', description: 'A bit worried...', color: 'var(--ctp-mauve)', icon: 'alert-circle' },
+	content: { name: 'Content', description: 'Peacefully content', color: 'var(--ctp-green)', icon: 'sun' },
+	frustrated: { name: 'Frustrated', description: 'Ugh...', color: 'var(--ctp-red)', icon: 'frown' },
+	curious: { name: 'Curious', description: 'Hmm, interesting...', color: 'var(--ctp-sky)', icon: 'circle-help' },
+	affectionate: { name: 'Affectionate', description: 'Feeling close to you', color: 'var(--ctp-pink)', icon: 'heart' },
+	playful: { name: 'Playful', description: 'In a playful mood~', color: 'var(--ctp-teal)', icon: 'smile' },
+	melancholy: { name: 'Melancholy', description: 'Feeling reflective...', color: 'var(--ctp-overlay0)', icon: 'meh' },
+	flustered: { name: 'Flustered', description: 'W-what?!', color: 'var(--ctp-red)', icon: 'zap' },
+	neutral: { name: 'Neutral', description: 'Just normal', color: 'var(--ctp-subtext0)', icon: 'minus' }
 };

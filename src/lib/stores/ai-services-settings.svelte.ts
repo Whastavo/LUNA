@@ -115,13 +115,13 @@ export function createLlmSettingsState() {
 			},
 			onError: (error) => {
 				llmIsLoading = false;
-				llmFetchError = error ?? 'No se pudieron obtener los modelos instalados';
+				llmFetchError = error ?? 'Could not fetch installed models';
 				llmDynamicModels = provider.isLocal ? [] : null;
 			},
 			onEmpty: () => {
 				llmIsLoading = false;
 				llmFetchError = provider.isLocal
-					? 'No se encontraron modelos instalados. Descarga un modelo y actualiza.'
+					? 'No installed models found. Pull a model, then refresh.'
 					: null;
 				llmDynamicModels = provider.isLocal ? [] : null;
 			},
@@ -293,7 +293,7 @@ export function createTtsSettingsState() {
 			},
 			onError: (error) => {
 				ttsIsLoading = false;
-				ttsFetchError = error ?? 'Usando la lista predeterminada';
+				ttsFetchError = error ?? 'Using default list';
 				ttsDynamicModels = null;
 			},
 			onEmpty: () => {

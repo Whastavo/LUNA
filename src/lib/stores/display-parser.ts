@@ -1,7 +1,6 @@
 import { clampPhysicsIntensity, PHYSICS_INTENSITY_DEFAULT } from '../engine/spring-physics.ts';
 import {
 	sanitizeSceneBackground,
-	DEFAULT_SCENE_BACKGROUND,
 	type SceneBackground
 } from '../services/scene-backgrounds.ts';
 import {
@@ -13,7 +12,6 @@ import {
 	DEFAULT_WAIT_TONE_ENABLED,
 	DEFAULT_TEXT_REVEAL_SPEED,
 	DEFAULT_CHAT_BAR_ALIGNMENT,
-	DEFAULT_SCREEN_WAKE_LOCK,
 	type CameraSettings,
 	type ChatDisplayMode,
 	type SidebarPosition,
@@ -31,9 +29,7 @@ export function sanitizeCamera(raw: Partial<CameraSettings> | undefined): Camera
 			raw?.height ?? CAMERA_DEFAULTS.height,
 			CAMERA_LIMITS.height.min,
 			CAMERA_LIMITS.height.max
-		),
-		// Settings saved before the pan existed stay centered (utsuwa 0.15.0).
-		panX: clamp(raw?.panX ?? CAMERA_DEFAULTS.panX, CAMERA_LIMITS.panX.min, CAMERA_LIMITS.panX.max)
+		)
 	};
 }
 
@@ -42,7 +38,7 @@ function isChatDisplayMode(value: unknown): value is ChatDisplayMode {
 }
 
 function isSidebarPosition(value: unknown): value is SidebarPosition {
-	return value === 'left' || value === 'right' || value === 'center';
+	return value === 'left' || value === 'right';
 }
 
 function isTextRevealSpeed(value: unknown): value is TextRevealSpeed {
@@ -68,7 +64,6 @@ export interface ParsedDisplaySettings {
 	typingIndicatorDelayMs: number;
 	textRevealSpeed: TextRevealSpeed;
 	chatBarAlignment: ChatBarAlignment;
-	screenWakeLock: boolean;
 }
 
 /**
@@ -94,14 +89,13 @@ export function parseDisplaySettings(raw: unknown): ParsedDisplaySettings {
 			camera: { ...CAMERA_DEFAULTS },
 			overlayCamera: { ...CAMERA_DEFAULTS },
 			physicsIntensity: PHYSICS_INTENSITY_DEFAULT,
-			sceneBackground: { ...DEFAULT_SCENE_BACKGROUND },
+			sceneBackground: sanitizeSceneBackground(undefined),
 			chatDisplayMode: DEFAULT_CHAT_DISPLAY_MODE,
 			sidebarPosition: DEFAULT_SIDEBAR_POSITION,
 			waitToneEnabled: DEFAULT_WAIT_TONE_ENABLED,
 			typingIndicatorDelayMs: DEFAULT_TYPING_INDICATOR_DELAY_MS,
 			textRevealSpeed: DEFAULT_TEXT_REVEAL_SPEED,
-			chatBarAlignment: DEFAULT_CHAT_BAR_ALIGNMENT,
-			screenWakeLock: DEFAULT_SCREEN_WAKE_LOCK
+			chatBarAlignment: DEFAULT_CHAT_BAR_ALIGNMENT
 		};
 	}
 
@@ -146,11 +140,6 @@ export function parseDisplaySettings(raw: unknown): ParsedDisplaySettings {
 			? parsed.waitToneEnabled
 			: DEFAULT_WAIT_TONE_ENABLED;
 
-	const screenWakeLock =
-		typeof parsed.screenWakeLock === 'boolean'
-			? parsed.screenWakeLock
-			: DEFAULT_SCREEN_WAKE_LOCK;
-
 	let typingIndicatorDelayMs = DEFAULT_TYPING_INDICATOR_DELAY_MS;
 	if (typeof parsed.typingIndicatorDelayMs === 'number' && !Number.isNaN(parsed.typingIndicatorDelayMs)) {
 		typingIndicatorDelayMs = Math.max(0, Math.min(10000, parsed.typingIndicatorDelayMs));
@@ -164,5 +153,5 @@ export function parseDisplaySettings(raw: unknown): ParsedDisplaySettings {
 		? parsed.chatBarAlignment
 		: DEFAULT_CHAT_BAR_ALIGNMENT;
 
-	return { camera, overlayCamera, physicsIntensity, sceneBackground, chatDisplayMode, sidebarPosition, waitToneEnabled, typingIndicatorDelayMs, textRevealSpeed, chatBarAlignment, screenWakeLock };
+	return { camera, overlayCamera, physicsIntensity, sceneBackground, chatDisplayMode, sidebarPosition, waitToneEnabled, typingIndicatorDelayMs, textRevealSpeed, chatBarAlignment };
 }

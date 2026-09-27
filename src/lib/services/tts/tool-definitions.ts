@@ -30,34 +30,34 @@ export interface GestureParams {
 export const TOOL_DEFINITIONS = [
 	{
 		name: 'speak',
-		description: 'Habla el texto dado en el idioma especificado. Omite lang para el idioma principal.',
+		description: 'Speak the given text in the specified language. Omit lang for the primary language.',
 		parameters: {
 			type: 'object',
 			properties: {
-				text: { type: 'string', description: 'El texto a hablar' },
-				lang: { type: 'string', description: 'Código de idioma ISO 639-1 (p. ej. de, en, es, fr)' }
+				text: { type: 'string', description: 'The text to speak' },
+				lang: { type: 'string', description: 'ISO 639-1 language code (e.g. de, en, es, fr)' }
 			},
 			required: ['text']
 		}
 	},
 	{
 		name: 'pause',
-		description: 'Inserta una pausa entre segmentos de habla.',
+		description: 'Insert a pause between speech segments.',
 		parameters: {
 			type: 'object',
 			properties: {
-				ms: { type: 'number', description: 'Duración de la pausa en milisegundos (100–5000)' }
+				ms: { type: 'number', description: 'Pause duration in milliseconds (100–5000)' }
 			},
 			required: ['ms']
 		}
 	},
 	{
 		name: 'gesture',
-		description: 'Activa una expresión del avatar.',
+		description: 'Trigger an avatar expression.',
 		parameters: {
 			type: 'object',
 			properties: {
-				type: { type: 'string', description: 'sonreír, reír, sorprender, asentir, sacudir_cabeza, saludar' }
+				type: { type: 'string', description: 'smile, laugh, surprise, nod, shake_head, wave' }
 			},
 			required: ['type']
 		}

@@ -69,7 +69,7 @@ class WebSpeechService {
 
 	startListening(callbacks: SpeechRecognitionCallbacks): boolean {
 		if (!this.isSupported()) {
-			callbacks.onError('El reconocimiento de voz no es compatible con este navegador');
+			callbacks.onError('Speech recognition not supported in this browser');
 			return false;
 		}
 
@@ -83,7 +83,7 @@ class WebSpeechService {
 
 		this.recognition.continuous = true;
 		this.recognition.interimResults = true;
-		this.recognition.lang = 'es-ES';
+		this.recognition.lang = 'en-US';
 		this.recognition.maxAlternatives = 1;
 
 		this.recognition.onstart = () => {
@@ -124,20 +124,20 @@ class WebSpeechService {
 				return;
 			}
 			// Map error codes to user-friendly messages
-		const errorMessages: Record<string, string> = {
-			'not-allowed': 'Acceso al micrófono denegado',
-			'audio-capture': 'No se encontró micrófono',
-			'network': 'Se produjo un error de red',
-			'service-not-allowed': 'Servicio de voz no permitido'
-		};
-		this.callbacks?.onError(errorMessages[event.error] || `Error de voz: ${event.error}`);
+			const errorMessages: Record<string, string> = {
+				'not-allowed': 'Microphone access denied',
+				'audio-capture': 'No microphone found',
+				'network': 'Network error occurred',
+				'service-not-allowed': 'Speech service not allowed'
+			};
+			this.callbacks?.onError(errorMessages[event.error] || `Speech error: ${event.error}`);
 		};
 
 		try {
 			this.recognition.start();
 			return true;
 		} catch (e) {
-			callbacks.onError('No se pudo iniciar el reconocimiento de voz');
+			callbacks.onError('Failed to start speech recognition');
 			return false;
 		}
 	}

@@ -10,17 +10,12 @@
 	let { characterName, onComplete }: Props = $props();
 
 	const activeModel = $derived(vrmStore.models.find((m) => m.id === vrmStore.activeModelId));
-	// Busto del retrato (hombro-arriba): un avatar debe mostrar el rostro.
-	const portrait = $derived(
-		(vrmStore.activeModelId ? vrmStore.getModelPortrait(vrmStore.activeModelId, 'bust') : undefined) ??
-			activeModel?.previewUrl
-	);
 </script>
 
 <div class="ob-step ob-step--center">
 	<div class="avatar">
-		{#if portrait}
-			<img src={portrait} alt={activeModel?.name ?? 'Luna'} />
+		{#if activeModel?.previewUrl}
+			<img src={activeModel.previewUrl} alt={activeModel.name} />
 		{:else}
 			<div class="avatar-fallback">
 				<Icon name="user" size={40} />
@@ -29,12 +24,12 @@
 	</div>
 
 	<div class="ob-head">
-		<h2 class="ob-title">Conoce a {characterName}</h2>
-		<p class="ob-subtitle">Tu compañera está lista — salúdala cuando quieras.</p>
+		<h2 class="ob-title">Meet {characterName}</h2>
+		<p class="ob-subtitle">Your companion is ready — say hello whenever you like.</p>
 	</div>
 
 	<button class="btn btn-primary btn-lg btn-block" onclick={onComplete}>
-		Empezar a chatear
+		Start chatting
 		<Icon name="arrow-right" size={16} />
 	</button>
 </div>

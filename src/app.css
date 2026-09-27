@@ -27,32 +27,26 @@
 }
 
 :root {
-	/* Backgrounds (Apple gray ladder: pure neutral, no blue cast) */
+	/* Backgrounds (white -> light gray -> gray ladder; grays used as fills) */
 	--bg-page: #ffffff;
 	--bg-primary: #ffffff;
-	--bg-secondary: #f5f5f7;
-	--bg-tertiary: #e8e8ed;
+	--bg-secondary: #f2f4f7;
+	--bg-tertiary: #e8ecf1;
 
-	/* Text (Apple/Expo silver ladder: pure neutral, zero blue cast —
-	   screenshot-grade contrast on the white page) */
-	--text-primary: #1d1d1f;
-	--text-secondary: #6e6e73;
-	--text-tertiary: #86868b;
+	/* Text (one ink, varied strength) */
+	--text-primary: #1c2b33;
+	--text-secondary: #70767d;
+	--text-tertiary: #9da9b7;
 
 	/* Borders */
-	--border-light: #d2d2d7;
-	--border-subtle: #e8e8ed;
+	--border-light: #d9d9d9;
+	--border-subtle: #eceef1;
 
-	/* Accent: neutral ink — the landing's expo voice, now product-wide.
-	   One accent for the whole system in both themes; fills are ink in light
-	   and white in dark, so --accent-contrast follows the page color. */
-	--accent: var(--text-primary);
-	--accent-hover: color-mix(in srgb, var(--text-primary) 86%, var(--bg-page));
-	--accent-muted: color-mix(in srgb, var(--text-primary) 16%, transparent);
-	--accent-subtle: color-mix(in srgb, var(--text-primary) 7%, transparent);
-	/* Text that sits ON a solid accent fill: page color — ink-on-white in
-	   light, white-on-ink in dark. Always full contrast. */
-	--accent-contrast: var(--bg-page);
+	/* Accent */
+	--accent: #00b2ff;
+	--accent-hover: #0096d6;
+	--accent-muted: rgba(0, 178, 255, 0.1);
+	--accent-subtle: rgba(0, 178, 255, 0.05);
 
 	/* Fonts */
 	--font-sans: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -64,50 +58,43 @@
 	--glass-bg: rgba(255, 255, 255, 0.72);
 	--glass-bg-subtle: rgba(255, 255, 255, 0.55);
 
-	/* Gradient orbs (neutral silver washes — the pastel blue/pink/purple
-	   fought the Apple/expo minimal voice) */
-	--gradient-orb-blue: radial-gradient(circle, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
-	--gradient-orb-pink: radial-gradient(circle, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0) 70%);
-	--gradient-orb-purple: radial-gradient(circle, rgba(0, 0, 0, 0.045) 0%, rgba(0, 0, 0, 0) 70%);
-	--gradient-orb-peach: radial-gradient(circle, rgba(0, 0, 0, 0.035) 0%, rgba(0, 0, 0, 0) 70%);
+	/* Gradient orbs (pastel aurora) */
+	--gradient-orb-blue: radial-gradient(circle, rgba(216, 237, 255, 0.85) 0%, rgba(216, 237, 255, 0) 70%);
+	--gradient-orb-pink: radial-gradient(circle, rgba(253, 221, 222, 0.85) 0%, rgba(253, 221, 222, 0) 70%);
+	--gradient-orb-purple: radial-gradient(circle, rgba(244, 231, 255, 0.85) 0%, rgba(244, 231, 255, 0) 70%);
+	--gradient-orb-peach: radial-gradient(circle, rgba(255, 247, 231, 0.85) 0%, rgba(255, 247, 231, 0) 70%);
 
-	/* Aurora gradients (neutral silver — same voice as the page) */
-	--gradient-aurora: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%);
-	--gradient-aurora-cool: linear-gradient(135deg, #eeeef0 0%, #e3e3e8 100%);
-	--gradient-aurora-iris: linear-gradient(135deg, #f5f5f7 0%, #ececf0 49%, #f0f0f4 100%);
-	--gradient-aurora-mint: linear-gradient(135deg, #ececee 0%, #f5f5f7 100%);
+	/* Aurora gradients (hero shapes, avatars, thumbnails) */
+	--gradient-aurora: linear-gradient(135deg, #f4e7ff 0%, #fdddde 100%);
+	--gradient-aurora-cool: linear-gradient(135deg, #e7fdff 0%, #ede4ff 100%);
+	--gradient-aurora-iris: linear-gradient(135deg, #feefff 0%, #effcff 49%, #f9fae9 100%);
+	--gradient-aurora-mint: linear-gradient(135deg, #dffdf1 0%, #fcfddd 100%);
 
-	/* Button gradient (neutral silver) */
-	--gradient-button: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%);
-	--gradient-button-hover: linear-gradient(135deg, #eeeef0 0%, #e0e0e5 100%);
+	/* Button gradient (decorative pastel) */
+	--gradient-button: linear-gradient(135deg, #f4e7ff 0%, #fdddde 100%);
+	--gradient-button-hover: linear-gradient(135deg, #ebd9ff 0%, #fcced0 100%);
 
-	/* Shadows (soft, ambient — pure neutral, no blue cast) */
-	--shadow-xs: 0 0 6px rgba(0, 0, 0, 0.04);
-	--shadow-sm: 0 0 10px rgba(0, 0, 0, 0.06);
-	--shadow-md: 0 0 16px rgba(0, 0, 0, 0.08);
-	--shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
-	--shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
-	--shadow-glow: 0 4px 20px 6px rgba(0, 0, 0, 0.08);
+	/* Shadows (soft, ambient) */
+	--shadow-xs: 0 0 6px rgba(28, 43, 51, 0.04);
+	--shadow-sm: 0 0 10px rgba(28, 43, 51, 0.06);
+	--shadow-md: 0 0 16px rgba(28, 43, 51, 0.08);
+	--shadow-lg: 0 8px 24px rgba(28, 43, 51, 0.1);
+	--shadow-xl: 0 16px 48px rgba(28, 43, 51, 0.12);
+	--shadow-glow: 0 4px 20px 6px rgba(58, 156, 255, 0.1);
 
 	/* Interactive surface effects (soft + accent blue) */
-	--skeu-shadow-soft: 0 0 16px rgba(0, 0, 0, 0.08);
-	--skeu-shadow-lifted: 0 8px 24px rgba(0, 0, 0, 0.12);
+	--skeu-shadow-soft: 0 0 16px rgba(28, 43, 51, 0.08);
+	--skeu-shadow-lifted: 0 8px 24px rgba(28, 43, 51, 0.12);
 	--skeu-shadow-button: 0 4px 20px 6px rgba(58, 156, 255, 0.1);
-	--skeu-inset: inset 0 1px 2px rgba(0, 0, 0, 0.05);
-	--skeu-inset-deep: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+	--skeu-inset: inset 0 1px 2px rgba(28, 43, 51, 0.05);
+	--skeu-inset-deep: inset 0 2px 4px rgba(28, 43, 51, 0.08);
 	--skeu-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 	--skeu-highlight-strong: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-	--skeu-glow-blue: 0 0 20px color-mix(in srgb, var(--text-primary) 35%, transparent);
-	--skeu-glow-blue-strong: 0 0 30px color-mix(in srgb, var(--text-primary) 50%, transparent);
+	--skeu-glow-blue: 0 0 20px rgba(0, 178, 255, 0.35);
+	--skeu-glow-blue-strong: 0 0 30px rgba(0, 178, 255, 0.5);
 
 	/* Motion */
 	--ease-brand: cubic-bezier(0.16, 1, 0.3, 1);
-
-	/* ── Silver title gradient (the hero's signature, sitewide) ──
-	   Ink that melts into silver at the foot: the same treatment on every
-	   big section title, in both themes. Pure-neutral stops, no blue cast. */
-	--title-silver-light: linear-gradient(180deg, var(--text-primary) 34%, color-mix(in srgb, var(--text-primary) 48%, transparent));
-	--title-silver-dark: linear-gradient(180deg, #ffffff 30%, rgba(255, 255, 255, 0.55) 78%, rgba(255, 255, 255, 0.34) 100%);
 
 	/* Radius */
 	--radius-xs: 4px;
@@ -127,7 +114,7 @@
 	--stat-trust: #22c55e;
 	--stat-intimacy: #ff477f;
 	--stat-comfort: #8b5cf6;
-	--stat-energy: #f59e0b;
+	--stat-energy: #00b2ff;
 	--stat-respect: #f97316;
 	--stat-affection: #ff477f;
 
@@ -141,17 +128,17 @@
 	--tier-eternal-bond: #8b5cf6;
 
 	/* Scrollbar */
-	--scrollbar-thumb: rgba(0, 0, 0, 0.12);
-	--scrollbar-thumb-hover: rgba(0, 0, 0, 0.2);
+	--scrollbar-thumb: rgba(28, 43, 51, 0.12);
+	--scrollbar-thumb-hover: rgba(28, 43, 51, 0.2);
 
 	/* Scene colors for 3D */
-	--scene-bg: #f5f5f7;
+	--scene-bg: #f2f4f7;
 	--scene-placeholder: #8b5cf6;
 
-	/* Primary color scale (maps to accent — neutral ink, no cyan) */
-	--color-primary-400: var(--accent);
+	/* Primary color scale (maps to accent) */
+	--color-primary-400: #4cc9ff;
 	--color-primary-500: var(--accent);
-	--color-primary-700: var(--accent);
+	--color-primary-700: #0077b3;
 
 	/* Red color scale (for destructive states) */
 	--color-red-100: #fef2f2;
@@ -185,42 +172,43 @@
 	--ctp-sky: #06b6d4;
 	--ctp-subtext0: var(--text-secondary);
 	--ctp-overlay0: var(--text-tertiary);
-}	.dark {
-	/* Backgrounds (pure neutral dark ladder, silver-texture like Apple's) */
-	--bg-page: #000000;
-	--bg-primary: #0d0d0f;
-	--bg-secondary: #161618;
-	--bg-tertiary: #232326;
+}
 
-	/* Text (Apple silver ladder on black: #f5f5f7 / #a1a1a6 / #6e6e73) */
-	--text-primary: #f5f5f7;
-	--text-secondary: #a1a1a6;
-	--text-tertiary: #6e6e73;
+.dark {
+	/* Backgrounds (slate from the #1c2b33 ink) */
+	--bg-page: #000000;
+	--bg-primary: #0c1116;
+	--bg-secondary: #141b21;
+	--bg-tertiary: #1d262e;
+
+	/* Text */
+	--text-primary: #f6f8f9;
+	--text-secondary: #9da9b7;
+	--text-tertiary: #70767d;
 
 	/* Borders */
-	--border-light: #2a2a2e;
-	--border-subtle: #1d1d20;
+	--border-light: #26313a;
+	--border-subtle: #1b242b;
 
-	/* Accent: same neutral ink as light (white fills in dark). */
-	--accent: var(--text-primary);
-	--accent-hover: color-mix(in srgb, var(--text-primary) 86%, var(--bg-page));
-	--accent-muted: color-mix(in srgb, var(--text-primary) 16%, transparent);
-	--accent-subtle: color-mix(in srgb, var(--text-primary) 7%, transparent);
-	--accent-contrast: var(--bg-page);
+	/* Accent */
+	--accent: #00b2ff;
+	--accent-hover: #33c1ff;
+	--accent-muted: rgba(0, 178, 255, 0.16);
+	--accent-subtle: rgba(0, 178, 255, 0.08);
 
 	/* Glass surfaces */
-	--glass-bg: rgba(22, 22, 24, 0.72);
-	--glass-bg-subtle: rgba(22, 22, 24, 0.55);
+	--glass-bg: rgba(20, 27, 33, 0.72);
+	--glass-bg-subtle: rgba(20, 27, 33, 0.55);
 
-	/* Gradient orbs (neutral white washes in dark) */
-	--gradient-orb-blue: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
-	--gradient-orb-pink: radial-gradient(circle, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 70%);
-	--gradient-orb-purple: radial-gradient(circle, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0) 70%);
-	--gradient-orb-peach: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 70%);
+	/* Gradient orbs (dimmed for dark) */
+	--gradient-orb-blue: radial-gradient(circle, rgba(0, 178, 255, 0.18) 0%, rgba(0, 178, 255, 0) 70%);
+	--gradient-orb-pink: radial-gradient(circle, rgba(255, 71, 127, 0.16) 0%, rgba(255, 71, 127, 0) 70%);
+	--gradient-orb-purple: radial-gradient(circle, rgba(139, 92, 246, 0.16) 0%, rgba(139, 92, 246, 0) 70%);
+	--gradient-orb-peach: radial-gradient(circle, rgba(255, 174, 0, 0.14) 0%, rgba(255, 174, 0, 0) 70%);
 
 	/* Button gradient */
-	--gradient-button: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 100%);
-	--gradient-button-hover: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+	--gradient-button: linear-gradient(135deg, rgba(0, 178, 255, 0.18) 0%, rgba(0, 178, 255, 0.08) 100%);
+	--gradient-button-hover: linear-gradient(135deg, rgba(0, 178, 255, 0.28) 0%, rgba(0, 178, 255, 0.16) 100%);
 
 	/* Shadows (subtle in dark mode) */
 	--shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -228,7 +216,7 @@
 	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
 	--shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
 	--shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
-	--shadow-glow: 0 4px 24px 6px rgba(255, 255, 255, 0.1);
+	--shadow-glow: 0 4px 24px 6px rgba(0, 178, 255, 0.18);
 
 	/* Semantic colors */
 	--color-success: #4ade80;
@@ -240,7 +228,7 @@
 	--stat-trust: #4ade80;
 	--stat-intimacy: #ff6b96;
 	--stat-comfort: #a78bfa;
-	--stat-energy: #fbbf24;
+	--stat-energy: #33c1ff;
 	--stat-respect: #fb923c;
 	--stat-affection: #ff6b96;
 
@@ -300,29 +288,6 @@
 	--ctp-overlay0: var(--text-tertiary);
 }
 
-/* ── .title-silver: the hero's gradient, shareable ──
-   Ink melting into silver at the foot of the glyphs. Chrome-only property
-   pairs (no -webkit- prefix) so Svelte scoping never blocks them, with a
-   plain-ink fallback for engines that lack background-clip: text. */
-.title-silver {
-	color: var(--text-primary);
-}
-
-@supports (background-clip: text) {
-	.title-silver {
-		/* background-image (NOT the shorthand): the shorthand would reset
-		   background-clip back to border-box and paint a gradient block. */
-		background-image: var(--title-silver-light);
-		background-clip: text;
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-	}
-
-	.dark .title-silver {
-		background-image: var(--title-silver-dark);
-	}
-}
-
 * {
 	box-sizing: border-box;
 }
@@ -366,8 +331,6 @@ body {
 	transition: background-color 0.2s, color 0.2s;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	/* Sin rebote elástico: el fondo no se arrastra al deslizar en móviles. */
-	overscroll-behavior: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -429,175 +392,6 @@ h1, h2, h3, h4, h5, h6 {
 	-webkit-backdrop-filter: blur(12px);
 }
 
-/* Liquid glass: translucent surface with a moving specular highlight,
-   for controls that float over the scene backdrop. Calibrated MODERATE:
-   tinted just enough to keep text readable, blurred just enough to
-   diffuse what's behind — glass, not smoked mirror. Theme-aware via
-   --lg-tint / --lg-hairline (inverted in .dark below). */
-:root {
-	--lg-tint: rgba(255, 255, 255, 0.52);
-	--lg-hairline: rgba(0, 0, 0, 0.1);
-	--lg-hairline-top: rgba(255, 255, 255, 0.75);
-	--lg-spec: rgba(255, 255, 255, 0.45);
-	/* expo.dev-style hover: a whisper of ink over any surface — light touch,
-	   no solid blocks. Alpha form works on both flat and glass backgrounds. */
-	--hover-wash: rgba(0, 0, 0, 0.045);
-	--hover-wash-strong: rgba(0, 0, 0, 0.08);
-	/* Liquid glass luminous edge — light caught by the rim of the material */
-	--glass-rim: rgba(255, 255, 255, 0.12);
-}
-
-.dark {
-	--lg-tint: rgba(16, 16, 20, 0.38);
-	--lg-hairline: rgba(255, 255, 255, 0.12);
-	--lg-hairline-top: rgba(255, 255, 255, 0.14);
-	--lg-spec: rgba(255, 255, 255, 0.07);
-	--hover-wash: rgba(255, 255, 255, 0.07);
-	--hover-wash-strong: rgba(255, 255, 255, 0.12);
-	--glass-rim: rgba(255, 255, 255, 0.16);
-}
-
-/* =============================================
-   Liquid glass — iOS 27 style. One recipe, two levels.
-   The material is smoked glass with WHITE content in both
-   themes (never dark icons inside glass). The edge is a
-   FADING GRADIENT of light — strongest top, dissolving
-   down the sides — never a drawn border or solid ring.
-   Chrome tokens are defined here at :root — one source of truth.
-   ============================================= */
-
-/* Tokens del chrome (vidrio flotante sobre la escena). El material es
-   vidrio ahumado con contenido BLANCO en AMBOS temas — nunca tinta
-   oscura dentro del glass. Definidos en :root porque se consumen sin
-   fallback en los remaps (--text-primary: var(--chrome-text)): si el
-   token no existiera, la propiedad caería en "invalid at computed-value
-   time" y el texto heredaría la tinta de la página (oscura en claro). */
-:root {
-	--chrome-surface: rgba(30, 30, 35, 0.42);
-	--chrome-surface-active: rgba(30, 30, 35, 0.58);
-	--chrome-sheet: rgba(28, 28, 33, 0.62);
-	--chrome-text: rgba(255, 255, 255, 0.92);
-	--chrome-text-dim: rgba(255, 255, 255, 0.64);
-	--chrome-text-shadow: rgba(0, 0, 0, 0.3);
-	--chrome-border: rgba(255, 255, 255, 0.22);
-	--chrome-wash: rgba(255, 255, 255, 0.06);
-	--chrome-wash-strong: rgba(255, 255, 255, 0.14);
-}
-
-/* Level 1 · controls: floating buttons, pills, docks */
-.glass-chip {
-	background: var(--chrome-surface, rgba(30, 30, 35, 0.42));
-	backdrop-filter: blur(16px) saturate(1.4);
-	-webkit-backdrop-filter: blur(16px) saturate(1.4);
-	box-shadow:
-		/* Edge of light: bright at the top, fading around the WHOLE
-		   perimeter — soft ring + inner bloom, never a drawn border */
-		inset 0 2px 4px -2px rgba(255, 255, 255, 0.5),
-		inset 0 0 1.5px 0.5px rgba(255, 255, 255, 0.26),
-		inset 0 0 8px rgba(255, 255, 255, 0.12),
-		inset 0 -5px 8px -6px rgba(255, 255, 255, 0.18),
-		0 8px 22px rgba(0, 0, 0, 0.14);
-	color: var(--chrome-text, rgba(255, 255, 255, 0.92));
-	/* Keeps white content legible over the lighter light-theme glass */
-	text-shadow: 0 1px 2px var(--chrome-text-shadow, rgba(0, 0, 0, 0.3));
-}
-
-/* Level 2 · reading surfaces: modals, popovers, dropdowns */
-.glass-panel {
-	background: var(--chrome-sheet, rgba(28, 28, 33, 0.62));
-	backdrop-filter: blur(24px) saturate(1.5);
-	-webkit-backdrop-filter: blur(24px) saturate(1.5);
-	box-shadow:
-		inset 0 2px 5px -2px rgba(255, 255, 255, 0.48),
-		inset 0 0 2px 0.5px rgba(255, 255, 255, 0.22),
-		inset 0 0 12px rgba(255, 255, 255, 0.1),
-		inset 0 -8px 12px -8px rgba(255, 255, 255, 0.16),
-		0 18px 40px rgba(0, 0, 0, 0.18);
-	color: var(--chrome-text, rgba(255, 255, 255, 0.92));
-	text-shadow: 0 1px 2px var(--chrome-text-shadow, rgba(0, 0, 0, 0.3));
-}
-
-/* Inside glass there are NO dark elements: remap the content tokens so
-   every child (text, icons, dividers, fills) speaks the glass language.
-   The catppuccin aliases are defined at :root (their var() resolves there,
-   NOT inside the glass), so they need their own remap — this is what keeps
-   the "neutral mood" icon (ctp-subtext0) from reading as black ink. */
-.glass-chip,
-.glass-panel {
-	--text-primary: var(--chrome-text);
-	--text-secondary: var(--chrome-text-dim);
-	--text-tertiary: var(--chrome-text-dim);
-	--text-muted: var(--chrome-text-dim);
-	--ctp-subtext0: var(--chrome-text-dim);
-	--ctp-overlay0: var(--chrome-text-dim);
-	--border-subtle: var(--chrome-border);
-	--border-light: var(--chrome-border);
-	--bg-primary: var(--chrome-wash-strong);
-	--bg-secondary: var(--chrome-wash);
-	--bg-tertiary: var(--chrome-wash);
-}
-
-.liquid-glass {
-	position: relative;
-	background: var(--lg-tint);
-	border: 1px solid var(--lg-hairline);
-	backdrop-filter: blur(14px) saturate(1.3);
-	-webkit-backdrop-filter: blur(14px) saturate(1.3);
-	box-shadow:
-		inset 0 1px 0 var(--lg-hairline-top),
-		inset 0 -1px 0 var(--lg-hairline),
-		0 6px 20px rgba(0, 0, 0, 0.14);
-	overflow: hidden;
-}
-
-.dark .liquid-glass {
-	box-shadow:
-		inset 0 1px 0 var(--lg-hairline-top),
-		inset 0 -1px 0 var(--lg-hairline),
-		0 8px 24px rgba(0, 0, 0, 0.35);
-}
-
-.liquid-glass::before {
-	content: '';
-	position: absolute;
-	inset: 0;
-	pointer-events: none;
-	background: radial-gradient(
-		120% 60% at 30% 0%,
-		var(--lg-spec) 0%,
-		rgba(255, 255, 255, 0.03) 45%,
-		transparent 70%
-	);
-}
-
-.liquid-glass::after {
-	content: '';
-	position: absolute;
-	inset: -40%;
-	pointer-events: none;
-	background: radial-gradient(
-		circle at 70% 30%,
-		rgba(255, 255, 255, 0.06) 0%,
-		transparent 40%
-	);
-	animation: liquidShift 9s ease-in-out infinite alternate;
-}
-
-@keyframes liquidShift {
-	from {
-		transform: translate(-6%, -4%) rotate(0deg);
-	}
-	to {
-		transform: translate(6%, 5%) rotate(8deg);
-	}
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.liquid-glass::after {
-		animation: none;
-	}
-}
-
 /* Legacy button styles (for non-bits-ui buttons) */
 .btn {
 	display: inline-flex;
@@ -622,13 +416,37 @@ h1, h2, h3, h4, h5, h6 {
 	transform: scale(0.98);
 }
 
+.btn-primary {
+	background: var(--color-muted);
+	border-color: var(--color-border);
+	color: var(--color-foreground);
+}
+
+.btn-primary:hover:not(:disabled) {
+	background: var(--color-neutral-200);
+}
+
+.dark .btn-primary {
+	color: var(--color-foreground);
+}
+
+.dark .btn-primary:hover:not(:disabled) {
+	background: var(--color-neutral-700);
+}
+
 .btn-secondary {
 	background: var(--color-muted);
 	border-color: var(--color-border);
 	color: var(--color-foreground);
-}	.btn-secondary:hover:not(:disabled) {
-		background: var(--color-neutral-200);
-	}
+}
+
+.btn-secondary:hover:not(:disabled) {
+	background: var(--color-neutral-200);
+}
+
+.dark .btn-secondary:hover:not(:disabled) {
+	background: var(--color-neutral-700);
+}
 
 .btn-ghost {
 	background: transparent;
@@ -791,30 +609,26 @@ h1, h2, h3, h4, h5, h6 {
 	width: 100%;
 }
 
-/* Primary: adaptive ink pill (expo-style) — black on light, white on dark.
-   The site's marketing pages scope their own accent; this canonical variant
-   follows the neutral ladder so every surface reads in one voice. */
+/* Primary: solid accent */
 .btn-primary {
-	background: var(--text-primary);
-	color: var(--bg-page);
+	background: var(--accent);
+	color: #fff;
 }
 
 .btn-primary:hover:not(:disabled) {
-	background: color-mix(in srgb, var(--text-primary) 86%, var(--bg-page));
-	box-shadow: 0 8px 28px color-mix(in srgb, var(--text-primary) 20%, transparent);
+	background: var(--accent-hover);
+	box-shadow: var(--shadow-glow);
 }
 
 /* Secondary: gray fill, no stroke */
 .btn-secondary {
 	background: var(--bg-tertiary);
 	color: var(--text-primary);
-}	.btn-secondary:hover:not(:disabled) {
-		background: color-mix(in srgb, var(--bg-tertiary), var(--text-primary) 8%);
-	}
+}
 
-	.btn-secondary:active:not(:disabled) {
-		background: color-mix(in srgb, var(--bg-tertiary), var(--text-primary) 14%);
-	}
+.btn-secondary:hover:not(:disabled) {
+	background: color-mix(in srgb, var(--bg-tertiary), var(--text-primary) 8%);
+}
 
 /* Ghost: transparent, fills gray on hover */
 .btn-ghost {

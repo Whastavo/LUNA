@@ -22,11 +22,11 @@
 		models,
 		value,
 		onSelect,
-		placeholder = 'Selecciona modelo...',
+		placeholder = 'Select model...',
 		isLoading = false,
 		onRefresh,
 		disabled = false,
-		disabledMessage = 'Introduce primero la clave de API'
+		disabledMessage = 'Enter API key first'
 	}: Props = $props();
 
 	let searchQuery = $state('');
@@ -81,13 +81,13 @@
 		</DropdownMenu.Trigger>
 
 		<DropdownMenu.Portal>
-			<DropdownMenu.Content class="model-dropdown-content glass-panel" align="start" sideOffset={4}>
+			<DropdownMenu.Content class="model-dropdown-content" align="start" sideOffset={4}>
 				<div class="search-row">
 					<Icon name="search" size={14} />
 					<input
 						type="text"
 						class="search-input"
-						placeholder="Buscar modelos..."
+						placeholder="Search models..."
 						bind:value={searchQuery}
 						onclick={(e) => e.stopPropagation()}
 						onkeydown={(e) => e.stopPropagation()}
@@ -113,7 +113,7 @@
 						</DropdownMenu.Item>
 					{/each}
 					{#if filteredModels.length === 0 && !isLoading}
-						<div class="no-models">No se encontraron modelos</div>
+						<div class="no-models">No models found</div>
 					{/if}
 				</div>
 			</DropdownMenu.Content>
@@ -121,7 +121,7 @@
 	</DropdownMenu.Root>
 
 	{#if onRefresh && !isLoading}
-		<button class="refresh-btn" onclick={onRefresh} title="Actualizar modelos">
+		<button class="refresh-btn" onclick={onRefresh} title="Refresh models">
 			<Icon name="refresh-cw" size={14} />
 		</button>
 	{/if}
@@ -140,7 +140,7 @@
 		gap: 0.5rem;
 		flex: 1;
 		padding: 0.75rem 1rem;
-		background: var(--chrome-wash);
+		background: var(--bg-tertiary);
 		border: 1px solid transparent;
 		border-radius: var(--radius-md);
 		cursor: pointer;
@@ -205,7 +205,7 @@
 		align-items: center;
 		justify-content: center;
 		padding: 0 0.75rem;
-		background: var(--chrome-wash);
+		background: var(--bg-tertiary);
 		border: 1px solid transparent;
 		border-radius: var(--radius-md);
 		color: var(--text-secondary);
@@ -232,8 +232,10 @@
 		z-index: 1050;
 		min-width: 200px;
 		max-width: 300px;
+		background: var(--bg-primary);
 		border-radius: var(--radius-lg);
 		padding: 0.375rem;
+		box-shadow: var(--shadow-lg);
 		animation: modelSlideDown 0.16s var(--ease-brand);
 	}
 
@@ -254,7 +256,7 @@
 		gap: 0.375rem;
 		padding: 0.375rem 0.5rem;
 		margin-bottom: 0.25rem;
-		background: var(--chrome-wash);
+		background: var(--bg-secondary);
 		border-radius: var(--radius-md);
 	}
 
@@ -323,7 +325,7 @@
 
 	:global(.model-item:hover),
 	:global(.model-item[data-highlighted]) {
-		background: var(--hover-wash-strong);
+		background: var(--bg-secondary);
 	}
 
 	:global(.model-item.selected) {

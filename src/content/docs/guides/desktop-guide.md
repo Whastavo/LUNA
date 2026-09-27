@@ -1,176 +1,176 @@
 ---
-title: Guía de escritorio
-description: Cómo instalar y usar la aplicación de escritorio de Luna con modo superposición.
+title: Desktop Guide
+description: How to install and use the Utsuwa desktop application with overlay mode.
 ---
 
-# Guía de escritorio
+# Desktop Guide
 
-Luna Desktop es una aplicación que lleva a tu compañera IA a tu escritorio con un modo de superposición transparente. Tu compañera puede flotar sobre otras aplicaciones, siempre visible mientras trabajas.
+Utsuwa Desktop is an application that brings your AI companion to your desktop with a transparent overlay mode. Your companion can float over other applications, always visible while you work.
 
-Disponible para **macOS**, **Windows** y **Linux**.
+Available for **macOS**, **Windows**, and **Linux**.
 
-## Instalación
+## Installation
 
-### Descargar
+### Download
 
-Ve a la página de [GitHub Releases](https://github.com/JuiceBoxxGames/luna/releases) y descarga la build para tu plataforma:
+Head to the [GitHub Releases](https://github.com/JuiceBoxxGames/utsuwa/releases) page and grab the build for your platform:
 
-| Plataforma | Archivo | Instalación |
+| Platform | File | Install |
 |----------|------|---------|
-| **macOS** | `.dmg` (universal) | Abre la imagen de disco y arrastra Luna a tu carpeta de Aplicaciones |
-| **Windows** | `.exe` | Ejecuta el instalador |
-| **Linux** | `.AppImage` | `chmod +x` al archivo y ejecútalo |
-| **Linux** | `.deb` / `.rpm` | Instala con tu gestor de paquetes |
+| **macOS** | `.dmg` (universal) | Open the disk image and drag Utsuwa to your Applications folder |
+| **Windows** | `.exe` | Run the installer |
+| **Linux** | `.AppImage` | `chmod +x` the file and run it |
+| **Linux** | `.deb` / `.rpm` | Install with your package manager |
 
-#### Abrir una build sin firmar
+#### Opening an unsigned build
 
-La app de escritorio está en beta y actualmente **sin firmar**, así que tu SO te avisará la primera vez que la abras. Es lo esperado.
+The desktop app is in beta and currently **unsigned**, so your OS will warn you the first time you open it. This is expected.
 
-- **macOS:** clic derecho en la app → **Abrir** → **Abrir**. O ejecuta `xattr -dr com.apple.quarantine /Applications/Luna.app` una vez.
-- **Windows:** en el aviso de SmartScreen, pulsa **Más información** → **Ejecutar de todos modos**.
-- **Linux:** los AppImage solo necesitan el bit de ejecución (`chmod +x Luna.AppImage`).
+- **macOS:** right-click the app → **Open** → **Open**. Or run `xattr -dr com.apple.quarantine /Applications/Utsuwa.app` once.
+- **Windows:** on the SmartScreen prompt, click **More info** → **Run anyway**.
+- **Linux:** AppImages just need the executable bit (`chmod +x Utsuwa.AppImage`).
 
-### Compilar desde el código fuente
+### Building from Source
 
-Si prefieres compilarla tú mismo:
+If you prefer to build it yourself:
 
-#### Requisitos previos
+#### Prerequisites
 
 - Node.js 22+
-- [Cadena de herramientas de Rust](https://rustup.rs/) (para Tauri)
+- [Rust toolchain](https://rustup.rs/) (for Tauri)
 - pnpm
 
 ```bash
-# Clona el repositorio
-git clone https://github.com/JuiceBoxxGames/luna.git
-cd luna
+# Clone the repo
+git clone https://github.com/JuiceBoxxGames/utsuwa.git
+cd utsuwa
 
-# Instala las dependencias
+# Install dependencies
 pnpm install
 
-# Ejecuta en modo desarrollo
+# Run in development mode
 pnpm tauri dev
 
-# O compila un binario de versión
+# Or build a release binary
 pnpm tauri build
 ```
 
-El comando dev lanza tanto un servidor de desarrollo como la ventana de escritorio. El comando build produce un instalador para tu plataforma actual en `src-tauri/target/release/bundle/`.
+The dev command launches both a development server and the desktop window. The build command produces an installer for your current platform in `src-tauri/target/release/bundle/`.
 
-## Actualizaciones
+## Updating
 
-La app de escritorio se mantiene al día sola. Al arrancar comprueba en silencio si hay una versión nueva, y cuando la hay aparece una pequeña banda que ofrece **Instalar y reiniciar** — púlsala y la app descarga la actualización, la instala y se relanza.
+The desktop app keeps itself up to date. On launch it quietly checks for a new release, and when one is available a small banner appears offering to **Install & Restart** — click it and the app downloads the update, installs it, and relaunches.
 
-También puedes comprobarlo manualmente en cualquier momento desde el diálogo **Acerca de** (el botón de información en la app) vía **Buscar actualizaciones**.
+You can also check manually any time from the **About** dialog (the info button in the app) via **Check for updates**.
 
-> Las actualizaciones automáticas funcionan para el `.dmg` de macOS, el `.exe` de Windows y el `.AppImage` de Linux. Si instalaste vía `.deb` o `.rpm`, actualiza con tu gestor de paquetes en su lugar.
+> Auto-updates work for the macOS `.dmg`, the Windows `.exe`, and the Linux `.AppImage`. If you installed via `.deb` or `.rpm`, update through your package manager instead.
 
-## Funciones
+## Features
 
-### Ventana principal
+### Main Window
 
-La ventana principal ofrece la experiencia completa de Luna — igual que la versión web con todas las funciones:
+The main window provides the full Utsuwa experience — same as the web version with all features:
 
-- Avatar VRM con animaciones
-- Interfaz de chat
-- Ajustes y configuración
-- Sistemas de memoria y relación
+- VRM avatar with animations
+- Chat interface
+- Settings and configuration
+- Memory and relationship systems
 
-Un **icono de monitor** azul en la esquina superior derecha lanza el modo superposición.
+A blue **monitor icon** in the top-right corner launches overlay mode.
 
-### Modo superposición
+### Overlay Mode
 
-El modo superposición separa a tu compañera en una ventana transparente siempre encima:
+Overlay mode detaches your companion into a transparent, always-on-top window:
 
-- **Fondo transparente**: solo el personaje es visible; todo lo demás se ve a través
-- **Siempre encima**: la compañera se mantiene visible sobre todas las demás ventanas
-- **Arrastrable**: haz clic y arrastra en cualquier parte del personaje para reposicionarlo
-- **Chat flotante**: pulsa el icono de chat abajo para expandir una entrada de chat
-- **Burbujas de diálogo**: las respuestas aparecen en una burbuja acoplada sobre los controles inferiores (la ventana se mueve, así que una burbuja con seguimiento de cabeza sería ilegible)
-- **Indicador de estado**: la píldora de estado de ánimo/relación aparece sobre el icono de chat
-- **Redimensionable**: arrastra la pestaña de la esquina superior izquierda para redimensionar la superposición; el tamaño se recuerda entre sesiones
-- **Bloqueable**: el botón de candado de los controles flotantes fija la superposición en su sitio para que los clics no la arrastren
-- **Cámara de superposición**: los controles flotantes incluyen un panel de cámara con deslizadores de zoom, altura y campo de visión independientes del encuadre de la ventana principal
+- **Transparent Background**: Only the character is visible; everything else is see-through
+- **Always on Top**: The companion stays visible over all other windows
+- **Draggable**: Click and drag anywhere on the character to reposition
+- **Floating Chat**: Click the chat icon at the bottom to expand a chat input
+- **Speech Bubbles**: Responses appear in a docked dialog bubble above the bottom controls (the window moves around, so a head-tracking bubble would be unreadable)
+- **Status Indicator**: The mood/relationship status pill appears above the chat icon
+- **Resizable**: Drag the top-left corner tab to resize the overlay; the size is remembered across launches
+- **Lockable**: The lock button in the hover controls pins the overlay in place so clicks cannot drag it
+- **Overlay Camera**: The hover controls include a camera panel with zoom, height, and field-of-view sliders independent from the main window's framing
 
-#### Controles
+#### Controls
 
-| Acción | Cómo |
+| Action | How |
 |--------|-----|
-| Mover el personaje | Clic y arrastre sobre el personaje |
-| Abrir el chat | Pulsa el icono de chat abajo |
-| Enviar mensaje | Escribe y pulsa Enter |
-| Cerrar el chat | Envía un mensaje (se colapsa solo) |
-| Salir de la superposición | Pulsa el botón X de la esquina superior derecha |
-| Pulsar para hablar | `Ctrl+Shift+Espacio` (atajo global) |
-| Alternar superposición | `Ctrl+Shift+U` (atajo global) |
-| Enfocar el chat | `Ctrl+Shift+C` (atajo global) |
+| Move character | Click and drag on the character |
+| Open chat | Click the chat icon at the bottom |
+| Send message | Type and press Enter |
+| Close chat | Send a message (auto-collapses) |
+| Exit overlay | Click the X button in the top-right corner |
+| Push-to-talk | `Ctrl+Shift+Space` (global hotkey) |
+| Toggle overlay | `Ctrl+Shift+U` (global hotkey) |
+| Focus chat | `Ctrl+Shift+C` (global hotkey) |
 
-### Cambiar entre modos
+### Switching Between Modes
 
-- **Principal → Superposición**: pulsa el icono de monitor azul en la esquina superior derecha
-- **Superposición → Principal**: pulsa el botón X en la esquina superior derecha de la superposición
+- **Main → Overlay**: Click the blue monitor icon in the top-right
+- **Overlay → Main**: Click the X button in the overlay's top-right corner
 
-Ambas ventanas comparten los mismos datos — tu conversación, recuerdos y estado de relación persisten entre modos.
+Both windows share the same data — your conversation, memories, and relationship state persist across modes.
 
-## Limitaciones conocidas
+## Known Limitations
 
-Algunas funciones siguen en desarrollo:
+Some features are still being worked on:
 
-| Función | Estado |
+| Feature | Status |
 |---------|--------|
-| Soporte de macOS | ✅ Disponible |
-| Soporte de Windows | ✅ Disponible |
-| Soporte de Linux | ✅ Disponible |
-| Transparencia clicable | ❌ Desactivada (bloquea la UI) |
-| Atajos globales | ✅ Disponibles |
-| Auto-actualización en la app | ✅ Disponible |
-| Persistencia de tamaño y bloqueo | ✅ Disponible (posición de la ventana entre sesiones aún prevista) |
-| Bandeja del sistema | ⏳ Previsto |
+| macOS support | ✅ Available |
+| Windows support | ✅ Available |
+| Linux support | ✅ Available |
+| Click-through transparency | ❌ Disabled (blocks UI) |
+| Global hotkeys | ✅ Available |
+| In-app auto-updates | ✅ Available |
+| Size and lock persistence | ✅ Available (window position across relaunch still planned) |
+| System tray | ⏳ Planned |
 
-## Solución de problemas
+## Troubleshooting
 
-### La app no arranca
+### App won't start
 
-Si compilaste desde el código fuente, asegúrate de que Rust está instalado:
+If you built from source, make sure Rust is installed:
 
 ```bash
 rustc --version
 ```
 
-Si no está instalado, ejecuta:
+If not installed, run:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-Si descargaste un binario de versión y no arranca, prueba a descargarlo de nuevo o revisa la página de [GitHub Issues](https://github.com/JuiceBoxxGames/luna/issues).
+If you downloaded a release binary and it won't launch, try downloading it again or check the [GitHub Issues](https://github.com/JuiceBoxxGames/utsuwa/issues) page.
 
-### El fondo de la superposición no es transparente
+### Overlay background not transparent
 
-Esto puede pasar si el renderer no está bien configurado. Prueba:
+This can happen if the renderer isn't properly configured. Try:
 
-1. Sal y vuelve a lanzar la app
-2. Asegúrate de estar en la última versión de [Releases](https://github.com/JuiceBoxxGames/luna/releases)
+1. Exit and relaunch the app
+2. Make sure you're on the latest version from [Releases](https://github.com/JuiceBoxxGames/utsuwa/releases)
 
-### El personaje mira hacia otra dirección
+### Character facing wrong direction
 
-La cámara está fija en modo superposición. Si el personaje aparece rotado, sal de la superposición y vuelve a entrar.
+The camera is locked in overlay mode. If the character appears rotated, exit overlay and re-enter.
 
-### La entrada de voz no funciona
+### Voice input not working
 
-La app de escritorio usa el webview de Tauri, que no soporta la Web Speech API del navegador. Para la entrada de voz en escritorio, configura un servidor Whisper local, una clave de API de Groq o una clave de OpenAI en **Ajustes > Personaje** bajo la sección de Entrada de voz (STT).
+The desktop app uses Tauri's webview, which does not support the browser's Web Speech API. For voice input on desktop, configure a local Whisper server, a Groq API key, or an OpenAI API key in **Settings > Character** under the Voice Input (STT) section.
 
-### No puedo interactuar con la UI de la superposición
+### Can't interact with overlay UI
 
-El botón X y el icono de chat deberían ser siempre clicables. Si no responden, la ventana puede haber perdido el foco — pulsa en cualquier parte de la superposición primero.
+The X button and chat icon should always be clickable. If they're not responding, the window may have lost focus — click anywhere on the overlay first.
 
-## Detalles técnicos
+## Technical Details
 
-La app de escritorio usa:
+The desktop app uses:
 
-- **Tauri v2** — framework basado en Rust para apps de escritorio
-- **La misma base de código SvelteKit** — sin fork, componentes compartidos
-- **Detección de plataforma** — `isTauri()` comprueba el entorno Tauri
-- **Multi-ventana** — ventana principal + ventana de superposición gestionadas por separado
+- **Tauri v2** — Rust-based framework for desktop apps
+- **Same SvelteKit codebase** — No fork, shared components
+- **Platform detection** — `isTauri()` checks for Tauri environment
+- **Multi-window** — Main window + overlay window managed separately
 
-Para detalles de arquitectura, consulta [Visión de la arquitectura](/docs/technology/architecture).
+For architecture details, see [Architecture Overview](/docs/technology/architecture).

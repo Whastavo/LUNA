@@ -6,7 +6,7 @@ import { computeScaledDimensions } from '$lib/services/chat/image-scaling';
 // never leaves the device; only the single vision inference does. Mirrors the
 // VRM blob store in stores/vrm.svelte.ts.
 const keepsakeStorage = browser
-	? localforage.createInstance({ name: 'luna-keepsakes', storeName: 'images' })
+	? localforage.createInstance({ name: 'utsuwa-keepsakes', storeName: 'images' })
 	: null;
 
 export interface PreparedImage {

@@ -69,7 +69,7 @@ export async function initEmbeddingModel(): Promise<boolean> {
 		notifyListeners();
 		return true;
 	} catch (err) {
-		loadError = err instanceof Error ? err.message : 'No se pudo cargar el modelo de embeddings';
+		loadError = err instanceof Error ? err.message : 'Failed to load embedding model';
 		isLoading = false;
 		isReady = false;
 		notifyListeners();

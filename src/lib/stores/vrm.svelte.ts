@@ -10,47 +10,34 @@ export interface VrmModel {
 	name: string;
 	url: string;
 	previewUrl?: string;
-	/** Retrato vertical de alta resolución para el rail de Cuenta. Si no
-	 *  existe (Nova/Vela/customs), la captura de sesión del canvas lo suple. */
-	portraitUrl?: string;
 	isDefault: boolean;
 	createdAt: number;
 }
 
-// Luna's visual forms bundled with the app (first one is loaded by default).
-// Each form is the same character: the id is the stable technical identity and
-// `name` es el nombre visible. Las licencias de cada forma viven en
-// assets-private/luna/forms/README.md (los originales nunca se despliegan).
+// Default models bundled with the app (first one is loaded by default).
+// See static/models/README.md for each model's license.
 const DEFAULT_MODELS: VrmModel[] = [
 	{
-		id: 'luna',
-		name: 'Luna',
-		url: '/luna/forms/luna.vrm',
-		// Previews ESTÁTICOS servidos con la app: nada de auto-generación en
-		// runtime (costo de GPU al arrancar y dependencia de WebGL). El
-		// preview es el BUSTO oficial (misma composición que Nova/Vela): es
-		// el respaldo de avatares y miniaturas. Los renders viven en
-		// assets-private/luna/renders como fuente.
-		previewUrl: '/luna/faces/luna.png',
-		// Retrato del rail: el render de figura completa (upscaled a
-		// 1096x2532) — su composición oficial para el panel de Cuenta.
-		portraitUrl: '/luna/visuals/luna-grace.png',
+		id: 'default-sample-b',
+		name: 'Tsuki',
+		url: '/models/AvatarSample_B.vrm',
+		previewUrl: undefined,
 		isDefault: true,
 		createdAt: 0
 	},
 	{
-		id: 'luna-nova',
-		name: 'Nova',
-		url: '/luna/forms/luna-nova.vrm',
-		previewUrl: '/luna/faces/luna-nova.png',
+		id: 'default-vita',
+		name: 'Yuki',
+		url: '/models/Vita.vrm',
+		previewUrl: undefined,
 		isDefault: true,
 		createdAt: 0
 	},
 	{
-		id: 'luna-vela',
-		name: 'Vela',
-		url: '/luna/forms/luna-vela.vrm',
-		previewUrl: '/luna/faces/luna-vela.png',
+		id: 'default-victoria',
+		name: 'Momo',
+		url: '/models/Victoria_Rubin.vrm',
+		previewUrl: undefined,
 		isDefault: true,
 		createdAt: 0
 	}
@@ -59,42 +46,17 @@ const DEFAULT_MODELS: VrmModel[] = [
 // Bumped when thumbnail generation changes so stale previews regenerate
 const PREVIEW_KEY_PREFIX = 'model-preview-v2-';
 
-// Retratos persistidos (busto + figura completa) por modelo. Versión v4:
-// composición final (fondo + pecho) — cambiarla invalida las guardadas y
-// fuerza UNA recaptura fresca.
-const PORTRAIT_KEY_PREFIX = 'model-portrait-v4-';
-
 // Configure localforage for VRM storage
 const vrmStorage = browser
 	? localforage.createInstance({
-			name: 'luna-vrm',
+			name: 'utsuwa-vrm',
 			storeName: 'models'
 		})
 	: null;
 
 function createVrmStore() {
-	// Current model state. OPTIMISTIC BOOT: assume the default form is active
-	// SYNCHRONOUSLY, so the viewer starts fetching/streaming the 18MB VRM in
-	// the very first module-evaluation frame — the browser serves it from the
-	// HTTP cache warmed by app.html's preload. initFromStorage corrects this
-	// moments later ONLY if the user's saved active model differs (a rare
-	// swap; the loader's invalidation handles it cleanly).
-	let modelUrl = $state<string | null>(DEFAULT_MODELS[0].url);
-
-	// Retratos de SESIÓN: la foto capturada del personaje activo al activar
-	// una forma — las TRES se capturan igual (Luna incluida: nada de imagen
-	// fija de bundle como retrato del rail). SOLO memoria — no persisten: la
-	// captura se regenera gratis en cada carga (copia 2D del frame vivo).
-	// Los portraitUrl/previewUrl servidos quedan como respaldo de los
-	// primeros instantes, antes de que aterrice la captura.
-	// DOS composiciones por forma, recortes del MISMO frame: 'bust' (primer
-	// plano hombro-arriba, anclado a la cabeza proyectada) y 'full' (figura
-	// completa del encuadre vivo — la del rail de Cuenta).
-	let sessionPortraits = $state<Record<string, string>>({});
-	let sessionFullPortraits = $state<Record<string, string>>({});
-	// Huella (hash muestreado) del VRM del que proviene cada retrato: si el
-	// archivo del modelo cambia, el retrato viejo se invalida y se recaptura.
-	let sessionPortraitHashes = $state<Record<string, string>>({});
+	// Current model state - null until initFromStorage determines the correct model
+	let modelUrl = $state<string | null>(null);
 	let vrm = $state<VRM | null>(null);
 	let isLoading = $state(false);
 	let error = $state<string | null>(null);
@@ -173,30 +135,30 @@ function createVrmStore() {
 	let headPosition = $state<[number, number, number]>([0, 1.6, 0]);
 	// Screen-space position (x, y as percentages 0-100)
 	let headScreenPosition = $state<{ x: number; y: number } | null>(null);
-	// Default motion clips
-	const idleAnimationUrl = '/luna/motion/luna-rest.vrma';
-	const talkingAnimationUrl = '/luna/motion/luna-speak.vrma';
+	// Default animations
+	const idleAnimationUrl = '/animations/idle.vrma';
+	const talkingAnimationUrl = '/animations/talking.vrma';
 
-	// All idle motions for random cycling
+	// All idle animations for random cycling
 	const idleAnimationUrls = [
-		'/luna/motion/luna-rest.vrma',
-		'/luna/motion/luna-drift.vrma',
-		'/luna/motion/luna-breathe.vrma',
-		'/luna/motion/luna-sway.vrma',
-		'/luna/motion/luna-flow.vrma'
+		'/animations/idle.vrma',
+		'/animations/idle_2.vrma',
+		'/animations/idle_3.vrma',
+		'/animations/idle_4.vrma',
+		'/animations/idle_5.vrma'
 	];
 
 	// Selectable one-shot emotes (played via the developer tools). These are the
-	// VRMA clips shipped in static/luna/motion/ that aren't part of the idle cycle
+	// VRMA files shipped in static/animations/ that aren't part of the idle cycle
 	// or the talking loop.
 	const availableAnimations: { id: string; name: string; url: string }[] = [
-		{ id: 'luna-present', name: 'Presentar', url: '/luna/motion/luna-present.vrma' },
-		{ id: 'luna-wave', name: 'Saludar', url: '/luna/motion/luna-wave.vrma' },
-		{ id: 'luna-peace', name: 'Paz', url: '/luna/motion/luna-peace.vrma' },
-		{ id: 'luna-point', name: 'Señalar', url: '/luna/motion/luna-point.vrma' },
-		{ id: 'luna-glow', name: 'Brillo', url: '/luna/motion/luna-glow.vrma' },
-		{ id: 'luna-pulse', name: 'Pulso', url: '/luna/motion/luna-pulse.vrma' },
-		{ id: 'luna-spark', name: 'Chispa', url: '/luna/motion/luna-spark.vrma' }
+		{ id: 'vrma_01', name: 'Emote 1', url: '/animations/VRMA_01.vrma' },
+		{ id: 'vrma_02', name: 'Emote 2', url: '/animations/VRMA_02.vrma' },
+		{ id: 'vrma_03', name: 'Emote 3', url: '/animations/VRMA_03.vrma' },
+		{ id: 'vrma_04', name: 'Emote 4', url: '/animations/VRMA_04.vrma' },
+		{ id: 'vrma_05', name: 'Emote 5', url: '/animations/VRMA_05.vrma' },
+		{ id: 'vrma_06', name: 'Emote 6', url: '/animations/VRMA_06.vrma' },
+		{ id: 'vrma_07', name: 'Emote 7', url: '/animations/VRMA_07.vrma' }
 	];
 
 	// Guard against saveToStorage running before init completes
@@ -242,16 +204,6 @@ function createVrmStore() {
 
 	async function initFromStorage() {
 		try {
-			// FAST PATH: resolve the active model URL with ONE storage round-trip
-			// when it's a default (static URL) — the avatar starts streaming
-			// immediately. Gallery metadata below enriches the picker afterward
-			// and must never gate the model's first frame.
-			const savedActiveId = await vrmStorage?.getItem<string>('active-model-id');
-			if (savedActiveId && DEFAULT_MODELS.some((m) => m.id === savedActiveId)) {
-				activeModelId = savedActiveId;
-				modelUrl = DEFAULT_MODELS.find((m) => m.id === savedActiveId)!.url;
-			}
-
 			// Load saved models list
 			const savedModels = await vrmStorage?.getItem<VrmModel[]>('model-list');
 			if (savedModels && savedModels.length > 0) {
@@ -276,82 +228,31 @@ function createVrmStore() {
 				});
 
 				models = [...DEFAULT_MODELS, ...restored];
-			}					// Restore preview thumbnails for all models (also concurrent).
-					// Los default SIEMPRE arrancan con su render estático servido con
-					// la app — solo los customs restauran su preview persistido.
-					const previews = await Promise.all(
-						models.map((model) => vrmStorage?.getItem<string>(`${PREVIEW_KEY_PREFIX}${model.id}`))
-					);
-					const isDefault = (id: string) => DEFAULT_MODELS.some((d) => d.id === id);
-					models = models.map((model, i) =>
-						previews[i] && !isDefault(model.id) ? { ...model, previewUrl: previews[i]! } : model
-					);
+			}
 
-					// Retratos persistidos (busto + figura completa) de TODAS las
-					// formas: reviven como retratos de sesión. Así el arranque NO
-					// muestra el respaldo del bundle y luego cambia (el flash que
-					// se veía al abrir perfiles), y VrmModel NO recaptura (cero
-					// costo de GPU al cargar). Restore concurrente, tolerante a
-					// claves ausentes.
-					const [busts, fulls, hashes] = await Promise.all([
-						Promise.all(
-							models.map((model) =>
-								vrmStorage?.getItem<string>(`${PORTRAIT_KEY_PREFIX}${model.id}`)
-							)
-						),
-						Promise.all(
-							models.map((model) =>
-								vrmStorage?.getItem<string>(`${PORTRAIT_KEY_PREFIX}full-${model.id}`)
-							)
-						),
-						Promise.all(
-							models.map((model) =>
-								vrmStorage?.getItem<string>(`${PORTRAIT_KEY_PREFIX}hash-${model.id}`)
-							)
-						)
-					]);
-					const bustsRestaurados: Record<string, string> = {};
-					const fullsRestaurados: Record<string, string> = {};
-					const hashesRestaurados: Record<string, string> = {};
-					models.forEach((model, i) => {
-						if (busts[i]) bustsRestaurados[model.id] = busts[i]!;
-						if (fulls[i]) fullsRestaurados[model.id] = fulls[i]!;
-						if (hashes[i]) hashesRestaurados[model.id] = hashes[i]!;
-					});
-					sessionPortraits = bustsRestaurados;
-					sessionFullPortraits = fullsRestaurados;
-					sessionPortraitHashes = hashesRestaurados;
+			// Restore preview thumbnails for all models (also concurrent)
+			const previews = await Promise.all(
+				models.map((model) => vrmStorage?.getItem<string>(`${PREVIEW_KEY_PREFIX}${model.id}`))
+			);
+			models = models.map((model, i) =>
+				previews[i] ? { ...model, previewUrl: previews[i] } : model
+			);
 
-					// Migración: purga de retratos de versiones anteriores (sus
-					// composiciones ya no aplican y solo ocupan storage).
-					try {
-						const todas = await vrmStorage?.keys();
-						await Promise.all(
-							(todas ?? [])
-								.filter((k) => k.startsWith('model-portrait-v') && !k.startsWith(PORTRAIT_KEY_PREFIX))
-								.map((k) => vrmStorage?.removeItem(k))
-						);
-					} catch {
-						// La purga es higiénica, nunca crítica
-					}
-
-			// Slow path: custom active model (or no saved id) — resolve from the
-			// now-loaded gallery. The fast path above already handled defaults.
-			if (!modelUrl) {
-				if (savedActiveId) {
-					const activeModel = models.find((m) => m.id === savedActiveId);
-					if (activeModel) {
-						activeModelId = savedActiveId;
-						modelUrl = activeModel.url;
-					} else {
-						activeModelId = DEFAULT_MODELS[0].id;
-						modelUrl = DEFAULT_MODELS[0].url;
-						await vrmStorage?.removeItem('active-model-id');
-					}
+			// Load active model ID
+			const savedActiveId = await vrmStorage?.getItem<string>('active-model-id');
+			if (savedActiveId) {
+				const activeModel = models.find((m) => m.id === savedActiveId);
+				if (activeModel) {
+					activeModelId = savedActiveId;
+					modelUrl = activeModel.url;
 				} else {
 					activeModelId = DEFAULT_MODELS[0].id;
 					modelUrl = DEFAULT_MODELS[0].url;
+					await vrmStorage?.removeItem('active-model-id');
 				}
+			} else {
+				activeModelId = DEFAULT_MODELS[0].id;
+				modelUrl = DEFAULT_MODELS[0].url;
 			}
 		} catch (e) {
 			console.error('Failed to load VRM storage:', e);
@@ -362,21 +263,6 @@ function createVrmStore() {
 		readyResolve?.();
 		// Flush any saves that were blocked during init
 		await saveToStorage();
-		// Background warm-up (user request): once the ACTIVE model is on
-		// screen, warm the rest ONE BY ONE on idle slots — other forms and
-		// the motion pool. Next sessions/forms/emotes are instant (HTTP
-		// cache), and nothing downloads as a burst competing with the live
-		// model. The landing warms its own cast separately.
-		try {
-			const { warmAssets } = await import('$lib/services/asset-warmup');
-			warmAssets([
-				...models.filter((m) => m.url !== modelUrl).map((m) => m.url),
-				...idleAnimationUrls,
-				talkingAnimationUrl
-			]);
-		} catch {
-			/* warm-up es best-effort: sin red la cola simplemente no rinde */
-		}
 	}
 
 	async function saveToStorage() {
@@ -549,7 +435,7 @@ function createVrmStore() {
 		// Defensive: if neither the original nor any default could be restored,
 		// surface an error instead of leaving the viewport blank silently.
 		if (!tempModelActive && activeModelId === null && modelUrl === null) {
-			setError('No hay ningún modelo VRM disponible para restaurar.');
+			setError('No VRM model available to restore.');
 		}
 	}
 
@@ -594,15 +480,6 @@ function createVrmStore() {
 		// Remove from storage
 		await vrmStorage?.removeItem(`model-blob-${id}`);
 		await vrmStorage?.removeItem(`${PREVIEW_KEY_PREFIX}${id}`);
-		await vrmStorage?.removeItem(`${PORTRAIT_KEY_PREFIX}${id}`);
-		await vrmStorage?.removeItem(`${PORTRAIT_KEY_PREFIX}full-${id}`);
-		await vrmStorage?.removeItem(`${PORTRAIT_KEY_PREFIX}hash-${id}`);
-		const { [id]: _hashLiberado, ...restoHashes } = sessionPortraitHashes;
-		sessionPortraitHashes = restoHashes;
-		const { [id]: _liberado, ...resto } = sessionPortraits;
-		sessionPortraits = resto;
-		const { [id]: _liberadoFull, ...restoFull } = sessionFullPortraits;
-		sessionFullPortraits = restoFull;
 
 		// Remove from list
 		models = models.filter((m) => m.id !== id);
@@ -619,78 +496,19 @@ function createVrmStore() {
 		return models.find((m) => m.id === activeModelId) || null;
 	}
 
-	async function setModelPreview(
-		modelId: string | null,
-		previewDataUrl: string,
-		fullDataUrl?: string,
-		hash?: string
-	): Promise<void> {
+	async function setModelPreview(modelId: string | null, previewDataUrl: string): Promise<void> {
 		if (!modelId) return;
 
-		// El retrato capturado SIEMPRE vive en memoria y manda para TODAS las
-		// formas (getModelPortrait lo consulta primero) — el rail y los
-		// avatares muestran al personaje activo al instante, con la MISMA
-		// composición para Luna, Nova y Vela. PERSISTE también: la captura no
-		// se repite en cada arranque (cero costo de GPU al cargar; la foto
-		// vieja solo se reemplaza si la composición cambia de versión).
-		sessionPortraits = { ...sessionPortraits, [modelId]: previewDataUrl };
-		if (fullDataUrl) sessionFullPortraits = { ...sessionFullPortraits, [modelId]: fullDataUrl };
-
-		try {
-			await vrmStorage?.setItem(`${PORTRAIT_KEY_PREFIX}${modelId}`, previewDataUrl);
-			if (fullDataUrl) {
-				await vrmStorage?.setItem(`${PORTRAIT_KEY_PREFIX}full-${modelId}`, fullDataUrl);
-			}
-			if (hash) {
-				sessionPortraitHashes = { ...sessionPortraitHashes, [modelId]: hash };
-				await vrmStorage?.setItem(`${PORTRAIT_KEY_PREFIX}hash-${modelId}`, hash);
-			}
-		} catch {
-			// Storage lleno o no disponible: los retratos de sesión siguen
-			// vivos en memoria; la próxima carga los regenera.
-			return;
-		}
-
+		// Update in models array
 		const modelIndex = models.findIndex((m) => m.id === modelId);
-		if (modelIndex === -1) return;
-		const model = models[modelIndex];
-		if (!model.isDefault && !model.previewUrl) {
-			models[modelIndex] = { ...model, previewUrl: previewDataUrl };
+		if (modelIndex !== -1) {
+			models[modelIndex] = { ...models[modelIndex], previewUrl: previewDataUrl };
+			// Trigger reactivity
 			models = [...models];
-			const key = `${PREVIEW_KEY_PREFIX}${modelId}`;
-			const existing = await vrmStorage?.getItem<string>(key);
-			if (!existing) {
-				await vrmStorage?.setItem(key, previewDataUrl);
-			}
 		}
-	}
 
-	/** Retrato a mostrar de un modelo. DOS composiciones, ambas desde la
-	 *  MISMA captura de sesión (un solo frame, dos recortes): 'full' es la
-	 *  figura completa (rail de Cuenta) y 'bust' el primer plano hombro-
-	 *  arriba (avatares de perfil y miniaturas). Orden de respaldo: la
-	 *  cara servida del bundle (busto oficial de fábrica), el retrato
-	 *  servido y el preview de galería. */
-	function getModelPortrait(modelId: string, kind: 'bust' | 'full' = 'bust'): string | undefined {
-		const model = models.find((m) => m.id === modelId);
-		if (kind === 'full') {
-			return sessionFullPortraits[modelId] ?? model?.portraitUrl ?? sessionPortraits[modelId] ?? model?.previewUrl;
-		}
-		return sessionPortraits[modelId] ?? model?.previewUrl ?? model?.portraitUrl;
-	}
-
-	/** ¿Ya aterrizó la captura de sesión de este modelo? El rail la usa para
-	 *  distinguir "captura viva" de "respaldo del bundle" y no vestir a un
-	 *  custom recién importado con la forma default. */
-	function hasSessionPortrait(modelId: string): boolean {
-		return Boolean(sessionPortraits[modelId]);
-	}
-
-	/** Huella del VRM del que proviene el retrato persistido (undefined si
-	 *  no la hay: retratos capturados antes de que existiera la huella —
-	 *  siguen VÁLIDOS; solo una huella DISTINTA invalida y recaptura). */
-	function getPortraitHash(modelId: string): string | undefined {
-		return sessionPortraitHashes[modelId];
+		// Save to storage for all models (including defaults) so thumbnails persist
+		await vrmStorage?.setItem(`${PREVIEW_KEY_PREFIX}${modelId}`, previewDataUrl);
 	}
 
 	return {
@@ -766,9 +584,6 @@ function createVrmStore() {
 		removeModel,
 		getActiveModel,
 		setModelPreview,
-		getModelPortrait,
-		hasSessionPortrait,
-		getPortraitHash,
 		loadTempModel,
 		restoreOriginalModel,
 		whenReady: () => ready

@@ -64,7 +64,7 @@
 			onlostpointercapture={onStickerUp}
 			onwheel={(e) => onStickerWheel(e, sticker.id)}
 			ondblclick={() => photomodeStore.removeSticker(sticker.id)}
-			title="Arrastra para mover, rueda para redimensionar, doble clic para quitar"
+			title="Drag to move, scroll to resize, double-click to remove"
 		/>
 	{/each}
 </div>

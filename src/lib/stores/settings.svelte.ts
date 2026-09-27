@@ -18,7 +18,7 @@ function createSettingsStore() {
 
 	// Load from localStorage on init
 	if (browser) {
-		const saved = localStorage.getItem('luna-settings');
+		const saved = localStorage.getItem('utsuwa-settings');
 		if (saved) {
 			try {
 				const parsed = JSON.parse(saved);
@@ -59,7 +59,7 @@ function createSettingsStore() {
 	function save() {
 		if (browser) {
 			localStorage.setItem(
-				'luna-settings',
+				'utsuwa-settings',
 				JSON.stringify({
 					providerConfigs,
 					addedProviders,
@@ -72,7 +72,7 @@ function createSettingsStore() {
 	// Sync settings across windows (main ↔ overlay)
 	if (browser) {
 		window.addEventListener('storage', (e) => {
-			if (e.key === 'luna-settings' && e.newValue) {
+			if (e.key === 'utsuwa-settings' && e.newValue) {
 				try {
 					const parsed = JSON.parse(e.newValue);
 					providerConfigs = parsed.providerConfigs ?? {};

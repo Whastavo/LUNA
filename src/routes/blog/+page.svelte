@@ -14,23 +14,23 @@
 </script>
 
 <svelte:head>
-	<title>Blog — Luna | Whizzend</title>
+	<title>Blog — Utsuwa | Development Updates & AI Companion News</title>
 	<meta
 		name="description"
-		content="Actualizaciones de desarrollo, notas de versión y notas tras bambalinas de la construcción de Luna — la compañera de IA con avatares VRM 3D."
+		content="Development updates, release notes, and behind-the-scenes notes from building Utsuwa — the open-source AI companion with 3D VRM avatars."
 	/>
 	<link rel="canonical" href={`${SITE_URL}/blog`} />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content="Blog — Luna" />
-	<meta property="og:description" content="Actualizaciones de desarrollo, notas de versión y notas tras bambalinas de Luna." />
+	<meta property="og:title" content="Blog — Utsuwa" />
+	<meta property="og:description" content="Development updates, release notes, and behind-the-scenes notes from building Utsuwa." />
 	<meta property="og:url" content={`${SITE_URL}/blog`} />
-	<meta property="og:site_name" content="Luna" />
+	<meta property="og:site_name" content="Utsuwa" />
 </svelte:head>
 
 <div class="blog-index">
 	<header class="blog-header">
 		<h1>Blog</h1>
-		<p>Actualizaciones de desarrollo y notas tras bambalinas.</p>
+		<p>Development updates and behind-the-scenes notes.</p>
 	</header>
 
 	{#if featured}
@@ -66,7 +66,7 @@
 	{#if gridPosts.length > 0}
 		<section class="more-stories" aria-labelledby="more-stories-title">
 			<div class="more-stories-head">
-				<h2 id="more-stories-title">Más historias</h2>
+				<h2 id="more-stories-title">More stories</h2>
 			</div>
 			<div class="post-grid">
 				{#each gridPosts as post}

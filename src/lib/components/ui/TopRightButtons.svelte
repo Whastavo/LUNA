@@ -1,42 +1,61 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Icon } from '$lib/components/ui';
-	import { settingsModal } from '$lib/stores/settings-modal.svelte';
+	import CameraSettingsPanel from '$lib/components/ui/CameraSettingsPanel.svelte';
+	import ArUnsupportedModal from '$lib/components/ui/ArUnsupportedModal.svelte';
+	import { localPath } from '$lib/config/links';
 	import { isTauri } from '$lib/services/platform';
+	import { arStore } from '$lib/stores/ar.svelte';
 	import { displayStore } from '$lib/stores/display.svelte';
-	import { chatSurface } from '$lib/stores/chat-surface.svelte';
-	import { photomodeStore } from '$lib/stores/photomode.svelte';
 	import { getColorMode, cycleColorMode, type ColorMode } from '$lib/utils/color-mode';
 	import { onMount } from 'svelte';
 	import type { Reminder } from '$lib/types/memory';
 
 	interface Props {
+		onInfoClick: () => void;
 		upcomingReminders?: Reminder[];
 		onDeleteReminder?: (id: number) => void;
 		recentFired?: Reminder[];
 		onDismissRecentFired?: (id: number) => void;
-		/** Toggles the chat view inside the bottom command surface. */
-		onMessagesToggle?: () => void;
+		sidebarOpen?: boolean;
+		onSidebarToggle?: () => void;
 	}
 
 	let {
+		onInfoClick,
 		upcomingReminders = [],
 		onDeleteReminder,
 		recentFired = [],
 		onDismissRecentFired,
-		onMessagesToggle
+		sidebarOpen = false,
+		onSidebarToggle
 	}: Props = $props();
 	let showOverlayBtn = $state(false);
 	let clusterOpen = $state(false);
 	let remindersOpen = $state(false);
+	let showCamera = $state(false);
 	let colorMode = $state<ColorMode>('system');
 	let rootEl = $state<HTMLDivElement | null>(null);
+	let showArModal = $state(false);
+
+	function handleArClick() {
+		if (!arStore.supported) {
+			showArModal = true;
+			clusterOpen = false;
+			return;
+		}
+		if (arStore.active) {
+			arStore.exit();
+		} else {
+			arStore.enter();
+		}
+	}
 
 	const themeIcon = $derived(
 		colorMode === 'system' ? 'monitor' : colorMode === 'light' ? 'sun' : 'moon'
 	);
 	const themeLabel = $derived(
-		colorMode === 'system' ? 'Tema: Sistema' : colorMode === 'light' ? 'Tema: Claro' : 'Tema: Oscuro'
+		colorMode === 'system' ? 'Theme: System' : colorMode === 'light' ? 'Theme: Light' : 'Theme: Dark'
 	);
 
 	onMount(() => {
@@ -48,6 +67,7 @@
 			if (!rootEl || rootEl.contains(e.target as Node)) return;
 			clusterOpen = false;
 			remindersOpen = false;
+			showCamera = false;
 		};
 		document.addEventListener('pointerdown', onPointerDown);
 		return () => document.removeEventListener('pointerdown', onPointerDown);
@@ -56,15 +76,16 @@
 	function toggleCluster() {
 		clusterOpen = !clusterOpen;
 		remindersOpen = false;
+		if (!clusterOpen) showCamera = false;
 	}
 
 	function formatTimeLabel(date: Date): string {
 		const now = new Date();
 		const diffMs = date.getTime() - now.getTime();
 		const diffMin = Math.max(0, Math.ceil(diffMs / 60000));
-		if (diffMin < 60) return `en ${diffMin} min`;
+		if (diffMin < 60) return `in ${diffMin} min`;
 		const diffH = Math.ceil(diffMin / 60);
-		return `en ${diffH} h`;
+		return `in ${diffH} h`;
 	}
 
 	function deleteReminder(id?: number) {
@@ -97,11 +118,11 @@
 	<div class="button-row">
 		<div class="reminder-wrapper">
 			<button
-				class="icon-btn glass-chip"
+				class="icon-btn"
 				class:active={remindersOpen}
 				onclick={() => (remindersOpen = !remindersOpen)}
-				aria-label="Abrir recordatorios"
-				title="Abrir recordatorios"
+				aria-label="Open reminders"
+				title="Open reminders"
 			>
 				<Icon name="bell" size={20} />
 				{#if upcomingReminders.length > 0}
@@ -109,10 +130,10 @@
 				{/if}
 			</button>
 			{#if remindersOpen}
-				<div class="reminder-dropdown glass-panel">
-					<div class="reminder-header">Tareas abiertas</div>
+				<div class="reminder-dropdown">
+					<div class="reminder-header">Open tasks</div>
 					{#if upcomingReminders.length === 0}
-						<div class="reminder-empty">No hay tareas ni temporizadores abiertos</div>
+						<div class="reminder-empty">No open tasks or timers</div>
 					{:else}
 						<ul class="reminder-list">
 							{#each upcomingReminders as reminder (reminder.id)}
@@ -124,8 +145,8 @@
 									<button
 										class="reminder-delete"
 										onclick={() => deleteReminder(reminder.id)}
-										aria-label="Eliminar recordatorio"
-										title="Eliminar recordatorio"
+										aria-label="Delete reminder"
+										title="Delete reminder"
 									>
 										<Icon name="trash" size={14} />
 									</button>
@@ -135,7 +156,7 @@
 					{/if}
 
 					{#if recentFired.length > 0}
-						<div class="reminder-header reminder-header--fired">Activados o perdidos</div>
+						<div class="reminder-header reminder-header--fired">Fired or missed</div>
 						<ul class="reminder-list">
 							{#each recentFired as reminder (reminder.id)}
 								<li class="reminder-item reminder-item--fired">
@@ -146,8 +167,8 @@
 									<button
 										class="reminder-delete"
 										onclick={() => dismissRecentFired(reminder.id)}
-										aria-label="Descartar recordatorio"
-										title="Descartar recordatorio"
+										aria-label="Dismiss reminder"
+										title="Dismiss reminder"
 									>
 										<Icon name="check" size={14} />
 									</button>
@@ -157,88 +178,101 @@
 					{/if}
 				</div>
 			{/if}
-		</div>		{#if displayStore.chatDisplayMode === 'sidebar' || displayStore.chatDisplayMode === 'both'}
+		</div>
+		{#if displayStore.chatDisplayMode === 'sidebar' || displayStore.chatDisplayMode === 'both'}
 			<button
-				class="icon-btn glass-chip"
-				class:active={chatSurface.open && chatSurface.view === 'chat'}
-				onclick={() => onMessagesToggle?.()}
-				aria-label="Chat"
-				title="Chat"
+				class="icon-btn"
+				class:active={sidebarOpen}
+				onclick={onSidebarToggle}
+				aria-label="Chat history"
+				title="Chat history"
 			>
 				<Icon name="message" size={20} />
 			</button>
 		{/if}
 		{#if showOverlayBtn}
-			<button class="icon-btn glass-chip overlay-btn" onclick={launchOverlay} aria-label="Lanzar superposición" title="Lanzar modo superposición">
+			<button class="icon-btn overlay-btn" onclick={launchOverlay} aria-label="Launch overlay" title="Launch Overlay Mode">
 				<Icon name="monitor" size={20} />
 			</button>
 		{/if}
+		<button class="icon-btn" onclick={onInfoClick} aria-label="App info">
+			<Icon name="info" size={20} />
+		</button>
 		<button
-			class="icon-btn glass-chip cluster-trigger"
+			class="icon-btn cluster-trigger"
 			class:open={clusterOpen}
 			onclick={toggleCluster}
-			aria-label="Controles"
+			aria-label="Controls"
 			aria-expanded={clusterOpen}
-			title="Controles"
+			title="Controls"
 		>
 			<Icon name={clusterOpen ? 'x' : 'sliders'} size={20} />
 		</button>
 	</div>
 
 	{#if clusterOpen}
-		<div class="menu glass-panel" role="menu">
+		<div class="cluster">
 			<button
-				class="menu-item"
+				class="icon-btn cluster-item"
 				style="--i: 0"
-				role="menuitem"
-				onclick={() => settingsModal.show()}
-				aria-label="Configuración"
+				onclick={() => goto(localPath('app', '/settings'))}
+				aria-label="Settings"
+				title="Settings"
 			>
-				<Icon name="settings" size={19} />
-				<span>Configuración</span>
+				<Icon name="settings" size={20} />
 			</button>
 			<button
-				class="menu-item"
+				class="icon-btn cluster-item"
+				class:active={showCamera}
 				style="--i: 1"
-				role="menuitem"
-				onclick={() => photomodeStore.enter()}
-				aria-label="Modo foto"
+				onclick={() => (showCamera = !showCamera)}
+				aria-label="Camera settings"
+				title="Camera"
 			>
-				<Icon name="camera" size={19} />
-				<span>Modo foto</span>
-			</button>				<button
-					class="menu-item"
-					style="--i: 2"
-					role="menuitem"
-					onclick={() => (colorMode = cycleColorMode())}
-					aria-label={themeLabel}
-				>
-					<Icon name={themeIcon} size={19} />
-					<span>{colorMode === 'system' ? 'Sistema' : colorMode === 'light' ? 'Claro' : 'Oscuro'}</span>
-				</button>
+				<Icon name="video" size={20} />
+			</button>
+			<button
+				class="icon-btn cluster-item"
+				style="--i: 2"
+				onclick={() => (colorMode = cycleColorMode())}
+				aria-label={themeLabel}
+				title={themeLabel}
+			>
+				<Icon name={themeIcon} size={20} />
+			</button>
+			<button
+				class="icon-btn cluster-item"
+				class:active={arStore.active}
+				style="--i: 3"
+				onclick={handleArClick}
+				aria-label={arStore.active ? 'Exit AR' : 'Enter AR'}
+				title={arStore.active ? 'Exit AR' : 'View in AR'}
+			>
+				<Icon name="cube" size={20} />
+			</button>
+		</div>
+
+		{#if showCamera}
+			<div class="camera-anchor">
+				<CameraSettingsPanel onclose={() => (showCamera = false)} />
 			</div>
 		{/if}
-	</div>
+	{/if}
+</div>
+
+{#if showArModal}
+	<ArUnsupportedModal onclose={() => (showArModal = false)} />
+{/if}
 
 <style>
 	.top-right-buttons {
 		position: fixed;
-		/* Shared top band with the brand header: same width; icons pinned right */
-		top: calc(1.25rem + env(safe-area-inset-top, 0) + (46px - 44px) / 2);
-		left: 50%;
-		transform: translateX(-50%);
-		width: clamp(300px, calc(100vw - 2rem), 450px);
-		/* 55: el panel de cámara vive DENTRO de este contenedor — si quedara
-		   bajo el dock inferior (z-50/60), la barra y los botones lo tapaban. */
-		z-index: 55;
+		top: 1rem;
+		right: 1rem;
+		z-index: 40;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
-		pointer-events: none;
-	}
-
-	.top-right-buttons > :global(*) {
-		pointer-events: auto;
 	}
 
 	.button-row {
@@ -246,46 +280,23 @@
 		gap: 0.5rem;
 	}
 
-	/* Grid menu under the trigger, like the reference's controls popover */
-	.menu {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 0.4rem;
-		width: 208px;
-		margin-top: 0.6rem;
-		padding: 0.5rem;
-		border-radius: 18px;
-	}
-
-	/* The third tile spans both columns so the grid never leaves a hole */
-	.menu-item:last-child:nth-child(odd) {
-		grid-column: 1 / -1;
-	}
-
-	.menu-item {
+	/* Expanded column hangs below the trigger */
+	.cluster {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.3rem;
-		height: 58px;
-		border: 1px solid var(--chrome-border);
-		border-radius: 14px;
-		background: transparent;
-		color: var(--chrome-text);
-		font-size: 0.62rem;
-		font-weight: 600;
-		letter-spacing: 0.02em;
-		cursor: pointer;
-		animation: menuIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
-		animation-delay: calc(var(--i) * 40ms);
-		transition: background 0.15s ease, color 0.15s ease;
+		gap: 0.5rem;
+		margin-top: 0.5rem;
 	}
 
-	@keyframes menuIn {
+	.cluster-item {
+		animation: clusterIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+		animation-delay: calc(var(--i) * 45ms);
+	}
+
+	@keyframes clusterIn {
 		from {
 			opacity: 0;
-			transform: translateY(-8px) scale(0.92);
+			transform: translateY(-8px) scale(0.9);
 		}
 		to {
 			opacity: 1;
@@ -293,12 +304,10 @@
 		}
 	}
 
-	.menu-item span {
-		opacity: 0.72;
-	}
-
-	.menu-item:hover {
-		background: var(--chrome-wash);
+	.camera-anchor {
+		position: absolute;
+		top: 3.25rem;
+		right: 3.25rem;
 	}
 
 	.icon-btn {
@@ -307,56 +316,54 @@
 		justify-content: center;
 		width: 44px;
 		height: 44px;
+		background: var(--bg-tertiary);
+		border: none;
 		border-radius: var(--radius-full);
-		color: var(--chrome-text);
+		color: var(--text-secondary);
 		cursor: pointer;
 		transition: color 0.15s ease, background 0.15s ease,
 			box-shadow 0.15s ease, transform 0.15s ease;
-	}
-
-	.icon-btn.glass-chip {
-		overflow: hidden;
+		box-shadow: var(--shadow-sm);
 	}
 
 	.icon-btn:hover {
-		color: var(--chrome-text);
-		background: var(--chrome-surface-active, rgba(30, 30, 35, 0.58));
+		color: var(--text-primary);
+		background: color-mix(in srgb, var(--bg-tertiary), var(--text-primary) 8%);
+		box-shadow: var(--shadow-md);
 		transform: translateY(-1px);
 	}
 
 	.icon-btn:focus-visible {
 		outline: none;
-		color: var(--chrome-text);
+		color: var(--text-primary);
 		box-shadow: 0 0 0 3px var(--accent-muted);
 	}
 
 	.icon-btn:active {
-		color: var(--chrome-text);
+		color: var(--accent);
 		transform: translateY(0) scale(0.96);
-		background: color-mix(in srgb, var(--chrome-surface) 70%, var(--chrome-text));
+		box-shadow: var(--shadow-sm);
 	}
 
-	.cluster-trigger.open {
-		/* Active state = denser smoked glass, never ink, never white-out */
-		color: var(--chrome-text);
-		background: var(--chrome-surface-active, rgba(30, 30, 35, 0.58));
+	.cluster-trigger.open,
+	.cluster-item.active {
+		color: var(--accent);
 	}
 
 	/* Overlay button - accent action */
 	.overlay-btn {
 		background: var(--accent);
 		border-color: transparent;
-		color: var(--accent-contrast, #fff);
+		color: #fff;
 	}
 
 	.overlay-btn:hover {
 		background: var(--accent-hover);
-		color: var(--accent-contrast, #fff);
+		color: #fff;
 	}
 
 	.overlay-btn:active {
-		color: var(--accent-contrast, #fff);
-		background: var(--accent-hover);
+		color: #fff;
 	}
 
 	.reminder-wrapper {
@@ -388,8 +395,11 @@
 		width: 280px;
 		max-height: 320px;
 		overflow-y: auto;
+		background: var(--bg-primary);
+		border: 1px solid var(--border-color);
 		border-radius: var(--radius-lg);
 		padding: 0.75rem;
+		box-shadow: var(--shadow-lg);
 		z-index: 60;
 	}
 
@@ -430,13 +440,13 @@
 		justify-content: space-between;
 		gap: 0.5rem;
 		padding: 0.5rem;
-		background: var(--chrome-wash);
+		background: var(--bg-secondary);
 		border-radius: var(--radius-md);
 		transition: background 0.15s ease;
 	}
 
 	.reminder-item:hover {
-		background: var(--chrome-wash-strong);
+		background: var(--bg-tertiary);
 	}
 
 	.reminder-text {

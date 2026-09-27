@@ -1,145 +1,145 @@
 ---
-title: Configurar OmniVoice
-description: Ejecuta el modelo texto-a-voz OmniVoice localmente para una voz completamente fuera de línea y multilenguaje.
+title: OmniVoice Setup
+description: Run the OmniVoice text-to-speech model locally for a fully offline, multi-language voice.
 ---
 
-# Configurar OmniVoice
+# OmniVoice Setup
 
-[OmniVoice](https://github.com/k2-fsa/OmniVoice) es un modelo local de texto-a-voz que funciona por completo en tu propio hardware. Soporta una gran cantidad de idiomas, genera audio rápidamente en una GPU moderna y no necesita clave de API en la nube. Luna habla con OmniVoice a través de un pequeño proxy compatible con OpenAI que se incluye en este repositorio.
+[OmniVoice](https://github.com/k2-fsa/OmniVoice) is a local text-to-speech model that runs entirely on your own hardware. It supports a large number of languages, generates audio quickly on a modern GPU, and does not need a cloud API key. Utsuwa talks to OmniVoice through a small OpenAI-compatible proxy that ships in this repository.
 
-## Lo que necesitas
+## What you need
 
-- **Docker** y Docker Compose (o un runtime de contenedores compatible) instalados en tu máquina.
-- Linux es recomendable; el proxy se compila y prueba ahí.
-- Una GPU NVIDIA con CUDA 12 para inferencia rápida, o una CPU moderna para inferencia por CPU más lenta.
-- `nvidia-container-toolkit` si quieres aceleración por GPU dentro del contenedor.
-- Acceso a internet en el primer arranque para descargar el modelo `k2-fsa/OmniVoice` desde HuggingFace.
+- **Docker** and Docker Compose (or a compatible container runtime) installed on your machine.
+- Linux is recommended; the proxy is built and tested there.
+- An NVIDIA GPU with CUDA 12 for fast inference, or a modern CPU for slower CPU inference.
+- `nvidia-container-toolkit` if you want GPU acceleration inside the container.
+- Internet access on first start to download the `k2-fsa/OmniVoice` model from HuggingFace.
 
-OmniVoice también puede instalarse y ejecutarse fuera de Docker con Python 3.11 y sus dependencias nativas. Esta guía se centra en el camino con Docker porque es la forma más fácil de conseguir un entorno reproducible.
+OmniVoice can also be installed and run outside of Docker with Python 3.11 and its native dependencies. This guide focuses on the Docker path because it is the easiest way to get a reproducible environment.
 
-## Arrancar el proxy
+## Start the proxy
 
-El código del proxy vive en `tools/omnivoice` e incluye un archivo Docker Compose listo para usar:
+The proxy code lives in `tools/omnivoice` and includes a ready-to-use Docker Compose file:
 
 ```bash
 cd tools/omnivoice
 docker compose up -d
 ```
 
-El primer arranque descarga el modelo desde HuggingFace, lo que puede tardar varios minutos según tu conexión. Espera hasta que el endpoint de salud devuelva `ok`:
+The first start downloads the model from HuggingFace, which can take several minutes depending on your connection. Wait until the health endpoint returns `ok`:
 
 ```bash
 curl http://localhost:8881/health
 # {"status":"ok"}
 ```
 
-Si la descarga del modelo es lenta o te topas con límites de peticiones, configura una variable de entorno `HF_TOKEN` para HuggingFace antes de arrancar el contenedor.
+If the model download is slow or you hit rate limits, set a `HF_TOKEN` environment variable for HuggingFace before starting the container.
 
-## Conectar Luna
+## Connect Utsuwa
 
-1. Arranca el proxy.
-2. Abre Luna y ve a **Ajustes > Voz (TTS)**.
-3. Activa **Voz** y selecciona **OmniVoice**.
-4. Configura la URL base. El archivo compose publica el proxy en todas las interfaces por defecto, así que usa:
-   - `http://localhost:8881/v1/` desde la misma máquina
-   - `http://<ip-del-host>:8881/v1/` desde otro dispositivo o desde el contenedor de desarrollo de Luna
-5. Elige una voz, un idioma y una velocidad, y envía un mensaje.
+1. Start the proxy.
+2. Open Utsuwa and go to **Settings > Speech (TTS)**.
+3. Enable **Speech** and select **OmniVoice**.
+4. Set the base URL. The compose file publishes the proxy on all interfaces by default, so use:
+   - `http://localhost:8881/v1/` from the same machine
+   - `http://<host-ip>:8881/v1/` from another device or from the Utsuwa dev container
+5. Choose a voice, language, and speed, then send a message.
 
-El proxy envía cabeceras CORS permisivas, así que un sitio alojado puede alcanzarlo mientras el navegador permita la petición.
+The proxy sends permissive CORS headers, so a hosted site can reach it as long as the browser allows the request.
 
-## Configurar tu voz
+## Configure your voice
 
-Después de seleccionar OmniVoice en **Ajustes > Voz (TTS)**:
+After selecting OmniVoice in **Settings > Speech (TTS)**:
 
-- **Idioma**: idioma principal para la síntesis. OmniVoice soporta muchos idiomas; elige el que tu compañera hable la mayor parte del tiempo.
-- **Voz predefinida**: una de las voces integradas de OmniVoice (por ejemplo `alloy`, `onyx` o `nova`). Cada predefinición tiene un perfil fijo de género/edad/tono/acento que Luna convierte en una cadena de instrucciones para el modelo.
-- **Modo**: alterna entre **Sintético** (voces integradas/predefinidas) y **Clonado** (tus propias voces clonadas).
-- **Regenerar**: solo disponible para voces sintéticas. Borra el perfil persistente en caché de la predefinición actual y crea uno nuevo con las mismas instrucciones. Úsalo para limpiar un perfil corrupto o para conseguir un color de voz ligeramente distinto con la misma predefinición. Como las voces clonadas no usan perfiles en caché, el botón está deshabilitado en modo clonado.
-- **Probar**: reproduce una frase de prueba corta en el idioma seleccionado para que verifiques la voz antes de chatear.
+- **Language**: Primary language for synthesis. OmniVoice supports many languages; pick the one your companion speaks most of the time.
+- **Preset Voice**: One of the built-in OmniVoice voices (for example `alloy`, `onyx`, or `nova`). Each preset has a fixed gender/age/pitch/accent profile that Utsuwa turns into an instructions string for the model.
+- **Mode**: Switch between **Synthetic** (built-in/preset voices) and **Cloned** (your own cloned voices).
+- **Regenerate**: Only available for synthetic voices. Deletes the cached persistent profile for the current preset and creates a fresh one with the same instructions. Use this to clear a corrupted profile or to get a slightly different speaker color from the same preset. Because cloned voices do not use cached profiles, the button is disabled in cloned mode.
+- **Test**: Plays a short test phrase in the selected language so you can verify the voice before chatting.
 
-### Ajustes avanzados
+### Advanced settings
 
-La tarjeta de voz principal lleva sus propios parámetros de síntesis:
+The primary voice card carries its own synthesis parameters:
 
-- **Velocidad**: velocidad de reproducción del audio generado.
-- **Num Step**: pasos de difusión. Valores más altos pueden mejorar la calidad a costa de una generación más lenta.
-- **Temperatura de posición** / **Temperatura de clase**: temperaturas de muestreo para el tokenizador de audio. Déjalas en los valores por defecto salvo que quieras experimentar con variaciones de pronunciación.
+- **Speed**: Playback speed of the generated audio.
+- **Num Step**: Diffusion steps. Higher values can improve quality at the cost of slower generation.
+- **Position Temperature** / **Class Temperature**: Sampling temperatures for the audio tokenizer. Leave them at the defaults unless you want to experiment with pronunciation variation.
 
-La tarjeta de **Voz alternativa** tiene los mismos cuatro parámetros con el prefijo **Alt**; los valores sin configurar recurren a los ajustes de la voz principal.
+The **Alternative Voice** card has the same four parameters with an **Alt** prefix; unset values fall back to the primary voice's settings.
 
-Como OmniVoice es un modelo de difusión, el color exacto del hablante puede variar ligeramente entre frases incluso con la misma predefinición. Los perfiles persistentes de predefinición mantienen pequeña la variación; las voces clonadas tienden a sonar más estables que las predefiniciones sintéticas.
+Because OmniVoice is a diffusion model, the exact speaker color can vary slightly between sentences even for the same preset. Persistent preset profiles keep the variation small; cloned voices tend to sound more stable than synthetic presets.
 
-### Idioma y voz alternativos
+### Alternative language & voice
 
-Activa **Voz alternativa** para dar a las palabras extranjeras su propia voz. Está pensado para el aprendizaje de idiomas: cuando la compañera explica una palabra extranjera, la palabra misma se pronuncia en su propio idioma y dialecto, mientras la explicación que la rodea se queda en la voz principal.
+Enable **Alternative Voice** to give foreign-language words their own voice. This is built for language training: when the companion explains a foreign word, the word itself is spoken in its own language and dialect, while the surrounding explanation stays in the primary voice.
 
-- **Interruptor de activación**: enciende el interruptor. Sin él, todo se pronuncia con la voz principal (las palabras extranjeras siguen recibiendo el dialecto correcto, pero sin cambio de voz).
-- **Idioma**: el idioma extranjero (por ejemplo `en`). El idioma principal queda excluido aquí; ambos deben ser distintos.
-- **Voz predefinida / Modo**: las mismas opciones que la voz principal — predefiniciones sintéticas o una de tus voces clonadas.
-- **Velocidad Alt / Num Step Alt / Temperaturas Alt**: parámetros de síntesis opcionales para la voz alternativa. Cada uno recurre al valor de la voz principal cuando no está configurado.
-- **Probar voz alternativa**: reproduce una frase de prueba corta en el idioma alternativo para que verifiques la voz antes de chatear.
-- **Precalentado de perfil**: cuando activas la voz alternativa, Luna pre-genera en segundo plano el perfil persistente para ese idioma, así que la primera palabra extranjera de un chat no se retrasa por la generación de perfil a demanda.
+- **Enable toggle**: Turns the switch on. Without it, everything is spoken with the primary voice (foreign words still get the correct dialect, but no voice change).
+- **Language**: The foreign language (for example `es`). The primary language is excluded here; the two must differ.
+- **Preset Voice / Mode**: Same choices as the primary voice — synthetic presets or one of your cloned voices.
+- **Alt Speed / Alt Num Step / Alt Position & Class Temperature**: Optional synthesis parameters for the alternative voice. Each falls back to the primary voice's value when unset.
+- **Test Alt Voice**: Plays a short test phrase in the alternative language so you can verify the voice before chatting.
+- **Profile pre-warming**: When you enable the alternative voice, Utsuwa pre-generates the persistent profile for that language in the background, so the first foreign word in a chat is not delayed by on-demand profile generation.
 
-El interruptor es por palabra: con modelos capaces de usar herramientas, Luna entrega al LLM herramientas nativas de habla (de lo contrario usa la sintaxis `speak({...})`), y cada cambio de idioma se convierte en su propio segmento — una respuesta como «Das spanische Wort für Auto ist **el coche**.» reproduce la parte alemana con la voz principal y «el coche» con la voz alternativa. Las etiquetas de idioma regional del modelo (`es-ES`) siguen coincidiendo con el idioma configurado, y los idiomas escritos en alfabetos no latinos (japonés, coreano, chino, ruso, árabe, tailandés…) se detectan por su escritura cuando el modelo omite el marcado explícito.
+The switch is per word: with tool-capable models Utsuwa hands the LLM native speech tools (otherwise it uses `speak({...})` syntax), and every language change becomes its own segment — a reply like "Das spanische Wort für Auto ist **el coche**." plays the German part with the primary voice and "el coche" with the alternative voice. Regional language tags from the model (`es-ES`) still match the configured language, and languages written in non-Latin scripts (Japanese, Korean, Chinese, Russian, Arabic, Thai, ...) are detected from their script when the model omits explicit markup.
 
-### Function Calling (soporte de herramientas)
+### Function Calling (tool support)
 
-Cuando la voz alternativa está activada, Luna puede usar opcionalmente **function calling** del LLM para forzar un código de idioma en cada segmento de habla. Es más fiable que pedirle al LLM que escriba la sintaxis `speak({...})`, porque el campo de idioma es obligatorio por el esquema y no se puede olvidar. El interruptor **Forzar idioma por segmento** en los ajustes controla esto:
+When the alternative voice is enabled, Utsuwa can optionally use **LLM function calling** to force a language code on every speech segment. This is more reliable than asking the LLM to write `speak({...})` syntax, because the language field is schema-required and cannot be forgotten. The toggle **Force language per segment** in the settings controls this:
 
-- **Activado** (por defecto): el LLM recibe una herramienta `speak_segment` con `language` como campo enum obligatorio. Cada segmento de habla debe especificar su idioma. Soportado por OpenAI, OpenRouter, DeepSeek y la mayoría de proveedores modernos.
-- **Desactivado**: recurre a la sintaxis de texto `speak({...})`. Úsalo si tu proveedor de LLM no soporta function calling o rechaza parámetros desconocidos.
+- **On** (default): The LLM receives a `speak_segment` tool with `language` as a required enum field. Every speech segment must specify its language. Supported by OpenAI, OpenRouter, DeepSeek, and most modern providers.
+- **Off**: Falls back to the text-based `speak({...})` syntax. Use this if your LLM provider does not support function calling or rejects unknown parameters.
 
-El icono ⓘ muestra la ayuda: *Más fiable; necesita soporte de herramientas del LLM*.
+The icon ⓘ shows the tooltip: *More reliable; needs LLM tool support*.
 
-**Limitación conocida (orden de salida mixto):** cuando el function calling está activado, Luna transmite los deltas de texto inmediatamente pero entrega las llamadas de herramientas en una pasada separada al final de la respuesta. Esto funciona correctamente cuando un modelo responde *o* con llamadas de herramientas *o* con texto — que es el comportamiento normal de las APIs compatibles con OpenAI (`finish_reason: "tool_calls"` vs. `"stop"`). Si un modelo emitiese una respuesta **mixta** que intercale texto y llamadas de herramientas, el orden del habla podría no coincidir con la secuencia prevista. Es un caso límite aceptado; si observas habla fuera de orden, desactiva **Forzar idioma por segmento** para volver a la sintaxis en línea `speak({...})`.
+**Known limitation (mixed output order):** When function calling is enabled, Utsuwa streams text deltas immediately but delivers tool calls in a separate pass at the end of the response. This works correctly when a model replies *either* with tool calls *or* with text — which is the normal behaviour for OpenAI-compatible APIs (`finish_reason: "tool_calls"` vs. `"stop"`). If a model ever emits a **mixed** response that interleaves text and tool calls, the speech order may not match the intended sequence. This is an accepted edge case; if you observe out-of-order speech, disable the **Force language per segment** toggle to fall back to inline `speak({...})` syntax.
 
-### Detección y validación de idioma
+### Language detection & validation
 
-Luna valida el idioma declarado de cada segmento contra el texto real usando **ELD** (Efficient Language Detector, [nitotm/eld](https://github.com/nitotm/efficient-language-detector)). Si el idioma detectado difiere del declarado (p. ej. el LLM etiquetó texto español como alemán), el segmento recurre a la voz principal. Esto detecta comportamientos inconsistentes del LLM sin depender solo del modelo.
+Utsuwa validates every segment's declared language against the actual text using **ELD** (Efficient Language Detector, [nitotm/eld](https://github.com/nitotm/efficient-language-detector)). If the detected language differs from the declared one (e.g. the LLM tagged Spanish text as German), the segment falls back to the primary voice. This catches inconsistent LLM behaviour without relying on the model alone.
 
-La validación solo considera los dos idiomas activos (principal y alternativo), lo que la hace muy precisa incluso con palabras sueltas. Las palabras funcionales comunes (`el la un una por para` para el español, `der die das ein` para el alemán) se usan como heurística secundaria cuando el texto carece de diacríticos característicos.
+The validation only considers the two active languages (primary and alternative), which makes it highly accurate even for single words. Common function words (`el la un una por para` for Spanish, `der die das ein` for German) are used as a secondary heuristic when the text lacks characteristic diacritics.
 
-### Streaming y habla expresiva
+### Streaming & expressive speech
 
-Las respuestas de OmniVoice empiezan a hablarse mientras el modelo sigue escribiendo: las frases completas se sintetizan en cuanto llegan, y el texto largo se divide en límites de frase. El lip-sync sigue el audio real.
+OmniVoice replies start speaking while the model is still writing: complete sentences are synthesised as soon as they arrive, and long text is split at sentence boundaries. Lip-sync follows the real audio.
 
-Para el habla expresiva, el modelo puede insertar marcadores no verbales en el texto hablado — p. ej. `[laughter]`, `[sigh]`, `[question-oh]`, `[surprise-wa]`. Estos se renderizan como audio (en ambas voces) y se eliminan automáticamente de la burbuja de chat visible.
+For expressive speech the model can insert non-verbal markers into the spoken text — e.g. `[laughter]`, `[sigh]`, `[question-oh]`, `[surprise-wa]`. These are rendered as audio (in both voices) and automatically removed from the visible chat bubble.
 
-Limitaciones conocidas: las palabras extranjeras muy cortas se pronuncian como segmentos individuales, así que puede haber pausas diminutas entre ellas; los marcadores `pause()`/`gesture()` dentro de una respuesta en streaming no se ejecutan (solo se respetan en la reproducción sin streaming). Como el modelo de difusión puede devolver audio vacío para entradas extranjeras muy cortas, Luna capitaliza la palabra y añade un punto final (`"ir"` → `"Ir."`) y desactiva la eliminación de silencios integrada del modelo. Una escala de guidance más alta (`guidance_scale=6`) se aplica a los segmentos extranjeros para mejorar la estabilidad de la pronunciación. Los fragmentos del idioma principal son estables y no se tocan; las comillas alrededor de palabras nunca llegan al sintetizador, ya que OmniVoice las renderiza como silencio.
+Known limitations: very short foreign words are spoken as individual segments, so there can be tiny pauses between them; `pause()`/`gesture()` markers inside a streaming reply are not executed (they are only honoured in non-streaming playback). Because the diffusion model can return empty audio for very short foreign-language inputs, Utsuwa capitalises the word and adds a closing period (`"ir"` → `"Ir."`) and disables the model's built-in silence removal. A higher guidance scale (`guidance_scale=6`) is set on foreign segments to improve pronunciation stability. Primary-language fragments are stable and stay untouched; quote marks around words never reach the synthesiser, as OmniVoice renders them as silence.
 
-Si sílabas o palabras enteras se tragan ocasionalmente, la causa es el propio modelo de difusión, no el cambio de idioma: OmniVoice muestrea el audio en varios pasos en vez de renderizarlo de forma determinista desde el texto, y con entradas cortas o inusuales ese muestreo puede degenerar — se pierden teléfonos o el segmento vuelve casi silencioso. Luna ya aplica las mitigaciones automáticas de arriba (expansión de frase como `"ir"` → `"Ir."`, escala de guidance elevada, eliminación de silencios desactivada, y reglas de prompt que prohíben al LLM enviar palabras sueltas). Las palancas restantes están en los ajustes de voz: sube **Num Step** (más pasos de difusión → salida más estable), baja la **Temperatura de posición/clase** (menos varianza de muestreo), prefiere una voz predefinida sintética sobre un clon de voz nuevo para los segmentos extranjeros (los clones transfieren mal a otros idiomas) y evita segmentos extranjeros muy cortos — una frase de dos palabras sobrevive a la difusión notablemente mejor que una palabra sola.
+If syllables or whole words still get swallowed occasionally, the cause is the diffusion model itself, not the language switching: OmniVoice samples the audio over several steps instead of rendering it deterministically from the text, and on short or unusual inputs that sampling can degenerate — phones get dropped or the segment comes back near-silent. Utsuwa already applies the automatic mitigations above (phrase expansion like `"ir"` → `"Ir."`, raised guidance scale, silence removal off, and prompt rules that forbid the LLM from sending bare single words). The remaining levers are in the voice settings: raise **Num Step** (more diffusion steps → more stable output), lower **Position/Class Temperature** (less sampling variance), prefer a synthetic preset voice over a fresh voice clone for foreign segments (clones transfer badly to other languages), and avoid very short foreign segments — a two-word phrase survives diffusion noticeably better than a lone word.
 
-> **Nota beta:** cualquier idioma que ofrezca el proxy puede seleccionarse como idioma alternativo, pero la función multilenguaje solo está completamente madura para **DE, ES, EN**. Otros idiomas funcionan — la detección de segmentos completos, los diacríticos y las comprobaciones de escritura siguen aplicando — pero las heurísticas dependientes del idioma (detección de palabras funcionales, interacción con clones de voz) están menos maduras. El interruptor **Forzar idioma por segmento** requiere un LLM con soporte de function calling; desactívalo para modelos que rechacen parámetros desconocidos.
+> **Beta note:** Every language the proxy offers can be selected as the alternative language, but the multilingual feature is only fully mature for **DE, ES, EN**. Other languages work — whole-segment detection, diacritics and script checks still apply — but language-dependent heuristics (function-word detection, voice-clone interaction) are less mature. The toggle **Force language per segment** requires an LLM with function-calling support; disable it for models that reject unknown parameters.
 
-### Cuando el modelo olvida etiquetar
+### When the model forgets to tag
 
-El cambio de idioma depende de que el LLM marque las palabras extranjeras con un idioma. Con el function calling activado esto lo impone el esquema; de lo contrario, Luna confía en la sintaxis `speak({ lang: ... })`. Algunos modelos aún etiquetan de forma inconsistente — por ejemplo metiendo «el gato» dentro de una frase alemana en vez de darle su propia llamada. Luna corrige lo que se puede probar de forma determinista mediante la validación ELD (diacríticos, escrituras y palabras funcionales), pero una palabra extranjera sin marcar y sin ningún rasgo distintivo no se puede detectar con seguridad y se queda en la voz principal.
+The language switch depends on the LLM marking foreign words with a language. With function calling enabled this is schema-enforced; otherwise Utsuwa relies on `speak({ lang: ... })` syntax. Some models still tag inconsistently — for example packing "el gato" into a German sentence instead of giving it its own call. Utsuwa corrects what can be proven deterministically via ELD validation (diacritics, scripts, and function words), but an unmarked foreign word without any distinguishing feature cannot be detected safely and stays in the primary voice.
 
-Si te pasa a menudo, la palanca es el modelo, no los ajustes de voz:
+If you hit this often, the lever is the model, not the voice settings:
 
-- **Baja la temperatura del LLM** (hacia 0.2–0.4). La disciplina de formato mejora notablemente a temperaturas más bajas; la creatividad de las frases solo sufre ligeramente en un caso de uso docente.
-- **Cambia a un modelo con mejor seguimiento de instrucciones.** Criterios que importan aquí: adhesión fiable a formatos de salida estructurados (el modelo no debería eliminar ni estropear la sintaxis `speak({...})`), soporte explícito de tool-calling o modo JSON, y un entrenamiento multilingüe sólido. Los modelos pequeños destilados tienden a saltarse el etiquetado justo cuando la frase se complica (variantes lado a lado, tablas de conjugación); si ves etiquetas faltantes sobre todo en respuestas docentes largas, el modelo suele ser el cuello de botella.
+- **Lower the LLM temperature** (towards 0.2–0.4). Format discipline improves noticeably at lower temperatures; creative phrasing suffers only slightly for a teaching use case.
+- **Switch to a model with stronger instruction following.** Criteria that matter here: reliable adherence to structured output formats (the model should not drop or mangle the `speak({...})` syntax), explicit tool-calling or JSON-mode support, and solid multilingual training. Small distilled models tend to skip tagging exactly when a sentence gets complex (side-by-side variants, conjugation tables); if you see missing tags mostly in long teaching answers, the model is usually the bottleneck.
 
-### Voces clonadas
+### Cloned voices
 
-Usa **Clonar voz nueva** para subir una muestra de audio de 3–10 segundos y el texto de referencia correspondiente. El proxy crea un clon de voz que luego puedes seleccionar en la lista de **Voces clonadas**. Borra un clon con el botón **Eliminar** junto a la voz seleccionada.
+Use **Clone New Voice** to upload a 3–10 second audio sample and the matching reference text. The proxy creates a voice clone that you can then select from the **Cloned Voices** list. Delete a clone with the **Delete** button next to the selected voice.
 
-## Alcanzar el proxy desde otra máquina
+## Reaching the proxy from another machine
 
-El proxy no tiene autenticación por defecto y ahora acepta subidas y borrados de voces, así que el archivo compose lo ata a loopback. Para alcanzarlo desde el contenedor de desarrollo de Luna u otro dispositivo, cambia el mapeo de puertos en `tools/omnivoice/docker-compose.yaml`:
+The proxy has no authentication by default and now accepts voice uploads and deletions, so the compose file binds it to loopback. To reach it from the Utsuwa development container or another device, change the port mapping in `tools/omnivoice/docker-compose.yaml`:
 
 ```yaml
 ports:
-  - "8881:8881" # todas las interfaces
+  - "8881:8881" # all interfaces
 ```
 
-Expón el proxy solo a tu LAN en una red de confianza, y configura `OMNIVOICE_AUTH_TOKEN` cuando lo hagas; introduce el mismo token como clave de API en los ajustes de OmniVoice de Luna. Cualquiera que alcance un puerto sin autenticar puede usar tu GPU, subir audio de referencia y borrar voces clonadas. Lo mismo aplica al ejecutarlo fuera de Docker con `--host 0.0.0.0`; por defecto ahí es `127.0.0.1`.
+Only expose the proxy to your LAN on a network you trust, and set `OMNIVOICE_AUTH_TOKEN` when you do; enter the same token as the API key in Utsuwa's OmniVoice settings. Anyone who can reach an unauthenticated port can use your GPU, upload reference audio, and delete cloned voices. The same applies when running outside Docker with `--host 0.0.0.0`; the default there is `127.0.0.1`.
 
-Una vez expuesto, usa `http://<ip-de-tu-máquina>:8881/v1/` como URL base (por ejemplo `http://192.168.1.42:8881/v1/`).
+Once exposed, use `http://<your-machine-ip>:8881/v1/` as the base URL (for example `http://192.168.1.42:8881/v1/`).
 
-### Actualizar el proxy tras cambios de código
+### Updating the proxy after code changes
 
-Cuando el código del proxy cambia (por ejemplo tras un `git pull`), recompila y reinicia el contenedor para que el código nuevo se copie a la imagen:
+When the proxy source changes (for example after a `git pull`), rebuild and restart the container so the new code is copied into the image:
 
 ```bash
 cd tools/omnivoice
@@ -147,61 +147,61 @@ docker compose down
 docker compose up -d --build
 ```
 
-## Modo solo CPU
+## CPU-only mode
 
-Si no tienes GPU NVIDIA ni `nvidia-container-toolkit`, usa el archivo compose de CPU:
+If you do not have an NVIDIA GPU or `nvidia-container-toolkit`, use the CPU compose file:
 
 ```bash
 cd tools/omnivoice
 docker compose -f docker-compose.cpu.yaml up -d
 ```
 
-La síntesis por CPU es más lenta, sobre todo en la primera carga, pero no requiere GPU.
+CPU synthesis is slower, especially on first load, but it does not require a GPU.
 
-## Ejecutar sin Docker
+## Run without Docker
 
-También puedes ejecutar el proxy directamente con Python 3.11:
+You can also run the proxy directly with Python 3.11:
 
 ```bash
 pip install -r tools/omnivoice/requirements.txt
 python tools/omnivoice/omnivoice-proxy.py --device cpu
 ```
 
-Consulta el [repositorio de OmniVoice](https://github.com/k2-fsa/OmniVoice) para la configuración del modelo subyacente y los requisitos sin Docker.
+See the [OmniVoice repository](https://github.com/k2-fsa/OmniVoice) for the underlying model setup and non-Docker requirements.
 
-## Probar el proxy
+## Test the proxy
 
-Arranca el proxy y ejecuta la prueba de integración:
+Start the proxy, then run the integration test:
 
 ```bash
 python tools/omnivoice/test-omnivoice.py
 ```
 
-Comprueba `/health`, `/v1/models`, `/v1/voices` y sintetiza un clip corto sin reproducir audio.
+It checks `/health`, `/v1/models`, `/v1/voices`, and synthesises a short clip without playing audio.
 
-## Solución de problemas
+## Troubleshooting
 
-### El contenedor se reinicia o `CONNECTION_REFUSED`
+### Container restarts or `CONNECTION_REFUSED`
 
-Revisa los registros:
+Check the logs:
 
 ```bash
 docker logs omnivoice-proxy --tail 50
 ```
 
-Las causas comunes son un import `Depends` faltante de `fastapi` (corregido en el proxy incluido), un conflicto de puertos, o que el modelo aún se esté descargando. Espera a que el endpoint de salud devuelva `ok` antes de probar desde Luna.
+Common causes are a missing `Depends` import from `fastapi` (fixed in the shipped proxy), a port conflict, or the model still downloading. Wait for the health endpoint to return `ok` before testing from Utsuwa.
 
 ### `RuntimeError: CUDA out of memory`
 
-Cierra otras aplicaciones que usen la GPU, reduce `--max-concurrent` a `1`, o ejecuta con `--device cpu`.
+Close other GPU applications, reduce `--max-concurrent` to `1`, or run with `--device cpu`.
 
-### El proxy está sano pero Luna no puede alcanzarlo
+### Proxy is healthy but Utsuwa cannot reach it
 
-- Confirma que estás usando `localhost` o `127.0.0.1`. El proxy está atado a loopback por defecto, así que una IP de red no lo alcanzará hasta que cambies el mapeo de puertos. Consulta [Alcanzar el proxy desde otra máquina](#alcanzar-el-proxy-desde-otra-máquina).
-- Si usas la app web alojada, el navegador puede pedir permiso para acceder a dispositivos de la red local; permítelo.
-- Si ejecutas Luna en el contenedor de desarrollo de Docker, recuerda que `localhost` dentro del contenedor no es la máquina anfitriona. Necesitas la IP del host, lo que implica exponer el puerto como se describió arriba.
+- Confirm you are using `localhost` or `127.0.0.1`. The proxy is bound to loopback by default, so a network IP will not reach it until you change the port mapping. See [Reaching the proxy from another machine](#reaching-the-proxy-from-another-machine).
+- If you use the hosted web app, the browser may ask for permission to access local-network devices; allow it.
+- If you run Utsuwa in the development Docker container, remember that `localhost` inside the container is not the host machine. You need the host IP, which means exposing the port as described above.
 
-## Ver también
+## See also
 
-- [Configurar TTS local](/docs/guides/local-tts-setup) para Kokoro-FastAPI y openedai-speech.
-- [Repositorio de OmniVoice](https://github.com/k2-fsa/OmniVoice)
+- [Local TTS Setup](/docs/guides/local-tts-setup) for Kokoro-FastAPI and openedai-speech.
+- [OmniVoice repository](https://github.com/k2-fsa/OmniVoice)

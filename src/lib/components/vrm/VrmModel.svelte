@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { T, useThrelte, useTask } from '@threlte/core';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-	import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 	import { VRMLoaderPlugin, VRM, VRMUtils } from '@pixiv/three-vrm';
 	import { createVRMAnimationClip } from '@pixiv/three-vrm-animation';
 	import { loadVrmAnimation } from '$lib/services/vrm-animations';
@@ -10,7 +9,6 @@
 	import { displayStore } from '$lib/stores/display.svelte';
 	import { photomodeStore } from '$lib/stores/photomode.svelte';
 	import { loadPoseAnimation, loadPoseManifest } from '$lib/services/poses';
-	import { fetchProtectedAsset } from '$lib/services/asset-guard';
 	import { pickReaction, stageTier, type TouchZone } from '$lib/engine/photo-reactions';
 	import { characterStore } from '$lib/stores/character.svelte';
 	import {
@@ -28,67 +26,6 @@
 	import { lipSyncAnalyzer } from '$lib/services/lipsync/analyzer';
 	import { untrack } from 'svelte';
 	import * as THREE from 'three';
-	import { useLuna3dMetrics } from '$lib/engine/luna3d-metrics';
-
-	// PREWARM A NIVEL DE MÓDULO: GLTFLoader+VRMLoaderPlugin se importan aquí,
-	// así que lanzar la carga del formulario default cuando el módulo se evalúa
-	// por PRIMERA vez significa que la descarga de 18MB (cifrada) Y el parseo
-	// (~500ms) corren en paralelo con el resto del arranque (router, stores,
-	// mount de Threlte). El efecto de carga del componente ADOPTA esta carga
-	// en vuelo si la url coincide — misma configuración, cero doble descarga
-	// (la memoria del parse prewarm la cubre; no hay cache HTTP que perder:
-	// el asset viaja cifrado y se descifra en memoria).
-	// Un modelo activo guardado simplemente descarta este resultado (un parse
-	// desperdiciado en el primer arranque, luego es gratis).
-	let prewarmGltf: Promise<GLTF> | null = null;
-	// Huella (SHA-256 muestreado) de los bytes del prewarm: la comparación
-	// contra el retrato persistido vive/die con el CONTENIDO del VRM, no con
-	// el id — un modelo actualizado regenera su retrato solo.
-	let prewarmHash: Promise<string> | null = null;
-	const PREWARM_URL = '/luna/forms/luna.vrm';
-	function beginPrewarm(): void {
-		if (prewarmGltf) return;
-		const loader = new GLTFLoader();
-		loader.register((parser) => new VRMLoaderPlugin(parser));
-		const bytes = fetchProtectedAsset(PREWARM_URL);
-		prewarmHash = bytes.then(hashArrayBuffer);
-		prewarmGltf = bytes.then((data) => loader.parseAsync(data, ''));
-	}
-	// Huella BARATA de un ArrayBuffer: SHA-256 sobre una muestra (primeros,
-	// medios y últimos 64KB + longitud total). Detecta cualquier actualización
-	// de un VRM sin hashear 18MB completos (~1ms de CPU).
-	async function hashArrayBuffer(data: ArrayBuffer): Promise<string> {
-		const CHUNK = 64 * 1024;
-		const u8 = new Uint8Array(data);
-		const mid = Math.floor(u8.length / 2);
-		const parts = [u8.subarray(0, Math.min(CHUNK, u8.length))];
-		if (u8.length > CHUNK * 2) parts.push(u8.subarray(mid - CHUNK / 2, mid + CHUNK / 2));
-		if (u8.length > CHUNK) parts.push(u8.subarray(u8.length - CHUNK));
-		const buf = new Uint8Array(parts.reduce((n, p) => n + p.length, 0) + 8);
-		let off = 0;
-		for (const p of parts) {
-			buf.set(p, off);
-			off += p.length;
-		}
-		new DataView(buf.buffer).setFloat64(off, u8.length);
-		const digest = await crypto.subtle.digest('SHA-256', buf);
-		return Array.from(new Uint8Array(digest))
-			.map((b) => b.toString(16).padStart(2, '0'))
-			.join('');
-	}
-	if (typeof window !== 'undefined') {
-		beginPrewarm();
-		// Idle clips are tiny (~1.6MB total) but gate a natural reveal: prewarm
-		// them NOW so the avatar's first visible frame is already IN MOTION —
-		// never the arms-down static pose. luna-speak rides along for chat.
-		try {
-			[...vrmStore.idleAnimationUrls, '/luna/motion/luna-speak.vrma'].forEach((u) =>
-				loadVrmAnimation(u).catch(() => {})
-			);
-		} catch {
-			/* store not ready — animations load lazily as before */
-		}
-	}
 
 	// Pose configurations for different VRM versions
 	// VRM 0.x and 1.0 have different bone orientations and coordinate systems
@@ -101,7 +38,7 @@
 			leftLowerArm: { x: 0, y: -Math.PI * 0.1, z: 0 },
 			rightLowerArm: { x: 0, y: Math.PI * 0.1, z: 0 }
 		},
-		// VRM 1.0 (VRoid Studio models like Luna)
+		// VRM 1.0 (VRoid Studio models like Utsuwa)
 		'1': {
 			sceneRotationY: 0, // Already facing camera
 			leftUpperArm: { x: Math.PI * 0.05, y: 0, z: -Math.PI * 0.4 },
@@ -206,132 +143,31 @@
 	let headTime = $state(0);
 
 	const { renderer, camera } = useThrelte();
-	useLuna3dMetrics(() => vrm?.scene ?? null);
 
-	// Captura del retrato del personaje desde el canvas 3D vivo.
-	// Alta resolución SIN costo: no crea canvas WebGL ni carga nada — copia
-	// un rectángulo del frame ya renderizado (drawImage de GPU a canvas 2D,
-	// sub-milisegundo). La copia es SIEMPRE 1:1 a los píxeles nativos del
-	// canvas (que ya traen el DPR del dispositivo): re-escalar aquí arriba
-	// provocaría aliasing visible; abajo el navegador hace downscale
-	// suave (Lanczos del compositor), que es matemáticamente limpio.
-	function generateThumbnail(modelId: string | null, hash?: string) {
-		if (!renderer || !modelId) return;
+	// Generate thumbnail from the current 3D render
+	function generateThumbnail(modelId: string | null) {
+		if (!renderer) return;
 
 		const canvas = renderer.domElement;
-		if (!canvas || !canvas.width || !canvas.height) return;
+		if (!canvas) return;
 
-		// ── FULL: figura completa — recorte vertical central (proporción del
-		// rail 248/680), 1:1 a píxeles nativos. Es la composición del rail de
-		// Cuenta, idéntica para las tres formas.
-		const ratio = 248 / 680;
-		let srcW = canvas.width;
-		let srcH = Math.round(srcW / ratio);
-		if (srcH > canvas.height) {
-			srcH = canvas.height;
-			srcW = Math.round(srcH * ratio);
+		const size = 256;
+		const thumbCanvas = document.createElement('canvas');
+		thumbCanvas.width = size;
+		thumbCanvas.height = size;
+		const ctx = thumbCanvas.getContext('2d');
+
+		if (ctx) {
+			const srcSize = Math.min(canvas.width, canvas.height);
+			const srcX = (canvas.width - srcSize) / 2;
+			const srcY = (canvas.height - srcSize) / 2;
+
+			ctx.drawImage(canvas, srcX, srcY, srcSize, srcSize, 0, 0, size, size);
+
+			const thumbnailDataUrl = thumbCanvas.toDataURL('image/png');
+			vrmStore.setModelPreview(modelId, thumbnailDataUrl);
 		}
-		const srcX = Math.round((canvas.width - srcW) / 2);
-		const srcY = 0; // desde arriba: el encuadre vivo ya centra a Luna
-
-		const fullCanvas = document.createElement('canvas');
-		fullCanvas.width = srcW;
-		fullCanvas.height = srcH;
-		fullCanvas.getContext('2d')?.drawImage(canvas, srcX, srcY, srcW, srcH, 0, 0, srcW, srcH);
-
-		// ── BUST: primer plano hombro-arriba, ANCLADO a la cabeza real.
-		// La posición proyectada de la cabeza (setHeadScreenPosition, en % del
-		// canvas) evita adivinar dónde está el rostro: funciona con cualquier
-		// encuadre vivo (chat dock, centrado, overlay). Encuadre con PECHO
-		// visible: ~4% de aire sobre el pelo y margen bajo el pecho — el
-		// corte no pega en el borde inferior del cuadro.
-		const head = vrmStore.headScreenPosition ?? { x: 50, y: 22 };
-		const bustSize = Math.round(canvas.height * 0.66);
-		const bx = Math.max(
-			0,
-			Math.min(Math.round((head.x / 100) * canvas.width - bustSize / 2), canvas.width - bustSize)
-		);
-		const by = Math.max(
-			0,
-			Math.min(Math.round((head.y / 100) * canvas.height - bustSize * 0.11), canvas.height - bustSize)
-		);
-
-		const bustCanvas = document.createElement('canvas');
-		bustCanvas.width = bustSize;
-		bustCanvas.height = bustSize;
-		const bctx = bustCanvas.getContext('2d');
-		if (!bctx) return;
-		// Fondo del retrato: tarjeta oscura con halo suave detrás de la cabeza
-		// (el tratamiento del referente utsuwa). El recorte llega con alpha —
-		// el canvas vivo es transparente alrededor de la figura — y este
-		// gradiente es lo que se ve a través, consistente en todos los
-		// consumidores (avatar, miniaturas, perfil) sin depender del tema CSS.
-		const halo = bctx.createRadialGradient(
-			bustSize / 2,
-			bustSize * 0.36,
-			bustSize * 0.06,
-			bustSize / 2,
-			bustSize * 0.36,
-			bustSize * 0.72
-		);
-		halo.addColorStop(0, 'rgba(104, 110, 128, 0.92)');
-		halo.addColorStop(0.55, 'rgba(52, 55, 66, 0.95)');
-		halo.addColorStop(1, '#131318');
-		bctx.fillStyle = halo;
-		bctx.fillRect(0, 0, bustSize, bustSize);
-		bctx.drawImage(canvas, bx, by, bustSize, bustSize, 0, 0, bustSize, bustSize);
-
-		vrmStore.setModelPreview(
-			modelId,
-			bustCanvas.toDataURL('image/png'),
-			fullCanvas.toDataURL('image/png'),
-			hash
-		);
 	}
-
-	/** Captura CON EL PERSONAJE ASENTADO Y PEINADO: congela el mixer y
-	 *  RESETÉA las cadenas spring (pelo, faldas, accesorios) a su pose
-	 *  inicial con velocidad CERO — el solver las deja colgar naturalmente
-	 *  en los dos frames siguientes, sin la oscilación de la entrada al
-	 *  idle que barría el pelo en el retrato. El dos-frames-rAF garantiza
-	 *  que ambos frames presentados muestren la misma pose (el compositor
-	 *  nunca ve mezcla). Guardía anti-carrera: si a mitad del camino se
-	 *  cambió de forma, NO captura — el frame del canvas ya es del modelo
-	 *  nuevo y se guardaría bajo el id del viejo. */
-	function generateSettledThumbnail(modelId: string | null, hash?: string) {
-		if (!renderer || !modelId) return;
-		const targetVrm = vrm;
-		const heldAction = idleAction;
-		const wasPaused = heldAction?.paused ?? false;
-		if (heldAction && !wasPaused) heldAction.paused = true;
-		targetVrm?.springBoneManager?.reset();
-		// Doble rAF (pose estable en dos frames presentados) con respaldo de
-		// setTimeout: Chromium CONGELA rAF en ventanas ocultas/minimizadas —
-		// sin respaldo, importar un custom con la ventana cubierta dejaría
-		// su retrato sin capturar para siempre. El mixer ya está pausado:
-		// la pose es idéntica pase lo que pase.
-		let done = false;
-		const capturar = () => {
-			if (done) return;
-			done = true;
-			try {
-				if (vrmStore.activeModelId === modelId) generateThumbnail(modelId, hash);
-			} finally {
-				// La captura es síncrona (drawImage + toDataURL); el mixer solo
-				// se reanuda si el modelo sigue montado (un switch a mitad de
-					// camino reemplaza idleAction — no toques el action nuevo).
-				if (idleAction === heldAction && heldAction && !wasPaused) {
-					heldAction.paused = false;
-				}
-			}
-		};
-		requestAnimationFrame(() => requestAnimationFrame(capturar));
-		setTimeout(capturar, 250);
-	}
-
-	// Programación de la captura: cancelable en cleanup — un cambio de forma
-	// no debe disparar la captura diferida del modelo que ya se fue.
-	let portraitTimer: ReturnType<typeof setTimeout> | null = null;
 
 	// Normalize model orientation and position
 	function normalizeModel(loadedVrm: VRM) {
@@ -397,17 +233,16 @@
 	// Idle animation cycling timer
 	let idleCycleTimeout: ReturnType<typeof setTimeout> | null = null;
 
-	// Load and start the looping idle animation. Resolves when the clip is
-	// PLAYING (or swallowed on failure) so the reveal can sync to motion.
-	function startIdleAnimation(targetVrm: VRM, targetMixer: THREE.AnimationMixer): Promise<void> {
+	// Load and start the looping idle animation
+	function startIdleAnimation(targetVrm: VRM, targetMixer: THREE.AnimationMixer) {
 		const urls = vrmStore.idleAnimationUrls;
-		if (!urls || urls.length === 0) return Promise.resolve();
+		if (!urls || urls.length === 0) return;
 
 		const index = pickRandomIdleIndex();
 		lastIdleIndex = index;
 		const idleUrl = urls[index];
 
-		return loadVrmAnimation(idleUrl)
+		loadVrmAnimation(idleUrl)
 			.then((vrmAnimation) => {
 				// Model was swapped or unmounted while this animation loaded
 				if (mixer !== targetMixer) return;
@@ -836,12 +671,7 @@
 								capturedVrm.expressionManager?.setValue(happyExpr, 0);
 							}
 
-							// 0.19.1: fade the finished clip OUT as the idle fades in.
-							// clampWhenFinished kept it at full weight, so its last pose
-							// blended with the rising idle and the arms hung between
-							// the two. Reset unclamps, fadeOut hands control over.
-							action.clampWhenFinished = false;
-							action.fadeOut(0.3);
+							// Resume idle animation
 							if (capturedIdleAction) {
 								capturedIdleAction.reset().fadeIn(0.3).play();
 							}
@@ -864,17 +694,6 @@
 		// Capture the model this load belongs to, so a fast switch can't save this
 		// render under a different model's id.
 		const loadModelId = vrmStore.activeModelId;
-		// La captura del retrato depende del CONTENIDO del VRM, no solo de su
-		// existencia: si el retrato persistido viene de OTRO archivo (el VRM
-		// se actualizó, o el custom se re-importó), la foto vieja se invalida
-		// y se recaptura. La decisión final vive DENTRO del timer (ver abajo):
-		// ahí ya aterrizaron el restore del storage Y la huella de los bytes.
-		// OJO: ni aquí ni en el timer se lee el estado de retratos del store
-		// de forma reactiva (hasSessionPortrait/getPortraitHash tocan $state):
-		// una lectura en este cuerpo re-ejecutaría el efecto cuando el storage
-		// restaura retratos o cuando la captura se registra — RECARGANDO el
-		// VRM entero (parpadeo + regeneración en bucle). Todo lo retrato-vivo
-		// pasa por untrack().
 
 		// Invalidate this load if the URL changes or the component unmounts
 		// before the loader finishes, so a slow load can't clobber a newer one
@@ -882,32 +701,21 @@
 
 		vrmStore.setLoading(true);
 		vrmStore.setError(null);
-		performance.mark('vrm:load-start');
 
-		// ADOPTA el prewarm del módulo si la URL coincide: el parseo puede ya
-		// estar listo (eval del módulo → este efecto: ~300–600ms de ventaja en
-		// el arranque). Si no, carga fresca: descarga cifrada + descifrado en
-		// memoria + parseAsync. Mismo registro de plugins en ambos caminos.
-		const adoptPrewarm = url === PREWARM_URL && prewarmGltf !== null;
-		const bytesPromise: Promise<ArrayBuffer> = adoptPrewarm
-			? Promise.resolve(new ArrayBuffer(0))
-			: fetchProtectedAsset(url);
-		// Huella de los bytes del modelo ACTUAL: el prewarm ya la calcula en
-		// paralelo; una carga fresca la deriva de sus propios bytes.
-		const hashPromise: Promise<string> = adoptPrewarm
-			? (prewarmHash ?? Promise.resolve(''))
-			: bytesPromise.then(hashArrayBuffer);
-		const loadPromise: Promise<GLTF> = adoptPrewarm
-			? prewarmGltf!
-			: bytesPromise.then((data) => {
-					const loader = new GLTFLoader();
-					loader.register((parser) => new VRMLoaderPlugin(parser));
-					return loader.parseAsync(data, '');
-				});
+		const loader = new GLTFLoader();
+		loader.crossOrigin = 'anonymous';
+		loader.register((parser) => {
+			const plugin = new VRMLoaderPlugin(parser);
+			// Enable thumbnail loading for VRM 1.0 models
+			if (plugin.metaPlugin) {
+				plugin.metaPlugin.needThumbnailImage = true;
+			}
+			return plugin;
+		});
 
-		loadPromise.then(
+		loader.load(
+			url,
 			(gltf) => {
-				performance.mark('vrm:bytes-ready');
 				const loadedVrm = gltf.userData.vrm as VRM;
 
 				if (cancelled) {
@@ -915,9 +723,9 @@
 					return;
 				}
 
+				// Optimize VRM
 				VRMUtils.removeUnnecessaryVertices(loadedVrm.scene);
-				VRMUtils.combineSkeletons(loadedVrm.scene);
-				performance.mark('vrm:optimized');
+				VRMUtils.removeUnnecessaryJoints(loadedVrm.scene);
 
 				// Skip frustum culling so animated meshes never pop out at the edges
 				loadedVrm.scene.traverse((obj) => {
@@ -939,25 +747,13 @@
 				const newMixer = new THREE.AnimationMixer(loadedVrm.scene);
 				mixer = newMixer;
 				vrmStore.setVrm(loadedVrm);
+				vrmStore.setLoading(false);
 
-				// REVEAL IN MOTION: hold the fade until the idle clip is actually
-				// PLAYING — her first visible frame is already animating, never
-				// the arms-down static pose. The clips were prewarmed at module
-				// eval, so this wait is normally ~0ms. Safety cap: a failed or
-				// slow clip must never block her appearance (reveal static).
-				const idleReady = startIdleAnimation(loadedVrm, newMixer);
-				Promise.race([idleReady, new Promise((r) => setTimeout(r, 1200))]).then(() => {
-					requestAnimationFrame(() => {
-						performance.mark('vrm:revealed');
-						performance.measure('vrm:fetch', 'vrm:load-start', 'vrm:bytes-ready');
-						performance.measure('vrm:parse+optimize', 'vrm:bytes-ready', 'vrm:optimized');
-						performance.measure('vrm:pose+rig', 'vrm:optimized', 'vrm:revealed');
-						if (!cancelled) vrmStore.setLoading(false);
+				// Start the looping idle animation
+				startIdleAnimation(loadedVrm, newMixer);
 
-						// Talking clip enriches post-reveal (cached for chat)
-						if (!cancelled) loadTalkingAnimation(loadedVrm, newMixer);
-					});
-				});
+				// Pre-load the talking animation
+				loadTalkingAnimation(loadedVrm, newMixer);
 
 				// Debug: Log available expressions
 				// if (loadedVrm.expressionManager) {
@@ -968,65 +764,56 @@
 				// 	);
 				// }
 
-				// Retrato de la forma: desde el render 3D vivo, con decisión por
-				// HUELLA del contenido (ver arriba). Retraso de 850ms: el primer
-				// frame ya está en pantalla y la física del enrolle amaine
-				// antes de congelar y copiar (generateSettledThumbnail).
-				{
-					if (portraitTimer) clearTimeout(portraitTimer);
-					// Decisión final DENTRO del timer: la huella llega async y
-					// initFromStorage puede restaurar retratos mientras el modelo
-					// carga (carrera de arranque). Recaptura SOLO si no hay retrato,
-					// o su huella no coincide con los bytes actuales (el VRM cambió
-					// — actualizar el archivo regenera la foto solo).
-					portraitTimer = setTimeout(() => {
-						if (!loadModelId) return;
-						hashPromise
-							.then((hash) =>
-								// DECISIÓN DETERMINISTA: esperar al restore del storage.
-								// Sin esta espera, un arranque lento de IndexedDB dejaba
-								// hasSessionPortrait() en false y se recapturaba un
-								// retrato que el usuario YA TENÍA (su queja original).
-								vrmStore.whenReady().then(() => {
-									if (cancelled) return;
-									// untrack: la decisión NO debe depender de $state — el
-									// restore y la captura previa mutan esos records y
-									// dispararían la RECARGA del modelo.
-									const hayRetrato = untrack(() => vrmStore.hasSessionPortrait(loadModelId));
-									if (!hayRetrato) {
-										generateSettledThumbnail(loadModelId, hash);
-										return;
-									}
-									// Sin huella persistida: el retrato sigue VÁLIDO (fue
-									// capturado por esta misma composición antes de que
-									// la huella existiera) — jamás se invalida solo. Solo
-									// una huella DISTINTA (otro archivo) fuerza recaptura.
-									const guardado = untrack(() => vrmStore.getPortraitHash(loadModelId));
-									if (guardado !== undefined && guardado !== hash) {
-										generateSettledThumbnail(loadModelId, hash);
-									}
-								})
-							)
-							.catch(() => {});
-					}, 850);
+				// Extract thumbnail from VRM metadata (supports both 0.x and 1.0)
+				let thumbnailImage: HTMLImageElement | undefined;
+
+				if (loadedVrm.meta) {
+					if (loadedVrm.meta.metaVersion === '1') {
+						// VRM 1.0: thumbnailImage is HTMLImageElement
+						thumbnailImage = (loadedVrm.meta as any).thumbnailImage;
+					} else {
+						// VRM 0.x: texture contains the image
+						const texture = (loadedVrm.meta as any).texture;
+						if (texture?.image) {
+							thumbnailImage = texture.image;
+						}
+					}
 				}
 
+				if (thumbnailImage) {
+					try {
+						const canvas = document.createElement('canvas');
+						const width = thumbnailImage.width || (thumbnailImage as any).naturalWidth || 256;
+						const height = thumbnailImage.height || (thumbnailImage as any).naturalHeight || 256;
+						canvas.width = width;
+						canvas.height = height;
+						const ctx = canvas.getContext('2d');
+						if (ctx) {
+							ctx.drawImage(thumbnailImage as CanvasImageSource, 0, 0);
+							const thumbnailDataUrl = canvas.toDataURL('image/png');
+							vrmStore.setModelPreview(loadModelId, thumbnailDataUrl);
+						}
+					} catch (e) {
+						console.error('Failed to extract thumbnail:', e);
+						setTimeout(() => generateThumbnail(loadModelId), 500);
+					}
+				} else {
+					// No embedded thumbnail - generate one from the 3D render
+					setTimeout(() => generateThumbnail(loadModelId), 500);
+				}
+
+			},
+			() => {},
+			(error) => {
+				if (cancelled) return;
+				console.error('Error loading VRM:', error);
+				vrmStore.setError('Failed to load VRM model');
 			}
-		)
-		.catch((error) => {
-			if (cancelled) return;
-			console.error('Error loading VRM:', error);
-			vrmStore.setLoading(false);
-			vrmStore.setError('No se pudo cargar el modelo VRM');
-		});
+		);
 
 		return () => {
 			// Cleanup on unmount or URL change
 			cancelled = true;
-			if (portraitTimer) {
-				clearTimeout(portraitTimer);
-				portraitTimer = null;
-			}
 			if (idleCycleTimeout) {
 				clearTimeout(idleCycleTimeout);
 				idleCycleTimeout = null;
@@ -1163,11 +950,7 @@
 			}
 		}
 
-		// Gaze follow now lives at the SCENE level (Scene.svelte rotates the
-		// container group, same recipe as the landing) — bone-level head slerp
-		// fought the idle mixer's per-frame head writes and read robotic.
-		// Photo-mode camera tracking keeps the bone machinery (it wins over the
-		// animation by design, and its weight-eased engagement never stutters).
+		// Photo-mode head tracking toward the scene camera
 		const trackTarget = photomodeStore.active && photomodeStore.headTracking ? 1 : 0;
 		headTrackWeight += (trackTarget - headTrackWeight) * Math.min(1, delta * 5);
 		if (headTrackWeight > 0.001 && camera.current) {

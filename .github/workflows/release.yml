@@ -75,7 +75,7 @@ jobs:
         with:
           # Only publish a release on a tag push. Manual runs just verify the build.
           tagName: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
-          releaseName: ${{ github.ref_type == 'tag' && 'Luna __VERSION__' || '' }}
+          releaseName: ${{ github.ref_type == 'tag' && 'Utsuwa __VERSION__' || '' }}
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
@@ -88,7 +88,7 @@ jobs:
             - Linux: `.AppImage`, `.deb`, or `.rpm`
 
             > These builds are **unsigned** while the desktop app is in beta, so your OS will warn you the first time you open it.
-            > - **macOS:** right-click the app → **Open** → **Open** (or run `xattr -dr com.apple.quarantine /Applications/Luna.app`).
+            > - **macOS:** right-click the app → **Open** → **Open** (or run `xattr -dr com.apple.quarantine /Applications/Utsuwa.app`).
             > - **Windows:** on the SmartScreen prompt, click **More info** → **Run anyway**.
             >
-            > See the [Desktop Guide](https://docs.luna.ai/docs/guides/desktop-guide) for details.
+            > See the [Desktop Guide](https://docs.utsuwa.ai/docs/guides/desktop-guide) for details.

@@ -67,7 +67,7 @@ async function fetchOpenAIModels(apiKey: string | undefined, baseUrl: string): P
 	const headers: Record<string, string> = {};
 	if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 	const response = await fetch(`${baseUrl}/models`, { headers });
-	if (!response.ok) throw new Error(`No se pudieron obtener los modelos: ${response.statusText}`);
+	if (!response.ok) throw new Error(`Failed to fetch models: ${response.statusText}`);
 	const data = await response.json();
 	return (data.data || []).map((m: { id: string }) => ({
 		id: m.id,
@@ -82,7 +82,7 @@ async function fetchAnthropicModels(apiKey: string, baseUrl: string): Promise<Mo
 			'anthropic-version': '2023-06-01'
 		}
 	});
-	if (!response.ok) throw new Error(`No se pudieron obtener los modelos: ${response.statusText}`);
+	if (!response.ok) throw new Error(`Failed to fetch models: ${response.statusText}`);
 	const data = await response.json();
 	return data.data.map((m: { id: string }) => ({
 		id: m.id,
@@ -92,7 +92,7 @@ async function fetchAnthropicModels(apiKey: string, baseUrl: string): Promise<Mo
 
 async function fetchOllamaModels(baseUrl: string): Promise<ModelInfo[]> {
 	const response = await fetch(`${baseUrl}/api/tags`);
-	if (!response.ok) throw new Error(`No se pudieron obtener los modelos: ${response.statusText}`);
+	if (!response.ok) throw new Error(`Failed to fetch models: ${response.statusText}`);
 	const data = await response.json();
 	return (data.models || []).map((m: { name: string }) => ({
 		id: m.name,
@@ -102,7 +102,7 @@ async function fetchOllamaModels(baseUrl: string): Promise<ModelInfo[]> {
 
 async function fetchLMStudioModels(baseUrl: string): Promise<ModelInfo[]> {
 	const response = await fetch(`${baseUrl}/models`);
-	if (!response.ok) throw new Error(`No se pudieron obtener los modelos: ${response.statusText}`);
+	if (!response.ok) throw new Error(`Failed to fetch models: ${response.statusText}`);
 	const data = await response.json();
 	return data.data.map((m: { id: string }) => ({
 		id: m.id,
@@ -114,7 +114,7 @@ async function fetchDeepSeekModels(apiKey: string, baseUrl: string): Promise<Mod
 	const response = await fetch(`${baseUrl}/models`, {
 		headers: { Authorization: `Bearer ${apiKey}` }
 	});
-	if (!response.ok) throw new Error(`No se pudieron obtener los modelos: ${response.statusText}`);
+	if (!response.ok) throw new Error(`Failed to fetch models: ${response.statusText}`);
 	const data = await response.json();
 	return data.data.map((m: { id: string }) => ({
 		id: m.id,
@@ -126,7 +126,7 @@ async function fetchXAIModels(apiKey: string, baseUrl: string): Promise<ModelInf
 	const response = await fetch(`${baseUrl}/models`, {
 		headers: { Authorization: `Bearer ${apiKey}` }
 	});
-	if (!response.ok) throw new Error(`No se pudieron obtener los modelos: ${response.statusText}`);
+	if (!response.ok) throw new Error(`Failed to fetch models: ${response.statusText}`);
 	const data = await response.json();
 	return data.data.map((m: { id: string }) => ({
 		id: m.id,
@@ -138,7 +138,7 @@ async function fetchGoogleModels(apiKey: string, baseUrl: string): Promise<Model
 	const response = await fetch(`${baseUrl}/models`, {
 		headers: { 'x-goog-api-key': apiKey }
 	});
-	if (!response.ok) throw new Error(`No se pudieron obtener los modelos: ${response.statusText}`);
+	if (!response.ok) throw new Error(`Failed to fetch models: ${response.statusText}`);
 	const data = await response.json();
 	return (data.models || []).map((m: { name: string; displayName?: string }) => ({
 		id: m.name.replace('models/', ''),
@@ -152,7 +152,7 @@ async function fetchElevenLabsModels(apiKey: string, baseUrl: string): Promise<M
 	const response = await fetch(`${baseUrl}/models`, {
 		headers: { 'xi-api-key': apiKey }
 	});
-	if (!response.ok) throw new Error(`No se pudieron obtener los modelos: ${response.statusText}`);
+	if (!response.ok) throw new Error(`Failed to fetch models: ${response.statusText}`);
 	const models = await response.json();
 	// Filter to TTS-capable models only
 	return models
@@ -167,7 +167,7 @@ async function fetchOpenAITTSModels(apiKey: string, baseUrl: string): Promise<Mo
 	const response = await fetch(`${baseUrl}/models`, {
 		headers: { Authorization: `Bearer ${apiKey}` }
 	});
-	if (!response.ok) throw new Error(`No se pudieron obtener los modelos: ${response.statusText}`);
+	if (!response.ok) throw new Error(`Failed to fetch models: ${response.statusText}`);
 	const data = await response.json();
 	// Filter to TTS models only (contain "tts" in name)
 	return data.data
@@ -214,7 +214,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		switch (providerId) {
 			case 'openai':
-				if (!apiKey) throw new Error('Se requiere clave de API para OpenAI');
+				if (!apiKey) throw new Error('API key required for OpenAI');
 				models = await fetchOpenAIModels(apiKey, cleanBaseUrl);
 				break;
 			case 'openai-compatible': {
@@ -228,7 +228,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				break;
 			}
 			case 'anthropic':
-				if (!apiKey) throw new Error('Se requiere clave de API para Anthropic');
+				if (!apiKey) throw new Error('API key required for Anthropic');
 				models = await fetchAnthropicModels(apiKey, cleanBaseUrl);
 				break;
 			case 'ollama':
@@ -238,24 +238,24 @@ export const POST: RequestHandler = async ({ request }) => {
 				models = await fetchLMStudioModels(cleanBaseUrl);
 				break;
 			case 'deepseek':
-				if (!apiKey) throw new Error('Se requiere clave de API para DeepSeek');
+				if (!apiKey) throw new Error('API key required for DeepSeek');
 				models = await fetchDeepSeekModels(apiKey, cleanBaseUrl);
 				break;
 			case 'xai':
-				if (!apiKey) throw new Error('Se requiere clave de API para xAI');
+				if (!apiKey) throw new Error('API key required for xAI');
 				models = await fetchXAIModels(apiKey, cleanBaseUrl);
 				break;
 			case 'google':
-				if (!apiKey) throw new Error('Se requiere clave de API para Google');
+				if (!apiKey) throw new Error('API key required for Google');
 				models = await fetchGoogleModels(apiKey, cleanBaseUrl);
 				break;
 			// TTS providers
 			case 'elevenlabs':
-				if (!apiKey) throw new Error('Se requiere clave de API para ElevenLabs');
+				if (!apiKey) throw new Error('API key required for ElevenLabs');
 				models = await fetchElevenLabsModels(apiKey, cleanBaseUrl);
 				break;
 			case 'openai-tts':
-				if (!apiKey) throw new Error('Se requiere clave de API para OpenAI TTS');
+				if (!apiKey) throw new Error('API key required for OpenAI TTS');
 				models = await fetchOpenAITTSModels(apiKey, cleanBaseUrl);
 				break;
 			default:

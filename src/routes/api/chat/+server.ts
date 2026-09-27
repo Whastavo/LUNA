@@ -4,7 +4,7 @@ import type { RequestHandler } from './$types';
 import type { LLMProvider } from '$lib/types';
 import { ensureOpenAIPath, getChatBaseUrl } from '$lib/services/providers/local-endpoints';
 import { assertSafeProviderUrl } from '$lib/services/providers/url-guard';
-import { sanitizeProviderError, unwrapRemoteError } from '$lib/services/providers/provider-errors';
+import { sanitizeProviderError } from '$lib/services/providers/provider-errors';
 import { pseudoCallFromTool } from '$lib/services/tts/speech-compiler';
 import { DEFAULT_CHAT_BASE_URLS } from '$lib/services/providers/provider-defaults';
 
@@ -73,7 +73,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		// Add system message (use provided systemPrompt or default)
 		const defaultSystemPrompt =
-			'Eres una asistente de IA amigable mostrada como un avatar VRM llamado Luna. Mantén las respuestas conversacionales y relativamente concisas.';
+			'You are a friendly AI assistant displayed as a VRM avatar named Utsuwa. Keep responses conversational and relatively concise.';
 		const messagesWithSystem = [
 			{
 				role: 'system' as const,
@@ -119,10 +119,10 @@ export const POST: RequestHandler = async ({ request }) => {
 			});
 		} catch (err) {
 			const msg = err instanceof Error ? err.message : 'Failed to connect to provider';
-			return new Response(
-				JSON.stringify({ error: sanitizeProviderError(unwrapRemoteError(msg), providerBaseURL) }),
-				{ status: 502, headers: { 'Content-Type': 'application/json' } }
-			);
+			return new Response(JSON.stringify({ error: sanitizeProviderError(msg, providerBaseURL) }), {
+				status: 502,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		// Suppress ALL background promise/stream rejections so they don't crash Node.
@@ -148,9 +148,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				} catch (err) {
 					const msg = err instanceof Error ? err.message : 'Failed to start stream';
 					controller.enqueue(
-						encoder.encode(
-							`e:${JSON.stringify({ error: sanitizeProviderError(unwrapRemoteError(msg), providerBaseURL) })}\n`
-						)
+						encoder.encode(`e:${JSON.stringify({ error: sanitizeProviderError(msg, providerBaseURL) })}\n`)
 					);
 					controller.close();
 					return;
@@ -175,24 +173,13 @@ export const POST: RequestHandler = async ({ request }) => {
 							try {
 								const args =
 									typeof value.args === 'string' ? JSON.parse(value.args) : value.args;
-								// The tool call id lets the MCP loop feed the result back
-								// in the tool-role message the protocol requires.
-								const callId =
-									typeof value.toolCallId === 'string' && value.toolCallId
-										? value.toolCallId
-										: `call_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 								const pseudo = pseudoCallFromTool(
 									value.toolName,
 									args as Record<string, unknown>
 								);
-								// Every tool call is forwarded (id included): the client
-								// decides which are speech pseudo-calls and which are
-								// MCP tools to execute.
-								controller.enqueue(
-									encoder.encode(
-										`t:${JSON.stringify({ id: callId, name: value.toolName, args })}\n`
-									)
-								);
+								if (pseudo) {
+									controller.enqueue(encoder.encode(`t:${JSON.stringify({ name: value.toolName, args })}\n`));
+								}
 							} catch {
 								// Malformed tool-call args: drop the call, keep streaming.
 							}
@@ -204,7 +191,7 @@ export const POST: RequestHandler = async ({ request }) => {
 					const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 					controller.enqueue(
 						encoder.encode(
-							`e:${JSON.stringify({ error: sanitizeProviderError(unwrapRemoteError(errorMessage), providerBaseURL) })}\n`
+							`e:${JSON.stringify({ error: sanitizeProviderError(errorMessage, providerBaseURL) })}\n`
 						)
 					);
 					controller.close();

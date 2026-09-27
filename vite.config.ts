@@ -2,14 +2,11 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import { readFileSync } from 'fs';
-import { buildAssetOptimizer, devAssetOptimizer } from './vite.config.assets.js';
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
-	// Auto-optimizes images (and future VRM/audio/video kinds) into
-	// static/optimized derivatives on every dev boot, file change and build.
-	plugins: [devAssetOptimizer(), buildAssetOptimizer(), sveltekit(), tailwindcss()],
+	plugins: [sveltekit(), tailwindcss()],
 	define: {
 		'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version),
 		// True only when the frontend is built by the Tauri CLI (which sets

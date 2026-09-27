@@ -30,7 +30,7 @@
 		{/each}
 	</div>
 	<span class="transcript" class:placeholder={!transcript}>
-		{transcript || 'Escuchando…'}
+		{transcript || 'Listening...'}
 	</span>
 </div>
 
@@ -41,11 +41,8 @@
 		gap: 0.75rem;
 		flex: 1;
 		min-width: 0;
-		/* Estira la MISMA caja que el textarea que reemplaza: grabar no
-		   desplaza un solo pixel del composer (el textarea también ocupa
-		   todo el alto flexible con su contenido centrado). */
-		align-self: stretch;
-		padding: 0 0.5rem;
+		padding: 0.625rem 0.5rem;
+		min-height: 24px;
 		overflow: hidden;
 	}
 
@@ -58,8 +55,7 @@
 
 	.bar {
 		width: 3px;
-		/* Bars live inside the glass input: white chrome, never accent ink */
-		background: var(--chrome-text, rgba(255, 255, 255, 0.92));
+		background: var(--accent);
 		border-radius: 1.5px;
 		transition: height 0.08s ease-out;
 		animation: pulse 0.5s ease-in-out infinite alternate;
@@ -77,7 +73,7 @@
 	.transcript {
 		flex: 1;
 		min-width: 0;
-		color: var(--chrome-text, rgba(255, 255, 255, 0.92));
+		color: var(--color-neutral-800);
 		font-size: 1rem;
 		line-height: 1.5;
 		white-space: nowrap;
@@ -86,6 +82,6 @@
 	}
 
 	.transcript.placeholder {
-		color: var(--chrome-text-dim, rgba(255, 255, 255, 0.64));
+		color: var(--color-neutral-500);
 	}
 </style>
